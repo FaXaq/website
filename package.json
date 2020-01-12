@@ -1,0 +1,32 @@
+{
+  "name": "faxaq-website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:FaXaq/website.git",
+  "author": "Marin Procureur <marin.procureur@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@zeit/next-sass": "^1.0.1",
+    "i18next": "^19.0.3",
+    "next": "^9.1.7",
+    "node-sass": "^4.13.0",
+    "react": "^16.12.0",
+    "react-anime": "^3.0.3",
+    "react-dom": "^16.12.0",
+    "react-i18next": "^11.2.7",
+    "tailwindcss": "^1.1.4"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.4",
+    "@types/react": "^16.9.17",
+    "autoprefixer": "^9.7.3",
+    "postcss-loader": "^3.0.0",
+    "typescript": "^3.7.4"
+  }
+}
