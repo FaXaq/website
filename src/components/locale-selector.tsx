@@ -2,30 +2,32 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 function LocaleSelector() {
-  const { i18n } = useTranslation();
-  const [locale, setLocale] = useState(i18n.language);
+  const { t, i18n } = useTranslation();
   const fallbackLocales = [];
 
   for (let l of i18n.languages.sort()) {
     const classes = ["p-1"];
-    if (i18n.language === l) classes.push("text-red-500");
+    if (i18n.language === l) {
+      classes.push("text-white");
+    } else {
+      classes.push("text-dark-sand");
+    }
 
     fallbackLocales.push(
       <div
+        key={l}
         className={classes.join(" ")}
         onClick={() => {
           i18n.changeLanguage(l);
         }}
       >
-        {l}
+        {t(`locales.${l}`)}
       </div>
     );
   }
 
   return (
-    <div className="border rounded border-gray-500 flex flex-row cursor-pointer">
-      {fallbackLocales}
-    </div>
+    <div className="flex flex-row cursor-pointer m-6">{fallbackLocales}</div>
   );
 }
 

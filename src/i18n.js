@@ -21,6 +21,7 @@ i18n
     fallbackLng: ['en', 'fr'],
     debug: false,
     resources,
+    returnObjects: true,
 
     interpolation: {
       escapeValue: false
