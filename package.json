@@ -9,6 +9,7 @@
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
     "i18next": "^19.0.3",
+    "mtts": "https://github.com/FaXaq/mtts",
     "next": "^9.1.7",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import Category from "../components/category";
+import Category from "../components/index/category";
 
 export default function useCategory(
   name: string,

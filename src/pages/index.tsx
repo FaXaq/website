@@ -1,13 +1,9 @@
-import { useTranslation } from "react-i18next";
-import LocaleSelector from "../components/locale-selector";
-import Header from "../components/header";
+import Header from "../components/index/header";
 import Mountains from "../components/images/mountains";
-import Footer from "../components/footer";
-import Content from "../components/content";
-import Anime from "react-anime";
+import Footer from "../components/index/footer";
+import Content from "../components/index/content";
 
 function HomePage() {
-  const { t } = useTranslation();
   return (
     <div className="font-sans">
       <Header />

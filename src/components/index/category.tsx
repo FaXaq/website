@@ -1,5 +1,5 @@
 import { isArray } from "util";
-import LinkIcon from "./images/link-icon";
+import LinkIcon from "../images/link-icon";
 
 export interface CategoryProps {
   object: any;

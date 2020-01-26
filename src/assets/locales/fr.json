@@ -119,5 +119,34 @@
         ]
       }]
     }
+  },
+  "pages": {
+    "mtts": {
+      "title": "MTTS Lab",
+      "subtitle": "Music theory in Typescript",
+      "buildScale": {
+        "title": "Construisez votre gamme",
+        "selectNote": "Sélectionnez la note",
+        "addAccidental": "Ajoutez une alteration",
+        "scaleTitle": "Voici les notes de la gamme majeure",
+        "scaleChordsTitle": "Et les accords correspondants"
+      }
+    }
+  },
+  "notes": {
+    "C": "Do",
+    "D": "Ré",
+    "E": "Mi",
+    "F": "Fa",
+    "G": "Sol",
+    "A": "La",
+    "B": "Si"
+  },
+  "accidentals": {
+    "DOUBLE_SHARP": "𝄪",
+    "SHARP": "♯",
+    "NATURAL": "♮",
+    "FLAT": "♭",
+    "DOUBLE_FLAT": "𝄫"
   }
 }

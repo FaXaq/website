@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import useCategory from "../hooks/category";
-import ExperienceIcon from "./images/experience-icon";
-import StudyIcon from "./images/study-icon";
-import AchievementIcon from "./images/achievement-icon";
-import MiscIcon from "./images/misc-icon";
-import ProjectIcon from "./images/project-icon";
+import useCategory from "../../hooks/category";
+import ExperienceIcon from "../images/experience-icon";
+import StudyIcon from "../images/study-icon";
+import AchievementIcon from "../images/achievement-icon";
+import MiscIcon from "../images/misc-icon";
+import ProjectIcon from "../images/project-icon";
 import Anime from "react-anime";
 
 function Content() {

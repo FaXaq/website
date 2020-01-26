@@ -1,7 +1,7 @@
-import Mountains from "./images/mountains";
+import Mountains from "../images/mountains";
 import { useTranslation } from "react-i18next";
 import Anime from "react-anime";
-import LocaleSelector from "./locale-selector";
+import LocaleSelector from "../locale-selector";
 
 function Header() {
   const { t } = useTranslation();
