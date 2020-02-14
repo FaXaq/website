@@ -5,6 +5,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { articleName },
   } = req
-  const content = fs.readFileSync(`./src/assets/articles/${articleName}`).toString()
+  const content = fs.readFileSync(`./${process.env.NODE_ENV === "production" ? "" : "public/"}articles/${articleName}`).toString()
   res.send({ content })
 }
