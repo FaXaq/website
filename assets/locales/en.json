@@ -6,6 +6,9 @@
     "fr": "Français",
     "en": "English"
   },
+  "blog": {
+    "title": "Blog"
+  },
   "content": {
     "experiences": {
       "title": "Experiences",

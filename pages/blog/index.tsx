@@ -1,29 +1,38 @@
-import fetch from 'isomorphic-unfetch';
-import { NextPage } from 'next';
-import Link from 'next/link'
+import fetch from "isomorphic-unfetch";
+import { NextPage } from "next";
+import Link from "next/link";
+import path from "path";
+import { useTranslation } from "react-i18next";
 
 interface BlogProps {
-  articles: any[]
+  articles: any[];
 }
 
 const Blog: NextPage<BlogProps> = function(props) {
+  const { t } = useTranslation();
   const links = props.articles.map(a => {
-    return <Link href={`/blog/${a}`} key={`article-${a}`}>
-      <a>{a}</a>
-    </Link>
-  })
-  return <div className="font-sans">
-    {links}
-  </div>
-}
+    return (
+      <div>
+        <h1 className="text-2xl">{t("blog.title")}</h1>
+        <Link href={`/blog/${a}`} key={`article-${a}`}>
+          <a>{a}</a>
+        </Link>
+      </div>
+    );
+  });
+  return <div className="font-sans">{links}</div>;
+};
 
-Blog.getInitialProps = async (ctx) => {
-  const res = await fetch(`http://${ctx.req.headers.host}/api/blog/articles`)
-  const { articles } = await res.json()
+Blog.getInitialProps = _ => {
+  const articles = (context => {
+    return context.keys().map(k => {
+      return path.basename(k.replace("./", ""), ".md");
+    });
+  })(require.context("../../public/articles", true, /\.md/));
+
   return {
     articles
-  }
-}
-
+  };
+};
 
 export default Blog;
