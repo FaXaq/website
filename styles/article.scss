@@ -1,24 +1,26 @@
-* {
-  @apply font-sans;
-}
+.article {
+  * {
+    @apply font-sans;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply text-gray-700;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-700;
+  }
 
-h1 {
-  @apply text-2xl;
-}
+  h1 {
+    @apply text-2xl;
+  }
 
-h2 {
-  @apply text-xl;
-}
+  h2 {
+    @apply text-xl;
+  }
 
-p {
-  @apply text-gray-800;
+  p {
+    @apply text-gray-800;
+  }
 }

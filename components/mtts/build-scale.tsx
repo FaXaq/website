@@ -13,7 +13,11 @@ function BuildScale() {
   );
 
   useEffect(() => {
-    setScale(new Scale({ key: note }));
+    setScale(
+      new Scale({
+        key: new Note({ name: note.name, accidental: accidental })
+      })
+    );
   }, [note]);
 
   useEffect(() => {

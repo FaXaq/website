@@ -1,7 +1,7 @@
-import Header from "../components/index/header";
-import Mountains from "../components/images/mountains";
-import Footer from "../components/index/footer";
-import Content from "../components/index/content";
+import Header from "../../components/index/header";
+import Mountains from "../../components/images/mountains";
+import Footer from "../../components/index/footer";
+import Content from "../../components/index/content";
 
 function HomePage() {
   return (

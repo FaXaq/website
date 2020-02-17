@@ -1,5 +1,5 @@
-import MTTSHeader from "../components/mtts/header";
-import BuildScale from "../components/mtts/build-scale";
+import MTTSHeader from "../../components/mtts/header";
+import BuildScale from "../../components/mtts/build-scale";
 
 function HomePage() {
   return (
