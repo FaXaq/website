@@ -1,5 +1,6 @@
 import { Note } from "mtts";
 import { useState } from "react";
+import { Synth, Frequency, Time } from "tone";
 
 interface TileProps {
   note: Note;
@@ -8,21 +9,10 @@ interface TileProps {
 const Tile = ({ note }: TileProps) => {
   const [playing, setPlaying] = useState(false);
   function playNote(note: Note) {
-    // create web audio api context
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    // create Oscillator node
-    var oscillator = audioCtx.createOscillator();
-
-    oscillator.type = "square";
-    oscillator.frequency.setValueAtTime(note.frequency, audioCtx.currentTime); // value in hertz
-    oscillator.connect(audioCtx.destination);
-    oscillator.start();
+    const t = new Synth().toMaster();
+    t.triggerAttackRelease(note.frequency, 1);
     setPlaying(true);
-    setTimeout(() => {
-      oscillator.stop();
-      setPlaying(false);
-    }, 1000);
+    setTimeout(() => setPlaying(false), 1000);
   }
 
   const classes = ["flex-grow", "border"];

@@ -10,6 +10,7 @@ interface BlogProps {
 
 const Blog: NextPage<BlogProps> = function(props) {
   const { t } = useTranslation();
+  
   const links = props.articles.map(a => {
     return (
       <div>

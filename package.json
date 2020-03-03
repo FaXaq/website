@@ -20,7 +20,8 @@
     "react-anime": "^3.0.3",
     "react-dom": "^16.12.0",
     "react-i18next": "^11.2.7",
-    "tailwindcss": "^1.1.4"
+    "tailwindcss": "^1.1.4",
+    "tone": "^13.8.25"
   },
   "scripts": {
     "dev": "next -p 1234",
