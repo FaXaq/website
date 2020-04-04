@@ -24,6 +24,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "node_modules/tone/tone.d.ts", "node_modules/tone/index.d.ts"
+    "**/*.tsx",
+    "node_modules/tone/tone.d.ts",
+    "node_modules/tone/index.d.ts"
   ]
 }

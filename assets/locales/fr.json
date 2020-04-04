@@ -1,152 +1,170 @@
 {
-  "firstname": "Marin",
-  "workfield": "Architecte logiciel / Développeur Full Stack",
-  "copy": "Code : ",
-  "locales": {
-    "fr": "Français",
-    "en": "English"
-  },
-  "content": {
-    "experiences": {
-      "title": "Expériences",
-      "past": [{
-        "title": "Ingénieur front-end @ Liberkeys",
-        "period": "Jul 2019 - Jan 2020",
-        "links": [
-          "https://liberkeys.com"
-        ],
-        "missions": [
-          "Développement d'une application mobile (nativescript, vuejs) & designs (figma)",
-          "Architecture (Project / API / OPS) & Développement d'un front-end SAAS en PWA (vuejs, nuxt, typescript, jest, normalizr)",
-          "Mise en place des analytics (mixpanel, GA)"
-        ]
-      }, {
-        "title": "Responsable pédagogique / Co-fondateur @ _blank - Belleville Citoyenne",
-        "period": "Nov 2015 - Jun 2019",
-        "links": [
-          "https://github.com/blank-project"
-        ],
-        "missions": [
-          "Sourcing & sélection des étudiants",
-          "Enseignements (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
-          "Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-          "Définition d'une roadmap annuelle & plannings",
-          "Reconnu 'Grande École du Numérique' délivrant un Bac+1"
-        ]
-      }, {
-        "title": "Architecte front-end / Consultant @ enioka",
-        "period": "Aug 2014 - Jan 2019",
-        "links": [
-          "https://enioka.com",
-          "https://github.com/enioka/ij.js",
-          "https://itlivemaps.com"
-        ],
-        "missions": [
-          "Développement & maintenance d'un outil de modélisation IT appelé le Modeler",
-          "Référencement de différentes DSI sous quatre plans (functionnal, applicative, infrastructure, and process) dans le modeler",
-          "Déploiement & support du modeler chez différents clients",
-          "Participation à la définition d'une roadmap pour le modeler",
-          "Design applicatif et amélioration du coeur du modeler (Java)",
-          "Création d'une libraire de représentation matricielle des données (ij.js)"
-        ]
-      }, {
-        "title": "Ingénieur Full-Stack @ Storefront",
-        "period": "Mar 2017 - Oct 2017",
-        "links": [
-          "https://thestorefront.com"
-        ],
-        "missions": [
-          "Traduction des différentes platformes (i18n)",
-          "Mise en place des paiements dans de nouvelles zones (Stripe)",
-          "Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics (Segment, mixpanel, GA, etc.)",
-          "Refonte de fonctionalités clés (listing page, user signup funnel)"
-
-        ]
-      }]
+  "resume": {
+    "firstname": "Marin",
+    "workfield": "Architecte logiciel / Développeur Full Stack",
+    "copy": "Code : ",
+    "locales": {
+      "fr": "Français",
+      "en": "English"
     },
-    "studies": {
-      "title": "Études",
-      "past": [{
-        "title": "M.Sc.2 Computer Sciences @ Supinfo",
-        "period": "2012 - 2017"
-      }]
-    },
-    "achievements": {
-      "title": "Accomplissements",
-      "past": [{
-        "title": "Membre du CA @ Belleville Citoyenne",
-        "period": "2018 - 2019",
-        "missions": [
-          "S'assurer que le bureau suit les décisions prises en assemblées générales"
+    "content": {
+      "experiences": {
+        "title": "Expériences",
+        "past": [
+          {
+            "title": "Ingénieur front-end @ Liberkeys",
+            "period": "Jul 2019 - Jan 2020",
+            "links": [
+              "https://liberkeys.com"
+            ],
+            "missions": [
+              "Développement d'une application mobile (nativescript, vuejs) & designs (figma)",
+              "Architecture (Project / API / OPS) & Développement d'un front-end SAAS en PWA (vuejs, nuxt, typescript, jest, normalizr)",
+              "Mise en place des analytics (mixpanel, GA)"
+            ]
+          },
+          {
+            "title": "Responsable pédagogique / Co-fondateur @ _blank - Belleville Citoyenne",
+            "period": "Nov 2015 - Jun 2019",
+            "links": [
+              "https://github.com/blank-project"
+            ],
+            "missions": [
+              "Sourcing & sélection des étudiants",
+              "Enseignements (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
+              "Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)",
+              "Définition d'une roadmap annuelle & plannings",
+              "Reconnu 'Grande École du Numérique' délivrant un Bac+1"
+            ]
+          },
+          {
+            "title": "Architecte front-end / Consultant @ enioka",
+            "period": "Aug 2014 - Jan 2019",
+            "links": [
+              "https://enioka.com",
+              "https://github.com/enioka/ij.js",
+              "https://itlivemaps.com"
+            ],
+            "missions": [
+              "Développement & maintenance d'un outil de modélisation IT appelé le Modeler",
+              "Référencement de différentes DSI sous quatre plans (functionnal, applicative, infrastructure, and process) dans le modeler",
+              "Déploiement & support du modeler chez différents clients",
+              "Participation à la définition d'une roadmap pour le modeler",
+              "Design applicatif et amélioration du coeur du modeler (Java)",
+              "Création d'une libraire de représentation matricielle des données (ij.js)"
+            ]
+          },
+          {
+            "title": "Ingénieur Full-Stack @ Storefront",
+            "period": "Mar 2017 - Oct 2017",
+            "links": [
+              "https://thestorefront.com"
+            ],
+            "missions": [
+              "Traduction des différentes platformes (i18n)",
+              "Mise en place des paiements dans de nouvelles zones (Stripe)",
+              "Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics (Segment, mixpanel, GA, etc.)",
+              "Refonte de fonctionalités clés (listing page, user signup funnel)"
+            ]
+          }
         ]
-      }, {
-        "title": "Manager des relations publiques @ Supinfo",
-        "period": "2015 - 2017",
-        "missions": [
-          "Management de 50 étudiants représentant l'écoles lors de salons",
-          "Planning et budgétisation anuelle"
+      },
+      "studies": {
+        "title": "Études",
+        "past": [
+          {
+            "title": "M.Sc.2 Computer Sciences @ Supinfo",
+            "period": "2012 - 2017"
+          }
         ]
-      }]
-    },
-    "projects": {
-      "title": "Projects",
-      "past": [{
-        "title": "MTTS",
-        "period": "2018 - 2019",
-        "links": [
-          "https://github.com/faxaq/mtts"
-        ],
-        "missions": [
-          "Le but est de fournir une API déterministe au solfège en Typescript",
-          "Implémenté pour le moment : accords, gammes, notes"
+      },
+      "achievements": {
+        "title": "Accomplissements",
+        "past": [
+          {
+            "title": "Membre du CA @ Belleville Citoyenne",
+            "period": "2018 - 2019",
+            "missions": [
+              "S'assurer que le bureau suit les décisions prises en assemblées générales"
+            ]
+          },
+          {
+            "title": "Manager des relations publiques @ Supinfo",
+            "period": "2015 - 2017",
+            "missions": [
+              "Management de 50 étudiants représentant l'écoles lors de salons",
+              "Planning et budgétisation anuelle"
+            ]
+          }
         ]
-      }]
-    },
-    "misc": {
-      "title": "Misc",
-      "past": [{
-        "title": "Langues",
-        "missions": [
-          "Français C2",
-          "Anglais B2"
+      },
+      "projects": {
+        "title": "Projects",
+        "past": [
+          {
+            "title": "MTTS",
+            "period": "2018 - 2019",
+            "links": [
+              "https://github.com/faxaq/mtts"
+            ],
+            "missions": [
+              "Le but est de fournir une API déterministe au solfège en Typescript",
+              "Implémenté pour le moment : accords, gammes, notes"
+            ]
+          }
         ]
-      }, {
-        "title": "Passions",
-        "missions": [
-          "Musique, Théorie Musicale, Guitare, Live Shows",
-          "Vélo",
-          "Design"
+      },
+      "misc": {
+        "title": "Misc",
+        "past": [
+          {
+            "title": "Langues",
+            "missions": [
+              "Français C2",
+              "Anglais B2"
+            ]
+          },
+          {
+            "title": "Passions",
+            "missions": [
+              "Musique, Théorie Musicale, Guitare, Live Shows",
+              "Vélo",
+              "Design"
+            ]
+          }
         ]
-      }]
-    }
-  },
-  "pages": {
-    "mtts": {
-      "title": "MTTS Lab",
-      "subtitle": "Music theory in Typescript",
-      "buildScale": {
-        "title": "Construisez votre gamme",
-        "selectNote": "Sélectionnez la note",
-        "addAccidental": "Ajoutez une alteration",
-        "scaleTitle": "Voici les notes de la gamme majeure",
-        "scaleChordsTitle": "Et les accords correspondants"
       }
     }
   },
-  "notes": {
-    "C": "Do",
-    "D": "Ré",
-    "E": "Mi",
-    "F": "Fa",
-    "G": "Sol",
-    "A": "La",
-    "B": "Si"
-  },
-  "accidentals": {
-    "DOUBLE_SHARP": "𝄪",
-    "SHARP": "♯",
-    "NATURAL": "♮",
-    "FLAT": "♭",
-    "DOUBLE_FLAT": "𝄫"
+  "mtts": {
+    "pages": {
+      "index": {
+        "title": "MTTS Lab",
+        "subtitle": "Music theory in Typescript",
+        "buildScale": {
+          "title": "Construisez votre gamme",
+          "selectNote": "Sélectionnez la note",
+          "addAccidental": "Ajoutez une alteration",
+          "scaleTitle": "Voici les notes de la gamme majeure",
+          "scaleChordsTitle": "Et les accords correspondants"
+        }
+      }
+    },
+    "notes": {
+      "C": "Do",
+      "D": "Ré",
+      "E": "Mi",
+      "F": "Fa",
+      "G": "Sol",
+      "A": "La",
+      "B": "Si"
+    },
+    "accidentals": {
+      "DOUBLE_SHARP": "𝄪",
+      "SHARP": "♯",
+      "NATURAL": "♮",
+      "FLAT": "♭",
+      "DOUBLE_FLAT": "𝄫"
+    }
   }
 }

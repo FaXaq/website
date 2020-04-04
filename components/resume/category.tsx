@@ -1,19 +1,20 @@
-import { isArray } from "util";
-import LinkIcon from "../images/link-icon";
+import React from 'react'
+import LinkIcon from '../images/link-icon'
 
 export interface CategoryProps {
   object: any;
   icon: () => JSX.Element;
 }
 
-function Category(props: CategoryProps) {
-  const links = [];
-  if (isArray(props.object.links)) {
-    for (let l in props.object.links) {
+function Category (props: CategoryProps) {
+  const links = []
+  if (Array.isArray(props.object.links)) {
+    for (const l in props.object.links) {
       links.push(
         <a
           href={props.object.links[l]}
           target="_blank"
+          rel="noopener noreferrer"
           className="block flex ml-2"
           key={`link-${l}`}
         >
@@ -22,14 +23,14 @@ function Category(props: CategoryProps) {
           </div>
           <span>{props.object.links[l]}</span>
         </a>
-      );
+      )
     }
   }
 
-  const missions = [];
-  if (isArray(props.object.missions)) {
-    for (let m in props.object.missions) {
-      missions.push(<li key={`mission-${m}`}>{props.object.missions[m]}</li>);
+  const missions = []
+  if (Array.isArray(props.object.missions)) {
+    for (const m in props.object.missions) {
+      missions.push(<li key={`mission-${m}`}>{props.object.missions[m]}</li>)
     }
   }
   return (
@@ -48,7 +49,7 @@ function Category(props: CategoryProps) {
         <ul>{missions}</ul>
       </div>
     </div>
-  );
+  )
 }
 
-export default Category;
+export default Category

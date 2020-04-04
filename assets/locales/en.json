@@ -1,126 +1,142 @@
 {
-  "firstname": "Marin",
-  "workfield": "Software architect / Full-stack developer",
-  "copy": "Code : ",
-  "locales": {
-    "fr": "Français",
-    "en": "English"
-  },
-  "blog": {
-    "title": "Blog"
-  },
-  "content": {
-    "experiences": {
-      "title": "Experiences",
-      "past": [{
-        "title": "Front-end engineer @ Liberkeys",
-        "period": "Jul 2019 - Jan 2020",
-        "links": [
-          "https://liberkeys.com"
-        ],
-        "missions": [
-          "Mobile app development (nativescript, vuejs) & designs (figma)",
-          "Architecture (Project / API / OPS) & Development of a SAAS front-end PWA (vuejs, nuxt, typescript, jest, normalizr)",
-          "Set up of analytics with tagging plan (mixpanel, GA)"
-        ]
-      }, {
-        "title": "Director of Studies / Co-founder @ _blank - Belleville Citoyenne",
-        "period": "Nov 2015 - Jun 2019",
-        "links": [
-          "https://github.com/blank-project"
-        ],
-        "missions": [
-          "Student sourcing & selection",
-          "Teaching (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
-          "Writing of classes about web development essentials and concepts (Algorithmic, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-          "Defining roadmap & Setting up processes",
-          "Recognized as a 'Grande École du Numérique' and providing a Bac+1 diploma"
-        ]
-      }, {
-        "title": "Front-end architect / Consultant @ enioka",
-        "period": "Aug 2014 - Jan 2019",
-        "links": [
-          "https://enioka.com",
-          "https://github.com/enioka/ij.js",
-          "https://itlivemaps.com"
-        ],
-        "missions": [
-          "Development & maintenance of an IT modelisation tool called the Modeler",
-          "Map several clients' informations systems on four plans (functionnal, applicative, infrastructure, and process) into the modeler",
-          "Deployment & support of the modeler at clients' places",
-          "Participating in the roadmap for the modeler",
-          "Applicative design enhancement of the modeler core (Java)",
-          "Creation of a matrix data representation librabry (ij.js)"
-        ]
-      }, {
-        "title": "Full-stack engineer @ Storefront",
-        "period": "Mar 2017 - Oct 2017",
-        "links": [
-          "https://thestorefront.com"
-        ],
-        "missions": [
-          "Internationalization (i18n)",
-          "Setting up payments for new areas (Stripe)",
-          "Focus on User Growth and Web Marketing tools implementation (Segment, mixpanel, GA, etc.)",
-          "Some key features (listing page, user signup funnel)"
-
-        ]
-      }]
+  "resume": {
+    "firstname": "Marin",
+    "workfield": "Software architect / Full-stack developer",
+    "copy": "Code : ",
+    "locales": {
+      "fr": "Français",
+      "en": "English"
     },
-    "studies": {
-      "title": "Studies",
-      "past": [{
-        "title": "M.Sc.2 Computer Sciences @ Supinfo",
-        "period": "2012 - 2017"
-      }]
+    "blog": {
+      "title": "Blog"
     },
-    "achievements": {
-      "title": "Achievements",
-      "past": [{
-        "title": "Board member @ Belleville Citoyenne",
-        "period": "2018 - 2019",
-        "missions": [
-          "Ensure general assembly decisions were followed throughout the year by the association"
+    "content": {
+      "experiences": {
+        "title": "Experiences",
+        "past": [
+          {
+            "title": "Front-end engineer @ Liberkeys",
+            "period": "Jul 2019 - Jan 2020",
+            "links": [
+              "https://liberkeys.com"
+            ],
+            "missions": [
+              "Mobile app development (nativescript, vuejs) & designs (figma)",
+              "Architecture (Project / API / OPS) & Development of a SAAS front-end PWA (vuejs, nuxt, typescript, jest, normalizr)",
+              "Set up of analytics with tagging plan (mixpanel, GA)"
+            ]
+          },
+          {
+            "title": "Director of Studies / Co-founder @ _blank - Belleville Citoyenne",
+            "period": "Nov 2015 - Jun 2019",
+            "links": [
+              "https://github.com/blank-project"
+            ],
+            "missions": [
+              "Student sourcing & selection",
+              "Teaching (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
+              "Writing of classes about web development essentials and concepts (Algorithmic, UI/UX, MVVM, OOP, MVC, Git, Agile)",
+              "Defining roadmap & Setting up processes",
+              "Recognized as a 'Grande École du Numérique' and providing a Bac+1 diploma"
+            ]
+          },
+          {
+            "title": "Front-end architect / Consultant @ enioka",
+            "period": "Aug 2014 - Jan 2019",
+            "links": [
+              "https://enioka.com",
+              "https://github.com/enioka/ij.js",
+              "https://itlivemaps.com"
+            ],
+            "missions": [
+              "Development & maintenance of an IT modelisation tool called the Modeler",
+              "Map several clients' informations systems on four plans (functionnal, applicative, infrastructure, and process) into the modeler",
+              "Deployment & support of the modeler at clients' places",
+              "Participating in the roadmap for the modeler",
+              "Applicative design enhancement of the modeler core (Java)",
+              "Creation of a matrix data representation librabry (ij.js)"
+            ]
+          },
+          {
+            "title": "Full-stack engineer @ Storefront",
+            "period": "Mar 2017 - Oct 2017",
+            "links": [
+              "https://thestorefront.com"
+            ],
+            "missions": [
+              "Internationalization (i18n)",
+              "Setting up payments for new areas (Stripe)",
+              "Focus on User Growth and Web Marketing tools implementation (Segment, mixpanel, GA, etc.)",
+              "Some key features (listing page, user signup funnel)"
+            ]
+          }
         ]
-      }, {
-        "title": "PR Manager @ Supinfo",
-        "period": "2015 - 2017",
-        "missions": [
-          "Management of 50 students representing school in exhibitions",
-          "Planning & budget yearly"
+      },
+      "studies": {
+        "title": "Studies",
+        "past": [
+          {
+            "title": "M.Sc.2 Computer Sciences @ Supinfo",
+            "period": "2012 - 2017"
+          }
         ]
-      }]
-    },
-    "projects": {
-      "title": "Projects",
-      "past": [{
-        "title": "MTTS",
-        "period": "2018 - 2019",
-        "links": [
-          "https://github.com/faxaq/mtts"
-        ],
-        "missions": [
-          "The goal is to provide a deterministic API to music theory in Typescript",
-          "Implemented so far : chords, scales, notes"
+      },
+      "achievements": {
+        "title": "Achievements",
+        "past": [
+          {
+            "title": "Board member @ Belleville Citoyenne",
+            "period": "2018 - 2019",
+            "missions": [
+              "Ensure general assembly decisions were followed throughout the year by the association"
+            ]
+          },
+          {
+            "title": "PR Manager @ Supinfo",
+            "period": "2015 - 2017",
+            "missions": [
+              "Management of 50 students representing school in exhibitions",
+              "Planning & budget yearly"
+            ]
+          }
         ]
-      }]
-    },
-    "misc": {
-      "title": "Misc",
-      "past": [{
-        "title": "Languages",
-        "missions": [
-          "French C2",
-          "English B2"
+      },
+      "projects": {
+        "title": "Projects",
+        "past": [
+          {
+            "title": "MTTS",
+            "period": "2018 - 2019",
+            "links": [
+              "https://github.com/faxaq/mtts"
+            ],
+            "missions": [
+              "The goal is to provide a deterministic API to music theory in Typescript",
+              "Implemented so far : chords, scales, notes"
+            ]
+          }
         ]
-      }, {
-        "title": "Hobbies",
-        "missions": [
-          "Music, Music Theory, Guitar, Live Shows",
-          "Biking",
-          "Design"
+      },
+      "misc": {
+        "title": "Misc",
+        "past": [
+          {
+            "title": "Languages",
+            "missions": [
+              "French C2",
+              "English B2"
+            ]
+          },
+          {
+            "title": "Hobbies",
+            "missions": [
+              "Music, Music Theory, Guitar, Live Shows",
+              "Biking",
+              "Design"
+            ]
+          }
         ]
-      }]
+      }
     }
   }
 }

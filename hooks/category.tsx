@@ -1,30 +1,31 @@
-import { useTranslation } from "react-i18next";
-import Category from "../components/index/category";
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import Category from '../components/resume/category'
 
-export default function useCategory(
+export default function useCategory (
   name: string,
   CustomIcon: () => JSX.Element
 ) {
-  const { t } = useTranslation();
-  const categoryObject: [] = t(`content.${name}.past`);
-  const elements = [];
+  const { t } = useTranslation()
+  const categoryObject: [] = t(`content.${name}.past`)
+  const elements: JSX.Element[] = []
 
-  for (let s in categoryObject) {
+  for (const s in categoryObject) {
     elements.push(
       <Category
         key={`${name}-${s}`}
         object={categoryObject[s]}
         icon={CustomIcon}
       />
-    );
+    )
   }
 
-  return [
+  return (
     <div className="category">
       <h2 className="text-dark-marine text-2xl font-bold">
         {t(`content.${name}.title`)}
       </h2>
       {elements}
     </div>
-  ];
+  )
 }

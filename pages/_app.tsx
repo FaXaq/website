@@ -1,8 +1,11 @@
-import "../styles/main.scss";
-import "../i18n";
+import React from 'react'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+import '../styles/main.scss'
+import '../i18n'
+
+// eslint-disable-next-line react/prop-types
+function MyApp ({ Component, pageProps }) {
+  return <Component {...pageProps} />
 }
 
-export default MyApp;
+export default MyApp

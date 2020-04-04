@@ -1,9 +1,11 @@
-import Header from "../../components/index/header";
-import Mountains from "../../components/images/mountains";
-import Footer from "../../components/index/footer";
-import Content from "../../components/index/content";
+import React from 'react'
 
-function HomePage() {
+import Header from '../../components/resume/header'
+import Mountains from '../../components/images/mountains'
+import Footer from '../../components/resume/footer'
+import Content from '../../components/resume/content'
+
+function HomePage () {
   return (
     <div className="font-sans">
       <Header />
@@ -15,7 +17,7 @@ function HomePage() {
       </div>
       <Footer />
     </div>
-  );
+  )
 }
 
-export default HomePage;
+export default HomePage

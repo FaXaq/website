@@ -1,7 +1,8 @@
-import MTTSHeader from "../../components/mtts/header";
-import BuildScale from "../../components/mtts/build-scale";
+import MTTSHeader from '../../components/mtts/header'
+import BuildScale from '../../components/mtts/build-scale'
+import React from 'react'
 
-function HomePage() {
+function HomePage () {
   return (
     <div className="font-sans">
       <MTTSHeader />
@@ -9,7 +10,7 @@ function HomePage() {
         <BuildScale />
       </div>
     </div>
-  );
+  )
 }
 
-export default HomePage;
+export default HomePage
