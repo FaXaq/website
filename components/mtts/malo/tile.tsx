@@ -1,43 +1,49 @@
-import React, { useState } from 'react'
-import { Synth } from 'tone'
+import React, { useEffect, useState } from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 import { useTranslation } from 'react-i18next'
 
 interface TileProps {
     notes: Note[];
+    playNotes: (notes: Note[]) => void;
+    playingNotes: { [key: string]: boolean }
 }
 
-const Tile = ({ notes }: TileProps) => {
-  const [playing, setPlaying] = useState(false)
+const Tile = ({ notes, playNotes, playingNotes }: TileProps) => {
   const { t } = useTranslation()
+  const [playing, setPlaying] = useState(false)
 
-  function playNote (note: Note) {
-    const t = new Synth().toMaster()
-    t.triggerAttackRelease(note.frequency, 1)
-    setPlaying(true)
-    setTimeout(() => setPlaying(false), 1000)
-  }
+  useEffect(() => {
+    setPlaying(playingNotes[notes.map(n => n.SPN).join('-')])
+  }, [playingNotes, notes])
 
-  const notesItems: JSX.Element[] = notes.map(n =>
-    <li key={`tile-note-${n.name}-${n.pitch.value}`}>
+  const notesItems: JSX.Element[] = notes.map(n => {
+    return <li
+      className="text-white text-lg opacity-75"
+      key={`tile-note-${n.name}-${n.pitch.value}`}>
       {t(`mtts.notes.${n.name}`)}
       {n.hasAccidental() && n.accidental.semitones !== 0
         ? t(`mtts.accidentals.${n.accidental.name}`)
         : ''}
       <span> {n.pitch.value}</span>
     </li>
-  )
+  })
 
-  const classes = ['flex-grow', 'border', 'flex', 'justify-center', 'align-center']
+  const classes = ['flex', 'flex-col', 'justify-center', 'text-center', 'flex-1', 'text-xs', 'hexagon', 'font-black']
 
-  if (playing) {
-    classes.push('bg-black text-white')
+  if (!playing) {
+    classes.push('opacity-50')
   }
 
+  const joinedNames = notes.map(n => n.name).join('-').toLowerCase()
+  classes.push(
+    `bg-mtts-${joinedNames}`,
+    `border-mtts-${joinedNames}`
+  )
+
   return (
-    <div className={classes.join(' ')} onClick={() => playNote(notes[0])}>
-      <ul className="flex flex-col justify-center">
+    <div className="px-2" onClick={() => playNotes(notes)}>
+      <ul className={classes.join(' ')}>
         {notesItems}
       </ul>
     </div>

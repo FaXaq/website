@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { NOTES, Note, Pitch } from 'mtts'
 import Tile from '../../components/mtts/malo/tile'
 import TileLine from '../../components/mtts/malo/tile-line'
 import TileContainer from '../../components/mtts/malo/tile-container'
+
+import { PolySynth, Synth } from 'tone'
+
+import '../../styles/malo.scss'
 
 function generateNotesForPitch (pitch: Pitch): Note[][] {
   const notes: Note[][] = []
@@ -15,11 +19,7 @@ function generateNotesForPitch (pitch: Pitch): Note[][] {
     })
 
     if (!currentNote.isCorF() && notes[notes.length - 1] !== undefined) {
-      const currentFlatNote = currentNote.duplicate()
-      currentFlatNote.addFlat()
-      notes[notes.length - 1].push(
-        currentFlatNote
-      )
+      notes[notes.length - 1].push(currentNote.duplicate().addFlat())
     }
 
     notes.push([
@@ -27,11 +27,7 @@ function generateNotesForPitch (pitch: Pitch): Note[][] {
     ])
 
     if (!currentNote.isBorE()) {
-      const currentSharpNote = currentNote.duplicate()
-      currentSharpNote.addSharp()
-      notes.push([
-        currentSharpNote
-      ])
+      notes.push([currentNote.duplicate().addSharp()])
     }
   }
 
@@ -39,19 +35,49 @@ function generateNotesForPitch (pitch: Pitch): Note[][] {
 }
 
 const Malo = () => {
+  const lineLength = 20
   const tileLines: JSX.Element[] = []
+  const tiles: JSX.Element[] = []
+  const [playingNotes, setPlayingNotes] =
+    useState<{ [key: string ]: boolean }>({})
 
-  for (let i = 0; i < 8; i++) {
-    const notesForPitch = generateNotesForPitch(new Pitch({ value: i })).map(n => (
-      <Tile
-        notes={n}
-        key={`tile-${n[0].name}-${n[0].pitch.value}`}
-      ></Tile>
-    ))
-
-    tileLines.push(<TileLine tiles={notesForPitch} />)
+  function playNotes (notes: Note[]) {
+    const t = new PolySynth({ voice: Synth }).toDestination()
+    t.triggerAttackRelease(notes.map(n => n.frequency), 1)
+    setPlayingNotes(prevState =>
+      ({ ...prevState, [notes.map(n => n.SPN).join('-')]: true })
+    )
+    setTimeout(() => {
+      setPlayingNotes(prevState =>
+        ({ ...prevState, [notes.map(n => n.SPN).join('-')]: false })
+      )
+    }, 1000)
   }
-  return <TileContainer tileLines={tileLines} />
+
+  for (let i = 1; i < 8; i++) {
+    tiles.push(...generateNotesForPitch(new Pitch({ value: i })).map(notes =>
+      <Tile
+        playingNotes={playingNotes}
+        playNotes={playNotes}
+        notes={notes}
+        key={`tile-${notes.map(n => `${n.SPN}`).join('-')}`}
+      ></Tile>)
+    )
+  }
+
+  for (let i = 0; i < lineLength; i++) {
+    const lineStart = i > 0 ? i * (lineLength - 12) : 0
+    const lineStop = lineStart + lineLength
+    tileLines.push(<TileLine
+      index={i}
+      tiles={tiles.slice(lineStart, lineStop)}
+      key={`tile-line-${lineStart}-${lineStop}`}
+    />)
+  }
+
+  return <div className="overflow-hidden bg-mtts-dark-violet">
+    <TileContainer tileLines={tileLines} />
+  </div>
 }
 
 export default Malo
