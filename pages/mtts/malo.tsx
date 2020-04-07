@@ -1,63 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import { NOTES, Note, Pitch } from 'mtts'
+// eslint-disable-next-line no-unused-vars
+import { Note, Pitch } from 'mtts'
+import { generateNotesForPitch } from '../../utils/mtts'
 import Tile from '../../components/mtts/malo/tile'
 import TileLine from '../../components/mtts/malo/tile-line'
 import TileContainer from '../../components/mtts/malo/tile-container'
-
-import { PolySynth, Synth } from 'tone'
-
+import { usePolySynth } from '../../hooks/mtts/polysynth'
 import '../../styles/malo.scss'
-
-function generateNotesForPitch (pitch: Pitch): Note[][] {
-  const notes: Note[][] = []
-
-  for (let note = 0; note < NOTES.length; note++) {
-    const currentNote = new Note({
-      name: NOTES[note],
-      pitch
-    })
-
-    if (!currentNote.isCorF() && notes[notes.length - 1] !== undefined) {
-      notes[notes.length - 1].push(currentNote.duplicate().addFlat())
-    }
-
-    notes.push([
-      currentNote
-    ])
-
-    if (!currentNote.isBorE()) {
-      notes.push([currentNote.duplicate().addSharp()])
-    }
-  }
-
-  return notes
-}
 
 const Malo = () => {
   const lineLength = 20
   const tileLines: JSX.Element[] = []
   const tiles: JSX.Element[] = []
-  const [playingNotes, setPlayingNotes] =
-    useState<{ [key: string ]: boolean }>({})
+  const {
+    startPlaying,
+    stopPlaying,
+    isPlaying
+  } = usePolySynth()
 
   function playNotes (notes: Note[]) {
-    const t = new PolySynth({ voice: Synth }).toDestination()
-    t.triggerAttackRelease(notes.map(n => n.frequency), 1)
-    setPlayingNotes(prevState =>
-      ({ ...prevState, [notes.map(n => n.SPN).join('-')]: true })
-    )
-    setTimeout(() => {
-      setPlayingNotes(prevState =>
-        ({ ...prevState, [notes.map(n => n.SPN).join('-')]: false })
-      )
-    }, 1000)
+    if (!isPlaying(notes)) {
+      startPlaying(notes)
+    } else {
+      stopPlaying(notes)
+    }
   }
 
   for (let i = 1; i < 8; i++) {
     tiles.push(...generateNotesForPitch(new Pitch({ value: i })).map(notes =>
       <Tile
-        playingNotes={playingNotes}
+        playing={isPlaying(notes)}
         playNotes={playNotes}
         notes={notes}
         key={`tile-${notes.map(n => `${n.SPN}`).join('-')}`}

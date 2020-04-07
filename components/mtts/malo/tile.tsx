@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 import { useTranslation } from 'react-i18next'
@@ -6,16 +6,11 @@ import { useTranslation } from 'react-i18next'
 interface TileProps {
     notes: Note[];
     playNotes: (notes: Note[]) => void;
-    playingNotes: { [key: string]: boolean }
+    playing: boolean
 }
 
-const Tile = ({ notes, playNotes, playingNotes }: TileProps) => {
+const Tile = ({ notes, playing, playNotes }: TileProps) => {
   const { t } = useTranslation()
-  const [playing, setPlaying] = useState(false)
-
-  useEffect(() => {
-    setPlaying(playingNotes[notes.map(n => n.SPN).join('-')])
-  }, [playingNotes, notes])
 
   const notesItems: JSX.Element[] = notes.map(n => {
     return <li

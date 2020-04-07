@@ -30,6 +30,9 @@ module.exports = {
         '8xl': '6rem',
         '9xl': '7rem',
         '10xl': '8rem'
+      },
+      flexGrow: {
+        2: 2
       }
     }
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import useCategory from '../../hooks/category'
+import useCategory from '../../hooks/resume/category'
 import ExperienceIcon from '../images/experience-icon'
 import StudyIcon from '../images/study-icon'
 import AchievementIcon from '../images/achievement-icon'
