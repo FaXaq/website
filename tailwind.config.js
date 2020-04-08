@@ -33,6 +33,12 @@ module.exports = {
       },
       flexGrow: {
         2: 2
+      },
+      height: {
+        '1/2': '50%'
+      },
+      width: {
+        '1/2': '50%'
       }
     }
   }
