@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { generateNotesForPitch } from '../../../utils/mtts'
 import { Note, Pitch } from 'mtts'
 import PianoNote from './piano-note'
@@ -6,14 +6,16 @@ import classNames from 'classnames'
 import { usePolySynth } from '../../../hooks/mtts/polysynth'
 
 interface PianoProps {
+  lowNote?: Note
+  highNote?: Note;
   align?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 const Piano = ({
-  align = 'left'
+  align = 'left',
+  lowNote = Note.fromSPN('A0'),
+  highNote = Note.fromSPN('C8')
 }: PianoProps) => {
-  const [lowNote] = useState<Note>(Note.fromSPN('A0'))
-  const [highNote] = useState<Note>(Note.fromSPN('C8'))
   const pianoNotes: JSX.Element[] = []
   const { isPlaying, stopPlaying, startPlaying } = usePolySynth()
 
@@ -25,6 +27,7 @@ const Piano = ({
       notes = notes.filter(n => n[0].getSemitonesTo(lowNote) <= 0)
     }
 
+    // filter notes above high note
     if (i === highNote.pitch.value) {
       notes = notes.filter(n => n[0].getSemitonesTo(highNote) >= 0)
     }

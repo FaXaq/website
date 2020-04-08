@@ -2,6 +2,7 @@ import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 import { useTranslation } from 'react-i18next'
+import classNames from 'classnames'
 
 interface TileProps {
     notes: Note[];
@@ -12,7 +13,7 @@ interface TileProps {
 const Tile = ({ notes, playing, playNotes }: TileProps) => {
   const { t } = useTranslation()
 
-  const notesItems: JSX.Element[] = notes.map(n => {
+  const notesItems = notes.map(n => {
     return <li
       className="text-white text-lg opacity-75"
       key={`tile-note-${n.name}-${n.pitch.value}`}>
@@ -24,21 +25,15 @@ const Tile = ({ notes, playing, playNotes }: TileProps) => {
     </li>
   })
 
-  const classes = ['flex', 'flex-col', 'justify-center', 'text-center', 'flex-1', 'text-xs', 'hexagon', 'font-black']
-
-  if (!playing) {
-    classes.push('opacity-50')
-  }
-
   const joinedNames = notes.map(n => n.name).join('-').toLowerCase()
-  classes.push(
-    `bg-mtts-${joinedNames}`,
-    `border-mtts-${joinedNames}`
-  )
 
   return (
     <div className="px-2" onClick={() => playNotes(notes)}>
-      <ul className={classes.join(' ')}>
+      <ul className={classNames({
+        'flex flex-col justify-center text-center flex-1 text-xs hexagon font-black': true,
+        'opacity-50': !playing,
+        [`bg-mtts-${joinedNames} border-mtts-${joinedNames}`]: true
+      })}>
         {notesItems}
       </ul>
     </div>
