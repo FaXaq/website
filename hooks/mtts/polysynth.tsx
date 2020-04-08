@@ -31,9 +31,14 @@ export function usePolySynth () {
       if (uniqueNotes.findIndex(un => un.SPN === n.SPN) > -1) {
         polysynth.triggerAttack(n.frequency)
       }
-      setPlayingNotes(prevState =>
-        ({ ...prevState, [n.SPN]: true })
-      )
+    })
+
+    setPlayingNotes(prevState => {
+      const nextState = Object.assign({}, prevState)
+      notes.map(n => {
+        nextState[n.SPN] = true
+      })
+      return nextState
     })
   }
 
@@ -48,9 +53,14 @@ export function usePolySynth () {
       if (playingNotes[n.SPN] === true) {
         polysynth.triggerRelease(n.frequency)
       }
-      setPlayingNotes(prevState =>
-        ({ ...prevState, [n.SPN]: false })
-      )
+    })
+
+    setPlayingNotes(prevState => {
+      const nextState = Object.assign({}, prevState)
+      notes.map(n => {
+        delete nextState[n.SPN]
+      })
+      return nextState
     })
   }
 

@@ -6,11 +6,10 @@ import classNames from 'classnames'
 
 interface TileProps {
     notes: Note[];
-    playNotes: (notes: Note[]) => void;
     playing: boolean
 }
 
-const Tile = ({ notes, playing, playNotes }: TileProps) => {
+const Tile = ({ notes, playing }: TileProps) => {
   const { t } = useTranslation()
 
   const notesItems = notes.map(n => {
@@ -28,7 +27,7 @@ const Tile = ({ notes, playing, playNotes }: TileProps) => {
   const joinedNames = notes.map(n => n.name).join('-').toLowerCase()
 
   return (
-    <div className="px-2" onClick={() => playNotes(notes)}>
+    <div className="px-2">
       <ul className={classNames({
         'flex flex-col justify-center text-center flex-1 text-xs hexagon font-black': true,
         'opacity-50': !playing,
@@ -40,4 +39,4 @@ const Tile = ({ notes, playing, playNotes }: TileProps) => {
   )
 }
 
-export default Tile
+export default React.memo(Tile)

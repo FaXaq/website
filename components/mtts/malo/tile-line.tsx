@@ -13,12 +13,15 @@ interface TileLineProps {
 
 const TileLine = ({ notes, index, isPlaying, playNotes }: TileLineProps) => {
   const tiles = notes.map(n =>
-    <Tile
-      playing={isPlaying(n)}
-      playNotes={playNotes}
-      notes={n}
+    <div
+      onClick={() => playNotes(n)}
       key={`tile-${n.map(sn => `${sn.SPN}`).join('-')}`}
-    ></Tile>
+    >
+      <Tile
+        playing={isPlaying(n)}
+        notes={n}
+      ></Tile>
+    </div>
   )
 
   return (
@@ -31,4 +34,4 @@ const TileLine = ({ notes, index, isPlaying, playNotes }: TileLineProps) => {
   )
 }
 
-export default TileLine
+export default React.memo(TileLine)
