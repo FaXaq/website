@@ -18,11 +18,11 @@ const TileContainer = ({ notes, lineLength, lineNumber }: TileContainerProps) =>
     isPlaying
   } = usePolySynth()
 
-  function playNotes (n: Note[]) {
-    if (!isPlaying(n)) {
-      startPlaying(n)
+  function playNotes (notes: Note[]) {
+    if (!isPlaying(notes)) {
+      startPlaying(notes)
     } else {
-      stopPlaying(n)
+      stopPlaying(notes)
     }
   }
 

@@ -1,6 +1,17 @@
 // eslint-disable-next-line no-unused-vars
 import { Pitch, Note, NOTES } from 'mtts'
 
+export function generatePitches (valueStart: number, valueStop: number): Pitch[] {
+  const pitches: Pitch[] = []
+  for (
+    let i = valueStart;
+    valueStart < valueStop ? i < valueStop : i > valueStop;
+    valueStart < valueStop ? i++ : i--) {
+    pitches.push(new Pitch({ value: i }))
+  }
+  return pitches
+}
+
 export function generateNotesForPitch (pitch: Pitch): Note[][] {
   const notes: Note[][] = []
 

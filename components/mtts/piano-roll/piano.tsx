@@ -1,5 +1,6 @@
-import React from 'react'
-import { generateNotesForPitch } from '../../../utils/mtts'
+import React, { useState, useMemo } from 'react'
+import { generateNotesForPitch, generatePitches } from '../../../utils/mtts'
+// eslint-disable-next-line no-unused-vars
 import { Note, Pitch } from 'mtts'
 import PianoNote from './piano-note'
 import classNames from 'classnames'
@@ -16,49 +17,72 @@ const Piano = ({
   lowNote = Note.fromSPN('A0'),
   highNote = Note.fromSPN('C8')
 }: PianoProps) => {
-  const pianoNotes: JSX.Element[] = []
   const { isPlaying, stopPlaying, startPlaying } = usePolySynth()
+  const [pitches] = useState<Pitch[]>(generatePitches(highNote.pitch.value, lowNote.pitch.value))
 
-  for (let i = highNote.pitch.value; i > lowNote.pitch.value + 1; i--) {
-    let notes = generateNotesForPitch(new Pitch({ value: i }))
-
-    // filter notes below low note
-    if (i === lowNote.pitch.value) {
-      notes = notes.filter(n => n[0].getSemitonesTo(lowNote) <= 0)
+  function handleClick (notes: Note[]) {
+    if (!isPlaying(notes)) {
+      startPlaying(notes)
+    } else {
+      stopPlaying(notes)
     }
-
-    // filter notes above high note
-    if (i === highNote.pitch.value) {
-      notes = notes.filter(n => n[0].getSemitonesTo(highNote) >= 0)
-    }
-
-    pianoNotes.push(
-      ...notes.reverse().map(n =>
-        <PianoNote
-          key={n.map(n => n.SPN).join('-')}
-          notes={n}
-          isPreviousToBlackKey={n.reduce((previousValue, currentValue) => {
-            return previousValue || !currentValue.isCorF()
-          }, false)}
-          align={align}
-          playing={isPlaying(n)}
-          startPlaying={startPlaying}
-          stopPlaying={stopPlaying}
-        />
-      )
-    )
   }
 
+  const notesToDisplay = useMemo(() => {
+    console.log('rerendered')
+    return pitches.map((p) => {
+      let notes = generateNotesForPitch(p)
+
+      // filter notes below low note
+      if (p.value === lowNote.pitch.value) {
+        notes = notes.filter(n => n[0].getSemitonesTo(lowNote) <= 0)
+      }
+
+      // filter notes above high note
+      if (p.value === highNote.pitch.value) {
+        notes = notes.filter(n => n[0].getSemitonesTo(highNote) >= 0)
+      }
+
+      return notes.reverse()
+    }).reduce((p: Note[][], c: Note[][]) => [...p, ...c], [])
+  }, [pitches])
+
+  const pianoNotes: JSX.Element[] = notesToDisplay.map(n => {
+    const isPreviousToBlackKey = n.reduce((previousValue, currentValue) => {
+      return previousValue || !currentValue.isCorF()
+    }, false)
+    const hasAccidental = n.reduce((previousValue, currentValue) => {
+      return previousValue || currentValue.hasAccidental()
+    }, false)
+    return (
+      <li
+        onClick={() => { handleClick(n) }}
+        key={`piano-note-${n.map(n => n.SPN).join('-')}`}
+        className={classNames({
+          flex: true,
+          'justify-end': align === 'right' || align === 'bottom',
+          '-mb-2': (isPreviousToBlackKey || hasAccidental) && (align === 'right' || align === 'left'),
+          '-ml-2': (isPreviousToBlackKey || hasAccidental) && (align === 'top' || align === 'bottom')
+        })}
+      >
+        <PianoNote
+          notes={n}
+          align={align}
+          playing={isPlaying(n)}
+          hasAccidental={hasAccidental}
+        />
+      </li>
+    )
+  })
+
   return (
-    <div>
-      <ul className={classNames({
-        flex: true,
-        'flex-row': align === 'top' || align === 'bottom',
-        'flex-col': align === 'left' || align === 'right'
-      })}>
-        {pianoNotes}
-      </ul>
-    </div>
+    <ul className={classNames({
+      'flex justify-center': true,
+      'flex-row-reverse h-24': align === 'top' || align === 'bottom',
+      'flex-col w-24': align === 'left' || align === 'right'
+    })}>
+      {pianoNotes}
+    </ul>
   )
 }
 
