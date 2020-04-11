@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { generateNotesForPitch, generatePitches } from '../../../utils/mtts'
 // eslint-disable-next-line no-unused-vars
 import { Note, Pitch } from 'mtts'
-import PianoNote from './piano-note'
+import PianoNote from './piano-key'
 import classNames from 'classnames'
 import { usePolySynth } from '../../../hooks/mtts/polysynth'
 
