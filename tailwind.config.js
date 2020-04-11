@@ -35,10 +35,20 @@ module.exports = {
         2: 2
       },
       height: {
-        '1/2': '50%'
+        '1/2': '50%',
+        'icon-s': '2rem',
+        'icon-m': '4rem',
+        'icon-l': '8rem',
+        'icon-xl': '16rem',
+        'icon-xxl': '32rem'
       },
       width: {
-        '1/2': '50%'
+        '1/2': '50%',
+        'icon-s': '2rem',
+        'icon-m': '4rem',
+        'icon-l': '8rem',
+        'icon-xl': '16rem',
+        'icon-xxl': '32rem'
       }
     }
   }

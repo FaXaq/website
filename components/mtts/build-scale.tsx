@@ -61,10 +61,10 @@ function BuildScale () {
   return (
     <div>
       <h3 className="text-4xl text-mtts-dark-violet">
-        {t('mtts.pages.index.buildScale.title')}
+        {t('mtts.components.buildScale.title')}
       </h3>
       <h5 className="text-2xl text-mtts-dark-violet py-2">
-        {t('mtts.pages.index.buildScale.selectNote')}
+        {t('mtts.components.buildScale.selectNote')}
       </h5>
       <MultiSelector
         elements={NOTES}
@@ -79,7 +79,7 @@ function BuildScale () {
         toText={noteName => t(`mtts.notes.${noteName}`)}
       />
       <h5 className="text-2xl text-mtts-dark-violet py-2">
-        {t('mtts.pages.index.buildScale.addAccidental')}
+        {t('mtts.components.buildScale.addAccidental')}
       </h5>
       <MultiSelector
         elements={possibleAccidentals}
@@ -90,11 +90,11 @@ function BuildScale () {
         toText={accidentalName => t(`mtts.accidentals.${accidentalName}`)}
       />
       <h5 className="text-2xl text-mtts-dark-violet py-2">
-        {t('mtts.pages.index.buildScale.scaleTitle')}
+        {t('mtts.components.buildScale.scaleTitle')}
       </h5>
       <ul className="flex">{notesInScale}</ul>
       <h5 className="text-2xl text-mtts-dark-violet py-2">
-        {t('mtts.pages.index.buildScale.scaleChordsTitle')}
+        {t('mtts.components.buildScale.scaleChordsTitle')}
       </h5>
       <ul>{chordsInScale}</ul>
     </div>

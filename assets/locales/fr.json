@@ -141,13 +141,43 @@
       "index": {
         "title": "MTTS Lab",
         "subtitle": "Music theory in Typescript",
-        "buildScale": {
-          "title": "Construisez votre gamme",
-          "selectNote": "Sélectionnez la note",
-          "addAccidental": "Ajoutez une alteration",
-          "scaleTitle": "Voici les notes de la gamme majeure",
-          "scaleChordsTitle": "Et les accords correspondants"
+        "experimentsTitle": "Expériences",
+        "experimentsLink": "Lien de l'expérience",
+        "experiments": [
+          {
+            "title": "Constructeur de gamme",
+            "description": "Construit une game à partir d'une note via mtts",
+            "link": "/mtts/scale-builder"
+          },
+          {
+            "title": "Malo",
+            "description": "Piano hexagonal, relié à un Synthéthiseur multi voix, permettant de jouer des notes suivant une disposition différente de celle d'un piano classique.",
+            "link": "/mtts/malo"
+          },
+          {
+            "title": "Piano-Roll",
+            "description": "Piano classique relié à un Synthéthiseur multi voix.",
+            "link": "/mtts/piano-roll"
+          },
+          {
+            "title": "Daw",
+            "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
+            "link": "/mtts/daw"
+          }
+        ],
+        "research": {
+          "title": "Recherche",
+          "text": "Le but de ce site est de chercher de nouvelles manières de créer, enseigner, apprendre et découvrir la théorie musicale au travers d'expériences. Il est basé sur la bibliothèque MTTS (sur mon github) et Tonejs."
         }
+      }
+    },
+    "components": {
+      "buildScale": {
+        "title": "Construisez votre gamme",
+        "selectNote": "Sélectionnez la note",
+        "addAccidental": "Ajoutez une alteration",
+        "scaleTitle": "Voici les notes de la gamme majeure",
+        "scaleChordsTitle": "Et les accords correspondants"
       }
     },
     "notes": {

@@ -23,5 +23,15 @@ module.exports = {
     'react',
     '@typescript-eslint'
   ],
-  rules: {}
+  rules: {},
+  overrides: [
+    {
+      // workers
+      files: ["*.worker.ts"],
+      rules: {
+        "no-restricted-globals": [0],
+        "no-isolated-modules": [0]
+      }
+    }
+  ]
 }

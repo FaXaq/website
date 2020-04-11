@@ -138,5 +138,66 @@
         ]
       }
     }
+  },
+  "mtts": {
+    "pages": {
+      "index": {
+        "title": "MTTS Lab",
+        "subtitle": "Music theory in Typescript",
+        "experimentsTitle": "Experiments",
+        "experimentsLink": "Link to the experiment",
+        "experiments": [
+          {
+            "title": "Scale builder",
+            "description": "Build a scale from a root note",
+            "link": "/mtts/scale-builder"
+          },
+          {
+            "title": "Malo",
+            "description": "Hexagonal keys, linked to a multi-voices synth, allowing playing keys from a different perspective w/ tonejs.",
+            "link": "/mtts/malo"
+          },
+          {
+            "title": "Piano-Roll",
+            "description": "Classic keys setup linked linked to a multi-voices synth w/ tonejs.",
+            "link": "/mtts/piano-roll"
+          },
+          {
+            "title": "Daw",
+            "description": "Digital Audio Workstation (early WIP) in react w/ tonejs",
+            "link": "/mtts/daw"
+          }
+        ],
+        "research": {
+          "title": "Reseach",
+          "text": "I'm aiming to find new ways to create, teach, learn and discover music theory through experiments. This lab is based on MTTS Library (from my github) and Tonejs."
+        }
+      }
+    },
+    "components": {
+      "buildScale": {
+        "title": "Construisez votre gamme",
+        "selectNote": "Sélectionnez la note",
+        "addAccidental": "Ajoutez une alteration",
+        "scaleTitle": "Voici les notes de la gamme majeure",
+        "scaleChordsTitle": "Et les accords correspondants"
+      }
+    },
+    "notes": {
+      "C": "Do",
+      "D": "Ré",
+      "E": "Mi",
+      "F": "Fa",
+      "G": "Sol",
+      "A": "La",
+      "B": "Si"
+    },
+    "accidentals": {
+      "DOUBLE_SHARP": "𝄪",
+      "SHARP": "♯",
+      "NATURAL": "♮",
+      "FLAT": "♭",
+      "DOUBLE_FLAT": "𝄫"
+    }
   }
 }

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Note } from 'mtts'
 import classNames from 'classnames'
 
-interface PianoNoteProps {
+interface PianoKeyProps {
   notes: Note[];
   showNote?: boolean;
   align?: 'top' | 'right' | 'bottom' | 'left';
@@ -11,13 +11,13 @@ interface PianoNoteProps {
   hasAccidental?: boolean
 }
 
-const PianoNote = ({
+const PianoKey = ({
   notes,
   showNote,
   align = 'left',
   playing,
   hasAccidental
-}: PianoNoteProps) => {
+}: PianoKeyProps) => {
   const [noteText, setNoteText] = useState('')
 
   useEffect(() => {
@@ -62,4 +62,4 @@ const PianoNote = ({
   )
 }
 
-export default React.memo(PianoNote)
+export default React.memo(PianoKey)
