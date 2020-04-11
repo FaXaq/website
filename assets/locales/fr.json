@@ -1,12 +1,12 @@
 {
+  "locales": {
+    "fr": "Français",
+    "en": "English"
+  },
   "resume": {
     "firstname": "Marin",
     "workfield": "Architecte logiciel / Développeur Full Stack",
     "copy": "Code : ",
-    "locales": {
-      "fr": "Français",
-      "en": "English"
-    },
     "content": {
       "experiences": {
         "title": "Expériences",

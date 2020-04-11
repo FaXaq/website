@@ -7,7 +7,7 @@ export default function useCategory (
   CustomIcon: () => JSX.Element
 ) {
   const { t } = useTranslation()
-  const categoryObject: [] = t(`content.${name}.past`)
+  const categoryObject: [] = t(`resume.content.${name}.past`)
   const elements: JSX.Element[] = []
 
   for (const s in categoryObject) {
@@ -23,7 +23,7 @@ export default function useCategory (
   return (
     <div className="category">
       <h2 className="text-dark-marine text-2xl font-bold">
-        {t(`content.${name}.title`)}
+        {t(`resume.content.${name}.title`)}
       </h2>
       {elements}
     </div>
