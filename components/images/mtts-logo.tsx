@@ -1,6 +1,7 @@
-import Anime from "react-anime";
+import React from 'react'
+import Anime from 'react-anime'
 
-function MTTSLogo() {
+function MTTSLogo () {
   return (
     <svg viewBox="0 0 70 26" fill="none" xmlns="http://www.w3.org/2000/svg">
       <Anime
@@ -34,7 +35,7 @@ function MTTSLogo() {
         />
       </Anime>
     </svg>
-  );
+  )
 }
 
-export default MTTSLogo;
+export default MTTSLogo

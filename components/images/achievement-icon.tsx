@@ -1,4 +1,6 @@
-function AchievementIcon() {
+import React from 'react'
+
+function AchievementIcon () {
   return (
     <svg viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse
@@ -29,7 +31,7 @@ function AchievementIcon() {
       />
       <circle cx="16.5" cy="12.5" r="1.5" fill="#173E57" />
     </svg>
-  );
+  )
 }
 
-export default AchievementIcon;
+export default AchievementIcon

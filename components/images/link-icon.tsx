@@ -1,4 +1,6 @@
-function LinkIcon() {
+import React from 'react'
+
+function LinkIcon () {
   return (
     <svg viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -10,7 +12,7 @@ function LinkIcon() {
         fill="#9CA5AB"
       />
     </svg>
-  );
+  )
 }
 
-export default LinkIcon;
+export default LinkIcon

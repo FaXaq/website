@@ -1,4 +1,6 @@
-function StudyIcon() {
+import React from 'react'
+
+function StudyIcon () {
   return (
     <svg viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -12,7 +14,7 @@ function StudyIcon() {
         fillOpacity="0.7"
       />
     </svg>
-  );
+  )
 }
 
-export default StudyIcon;
+export default StudyIcon

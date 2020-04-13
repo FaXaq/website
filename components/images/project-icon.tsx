@@ -1,4 +1,6 @@
-function ProjectIcon() {
+import React from 'react'
+
+function ProjectIcon () {
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect
@@ -50,7 +52,7 @@ function ProjectIcon() {
       />
       <circle cx="8.00001" cy="8.00001" r="1.77778" fill="white" />
     </svg>
-  );
+  )
 }
 
-export default ProjectIcon;
+export default ProjectIcon

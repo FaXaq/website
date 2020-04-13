@@ -1,4 +1,5 @@
-import Link from "next/link";
+import React from 'react'
+import Link from 'next/link'
 
 const Home = () => {
   return (
@@ -21,7 +22,7 @@ const Home = () => {
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

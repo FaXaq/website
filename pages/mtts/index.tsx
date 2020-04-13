@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
 import { NextPage } from 'next'
 import ResearchIcon from '../../components/images/research-icon'
+import Link from 'next/link'
 
 interface Experiment {
   title: string;
@@ -18,7 +19,9 @@ const HomePage: NextPage<{}> = () => {
       <li key={e.title} className="py-4">
         <h5 className="text-2xl">{e.title}</h5>
         <p>{e.description}</p>
-        <a className="text-mtts-light-violet" href={e.link}>{t('mtts.pages.index.experimentsLink')}</a>
+        <Link href={e.link}>
+          <a className="text-mtts-light-violet">{t('mtts.pages.index.experimentsLink')}</a>
+        </Link>
       </li>
     )
   })

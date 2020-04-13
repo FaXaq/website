@@ -1,6 +1,8 @@
-import Anime, { anime } from "react-anime";
+import React from 'react'
 
-function Mountains() {
+import Anime from 'react-anime'
+
+function Mountains () {
   return (
     <svg
       width="100%"
@@ -28,7 +30,7 @@ function Mountains() {
         />
       </Anime>
     </svg>
-  );
+  )
 }
 
-export default Mountains;
+export default Mountains

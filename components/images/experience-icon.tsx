@@ -1,4 +1,6 @@
-function ExperienceIcon() {
+import React from 'react'
+
+function ExperienceIcon () {
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -12,7 +14,7 @@ function ExperienceIcon() {
         fillOpacity="0.4"
       />
     </svg>
-  );
+  )
 }
 
-export default ExperienceIcon;
+export default ExperienceIcon
