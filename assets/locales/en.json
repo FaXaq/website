@@ -169,7 +169,7 @@
           }
         ],
         "research": {
-          "title": "Reseach",
+          "title": "Research",
           "text": "I'm aiming to find new ways to create, teach, learn and discover music theory through experiments. This lab is based on MTTS Library (from my github) and Tonejs."
         }
       }
