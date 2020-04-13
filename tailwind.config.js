@@ -4,6 +4,10 @@ module.exports = {
   plugins: [],
   theme: {
     extend: {
+      fontFamily: {
+        'mtts-title': ['Nunito', 'Open Sans', 'sans'],
+        'mtts-text': ['Open Sans', 'sans']
+      },
       colors: {
         'light-marine': '#3BA0B8',
         'dark-marine': '#173E57',
@@ -11,6 +15,11 @@ module.exports = {
         'dark-sand': '#AB9280',
         'mtts-dark-violet': '#332640',
         'mtts-light-violet': '#997FB3',
+        'mtts-cta-0': '#D237C6',
+        'mtts-cta-1': '#DB61D2',
+        'mtts-cta-2': '#E58CDE',
+        'mtts-cta-3': '#EEB4EA',
+        'mtts-cta-4': '#F7DEF5',
         'mtts-white': '#FAF9FB',
         'mtts-c': '#E5C72E',
         'mtts-c-d': '#CDE52E',

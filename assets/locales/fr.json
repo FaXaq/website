@@ -137,6 +137,11 @@
     }
   },
   "mtts": {
+    "games": {
+      "intervalGuesser": {
+        "title": "Interval Guesser"
+      }
+    },
     "pages": {
       "index": {
         "title": "MTTS Lab",
