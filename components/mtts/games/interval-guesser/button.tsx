@@ -8,7 +8,7 @@ interface IntervalGuesserButtonProps {
 const IntervalGuesserButton = ({ onClick, children }: IntervalGuesserButtonProps) => {
   return (
     <button
-      className="border-4 rounded w-24 h-24 mx-2 font-mtts-title font-bold text-xl text-mtts-white"
+      className="border-4 rounded w-24 h-24 m-2 font-mtts-title font-bold text-xl text-mtts-white"
       onClick={ (e) => onClick !== undefined ? onClick(e) : () => {} }
     >
       { children }

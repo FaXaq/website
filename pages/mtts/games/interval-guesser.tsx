@@ -1,74 +1,79 @@
-import React, { useEffect } from 'react'
-import { INTERVALS, NOTES, Note, Interval } from 'mtts'
+import React, { useState, useMemo } from 'react'
+import { getRandomEntity } from '../../../utils/misc'
+import IntervalGuesserGame from '../../../components/mtts/games/interval-guesser/game'
+// eslint-disable-next-line no-unused-vars
+import { Note, Interval, NOTES, INTERVALS } from 'mtts'
+import IntervalGuesserModal from '../../../components/mtts/games/interval-guesser/modal'
 import { useTranslation } from 'react-i18next'
-import { shuffleArray, getRandomEntity, getRandomEntities } from '../../../utils/misc'
-import IntervalGuesserButton from '../../../components/mtts/games/interval-guesser/button'
-import { PolySynth, Synth } from 'tone'
 
-interface Level {
+export interface Level {
   notes: Note[],
-  intervals: Interval[]
+  intervals: Interval[],
+  intervalsToGuess: number
 }
 
-const LEVELS: { [key: string]: Level } = {
+export const LEVELS: { [key: string]: Level } = {
   easy: {
     notes: NOTES.map(n => new Note({ name: n })),
     intervals: Object.keys(INTERVALS)
       .map(i => Interval.fromName(i))
       .reduce((previous, current) => {
-        return previous.findIndex((pi) => current.semitones === pi.semitones) === -1 && current.semitones <= 12
+        return previous.findIndex((pi) => current.semitones === pi.semitones) === -1 && current.semitones <= 12 && current.semitones > 0
           ? [...previous, current]
           : [...previous]
-      }, [])
+      }, []),
+    intervalsToGuess: 1
   }
 }
 
 const IntervalGuesser = () => {
   const { t } = useTranslation()
+  const [level] = useState<typeof LEVELS[string]>(LEVELS.easy)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [randomNote, setRandomNote] = useState<Note>(getRandomEntity(level.notes))
+  const [hasWon, setHasWon] = useState(false)
 
-  const randomNote = getRandomEntity(LEVELS.easy.notes)
-  const randomIntervals = getRandomEntities(LEVELS.easy.intervals)
-  const remainingIntervals = getRandomEntities(
-    LEVELS.easy.intervals.filter(i => randomIntervals.findIndex((ri: Interval) => ri.name === i.name) < 0),
-    4
-  )
-
-  function compareToSecretInterval (interval: Interval) {
-    console.log(randomIntervals.some(i => Interval.equals(i, interval)))
-    return randomIntervals.some(i => Interval.equals(i, interval))
+  function endGame (win: boolean) {
+    if (win) {
+      setHasWon(true)
+    } else {
+      setHasWon(false)
+    }
+    setIsPlaying(false)
+    setIsShowingModal(true)
   }
 
-  const displayIntervals = shuffleArray(
-    [
-      ...randomIntervals,
-      ...remainingIntervals
-    ].map(i => (
-      <li key={`interval-${i.name}`}>
-        <IntervalGuesserButton onClick={() => compareToSecretInterval(i) }>
-          <span>{i.name}</span>
-        </IntervalGuesserButton>
-      </li>
-    ))
+  function startGame () {
+    setIsShowingModal(false)
+    setRandomNote(getRandomEntity(level.notes))
+    setIsPlaying(true)
+  }
+
+  const game = useMemo(() => (
+    <IntervalGuesserGame
+      note={ randomNote }
+      onWin={ () => endGame(true) }
+      onLoose={ () => endGame(false) }
+      level={ level }
+      isPlaying={ isPlaying }
+    />
+  ), [randomNote, level, isPlaying])
+
+  const [isShowingModal, setIsShowingModal] = useState(false)
+
+  return (
+    <div className="bg-mtts-light-violet h-screen w-screen relative">
+      <h1 className="text-5xl md:text-8xl font-mtts-title font-bold text-center text-mtts-white uppercase py-6">
+        {t('mtts.games.intervalGuesser.title')}
+      </h1>
+      <p className="font-mtts-text font-thin text-mtts-white px-6 text-sm text-justify max-w-3xl mx-auto">
+        {t('mtts.games.intervalGuesser.description')}
+      </p>
+      {game}
+      <IntervalGuesserModal isShowing={isShowingModal} onClose={() => startGame()} hasWon={hasWon}>
+      </IntervalGuesserModal>
+    </div>
   )
-
-  const notesToPlay = [randomNote, ...randomIntervals.map(i => i.apply(randomNote))]
-
-  useEffect(() => {
-    console.log(notesToPlay)
-    const polysynth = new PolySynth(2, Synth).toMaster()
-    polysynth.set('volume', -10)
-    polysynth.set('detune', -1200)
-    polysynth.triggerAttackRelease(notesToPlay.map(n => n.frequency), 5)
-  })
-
-  return <div className="bg-mtts-light-violet h-screen w-screen">
-    <h1 className="text-8xl font-mtts-title font-bold text-center text-mtts-white uppercase py-12">
-      {t('mtts.games.intervalGuesser.title')}
-    </h1>
-    <ul className="flex justify-center">
-      {displayIntervals}
-    </ul>
-  </div>
 }
 
 export default IntervalGuesser

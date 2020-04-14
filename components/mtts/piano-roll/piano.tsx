@@ -29,7 +29,6 @@ const Piano = ({
   }
 
   const notesToDisplay = useMemo(() => {
-    console.log('rerendered')
     return pitches.map((p) => {
       let notes = generateNotesForPitch(p)
 

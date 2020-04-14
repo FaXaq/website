@@ -7,3 +7,9 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+.center-absolute {
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}

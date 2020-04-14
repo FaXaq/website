@@ -166,6 +166,11 @@
             "title": "Daw",
             "description": "Digital Audio Workstation (early WIP) in react w/ tonejs",
             "link": "/mtts/daw"
+          },
+          {
+            "title": "Interval Guesser",
+            "description": "Discover which interval is currently played on the page",
+            "link": "/mtts/games/interval-guesser"
           }
         ],
         "research": {

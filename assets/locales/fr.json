@@ -139,7 +139,8 @@
   "mtts": {
     "games": {
       "intervalGuesser": {
-        "title": "Interval Guesser"
+        "title": "Interval Guesser",
+        "description": "Le but est de découvrir quel interval est joué actuellement sur la page. Pour cela vous avez 5 propositions en dessous. Pour augmenter le son cliquer sur l'oscilateur."
       }
     },
     "pages": {
@@ -168,6 +169,11 @@
             "title": "Daw",
             "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
             "link": "/mtts/daw"
+          },
+          {
+            "title": "Interval Guesser",
+            "description": "Découvrir quel interval est actuellement joué sur la page avec mtts & tonejs",
+            "link": "/mtts/games/interval-guesser"
           }
         ],
         "research": {
