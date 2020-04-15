@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { theme } from '../../../../tailwind.config'
 
 const AMPLITUDE = 90
 const CANVAS_HEIGHT = 200
-const CANVAS_WIDTH = 900
 // Add default offset for X to prevent canvas sine being cut too sharp
 const X_DEFAULT_OFFSET = 4
 const FREQUENCY_COLORS = [
@@ -50,9 +49,14 @@ function drawAxes (ctx: CanvasRenderingContext2D) {
   ctx.stroke()
 }
 
+function setCanvasWidth (ctx: CanvasRenderingContext2D) {
+  ctx.canvas.width = window.innerWidth
+}
+
 const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animated }: IntervalGuesserOscillatorProps) => {
   const [showAxes] = useState(false)
   const canvas = useRef<HTMLCanvasElement>()
+  const [animationFrames, setAnimationFrames] = useState<number[]>([])
 
   const drawSine = (ctx: CanvasRenderingContext2D, {
     amplitude = AMPLITUDE,
@@ -87,21 +91,36 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
     ctx.save()
 
     if (animated) {
-      requestAnimationFrame(() => {
-        drawSine(ctx, {
-          amplitude,
-          frequency,
-          frequencyIndex,
-          offset: offset + 2,
-          clear
+      setAnimationFrames(prev => {
+        prev[frequencyIndex] = requestAnimationFrame(() => {
+          drawSine(ctx, {
+            amplitude,
+            frequency,
+            frequencyIndex,
+            offset: offset + 6,
+            clear
+          })
         })
+        return prev
       })
     }
+
+    return -1
   }
 
+  const cancelAnimationFrames = useCallback(() => {
+    animationFrames.map(frame => {
+      if (frame !== -1) {
+        cancelAnimationFrame(frame)
+      }
+    })
+  }, [animationFrames])
+
   useEffect(() => {
+    cancelAnimationFrames()
     if (canvas.current !== undefined) {
       const ctx = canvas.current.getContext('2d')
+      setCanvasWidth(ctx)
       if (showAxes) {
         drawAxes(ctx)
       }
@@ -113,18 +132,20 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
         clear: i % 2 === 0
       }))
     }
+
+    return () => {
+      cancelAnimationFrames()
+    }
   }, [highAmplitude, frequencies])
 
   return (
-    <div className="flex justify-center pb-8">
+    <div className="flex justify-center py-8">
       <canvas
         onClick={() => onClick()}
         ref={canvas}
-        width={ CANVAS_WIDTH }
+        width="100%"
         height={ CANVAS_HEIGHT }
-      >
-
-      </canvas>
+      ></canvas>
     </div>
   )
 }
