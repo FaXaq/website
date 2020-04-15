@@ -11,7 +11,7 @@ export function usePolySynth () {
 
   useEffect(() => {
     setPolySynth(new PolySynth(6, Synth).toMaster())
-  })
+  }, [])
 
   function startPlaying (notes: Note[]) {
     const uniqueNotes = filterUniqueNotes(notes)
