@@ -140,7 +140,20 @@
     "games": {
       "intervalGuesser": {
         "title": "Interval Guesser",
-        "description": "Le but est de découvrir quel interval est joué actuellement sur la page. Pour cela vous avez 5 propositions en dessous. Pour augmenter le son cliquer sur l'oscilateur."
+        "description": "Le but est de découvrir quel interval est joué actuellement sur la page. Pour cela vous avez 5 propositions en dessous. Pour augmenter le son cliquer sur l'oscilateur.",
+        "levels": {
+          "easy": {
+            "title": "Facile",
+            "alt": "Iintervals simples sur une seule note de départ : C4"
+          },
+          "intermediate": {
+            "title": "Intermédiaire",
+            "alt": "Intervals simples sur une de ces notes de départ : A4, B4, C4, D4, E4, F4, G4"
+          }
+        },
+        "win": "Bien joué !",
+        "lost": "Perdu :(",
+        "tryAgain": "Réessayer ?"
       }
     },
     "pages": {

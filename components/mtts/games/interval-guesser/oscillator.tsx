@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { theme } from '../../../../tailwind.config'
 
-const AMPLITUDE = 90
-const CANVAS_HEIGHT = 200
+const CANVAS_HEIGHT = 150
+const AMPLITUDE = (CANVAS_HEIGHT / 2) - 10
 // Add default offset for X to prevent canvas sine being cut too sharp
 const X_DEFAULT_OFFSET = 4
 const FREQUENCY_COLORS = [
@@ -97,7 +97,7 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
             amplitude,
             frequency,
             frequencyIndex,
-            offset: offset + 6,
+            offset: offset + 4,
             clear
           })
         })

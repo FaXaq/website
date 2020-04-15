@@ -17,20 +17,37 @@ interface IntervalGuesserGameProps {
 }
 
 const LOW_VOLUME = -30
-const HIGH_VOLUME = -15
+const HIGH_VOLUME = -10
 
 const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: IntervalGuesserGameProps) => {
   const [playingSound, setPlayingSound] = useState(false)
   const [highVolume, setHighVolume] = useState(false)
   const [polysynth, setPolysynth] = useState<PolySynth | undefined>()
+  const [randomIntervals, setRandomIntervals] = useState<Interval[]>(getRandomEntities(level.intervals))
 
   // Generate random interval
-  const randomIntervals = useMemo(() => getRandomEntities(level.intervals), [note])
-  // Gather 4 wrong random intervals
-  const remainingIntervals = useMemo(() => getRandomEntities(
-    level.intervals.filter(i => randomIntervals.findIndex((ri: Interval) => ri.name === i.name) < 0),
-    4
-  ), [note])
+  useEffect(() => {
+    if (isPlaying === true) {
+      setRandomIntervals(getRandomEntities(level.intervals))
+    }
+  }, [isPlaying])
+
+  // fill new intervals
+  const remainingIntervals = useMemo(() => {
+    return getRandomEntities(
+      level.intervals.filter(i => randomIntervals.findIndex((ri: Interval) => ri.name === i.name) < 0),
+      4
+    )
+  }, [randomIntervals])
+
+  // Is the user right ?
+  const compareToSecretInterval = useCallback((interval: Interval) => {
+    if (randomIntervals.some(i => Interval.equals(i, interval))) {
+      onWin()
+    } else {
+      onLoose()
+    }
+  }, [randomIntervals])
 
   // JSX Elements for intervals
   const displayIntervals = useMemo(() => shuffleArray(
@@ -44,7 +61,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
         <span>{i.name}</span>
       </IntervalGuesserButton>
     </li>
-  )), [note])
+  )), [randomIntervals, remainingIntervals, compareToSecretInterval])
 
   // generate all notes from intervals to guess
   const notesToPlay = useMemo(() => [note, ...randomIntervals.map(i => i.apply(note))], [note, randomIntervals])
@@ -54,52 +71,48 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     setPolysynth(new PolySynth(2, Synth).toMaster())
   }, [])
 
+  // setting up the polysynth
   useEffect(() => {
     if (polysynth !== undefined) {
-      polysynth.set('volume', LOW_VOLUME)
-      polysynth.set('detune', -1200)
+      polysynth.set({
+        volume: LOW_VOLUME,
+        detune: -1200,
+        envelope: {
+          attack: 0.5,
+          decay: 0.5,
+          sustain: 0.9,
+          release: 0.9,
+          attackCurve: 'linear',
+          decayCurve: 'linear',
+          releaseCurve: 'linear'
+        }
+      })
     }
   }, [polysynth])
 
-  const startPlaying = useCallback(() => {
-    if (polysynth) {
-      polysynth.triggerAttack(notesToPlay.map(n => n.frequency), undefined, 0.7)
-      setPlayingSound(true)
-    } else {
-      console.warn('no synth initialized')
-    }
-  }, [polysynth, notesToPlay])
-
-  const stopPlaying = useCallback(() => {
-    if (polysynth) {
-      polysynth.triggerRelease(notesToPlay.map(n => n.frequency))
-      setPlayingSound(false)
-    } else {
-      console.warn('no synth initialized')
-    }
-  }, [polysynth, notesToPlay])
-
-  // play notes
+  // player handler
   useEffect(() => {
     if (polysynth !== undefined) {
-      startPlaying()
+      polysynth.triggerAttack(notesToPlay.map(n => n.frequency))
+      setPlayingSound(true)
+    }
 
-      return () => {
-        stopPlaying()
+    return () => {
+      if (polysynth !== undefined) {
+        polysynth.triggerRelease(notesToPlay.map(n => n.frequency))
+        setPlayingSound(false)
       }
     }
   }, [polysynth, notesToPlay])
 
   useEffect(() => {
-    if (polysynth) {
-      if (isPlaying) {
-        startPlaying()
-      } else {
-        stopPlaying()
-      }
+    if (!isPlaying && playingSound) {
+      polysynth.triggerRelease(notesToPlay.map(n => n.frequency))
+      setPlayingSound(false)
     }
-  }, [isPlaying])
+  }, [isPlaying, playingSound, notesToPlay])
 
+  // allow user to toggle volume of the interval playing
   const toggleVolume = useCallback(() => {
     if (polysynth !== undefined) {
       const currentVolume = polysynth.get('volume').volume
@@ -113,17 +126,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     }
   }, [polysynth])
 
-  // Is the user right ?
-  const compareToSecretInterval = useCallback((interval: Interval) => {
-    if (randomIntervals.some(i => Interval.equals(i, interval))) {
-      onWin()
-    } else {
-      onLoose()
-    }
-  }, [randomIntervals])
-
   const oscillator = useMemo(() => (
-
     <IntervalGuesserOscillator
       frequencies={ notesToPlay.map(n => n.frequency) }
       highAmplitude={ highVolume }

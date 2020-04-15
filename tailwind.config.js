@@ -32,7 +32,9 @@ module.exports = {
         'mtts-g-a': '#E52ED1',
         'mtts-a': '#E52E6B',
         'mtts-a-b': '#E5402E',
-        'mtts-b': '#E58A2E'
+        'mtts-b': '#E58A2E',
+        'mtts-success': '#8CE6AA',
+        'mtts-error': '#D65C5C'
       },
       fontSize: {
         '7xl': '5rem',
