@@ -13,3 +13,12 @@
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+
+.center-absolute-h {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cursor-dial {
+  cursor: ew-resize;
+}

@@ -3,10 +3,12 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Note, Interval } from 'mtts'
 import IntervalGuesserButton from './button'
 import { shuffleArray, getRandomEntities } from '../../../../utils/misc'
-import { PolySynth, Synth } from 'tone'
+import * as Tone from 'tone'
 // eslint-disable-next-line no-unused-vars
 import { Level } from '../../../../pages/mtts/games/interval-guesser'
-import IntervalGuesserOscillator from './oscillator'
+import Oscillator from './oscillator'
+import FFT from './fft'
+import Dial from '../../controls/dial'
 
 interface IntervalGuesserGameProps {
   note: Note;
@@ -16,13 +18,13 @@ interface IntervalGuesserGameProps {
   isPlaying: boolean;
 }
 
-const LOW_VOLUME = -30
-const HIGH_VOLUME = -10
-
 const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: IntervalGuesserGameProps) => {
   const [playingSound, setPlayingSound] = useState(false)
-  const [highVolume, setHighVolume] = useState(false)
-  const [polysynth, setPolysynth] = useState<PolySynth | undefined>()
+  const [volume, setVolume] = useState<Tone.Volume | undefined>()
+  const [decibels, setDecibels] = useState<number>(-10)
+  const [fft, setFFT] = useState<Tone.FFT | undefined>()
+  const [waveform, setWaveform] = useState<Tone.Waveform | undefined>()
+  const [polysynth, setPolysynth] = useState<Tone.PolySynth | undefined>()
   const [randomIntervals, setRandomIntervals] = useState<Interval[]>(getRandomEntities(level.intervals))
 
   // Generate random interval
@@ -68,27 +70,47 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
 
   // create the polysynth
   useEffect(() => {
-    setPolysynth(new PolySynth(2, Synth).toMaster())
+    setPolysynth(new Tone.PolySynth(2, Tone.Synth))
+    setVolume(new Tone.Volume(decibels))
+    setWaveform(new Tone.Waveform(256))
+    setFFT(new Tone.FFT(256))
+
+    return () => {
+      console.log('disposing')
+      polysynth.dispose()
+      volume.dispose()
+      fft.dispose()
+      waveform.dispose()
+    }
   }, [])
 
   // setting up the polysynth
   useEffect(() => {
-    if (polysynth !== undefined) {
+    if (polysynth && volume && waveform && fft) {
+      console.log(volume)
+      polysynth.chain(volume, waveform, fft, Tone.Master)
       polysynth.set({
-        volume: LOW_VOLUME,
-        detune: -1200,
         envelope: {
           attack: 0.5,
           decay: 0.5,
           sustain: 0.9,
-          release: 0.9,
+          release: 0.5,
           attackCurve: 'linear',
           decayCurve: 'linear',
           releaseCurve: 'linear'
         }
       })
     }
-  }, [polysynth])
+  }, [polysynth, volume, waveform, fft])
+
+  const updateVolume = useCallback((db: number) => {
+    if (volume) {
+      volume.volume.value = db
+      setDecibels(db)
+    } else {
+      console.log('no volume')
+    }
+  }, [volume])
 
   // player handler
   useEffect(() => {
@@ -112,35 +134,15 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     }
   }, [isPlaying, playingSound, notesToPlay])
 
-  // allow user to toggle volume of the interval playing
-  const toggleVolume = useCallback(() => {
-    if (polysynth !== undefined) {
-      const currentVolume = polysynth.get('volume').volume
-      if (currentVolume as number < HIGH_VOLUME) {
-        polysynth.set('volume', HIGH_VOLUME)
-        setHighVolume(true)
-      } else {
-        polysynth.set('volume', LOW_VOLUME)
-        setHighVolume(false)
-      }
-    }
-  }, [polysynth])
-
-  const oscillator = useMemo(() => (
-    <IntervalGuesserOscillator
-      frequencies={ notesToPlay.map(n => n.frequency) }
-      highAmplitude={ highVolume }
-      onClick={() => toggleVolume()}
-      animated={ playingSound }
-    />
-  ), [notesToPlay, highVolume, playingSound])
-
   return (
     <div>
-      {oscillator}
+      { /* oscillator */ }
+      <Oscillator waveform={waveform} />
+      <FFT fft={fft} />
       <ul className="flex justify-center flex-wrap">
         {displayIntervals}
       </ul>
+      <Dial onUpdate={updateVolume} value={decibels} min={-100} max={10} />
     </div>
   )
 }

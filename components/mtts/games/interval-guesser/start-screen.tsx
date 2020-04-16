@@ -13,7 +13,7 @@ const IntervalGuesserStartScreen = ({ onStart }: IntervalGuesserStartScreenProps
     <li key={levelName}>
       <button
         title={t(`mtts.games.intervalGuesser.levels.${levelName}.alt`)}
-        className="text-mtts-white border-4 rounded border-mtts-white p-4 mx-2 font-bold uppercase"
+        className="text-mtts-dark-violet border-4 rounded border-mtts-dark-violet p-4 mx-2 font-bold uppercase"
         onClick={() => onStart(LEVELS[levelName])}
       >
         {t(`mtts.games.intervalGuesser.levels.${levelName}.title`)}
@@ -22,7 +22,7 @@ const IntervalGuesserStartScreen = ({ onStart }: IntervalGuesserStartScreenProps
   ))
   return (
     <div>
-      <p className="font-mtts-text font-thin text-mtts-white px-6 text-sm md:text-lg text-justify max-w-3xl mx-auto">
+      <p className="font-mtts-text font-thin text-mtts-dark-violet px-6 text-sm md:text-lg text-justify max-w-3xl mx-auto">
         {t('mtts.games.intervalGuesser.description')}
       </p>
       <ul className="flex flex-wrap justify-center p-4">

@@ -9,11 +9,11 @@ const FREQUENCY_COLORS = [
   theme.extend.colors['mtts-cta-2']
 ]
 
-interface OscillatorProps {
-  waveform: Tone.Waveform
+interface FFTProps {
+  fft: Tone.FFT
 }
 
-const Oscillator = ({ waveform }: OscillatorProps) => {
+const FFT = ({ fft }: FFTProps) => {
   const canvas = useRef<HTMLCanvasElement>()
   const [animationFrame, setAnimationFrame] = useState<number>(-1)
 
@@ -22,46 +22,39 @@ const Oscillator = ({ waveform }: OscillatorProps) => {
       setCanvasToParentDimension(canvas.current)
     }
 
-    function showWaveform () {
-      if (waveform && canvas.current) {
-        const values: Float32Array = waveform.getValue()
+    function showFFT () {
+      if (fft && canvas.current) {
+        const values: Float32Array = fft.getValue()
         const context = canvas.current.getContext('2d')
         const width = context.canvas.width
         const height = context.canvas.height
+        const barWidth = Math.floor((context.canvas.width / values.length))
         context.clearRect(0, 0, width, height)
-        context.beginPath()
-        context.lineWidth = 4
+        context.fillStyle = FREQUENCY_COLORS[0]
         values.forEach((v, i) => {
-          const x = scale(i, 10, values.length, 0, width)
-          const y = scale(v, -1, 1, 0, height)
-          if (i === 0) {
-            context.moveTo(x, y)
-          } else {
-            context.lineTo(x, y)
-          }
-          context.lineCap = 'round'
-          context.strokeStyle = FREQUENCY_COLORS[0]
-          context.stroke()
-          context.save()
+          const x = scale(i, 0, values.length, 0, width)
+          const barHeight = Math.ceil(scale(v, -100, 0, 0, height))
+          context.fillRect(x, height / 2 - barHeight / 2, barWidth > 0 ? barWidth : 1, barHeight)
+          context.fill()
         })
-        setAnimationFrame(requestAnimationFrame(showWaveform))
+        setAnimationFrame(requestAnimationFrame(showFFT))
       }
     }
 
-    showWaveform()
+    showFFT()
 
     return () => {
       if (animationFrame > -1) {
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [canvas, waveform])
+  }, [canvas, fft])
 
   return (
     <div>
-      <canvas ref={canvas}></canvas>
+      <canvas ref={canvas} height="100" width="500"></canvas>
     </div>
   )
 }
 
-export default Oscillator
+export default FFT

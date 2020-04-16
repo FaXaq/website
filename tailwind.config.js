@@ -14,6 +14,7 @@ module.exports = {
         'light-sand': '#F5E5C7',
         'dark-sand': '#AB9280',
         'mtts-dark-violet': '#332640',
+        'mtts-dark-violet-200': '#594370',
         'mtts-light-violet': '#997FB3',
         'mtts-cta-0': '#D237C6',
         'mtts-cta-1': '#DB61D2',

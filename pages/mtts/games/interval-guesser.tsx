@@ -80,8 +80,8 @@ const IntervalGuesser = () => {
   ), [randomNote, level, isPlaying])
 
   return (
-    <div className="bg-mtts-light-violet h-screen w-screen relative">
-      <h1 className="text-5xl md:text-8xl font-mtts-title font-bold text-center text-mtts-white uppercase py-6">
+    <div className="bg-mtts-white h-screen w-screen relative">
+      <h1 className="text-5xl md:text-8xl font-mtts-title font-bold text-center text-mtts-dark-violet uppercase py-6">
         { t('mtts.games.intervalGuesser.title') }
       </h1>
       {

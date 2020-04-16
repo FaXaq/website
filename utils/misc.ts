@@ -22,3 +22,12 @@ export function getRandomEntities<T> (entities: T[], number: number = 1, unique:
 
   return randomEntities
 }
+
+export function scale (index: number, rangeStart: number, rangeStop: number, outRangeStart: number, outRangeStop: number): number {
+  const inRange = rangeStop - rangeStart
+  const inDistance = index - rangeStart
+  const inPercentage = (inDistance / inRange) * 100
+  const outRange = outRangeStop - outRangeStart
+  const outIndex = inPercentage * outRange / 100
+  return outIndex <= outRangeStop ? outIndex <= outRangeStart ? outRangeStart : Math.ceil(outIndex) : outRangeStop
+}
