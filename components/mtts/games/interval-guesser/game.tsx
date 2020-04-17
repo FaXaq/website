@@ -8,7 +8,9 @@ import * as Tone from 'tone'
 import { Level } from '../../../../pages/mtts/games/interval-guesser'
 import Oscillator from './oscillator'
 import FFT from './fft'
-import Dial from '../../controls/dial'
+import Knob from '../../controls/knob'
+import { useVolume, useFFT, useWaveform } from '../../../../hooks/mtts/tonejs'
+import { useTranslation } from 'react-i18next'
 
 interface IntervalGuesserGameProps {
   note: Note;
@@ -18,12 +20,14 @@ interface IntervalGuesserGameProps {
   isPlaying: boolean;
 }
 
+const DEFAULT_VOLUME = -15
+
 const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: IntervalGuesserGameProps) => {
+  const { t } = useTranslation()
   const [playingSound, setPlayingSound] = useState(false)
-  const [volume, setVolume] = useState<Tone.Volume | undefined>()
-  const [decibels, setDecibels] = useState<number>(-10)
-  const [fft, setFFT] = useState<Tone.FFT | undefined>()
-  const [waveform, setWaveform] = useState<Tone.Waveform | undefined>()
+  const [decibels, setDecibels, volume] = useVolume(DEFAULT_VOLUME)
+  const fft = useFFT()
+  const waveform = useWaveform()
   const [polysynth, setPolysynth] = useState<Tone.PolySynth | undefined>()
   const [randomIntervals, setRandomIntervals] = useState<Interval[]>(getRandomEntities(level.intervals))
 
@@ -59,7 +63,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     ]
   ).map(i => (
     <li key={`interval-${i.name}`}>
-      <IntervalGuesserButton onClick={() => compareToSecretInterval(i) }>
+      <IntervalGuesserButton onClick={() => compareToSecretInterval(i) } fixedSize={true}>
         <span>{i.name}</span>
       </IntervalGuesserButton>
     </li>
@@ -71,23 +75,15 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
   // create the polysynth
   useEffect(() => {
     setPolysynth(new Tone.PolySynth(2, Tone.Synth))
-    setVolume(new Tone.Volume(decibels))
-    setWaveform(new Tone.Waveform(256))
-    setFFT(new Tone.FFT(256))
 
     return () => {
-      console.log('disposing')
       polysynth.dispose()
-      volume.dispose()
-      fft.dispose()
-      waveform.dispose()
     }
   }, [])
 
   // setting up the polysynth
   useEffect(() => {
     if (polysynth && volume && waveform && fft) {
-      console.log(volume)
       polysynth.chain(volume, waveform, fft, Tone.Master)
       polysynth.set({
         envelope: {
@@ -102,15 +98,6 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
       })
     }
   }, [polysynth, volume, waveform, fft])
-
-  const updateVolume = useCallback((db: number) => {
-    if (volume) {
-      volume.volume.value = db
-      setDecibels(db)
-    } else {
-      console.log('no volume')
-    }
-  }, [volume])
 
   // player handler
   useEffect(() => {
@@ -127,6 +114,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     }
   }, [polysynth, notesToPlay])
 
+  /* release when parent is not playing anymore */
   useEffect(() => {
     if (!isPlaying && playingSound) {
       polysynth.triggerRelease(notesToPlay.map(n => n.frequency))
@@ -135,14 +123,16 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
   }, [isPlaying, playingSound, notesToPlay])
 
   return (
-    <div>
+    <div className="container mx-auto">
       { /* oscillator */ }
-      <Oscillator waveform={waveform} />
-      <FFT fft={fft} />
+      <div className="px-6">
+        <Oscillator waveform={waveform} />
+        <FFT fft={fft} />
+      </div>
       <ul className="flex justify-center flex-wrap">
         {displayIntervals}
       </ul>
-      <Dial onUpdate={updateVolume} value={decibels} min={-100} max={10} />
+      <Knob onUpdate={setDecibels} value={decibels} min={-100} max={0} label={t('mtts.controls.volume.title')}/>
     </div>
   )
 }

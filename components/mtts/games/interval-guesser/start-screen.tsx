@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
 import { Level, LEVELS } from '../../../../pages/mtts/games/interval-guesser'
+import IntervalGuesserButton from './button'
 
 interface IntervalGuesserStartScreenProps {
   onStart: (level: Level) => any;
@@ -11,13 +12,12 @@ const IntervalGuesserStartScreen = ({ onStart }: IntervalGuesserStartScreenProps
   const { t } = useTranslation()
   const levelsButtons = Object.keys(LEVELS).map((levelName) => (
     <li key={levelName}>
-      <button
+      <IntervalGuesserButton
         title={t(`mtts.games.intervalGuesser.levels.${levelName}.alt`)}
-        className="text-mtts-dark-violet border-4 rounded border-mtts-dark-violet p-4 mx-2 font-bold uppercase"
         onClick={() => onStart(LEVELS[levelName])}
       >
         {t(`mtts.games.intervalGuesser.levels.${levelName}.title`)}
-      </button>
+      </IntervalGuesserButton>
     </li>
   ))
   return (

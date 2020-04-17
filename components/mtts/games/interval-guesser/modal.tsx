@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
 import { LEVELS, Level } from '../../../../pages/mtts/games/interval-guesser'
 import classNames from 'classnames'
+import IntervalGuesserButton from './button'
 
 interface IntervalGuesserModalProps {
   isShowing: boolean
@@ -17,13 +18,12 @@ const IntervalGuesserModal = ({ isShowing, onClose, hasWon, level }: IntervalGue
 
   const levelsButtons = Object.keys(LEVELS).map((levelName) => (
     <li key={levelName}>
-      <button
+      <IntervalGuesserButton
         title={t(`mtts.games.intervalGuesser.levels.${levelName}.alt`)}
-        className="text-mtts-light-violet border-4 rounded border-mtts-light-violet p-4 m-2 font-bold uppercase"
         onClick={() => onClose(LEVELS[levelName])}
       >
         {t(`mtts.games.intervalGuesser.levels.${levelName}.title`)}
-      </button>
+      </IntervalGuesserButton>
     </li>
   ))
 
