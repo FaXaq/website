@@ -10,7 +10,7 @@ interface IntervalGuesserButtonProps {
 
 const IntervalGuesserButton = ({ onClick, children, title, fixedSize }: IntervalGuesserButtonProps) => {
   const classes = classNames({
-    'border-1 md:border-2 rounded m-1 md:mx-4 font-mtts-title font-bold text-xl md:text-3xl text-mtts-dark-violet border-mtts-dark-violet': true,
+    'border md:border-2 rounded m-1 md:mx-4 font-mtts-title font-bold text-xl md:text-3xl text-mtts-dark-violet border-mtts-dark-violet': true,
     'w-16 h-16 md:w-24 md:h-24': fixedSize,
     'px-6 py-2': !fixedSize,
     'hover:bg-mtts-light-violet hover:text-mtts-white': true
