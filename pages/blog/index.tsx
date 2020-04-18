@@ -5,31 +5,51 @@ import Link from 'next/link'
 import path from 'path'
 import { useTranslation } from 'react-i18next'
 
+import '../../styles/blog.scss'
+import matter from 'gray-matter'
+
+interface Article {
+  data: { [key: string] : any }
+  link: string
+}
+
 interface BlogProps {
-  articles: any[];
+  articles: Article[];
 }
 
 const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
   const { t } = useTranslation()
 
   const links = articles.map((a, i) => {
+    const articleDate = new Date(a.data.creationDate)
     return (
-      <div key={`article-${i}`}>
-        <h1 className="text-2xl">{t('blog.title')}</h1>
-        <Link href={`/blog/${a}`} key={`article-${a}`}>
-          <a>{a}</a>
+      <li key={`article-${i}`}>
+        <Link href={`/blog/${a.link}`}>
+          <a>{a.data.title} {t('format.date', { date: articleDate })}</a>
         </Link>
-      </div>
+      </li>
     )
   })
-  return <div className="font-sans">{links}</div>
+  return (
+    <div className="font-sans">
+      <h1 className="text-2xl">{t('blog.title')}</h1>
+      <ul className="flex flex-col">
+        {links}
+      </ul>
+    </div>
+  )
 }
 
-Blog.getInitialProps = _ => {
-  const articles = (context => {
-    return context.keys().map(k => {
-      return path.basename(k.replace('./', ''), '.md')
-    })
+Blog.getInitialProps = async (_) => {
+  const articles = await (async context => {
+    return await Promise.all(context.keys().map(async (k) => {
+      const postContent = await import(`../../public/articles/${k.replace('./', '')}`)
+      const { data } = matter(postContent.default)
+      return {
+        data,
+        link: `/blog/${path.basename(k.replace('./', ''), '.md')}`
+      }
+    }))
   })(require.context('../../public/articles', true, /\.md/))
 
   return {

@@ -1,9 +1,10 @@
-import i18n from 'i18next';
+import i18n from 'i18next'
 import {
   initReactI18next
-} from 'react-i18next';
-import FRTranslation from './assets/locales/fr.json';
-import ENTranslation from './assets/locales/en.json';
+} from 'react-i18next'
+import FRTranslation from './assets/locales/fr.json'
+import ENTranslation from './assets/locales/en.json'
+import moment from 'moment'
 
 const resources = {
   en: {
@@ -12,7 +13,7 @@ const resources = {
   fr: {
     translation: FRTranslation
   }
-};
+}
 
 i18n
   .use(initReactI18next)
@@ -24,9 +25,13 @@ i18n
     returnObjects: true,
 
     interpolation: {
-      escapeValue: false
+      escapeValue: false,
+      format: function (value, format) {
+        if (format === 'uppercase') return value.toUpperCase()
+        if (value instanceof Date) return moment(value).format(format || 'MM/DD/YYYY')
+        return value
+      }
     }
-  });
+  })
 
-
-export default i18n;
+export default i18n

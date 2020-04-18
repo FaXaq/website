@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 
-import '../../styles/article.scss'
+import '../../styles/blog.scss'
 
 interface ArticleProps {
   content: string;
