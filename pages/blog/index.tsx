@@ -34,7 +34,7 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
     <div className="font-sans">
       <h1 className="text-2xl">{t('blog.title')}</h1>
       <ul className="flex flex-col">
-        {links}
+        {links.length > 0 ? links : 'No blog post yet...'}
       </ul>
     </div>
   )
