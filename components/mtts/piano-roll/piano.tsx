@@ -4,7 +4,7 @@ import { generateNotesForPitch, generatePitches } from '../../../utils/mtts'
 import { Note, Pitch } from 'mtts'
 import PianoNote from './piano-key'
 import classNames from 'classnames'
-import { usePolySynth } from '../../../hooks/mtts/polysynth'
+import { useMaloSynth } from '../../../hooks/mtts/malosynth'
 
 interface PianoProps {
   lowNote?: Note
@@ -17,7 +17,7 @@ const Piano = ({
   lowNote = Note.fromSPN('A0'),
   highNote = Note.fromSPN('C8')
 }: PianoProps) => {
-  const { isPlaying, stopPlaying, startPlaying } = usePolySynth()
+  const { isPlaying, stopPlaying, startPlaying } = useMaloSynth()
   const [pitches] = useState<Pitch[]>(generatePitches(highNote.pitch.value, lowNote.pitch.value))
 
   function handleClick (notes: Note[]) {

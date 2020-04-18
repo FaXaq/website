@@ -2,7 +2,7 @@ import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 import TileLine from './tile-line'
-import { usePolySynth } from '../../../hooks/mtts/polysynth'
+import { useMaloSynth } from '../../../hooks/mtts/malosynth'
 
 interface TileContainerProps {
   notes: Note[][];
@@ -16,7 +16,7 @@ const TileContainer = ({ notes, lineLength, lineNumber }: TileContainerProps) =>
     startPlaying,
     stopPlaying,
     isPlaying
-  } = usePolySynth()
+  } = useMaloSynth()
 
   function playNotes (notes: Note[]) {
     if (!isPlaying(notes)) {

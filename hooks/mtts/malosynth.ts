@@ -4,7 +4,7 @@ import { PolySynth, Synth } from 'tone'
 import { Note } from 'mtts'
 import { filterUniqueNotes } from '../../utils/mtts'
 
-export function usePolySynth () {
+export function useMaloSynth () {
   const [playingNotes, setPlayingNotes] =
     useState<{ [key: string]: boolean }>({})
   const [polysynth, setPolySynth] = useState<PolySynth | undefined>()
