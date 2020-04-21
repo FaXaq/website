@@ -28,7 +28,7 @@ i18n
       escapeValue: false,
       format: function (value, format) {
         if (format === 'uppercase') return value.toUpperCase()
-        if (value instanceof Date) return moment(value).format(format || 'MM/DD/YYYY')
+        if (value instanceof Date) return moment(value).format(format)
         return value
       }
     }

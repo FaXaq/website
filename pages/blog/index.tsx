@@ -4,9 +4,9 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import path from 'path'
 import { useTranslation } from 'react-i18next'
+import matter from 'gray-matter'
 
 import '../../styles/blog.scss'
-import matter from 'gray-matter'
 
 interface Article {
   data: { [key: string] : any }
@@ -24,7 +24,7 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
     const articleDate = new Date(a.data.creationDate)
     return (
       <li key={`article-${i}`}>
-        <Link href={`/blog/${a.link}`}>
+        <Link href={`${a.link}`}>
           <a>{a.data.title} {t('format.date', { date: articleDate })}</a>
         </Link>
       </li>

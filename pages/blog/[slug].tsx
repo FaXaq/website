@@ -5,25 +5,26 @@ import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 
 import '../../styles/blog.scss'
+import { useTranslation } from 'react-i18next'
 
 interface ArticleProps {
   content: string;
   data: {
     title?: string;
     author?: string;
-    data?: string;
+    creationDate?: string;
   };
 }
 
-const Article: NextPage<ArticleProps> = (props: ArticleProps) => {
-  const renderedArticle = new MarkdownIt().render(props.content)
+const Article: NextPage<ArticleProps> = ({ data, content }: ArticleProps) => {
+  const renderedArticle = new MarkdownIt().render(content)
+  const { t } = useTranslation()
   return (
-    <div>
-      <h1>
-        {props.data.title
-          ? props.data.title
-          : 'Oops, this article has no title.'}
-      </h1>
+    <div className="article container">
+      <h1>{data.title}</h1>
+      <div className="article-info">
+        <p><em>{t('format.date', { date: data.creationDate })}</em></p>
+      </div>
       <div dangerouslySetInnerHTML={{ __html: renderedArticle }}></div>
     </div>
   )

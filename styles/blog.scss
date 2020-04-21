@@ -1,7 +1,17 @@
 .article {
   * {
-    @apply font-sans;
+    @apply font-mtts-text;
+    @apply text-mtts-dark-violet;
   }
+
+  @apply mx-auto;
+  @apply px-4;
+
+  .article-info {
+    @apply flex;
+    @apply text-mtts-light-violet;
+  }
+
 
   h1,
   h2,
@@ -9,18 +19,17 @@
   h4,
   h5,
   h6 {
-    @apply text-gray-700;
+    @apply font-bold;
+    @apply font-mtts-title;
+    @apply my-4;
   }
 
   h1 {
-    @apply text-2xl;
+    @apply font-black;
+    @apply text-4xl;
   }
 
   h2 {
-    @apply text-xl;
-  }
-
-  p {
-    @apply text-gray-800;
+    @apply text-2xl;
   }
 }

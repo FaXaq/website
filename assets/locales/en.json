@@ -209,6 +209,6 @@
     "title": "Blog"
   },
   "format": {
-    "date": "{{date, DD-MMM-YYYY}}"
+    "date": "{{date, DD-MMMM-YYYY}}"
   }
 }
