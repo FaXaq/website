@@ -10,36 +10,41 @@ const FFT_SIZE = 32768
 
 const notesPerPitch = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => generateNotesForPitch(new Pitch({ value: i })))
 console.log(notesPerPitch[0].map(n => n.map(nn => `${nn.SPN} : ${nn.frequency}`)))
-const notes = notesPerPitch.reduce((p, c) => [...p, ...c], [])
+const notes = [
+  [new Note({ name: 'E', pitch: new Pitch({ value: 2 }) })],
+  [new Note({ name: 'A', pitch: new Pitch({ value: 2 }) })],
+  [new Note({ name: 'D', pitch: new Pitch({ value: 3 }) })],
+  [new Note({ name: 'G', pitch: new Pitch({ value: 3 }) })],
+  [new Note({ name: 'B', pitch: new Pitch({ value: 3 }) })],
+  [new Note({ name: 'E', pitch: new Pitch({ value: 4 }) })]
+]
 
 function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourceNode] {
   const ctx = new AudioContext()
   const analyser = ctx.createAnalyser()
   analyser.fftSize = FFT_SIZE
   const sourceNode = ctx.createMediaStreamSource(stream)
-  const highPassFT = ctx.createBiquadFilter()
-  highPassFT.type = 'highpass'
-  highPassFT.frequency.setValueAtTime(notesPerPitch[0][0][0].frequency, ctx.currentTime)
-  const lowPassFT = ctx.createBiquadFilter()
-  lowPassFT.type = 'lowpass'
-  console.log(notesPerPitch[7][notesPerPitch[7].length - 1][0].frequency)
-  lowPassFT.frequency.setValueAtTime(notesPerPitch[7][notesPerPitch[7].length - 1][0].frequency, ctx.currentTime)
-  sourceNode.connect(lowPassFT)
-  lowPassFT.connect(highPassFT)
-  highPassFT.connect(analyser)
+  sourceNode.connect(analyser)
   return [analyser, sourceNode]
+}
+
+interface GuessedNote {
+  notes: Note[];
+  value?: number;
+  values: number[];
 }
 
 const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   const canvas = useRef<HTMLCanvasElement>()
-  const [analyser, sourceNode] = useAnalyser(audioStream)
-  const [guessedNotes, setGuessedNotes] = useState<Note[][]>([])
+  const [guessedNotes, setGuessedNotes] = useState<GuessedNote[]>([])
+  const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
+  const [frame, setFrame] = useState(-1)
 
   useEffect(() => {
+    const [analyser, sourceNode] = useAnalyser(audioStream)
     const sampleRate = sourceNode.context.sampleRate
-    console.log(Math.floor(new Note({ name: 'E', pitch: new Pitch({ value: 2 }) }).frequency))
     const bufferLength = analyser.frequencyBinCount
-    const frequencyRatio = sampleRate / bufferLength
+    const frequencyRatio = sampleRate / FFT_SIZE
     console.log(frequencyRatio)
 
     function loop (ctx: CanvasRenderingContext2D) {
@@ -49,18 +54,18 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
       const height = ctx.canvas.height
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = 'black'
-      const currentNotes: {notes: Note[], value: number[]}[] = []
-      let bigNote: { notes: Note[], value: number, values: number[]} = { notes: [], value: 0, values: [0, 0] }
+      const currentNotes: GuessedNote[] = []
+      let bigNote: GuessedNote = { notes: [], value: 0, values: [0, 0] }
       notes.forEach((n) => {
         const low = Math.floor(n[0].frequency / frequencyRatio)
         const high = Math.ceil(n[0].frequency / frequencyRatio)
-        if (dataArray[low] > 50 || dataArray[high] > 50) {
+        if (dataArray[low] > 25 || dataArray[high] > 25) {
           ctx.fillRect(low, 0, 1, dataArray[low])
           ctx.fill()
           ctx.fillRect(high, 0, 1, dataArray[high])
           ctx.fill()
           const med = (dataArray[low] + dataArray[high]) / 2
-          currentNotes.push({ notes: n, value: [dataArray[low], dataArray[high]] })
+          currentNotes.push({ notes: n, values: [dataArray[low], dataArray[high]], value: med })
           if (bigNote.value < med) {
             bigNote = { notes: n, value: med, values: [dataArray[low], dataArray[high]] }
           }
@@ -68,16 +73,14 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
       })
 
       if (currentNotes.length > 0) {
-        console.log(bigNote.notes.map(n => n.SPN).join(','), bigNote.value, bigNote.values)
-        console.log(currentNotes)
+        setGuessedNotes(currentNotes)
+        setMostProbable(bigNote)
+      } else {
+        setGuessedNotes([])
+        setMostProbable(undefined)
       }
 
-      // dataArray.forEach((v, i) => {
-      //   ctx.fillRect(i, 0, 1, v)
-      //   ctx.fill()
-      // })
-
-      setTimeout(() => loop(ctx), 300)
+      setFrame(requestAnimationFrame(() => loop(ctx)))
     }
 
     if (canvas.current) {
@@ -88,12 +91,19 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
       ctx.canvas.height = 255
       loop(ctx)
     }
+
+    return () => {
+      cancelAnimationFrame(frame)
+    }
   }, [audioStream])
 
   return (
     <div className="w-screen h-screen">
       <canvas ref={canvas} />
-      <p>{guessedNotes.map(n => n.map(nn => nn.SPN).join('/')).join(' OR ')}</p>
+      <p>{mostProbable !== undefined ? <span>{mostProbable.values.reduce((p, c) => c - p, 0)} {mostProbable.notes.map(n => n.SPN).join('/')}</span> : 'no guess...'}</p>
+      <ul>
+        {guessedNotes.map((n, i) => <li key={i}>{n.value} {n.notes.map(nn => nn.SPN).join('-')}</li>)}
+      </ul>
     </div>
   )
 }
