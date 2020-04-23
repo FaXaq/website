@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Note, Pitch } from 'mtts'
 import { generateNotesForPitch } from '../../../utils/mtts'
+import GuessedNoteItem from './guessed-note'
 
 interface TunerContainerProps {
   audioStream: MediaStream
@@ -18,6 +19,7 @@ const notes = [
   [new Note({ name: 'B', pitch: new Pitch({ value: 3 }) })],
   [new Note({ name: 'E', pitch: new Pitch({ value: 4 }) })]
 ]
+// const notes = notesPerPitch.reduce((p, c) => [...p, ...c], [])
 
 function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourceNode] {
   const ctx = new AudioContext()
@@ -28,10 +30,19 @@ function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourc
   return [analyser, sourceNode]
 }
 
-interface GuessedNote {
+function getNoteFrequencyDiff (note: GuessedNote): number {
+  const coeffValues = note.values.map((v, i) => v * (1))
+  return coeffValues.reduce((p, c) => c - p, 0)
+}
+
+function getNoteTotalValue (note: GuessedNote): number {
+  return note.values.reduce((p, c) => p + c, 0)
+}
+
+export interface GuessedNote {
   notes: Note[];
-  value?: number;
   values: number[];
+  diffs: number[];
 }
 
 const TunerContainer = ({ audioStream }: TunerContainerProps) => {
@@ -55,19 +66,25 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = 'black'
       const currentNotes: GuessedNote[] = []
-      let bigNote: GuessedNote = { notes: [], value: 0, values: [0, 0] }
+      let bigNote: GuessedNote | undefined
       notes.forEach((n) => {
+        // since frequency is most likely not gonna hit precisely a frequency bin, analyse the two closests one with diff coefficients
+        // get lower index of note frequency
         const low = Math.floor(n[0].frequency / frequencyRatio)
+        // get higher index of note frequency
         const high = Math.ceil(n[0].frequency / frequencyRatio)
-        if (dataArray[low] > 25 || dataArray[high] > 25) {
+        const lowDiff = Math.abs(n[0].frequency - (low * frequencyRatio))
+        const highDiff = Math.abs(n[0].frequency - (high * frequencyRatio))
+        if (dataArray[low] > 100 || dataArray[high] > 100) {
           ctx.fillRect(low, 0, 1, dataArray[low])
           ctx.fill()
           ctx.fillRect(high, 0, 1, dataArray[high])
           ctx.fill()
           const med = (dataArray[low] + dataArray[high]) / 2
-          currentNotes.push({ notes: n, values: [dataArray[low], dataArray[high]], value: med })
-          if (bigNote.value < med) {
-            bigNote = { notes: n, value: med, values: [dataArray[low], dataArray[high]] }
+          const currentNote: GuessedNote = { notes: n, values: [dataArray[low], dataArray[high]], diffs: [lowDiff, highDiff] }
+          currentNotes.push(currentNote)
+          if (!bigNote || getNoteTotalValue(bigNote) < getNoteTotalValue(currentNote)) {
+            bigNote = { notes: n, values: [dataArray[low], dataArray[high]], diffs: [lowDiff, highDiff] }
           }
         }
       })
@@ -80,7 +97,7 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
         setMostProbable(undefined)
       }
 
-      setFrame(requestAnimationFrame(() => loop(ctx)))
+      setTimeout(() => loop(ctx), 1000)
     }
 
     if (canvas.current) {
@@ -100,9 +117,9 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   return (
     <div className="w-screen h-screen">
       <canvas ref={canvas} />
-      <p>{mostProbable !== undefined ? <span>{mostProbable.values.reduce((p, c) => c - p, 0)} {mostProbable.notes.map(n => n.SPN).join('/')}</span> : 'no guess...'}</p>
       <ul>
-        {guessedNotes.map((n, i) => <li key={i}>{n.value} {n.notes.map(nn => nn.SPN).join('-')}</li>)}
+        { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable }/> : null }
+        {guessedNotes.map((n, i) => <GuessedNoteItem guessedNote={n} key={`guessed-note-${i}`} />)}
       </ul>
     </div>
   )
