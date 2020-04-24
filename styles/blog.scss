@@ -30,6 +30,45 @@
   }
 
   h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
     @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  p, h2, h3, h4, h5, h6, pre {
+    @apply my-4;
+  }
+
+  a {
+    @apply text-mtts-cta-0;
+    @apply underline;
+  }
+
+  blockquote {
+    @apply mx-4;
+    @apply italic;
+    @apply text-sm;
+  }
+
+  ul > li {
+    &::before {
+      content: '*';
+      @apply mr-2;
+    }
+  }
+
+  img {
+    @apply border;
+    @apply border-mtts-light-violet;
+    border-radius: .2rem;
+    @apply p-2;
+    @apply mx-auto;
+    @apply my-4;
   }
 }

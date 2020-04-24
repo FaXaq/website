@@ -50,12 +50,14 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   const [guessedNotes, setGuessedNotes] = useState<GuessedNote[]>([])
   const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
   const [frame, setFrame] = useState(-1)
+  const [fqRatio, setFqRatio] = useState(-1)
 
   useEffect(() => {
     const [analyser, sourceNode] = useAnalyser(audioStream)
     const sampleRate = sourceNode.context.sampleRate
     const bufferLength = analyser.frequencyBinCount
     const frequencyRatio = sampleRate / FFT_SIZE
+    setFqRatio(frequencyRatio)
     console.log(frequencyRatio)
 
     function loop (ctx: CanvasRenderingContext2D) {
@@ -118,8 +120,8 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
     <div className="w-screen h-screen">
       <canvas ref={canvas} />
       <ul>
-        { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable }/> : null }
-        {guessedNotes.map((n, i) => <GuessedNoteItem guessedNote={n} key={`guessed-note-${i}`} />)}
+        { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable } fqRatio={fqRatio} /> : null }
+        {guessedNotes.map((n, i) => <GuessedNoteItem guessedNote={n} key={`guessed-note-${i}`} fqRatio={fqRatio}/>)}
       </ul>
     </div>
   )

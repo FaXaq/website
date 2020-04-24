@@ -4,12 +4,13 @@ import { NextPage } from 'next'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { useTranslation } from 'react-i18next'
-import hljs from 'highlight.js'
+import Prism from 'prismjs'
 
 interface ArticleProps {
   content: string;
   data: {
     title?: string;
+    description?: string;
     author?: string;
     creationDate?: string;
   };
@@ -20,7 +21,7 @@ const Article: NextPage<ArticleProps> = ({ data, content }: ArticleProps) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    hljs.initHighlighting()
+    Prism.highlightAll()
   }, [])
 
   return (
