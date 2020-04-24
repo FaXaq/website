@@ -6,8 +6,6 @@ import path from 'path'
 import { useTranslation } from 'react-i18next'
 import matter from 'gray-matter'
 
-import '../../styles/blog.scss'
-
 interface Article {
   data: { [key: string] : any }
   link: string
