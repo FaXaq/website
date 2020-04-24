@@ -64,6 +64,7 @@ pre[class*="language-"] {
   background-color: $syntax-bg;
   font-family: 'Monospace';
   box-shadow: $block-code-shadow;
+  overflow-x: auto;
 
   > code {
     font-family: inherit;
