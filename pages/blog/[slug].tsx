@@ -28,7 +28,7 @@ const Article: NextPage<ArticleProps> = ({ data, content }: ArticleProps) => {
     <div className="article container">
       <h1>{data.title}</h1>
       <div className="article-info">
-        <p><em>{t('format.date', { date: data.creationDate })}</em></p>
+        <p>{data.description ? data.description : '' } - <em>{t('format.date', { date: data.creationDate })}</em></p>
       </div>
       <div dangerouslySetInnerHTML={{ __html: renderedArticle }}></div>
     </div>

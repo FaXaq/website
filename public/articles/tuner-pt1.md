@@ -1,7 +1,7 @@
 ---
 title: How to build a tuner in Javascript ? - Part 1
 description: With no prior DSP knowledge
-creationDate: 04/18/2020
+creationDate: 04/27/2020
 ---
 ## What is a tuner ?
 
@@ -16,7 +16,7 @@ const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
 
 audioStreamRequest
   .then((audioStream) => {
-    /* ... Following source code will be there ... */
+    /* ... Following source code will be there except for function & constants declarations ... */
   })
   .catch(err => {
     console.error("Error when requesting mic audio stream", err)
@@ -25,7 +25,7 @@ audioStreamRequest
 
 ## Inserting our audio in a context
 
-Second we'll need to inject this audio stream in a context we can analyse. We can use the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) for that. It provides a [context](), [audio nodes](), [filters]() and many more, that we can use to manipulate and analyse sound with browser javascript.
+Second we'll need to inject this audio stream in a context we can analyse. We can use the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). It provides a [context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) and many more, that we can use to manipulate and analyse sound with browser javascript.
 
 ```js
 const ctx = new AudioContext()
@@ -42,7 +42,8 @@ const sourceNode = ctx.createMediaStreamSource(audioStream)
 ### How do I want to do it ?
 
 I have a very crude idea in mind.
-Extract frequencies from the stream and see if there are frequencies with high magnitude.
+
+Set notes that we want to analyse, for a guitar those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude (the one currently playing) and see if we can tell it's in tune.
 
 _Spoiler: This is not how to do it_
 
@@ -54,7 +55,7 @@ Now that we have an Audio Context we can play with, we can analyse the audio str
 
 > The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
 
-It seems that the [Analyse Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
+It seems that the [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
 
 In the documentation there are two methods that we may have a use for :
 - [getFloatFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getFloatFrequencyData)
@@ -64,7 +65,7 @@ In the documentation there are two methods that we may have a use for :
 
 Let's try extracting data from out mic input and see what it looks like.
 
-So, we'll create an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) and connect it to our source node. Since we do not plan to do anything else with our audio stream, we can ommit to connect the analyse node output.
+So, we'll create an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) and connect it to our source node. Since we do not plan to do anything else with our audio stream, we can ommit to connect the Analyser Node output.
 
 ```js
 const analyserNode = ctx.createAnalyser()
@@ -79,19 +80,20 @@ For now our chain looks like this :
 ---------------         ----------------
 ```
 
-We'll use the `getByteFrequencyData` since it is easier to use. Let's try requesting the data from the Analyser Node each 300ms. Let's follow MDN's documentation.
+We'll use the `getByteFrequencyData` since it is easier to use. Let's try requesting the data from the Analyser Node each 300ms.
 
 ```js
-function collectAnalyserData() {
+function collectAnalyserData(analyser) {
   // Uint8Array should be the same length as the frequencyBinCount
-  const dataArray = new Uint8Array(analyserNode.frequencyBinCount)
-  analyserNode.getByteFrequencyData(dataArray)
-  console.log(dataArray)
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+  console.log("Working with a frequency bin range of ", dataArray)
 
-  setTimeout(collectAnalyserData, 300)
+  setTimeout(() => collectAnalyserData(analyser), 300)
 }
 
-collectAnalyserData()
+/* calling the function within the then callback */
+collectAnalyserData(analyserNode)
 ```
 
 
@@ -103,21 +105,19 @@ What do we do with that ?
 
 After a few seconds looking online, I found out that what `getByteFrequencyData` does under the hood is a Fast Fourier Transform (FFT).
 
-_A FFT is a formula used to switch between time domain to frequency domain._
+> A FFT is a formula used to switch between time domain to frequency domain.
 
 Let's skip forward a few days trying to understand what FFT is. I found 2 videos on YouTube that sums it pretty well. Watch the [first](https://www.youtube.com/watch?v=mkGsMWi_j4Q) one, then the [second](https://www.youtube.com/watch?v=htCj9exbGo0) one.
 
 Since we are now in the frequency domain, we have 1024 `frequencyBins`. But what are those `frequencyBins` ? And why 1024 ?
 
-We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing a value related to a frequency bin.
+We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing a value related to a frequency bin. After a few research, a frequency bin is a range between two frequencies and is calculated as follow : `sampleRate / fftSize`. What is our `sampleRate` ?
 
-After a few research frequency bin is a range between two frequencies and is calculated as follow : `sampleRate / fftSize`. What is this `sampleRate` ?
-
-If I check the `sampleRate` from my current audio context I get `48000`. It means that I get `48000` samples per second. Well, that's a lot. But for now, I don't need this information. Though, I can use it to calculate the frequency bin range.
+If I check the `sampleRate` from my current audio context I get `48000`. Let's use it to calculate our frequency bin range.
 
 ```js
 const frequencyBinRange = ctx.sampleRate / analyserNode.fftSize
-console.log(frequencyBinRange)
+console.log("Working with a frequency bin range of ", frequencyBinRange)
 ```
 
 With my values I end up with a `frequencyBinRange` of `23.4375`. That's a huge range. Let's try to reduce it a bit. Can we increase the `fftSize` ? Yes ! As long that it's a power of 2 and within the range of `2⁵` and `2¹⁵`. Let's set it to the maximum, see where we can end up. So, let's set the `fftSize` to `32768` before calculating that range.
@@ -126,4 +126,104 @@ With my values I end up with a `frequencyBinRange` of `23.4375`. That's a huge r
 analyserNode.fftSize = 32768
 ```
 
-I end up with a much smaller range of `1.46484375`. That is ok but I would prefer below 1Hz. Let's see if we can lower that a bit.
+I end up with a much smaller range of `1.46484375`. It sounds nice enough, let's move forward and try to get magnitude for specific frequencies (guitar strings for instance).
+
+#### Guessing the current note
+
+Here is an array containing guitar string frequencies that will be our reference. I declare it at the start of the file :
+```js
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+```
+
+Now, if I want the magnitude of each guitar string frequency in my signal, I have to check on the magnitude of the corresponding frequency bin. First we'll try with the `E2` string. Let's declare a function that takes a frequency in parameter, the frequency bin range, the FFT results and returns the magnitude.
+
+To get the frequency bin that corresponds to our custom frequency, it's simply the closest lower integer of this frequency divided by the frequency bin range.
+
+```js
+function getFrequencyMagnitudeFromFFT(frequency, frequencyBinRange, FFTValues) {
+  const frequencyBinIndex = Math.floor(frequency / frequencyBinRange)
+  return FFTValues[frequencyBinIndex]
+}
+```
+
+Let's call it from within our `collectAnalyserData` function.
+
+```js
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
+  console.log(E2Magnitude)
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+```
+
+Well, it's working like a charm, let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string is currently playing.
+
+```js
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const guitarStringWithMagnitudes = GUITAR_STRING_FREQUENCIES.map(gsf => {
+    return {
+      ...gsf,
+      magnitude: getFrequencyMagnitudeFromFFT(gsf.frequency, frequencyBinRange, dataArray)
+    }
+  })
+
+  const guessedString = guitarStringWithMagnitudes.reduce((p, c) => p.magnitude < c.magnitude ? c : p)
+  console.log('Guessed string is : ', guessedString)
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+```
+
+I have my guitar right next to me, and when I play an A string for instance it prints in the console :
+![guessed A string](/articles/images/tuner-pt1/guessed-string.png)
+
+__SUCCESS !__
+
+#### Is the string in tune ?
+
+Here we may have a situation. Since the frequency bin range is ~1.46Hz, we can never assure that our string is in tune within those 1.4Hz (which is a huge range for an instrument). Unless... We try to analyse its surroundings frequency bins ?
+
+If a string is in tune, it means that its frequency bin's magnitude is higher than its surroundings one, right ?
+
+```js
+function isStringInTune(guitarString, frequencyBinRange, FFTValues) {
+  const prevMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency - frequencyBinRange, frequencyBinRange, FFTValues)
+  const nextMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency + frequencyBinRange, frequencyBinRange, FFTValues)
+
+  return prevMagnitude - guitarString.magnitude < 0 && nextMagnitude - guitarString.magnitude < 0
+}
+```
+
+But that leaves a range of ~1.46Hz for it to be out of tune.
+
+I tried to find a correlation between its souroundings frequency bins, their magnitude, its frequency bin and its magnitude and the distances but I cannot seem to identify a relation. After a week of thinking about it here and there, sketching and drawing, I decided to stop looking into it for now, and try something different.
+
+## Conclusion
+
+Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). That will be for the part two, stay tuned !
+
+## Links
+
+1. [Github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner)
+2. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)

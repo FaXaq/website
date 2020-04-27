@@ -21,6 +21,8 @@ const notes = [
 ]
 // const notes = notesPerPitch.reduce((p, c) => [...p, ...c], [])
 
+console.log(notes.map(n => n[0].frequency))
+
 function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourceNode] {
   const ctx = new AudioContext()
   const analyser = ctx.createAnalyser()

@@ -1,4 +1,7 @@
 .article {
+  @apply pt-4;
+  @apply pb-8;
+
   * {
     @apply font-mtts-text;
     @apply text-mtts-dark-violet;
@@ -21,6 +24,9 @@
   h6 {
     @apply font-bold;
     @apply font-mtts-title;
+  }
+
+  p, h2, h3, h4, h5, h6, pre {
     @apply my-4;
   }
 
@@ -31,6 +37,7 @@
 
   h2 {
     @apply text-3xl;
+    @apply my-8;
   }
 
   h3 {
@@ -41,19 +48,27 @@
     @apply text-xl;
   }
 
-  p, h2, h3, h4, h5, h6, pre {
-    @apply my-4;
-  }
-
   a {
     @apply text-mtts-cta-0;
     @apply underline;
   }
 
   blockquote {
+    @apply pl-6;
     @apply mx-4;
+    @apply my-2;
     @apply italic;
-    @apply text-sm;
+    @apply relative;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 100%;
+      @apply w-2;
+      @apply absolute;
+      @apply bg-mtts-cta-4;
+      @apply left-0;
+    }
   }
 
   ul > li {
