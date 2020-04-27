@@ -21,16 +21,21 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
   const links = articles.map((a, i) => {
     const articleDate = new Date(a.data.creationDate)
     return (
-      <li key={`article-${i}`}>
+      <li key={`article-${i}`} className="my-4">
         <Link href={`${a.link}`}>
-          <a>{a.data.title} {t('format.date', { date: articleDate })}</a>
+          <a>
+            <div>
+              <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.data.title}</h3>
+              <p>{a.data.description ? a.data.description : '' } - <em>{t('format.date', { date: articleDate })}</em></p>
+            </div>
+          </a>
         </Link>
       </li>
     )
   })
   return (
-    <div className="font-sans">
-      <h1 className="text-2xl">{t('blog.title')}</h1>
+    <div className="font-sans container mx-auto">
+      <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
       <ul className="flex flex-col">
         {links.length > 0 ? links : 'No blog post yet...'}
       </ul>

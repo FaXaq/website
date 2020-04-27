@@ -25,7 +25,7 @@ const Article: NextPage<ArticleProps> = ({ data, content }: ArticleProps) => {
   }, [])
 
   return (
-    <div className="article container">
+    <div className="article container md:max-w-1/2">
       <h1>{data.title}</h1>
       <div className="article-info">
         <p>{data.description ? data.description : '' } - <em>{t('format.date', { date: data.creationDate })}</em></p>

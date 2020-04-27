@@ -1,6 +1,6 @@
 ---
-title: How to build a tuner in Javascript ? - Part 1
-description: With no prior DSP knowledge
+title: How to build a (guitar) tuner in Javascript ? - Part 1
+description: With no prior Digital Signal Processing knowledge
 creationDate: 04/27/2020
 ---
 ## What is a tuner ?
