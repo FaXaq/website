@@ -4,10 +4,15 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import path from 'path'
 import { useTranslation } from 'react-i18next'
-import matter from 'gray-matter'
+
+export interface ArticleMetaData {
+  title: string
+  description: string
+  creationDate: Date
+}
 
 interface Article {
-  data: { [key: string] : any }
+  meta: ArticleMetaData
   link: string
 }
 
@@ -19,14 +24,13 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
   const { t } = useTranslation()
 
   const links = articles.map((a, i) => {
-    const articleDate = new Date(a.data.creationDate)
     return (
       <li key={`article-${i}`} className="my-4">
         <Link href={`${a.link}`}>
           <a>
             <div>
-              <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.data.title}</h3>
-              <p>{a.data.description ? a.data.description : '' } - <em>{t('format.date', { date: articleDate })}</em></p>
+              <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
+              <p>{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
             </div>
           </a>
         </Link>
@@ -46,14 +50,13 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
 Blog.getInitialProps = async (_) => {
   const articles = await (async context => {
     return await Promise.all(context.keys().map(async (k) => {
-      const postContent = await import(`../../public/articles/${k.replace('./', '')}`)
-      const { data } = matter(postContent.default)
+      const postContent = await import(`./${k.replace('./', '')}`)
       return {
-        data,
-        link: `/blog/${path.basename(k.replace('./', ''), '.md')}`
+        meta: postContent.meta,
+        link: `/blog/${path.basename(k.replace('./', ''), '.mdx')}`
       }
     }))
-  })(require.context('../../public/articles', true, /\.md/))
+  })(require.context('./', true, /\.mdx/))
 
   return {
     articles

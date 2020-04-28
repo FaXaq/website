@@ -1,8 +1,14 @@
----
-title: How to build a (guitar) tuner in Javascript ? - Part 1
-description: With no prior Digital Signal Processing knowledge
-creationDate: 04/27/2020
----
+import BlogPostLayout from '../../components/blog/BlogPostLayout'
+import Correlation from '../../components/blog/tuner-pt1/correlation'
+
+export const meta = {
+  title: 'How to build a (guitar) tuner in Javascript ? - Part 1',
+  description: 'With no prior Digital Signal Processing knowledge',
+  creationDate: '04/27/2020'
+}
+
+<BlogPostLayout meta={meta}>
+
 ## What is a tuner ?
 
 A tuner is a device that helps tune (mostly strings based) instruments. It takes a sound in input and output a note name if it's close enough.
@@ -43,15 +49,15 @@ const sourceNode = ctx.createMediaStreamSource(audioStream)
 
 I have a very crude idea in mind.
 
-Set notes that we want to analyse, for a guitar those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude (the one currently playing) and see if we can tell it's in tune.
+Set notes that we want to analyse, for a guitar those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude (hopefully the one currently playing) and see if we can tell it's in tune.
 
-_Spoiler: This is not how to do it_
+_Spoiler: This is probably not how to do it_
 
 ### Let's do it
 
 #### Extracting the data
 
-Now that we have an Audio Context we can play with, we can analyse the audio stream from the mic. The Web audio Api provides an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) for that.
+Now that we have an [Audio Context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) we can play with, we can analyse the audio stream from the mic. The [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) provides an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) for that.
 
 > The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
 
@@ -97,7 +103,7 @@ collectAnalyserData(analyserNode)
 ```
 
 
-Let's look at the console for a moment. We see, each 300ms an Uint8Array of 1024 numbers. Those numbers are bytes, so are ranging between 0 and 255.
+Each 300ms it yields an Uint8Array of 1024 numbers. Those numbers are bytes, so are ranging between 0 and 255.
 What do we do with that ?
 ![Uint8Array from the console](/articles/images/tuner-pt1/uint-array.png)
 
@@ -111,7 +117,7 @@ Let's skip forward a few days trying to understand what FFT is. I found 2 videos
 
 Since we are now in the frequency domain, we have 1024 `frequencyBins`. But what are those `frequencyBins` ? And why 1024 ?
 
-We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing a value related to a frequency bin. After a few research, a frequency bin is a range between two frequencies and is calculated as follow : `sampleRate / fftSize`. What is our `sampleRate` ?
+We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing a value related to a frequency bin. A frequency bin is a range between two frequencies and is calculated as follow : `sampleRate / fftSize`. What is our `sampleRate` ?
 
 If I check the `sampleRate` from my current audio context I get `48000`. Let's use it to calculate our frequency bin range.
 
@@ -120,13 +126,13 @@ const frequencyBinRange = ctx.sampleRate / analyserNode.fftSize
 console.log("Working with a frequency bin range of ", frequencyBinRange)
 ```
 
-With my values I end up with a `frequencyBinRange` of `23.4375`. That's a huge range. Let's try to reduce it a bit. Can we increase the `fftSize` ? Yes ! As long that it's a power of 2 and within the range of `2⁵` and `2¹⁵`. Let's set it to the maximum, see where we can end up. So, let's set the `fftSize` to `32768` before calculating that range.
+With my values I end up with a `frequencyBinRange` of `23.4375`Hz. That's a huge range. Let's try to reduce it a bit. Can we increase the `fftSize` ? Yes ! As long that it's a power of 2 and within the range of `2⁵` and `2¹⁵`. Let's set it to the maximum, see where we can end up. So, let's set the `fftSize` to `32768` before calculating that range.
 
 ```js
 analyserNode.fftSize = 32768
 ```
 
-I end up with a much smaller range of `1.46484375`. It sounds nice enough, let's move forward and try to get magnitude for specific frequencies (guitar strings for instance).
+I end up with a much smaller range of `1.46484375`Hz. It sounds nice enough.
 
 #### Guessing the current note
 
@@ -170,7 +176,7 @@ function collectAnalyserData(analyser) {
 }
 ```
 
-Well, it's working like a charm, let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string is currently playing.
+Well, it's working ! Let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string is currently playing.
 
 ```js
 function collectAnalyserData(analyser) {
@@ -202,7 +208,7 @@ __SUCCESS !__
 
 #### Is the string in tune ?
 
-Here we may have a situation. Since the frequency bin range is ~1.46Hz, we can never assure that our string is in tune within those 1.4Hz (which is a huge range for an instrument). Unless... We try to analyse its surroundings frequency bins ?
+Here we may have a situation. Since the frequency bin range is ~1.46Hz, we can never assure that our string is in tune within this range. Unless... We try to analyse its surroundings frequency bins ?
 
 If a string is in tune, it means that its frequency bin's magnitude is higher than its surroundings one, right ?
 
@@ -217,13 +223,58 @@ function isStringInTune(guitarString, frequencyBinRange, FFTValues) {
 
 But that leaves a range of ~1.46Hz for it to be out of tune.
 
-I tried to find a correlation between its souroundings frequency bins, their magnitude, its frequency bin and its magnitude and the distances but I cannot seem to identify a relation. After a week of thinking about it here and there, sketching and drawing, I decided to stop looking into it for now, and try something different.
+I have an idea : Try to see if the distance between our guitar string frequency and the starting frequency of its frequency bin has any relation with its surroundings magnitude.
+
+Let me try to explain my reasoning. Each data extraction we have 7 data :
+- Guitar string frequency
+- Guitar string frequency bin
+- Guitar string frequency bin magnitude
+- Previous frequency bin
+- Previous frequency bin magnitude
+- Next frequency bin
+- Next frequency bin magnitude
+
+_Note: Each time I talk about a frequency bin's frequency, I'm refering to its starting frequency._
+
+For the E2 string, its frequency is `82.4068892282175`. It means that its distance from its frequency bin is `82.4068892282175 - Math.floor(82.4068892282175 / frequencyBinRange) * frequencyBinRange` which is equal to `0.3115523141549943`. This is lesser than half of our frequency range. So it is closer to the previous frequency bin than the next frequency bin.
+
+Let's see, when the E string is in tune, if the previous frequency bin magnitude is higher than the next frequency bin magnitude.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={132} prevFqBinMag={124} nextFqBinMag={112} title={'E2 string in tune'} />
+
+__SUCCESS__ !
+
+Now, after tuning it slightly sharp.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={147} prevFqBinMag={107} nextFqBinMag={156} title={'Sharp E2 string'} />
+
+And tuning it slightly down.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={59} prevFqBinMag={103} nextFqBinMag={32} title={'Flat E2 string'} />
+
+__SUCCESS__ !
+
+Ok so what I had as an intuition worked as expected. See data for the G3 string. Its distance from its frequency bin is `0.8530646705621336`. Which means it's closer to the next frequency bin than the last. So, when in tune, the next frequency bin's magnitude should be higher than the previous one.
+
+<Correlation gsFq={195.99771799087463} fqBin={195.1446533203125} prevFqBin={193.798828125} nextFqBin={196.490478515625} fqBinMag={202} prevFqBinMag={166} nextFqBinMag={211} title={'B3 string in tune'} />
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={126} prevFqBinMag={120} nextFqBinMag={133} title={'Sharp B3 string'} />
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={207} prevFqBinMag={211} nextFqBinMag={191} title={'Flat B3 string'} />
+
+
+After seeing those graphs I don't know how to procede and find the correlation. I tried looking at the lines equations' coefficients but ... nothing. If anyone has an idea, don't hesitate to fork the [github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner) and make a PR.
 
 ## Conclusion
 
-Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). That will be for the part two, stay tuned !
+Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). That will be for part two.
+
+Thanks for reading :)
 
 ## Links
 
 1. [Github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner)
 2. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+
+
+</BlogPostLayout>
