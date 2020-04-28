@@ -1,6 +1,11 @@
 import React from 'react'
-import { Line } from 'react-chartjs-2'
+import { HorizontalBar } from 'react-chartjs-2'
 import { theme } from '../../../tailwind.config'
+import { hexToRgb } from '../../../utils/misc'
+
+const CTA2_RGB = hexToRgb(theme.extend.colors['mtts-cta-2'])
+const BAR_COLOR = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.5)`
+const BAR_COLOR_HOVER = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.7)`
 
 interface CorrelationProps {
   gsFq: number
@@ -15,30 +20,19 @@ interface CorrelationProps {
 
 const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag, nextFqBinMag, title }: CorrelationProps) => {
   const data = {
-    labels: ['Previous frequency bin', 'Frequency bin', 'Next frequency bin'],
+    labels: ['Prev. Fq Bin', 'Fq Bin', 'Next Fq Bin'],
     datasets: [
       {
         label: 'Magnitude',
-        backgroundColor: 'transparent',
-        borderColor: theme.extend.colors['mtts-cta-2'],
-        hoverBackgroundColor: 'transparent',
-        hoverBorderColor: theme.extend.colors['mtts-cta-2'],
-        data: [{
-          x: prevFqBin,
-          y: prevFqBinMag
-        }, {
-          x: fqBin,
-          y: fqBinMag
-        }, {
-          x: nextFqBin,
-          y: nextFqBinMag
-        }]
+        backgroundColor: BAR_COLOR,
+        hoverBackgroundColor: BAR_COLOR_HOVER,
+        data: [prevFqBinMag, fqBinMag, nextFqBinMag]
       }
     ]
   }
   const options = {
     scales: {
-      yAxes: [{
+      xAxes: [{
         ticks: {
           beginAtZero: true,
           endAt: 100
@@ -56,7 +50,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
       text: title
     }
   }
-  return <Line data={data} options={options} height={75} />
+  return <HorizontalBar data={data} options={options} />
 }
 
 export default Correlation
