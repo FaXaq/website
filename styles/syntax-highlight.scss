@@ -1,0 +1,105 @@
+/* inspired by https://github.com/smlombardi/daylight-ui/blob/737cc2887a8e87da09756e72ad16a8bef5c09876/LICENSE.md */
+
+
+
+// Config -----------------------------------
+$syntax-hue:          230;
+$syntax-saturation:    1%;
+$syntax-brightness:   98%;
+
+
+// Monochrome -----------------------------------
+$mono-1: hsl($syntax-hue, 8%, 24%);
+$mono-2: hsl($syntax-hue, 6%, 44%);
+$mono-3: hsl($syntax-hue, 4%, 64%);
+
+// Colors -----------------------------------
+$hue-1:   hsl(198, 99%, 37%); // <-cyan
+$hue-2:   hsl(221, 87%, 60%); // <-blue
+$hue-3:   hsl(301, 63%, 40%); // <-purple
+$hue-4:   hsl(119, 34%, 47%); // <-green
+
+$hue-5:   hsl(  5, 74%, 59%); // <-red 1
+$hue-5-2: hsl(344, 84%, 43%); // <-red 2
+
+$hue-6:   hsl(41, 99%, 30%); // <-orange 1
+$hue-6-2: hsl(41, 99%, 38%); // <-orange 2
+
+
+// Base colors -----------------------------------
+$syntax-fg:     $mono-1;
+$syntax-bg:     hsl($syntax-hue, $syntax-saturation, $syntax-brightness);
+$syntax-gutter: darken($syntax-bg, 36%);
+$syntax-guide:  fade($syntax-fg, 20%);
+$syntax-accent: hsl($syntax-hue, 100%, 66% );
+
+$syntax-color-variable:   $hue-5;
+$syntax-color-constant:   $hue-6;
+$syntax-color-property:   $syntax-fg;
+$syntax-color-value:      $syntax-fg;
+$syntax-color-function:   $hue-2;
+$syntax-color-method:     $hue-2;
+$syntax-color-class:      $hue-6-2;
+$syntax-color-keyword:    $hue-3;
+$syntax-color-tag:        $hue-5;
+$syntax-color-attribute:  $hue-6;
+$syntax-color-import:     $hue-3;
+$syntax-color-snippet:    $hue-4;
+
+$block-code-shadow: 0px 0px 5px rgba(0, 0, 0, .1);
+
+p > code {
+  margin: 1rem 0;
+  padding: .3rem .7rem;
+  border-radius: .1rem;
+  background-color: $syntax-bg;
+  font-family: 'Monospace';
+  box-shadow: $block-code-shadow;
+}
+
+pre[class*="language-"] {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: .3rem;
+  background-color: $syntax-bg;
+  font-family: 'Monospace';
+  box-shadow: $block-code-shadow;
+  overflow-x: auto;
+
+  > code {
+    font-family: inherit;
+    color: $syntax-fg;
+
+    > .token {
+      font-family: inherit;
+
+      &.keyword {
+        color: $syntax-color-keyword;
+      }
+
+      &.function {
+        color: $syntax-color-method;
+      }
+
+      &.parameter {
+        color: $syntax-color-variable;
+      }
+
+      &.comment {
+        color: $syntax-color-snippet;
+      }
+
+      &.string {
+        color: $syntax-color-class;
+      }
+
+      &.operator {}
+
+      &.punctuation {}
+
+      &.number, &.boolean {
+        color: $syntax-color-import;
+      }
+    }
+  }
+}

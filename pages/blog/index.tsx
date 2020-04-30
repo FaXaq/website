@@ -5,8 +5,19 @@ import Link from 'next/link'
 import path from 'path'
 import { useTranslation } from 'react-i18next'
 
+export interface ArticleMetaData {
+  title: string
+  description: string
+  creationDate: Date
+}
+
+interface Article {
+  meta: ArticleMetaData
+  link: string
+}
+
 interface BlogProps {
-  articles: any[];
+  articles: Article[];
 }
 
 const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
@@ -14,23 +25,38 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
 
   const links = articles.map((a, i) => {
     return (
-      <div key={`article-${i}`}>
-        <h1 className="text-2xl">{t('blog.title')}</h1>
-        <Link href={`/blog/${a}`} key={`article-${a}`}>
-          <a>{a}</a>
+      <li key={`article-${i}`} className="my-4">
+        <Link href={`${a.link}`}>
+          <a>
+            <div>
+              <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
+              <p>{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
+            </div>
+          </a>
         </Link>
-      </div>
+      </li>
     )
   })
-  return <div className="font-sans">{links}</div>
+  return (
+    <div className="font-sans container mx-auto px-4">
+      <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
+      <ul className="flex flex-col">
+        {links.length > 0 ? links : 'No blog post yet...'}
+      </ul>
+    </div>
+  )
 }
 
-Blog.getInitialProps = _ => {
-  const articles = (context => {
-    return context.keys().map(k => {
-      return path.basename(k.replace('./', ''), '.md')
-    })
-  })(require.context('../../public/articles', true, /\.md/))
+Blog.getInitialProps = async (_) => {
+  const articles = await (async context => {
+    return await Promise.all(context.keys().map(async (k) => {
+      const postContent = await import(`./${k.replace('./', '')}`)
+      return {
+        meta: postContent.meta,
+        link: `/blog/${path.basename(k.replace('./', ''), '.mdx')}`
+      }
+    }))
+  })(require.context('./', true, /\.mdx/))
 
   return {
     articles

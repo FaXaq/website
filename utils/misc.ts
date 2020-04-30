@@ -31,3 +31,16 @@ export function scale (index: number, rangeStart: number, rangeStop: number, out
   const outIndex = inPercentage * outRange / 100
   return outIndex <= outRangeStop ? outIndex <= outRangeStart ? outRangeStart : Math.ceil(outIndex) : outRangeStop
 }
+
+/**
+ * see : https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+ */
+
+export function hexToRgb (hex: string): { r: number, g: number, b: number } {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null
+}

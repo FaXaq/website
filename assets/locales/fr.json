@@ -225,5 +225,11 @@
       "FLAT": "♭",
       "DOUBLE_FLAT": "𝄫"
     }
+  },
+  "blog": {
+    "title": "Blog"
+  },
+  "format": {
+    "date": "{{date, DD/MM/YYYY}}"
   }
 }

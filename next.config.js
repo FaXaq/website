@@ -1,12 +1,6 @@
-const withSass = require('@zeit/next-sass')
-
-module.exports = withSass({
-  webpack: function (config) {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader'
-    })
-
-    return config
-  }
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/
+})
+module.exports = withMDX({
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx']
 })

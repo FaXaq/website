@@ -61,6 +61,9 @@ module.exports = {
         'icon-l': '8rem',
         'icon-xl': '16rem',
         'icon-xxl': '32rem'
+      },
+      maxWidth: {
+        '1/2': '50%'
       }
     }
   }
