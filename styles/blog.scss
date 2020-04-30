@@ -26,7 +26,11 @@
     @apply font-mtts-title;
   }
 
-  p, h2, h3, h4, h5, h6, pre {
+  h2, h3, h4, h5, h6 {
+    @apply mt-8 mb-4;
+  }
+
+  p, pre {
     @apply my-4;
   }
 
@@ -37,7 +41,7 @@
 
   h2 {
     @apply text-3xl;
-    @apply my-8;
+    @apply mt-8 mb-4;
   }
 
   h3 {
@@ -84,6 +88,6 @@
     border-radius: .2rem;
     @apply p-2;
     @apply mx-auto;
-    @apply my-4;
+    @apply my-2;
   }
 }

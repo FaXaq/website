@@ -50,7 +50,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
       text: title
     }
   }
-  return <HorizontalBar data={data} options={options} />
+  return <HorizontalBar data={data} options={options} height={100} />
 }
 
 export default Correlation

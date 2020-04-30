@@ -11,7 +11,7 @@ export const meta = {
 
 ## What is a tuner ?
 
-A tuner is a device that helps tune (mostly strings based) instruments. It takes a sound in input and output a note name if it's close enough.
+A tuner is a device that helps tuning string based instruments. It takes a sound in input and output a note name if it's close enough and indicates if it is sharp, flat, or in tune.
 
 ## Get audio data from the microphone
 
@@ -37,7 +37,7 @@ Second we'll need to inject this audio stream in a context we can analyse. We ca
 const ctx = new AudioContext()
 ```
 
-We'll also define the audio stream from the mic as a "source node" for our chain.
+We'll also define the audio stream from the mic as a "source node" of our audio chain.
 
 ```js
 const sourceNode = ctx.createMediaStreamSource(audioStream)
@@ -49,7 +49,7 @@ const sourceNode = ctx.createMediaStreamSource(audioStream)
 
 I have a very crude idea in mind.
 
-Set notes that we want to analyse, for a guitar those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude (hopefully the one currently playing) and see if we can tell it's in tune.
+Take as reference notes we want to analyse. If we take a guitar, those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude or the loudest (hopefully the one currently playing) and see if we can tell it's in tune.
 
 _Spoiler: This is probably not how to do it_
 
@@ -57,11 +57,11 @@ _Spoiler: This is probably not how to do it_
 
 #### Extracting the data
 
-Now that we have an [Audio Context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) we can play with, we can analyse the audio stream from the mic. The [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) provides an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) for that.
+Now that we have an [Audio Context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) we can play with, we can analyse the audio stream from the mic. The [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) provides an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) especially for this purpose.
 
-> The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
+> The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an [Audio Node]() that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
 
-It seems that the [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
+It seems that an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
 
 In the documentation there are two methods that we may have a use for :
 - [getFloatFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getFloatFrequencyData)
@@ -69,16 +69,16 @@ In the documentation there are two methods that we may have a use for :
 - [getByteFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData)
 > Copies the current frequency data into a Uint8Array (unsigned byte array) passed into it.
 
-Let's try extracting data from out mic input and see what it looks like.
+We'll extract data from our mic input and see what it looks like.
 
-So, we'll create an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) and connect it to our source node. Since we do not plan to do anything else with our audio stream, we can ommit to connect the Analyser Node output.
+Create an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) and connect it to our source node. Since we do not plan to do anything else with our audio stream, we can ommit to connect the Analyser Node output.
 
 ```js
 const analyserNode = ctx.createAnalyser()
 sourceNode.connect(analyserNode)
 ```
 
-For now our chain looks like this :
+Our [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) chain looks like this :
 
 ```plaintext
 ---------------         ----------------
@@ -86,7 +86,7 @@ For now our chain looks like this :
 ---------------         ----------------
 ```
 
-We'll use the `getByteFrequencyData` since it is easier to use. Let's try requesting the data from the Analyser Node each 300ms.
+We'll use the `getByteFrequencyData` and try requesting data from the Analyser Node each 300ms.
 
 ```js
 function collectAnalyserData(analyser) {
@@ -103,13 +103,13 @@ collectAnalyserData(analyserNode)
 ```
 
 
-Each 300ms it yields an Uint8Array of 1024 numbers. Those numbers are bytes, so are ranging between 0 and 255.
+Each 300ms it yields an `Uint8Array` of 1024 numbers. Those numbers are bytes, so are ranging between 0 and 255.
 What do we do with that ?
 ![Uint8Array from the console](/articles/images/tuner-pt1/uint-array.png)
 
 #### Understanding the data
 
-After a few seconds looking online, I found out that what `getByteFrequencyData` does under the hood is a Fast Fourier Transform (FFT).
+I found out that what `getByteFrequencyData` does under the hood is a Fast Fourier Transform (FFT).
 
 > A FFT is a formula used to switch between time domain to frequency domain.
 
@@ -117,7 +117,9 @@ Let's skip forward a few days trying to understand what FFT is. I found 2 videos
 
 Since we are now in the frequency domain, we have 1024 `frequencyBins`. But what are those `frequencyBins` ? And why 1024 ?
 
-We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing a value related to a frequency bin. A frequency bin is a range between two frequencies and is calculated as follow : `sampleRate / fftSize`. What is our `sampleRate` ?
+We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing the magnitude related to a frequency bin. A frequency bin is an interval between two frequencies and its range is calculated as follow : `sampleRate / fftSize`.
+
+See [here](https://stackoverflow.com/questions/4364823/how-do-i-obtain-the-frequencies-of-each-value-in-an-fft) for a stackoverflow explaination.
 
 If I check the `sampleRate` from my current audio context I get `48000`. Let's use it to calculate our frequency bin range.
 
@@ -176,7 +178,7 @@ function collectAnalyserData(analyser) {
 }
 ```
 
-Well, it's working ! Let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string is currently playing.
+Well, it's working ! Let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string has the highest magnitude and hopefully the one currently playing.
 
 ```js
 function collectAnalyserData(analyser) {
@@ -267,7 +269,7 @@ After seeing those graphs I don't know how to procede and find the correlation. 
 
 ## Conclusion
 
-Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). That will be for part two.
+Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). It will be for part two.
 
 Thanks for reading :)
 
