@@ -9,7 +9,9 @@ export function useVolume (decibels: number = -10) {
     setVolume(new Tone.Volume(db))
 
     return () => {
-      volume.dispose()
+      if (volume) {
+        volume.dispose()
+      }
     }
   }, [])
 
@@ -35,7 +37,9 @@ export function useFFT (fftNumber: number = 256) {
     setFFT(new Tone.FFT(fftNumber))
 
     return () => {
-      fft.dispose()
+      if (fft) {
+        fft.dispose()
+      }
     }
   }, [])
 
@@ -49,7 +53,9 @@ export function useWaveform (fftNumber: number = 256) {
     setWaveform(new Tone.Waveform(fftNumber))
 
     return () => {
-      waveform.dispose()
+      if (waveform) {
+        waveform.dispose()
+      }
     }
   }, [])
 

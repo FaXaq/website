@@ -35,7 +35,7 @@ const HomePage: NextPage<{}> = () => {
             <h3 className="text-4xl font-bold pb-4">{t('mtts.pages.index.research.title')}</h3>
             <p className="leading-loose"><Trans t={t}>mtts.pages.index.research.text</Trans></p>
           </div>
-          <div className="w-icon-l p-4 md:pl-32">
+          <div className="w-icon-l h-icon-l p-4 md:w-icon-xl md:h-icon-xl md:p-8">
             <ResearchIcon />
           </div>
         </div>

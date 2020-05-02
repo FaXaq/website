@@ -77,7 +77,9 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     setPolysynth(new Tone.PolySynth(2, Tone.Synth))
 
     return () => {
-      polysynth.dispose()
+      if (polysynth) {
+        polysynth.dispose()
+      }
     }
   }, [])
 

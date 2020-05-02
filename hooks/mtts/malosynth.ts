@@ -11,6 +11,12 @@ export function useMaloSynth () {
 
   useEffect(() => {
     setPolySynth(new PolySynth(6, Synth).toMaster())
+
+    return () => {
+      if (polysynth) {
+        polysynth.dispose()
+      }
+    }
   }, [])
 
   function startPlaying (notes: Note[]) {
