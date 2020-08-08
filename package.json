@@ -19,7 +19,7 @@
     "mtts": "https://github.com/FaXaq/mtts",
     "next": "^9.1.7",
     "node-sass": "^4.13.0",
-    "prismjs": "^1.20.0",
+    "prismjs": "^1.21.0",
     "raw-loader": "^4.0.0",
     "react": "^16.12.0",
     "react-anime": "^3.0.3",
