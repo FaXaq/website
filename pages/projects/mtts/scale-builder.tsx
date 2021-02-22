@@ -1,5 +1,5 @@
 import React from 'react'
-import BuildScale from '../../components/mtts/build-scale'
+import BuildScale from '../../../components/mtts/build-scale'
 
 const ScaleBuilder = () => {
   return (

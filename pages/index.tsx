@@ -11,8 +11,8 @@ const Home = () => {
           </Link>
         </li>
         <li>
-          <Link href="/mtts">
-            <a>MTTS</a>
+          <Link href="/projects">
+            <a>Projects</a>
           </Link>
         </li>
         <li>

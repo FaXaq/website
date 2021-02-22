@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react'
 
 // eslint-disable-next-line no-unused-vars
 import { Note, Pitch } from 'mtts'
-import { generateNotesForPitch } from '../../utils/mtts'
-import TileContainer from '../../components/mtts/malo/tile-container'
+import { generateNotesForPitch } from '../../../utils/mtts'
+import TileContainer from '../../../components/mtts/malo/tile-container'
 
 const Malo = () => {
   const [lineLength] = useState(20)

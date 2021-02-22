@@ -1,9 +1,9 @@
-import MTTSHeader from '../../components/mtts/header'
+import MTTSHeader from '../../../components/mtts/header'
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
 import { NextPage } from 'next'
-import ResearchIcon from '../../components/images/research-icon'
+import ResearchIcon from '../../../components/images/research-icon'
 import Link from 'next/link'
 
 interface Experiment {

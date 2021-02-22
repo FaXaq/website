@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import NoMicAccess from '../../components/mtts/tuner/no-mic-access'
-import TunerContainer from '../../components/mtts/tuner/tuner-container'
+import NoMicAccess from '../../../components/mtts/tuner/no-mic-access'
+import TunerContainer from '../../../components/mtts/tuner/tuner-container'
 
 const Tuner = () => {
   const [audioStream, setAudioStream] = useState<MediaStream | undefined>()

@@ -1,5 +1,5 @@
 import React from 'react'
-import BeatGrid from '../../components/mtts/beat-grid/beat-grid'
+import BeatGrid from '../../../components/mtts/beat-grid/beat-grid'
 
 const Beats = () => {
   return (

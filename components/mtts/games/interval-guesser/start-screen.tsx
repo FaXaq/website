@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
-import { Level, LEVELS } from '../../../../pages/mtts/games/interval-guesser'
+import { Level, LEVELS } from '../../../../pages/projects/mtts/games/interval-guesser'
 import IntervalGuesserButton from './button'
 
 interface IntervalGuesserStartScreenProps {

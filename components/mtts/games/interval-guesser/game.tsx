@@ -5,7 +5,7 @@ import IntervalGuesserButton from './button'
 import { shuffleArray, getRandomEntities } from '../../../../utils/misc'
 import * as Tone from 'tone'
 // eslint-disable-next-line no-unused-vars
-import { Level } from '../../../../pages/mtts/games/interval-guesser'
+import { Level } from '../../../../pages/projects/mtts/games/interval-guesser'
 import Oscillator from './oscillator'
 import FFT from './fft'
 import Knob from '../../controls/knob'
@@ -63,7 +63,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
     ]
   ).map(i => (
     <li key={`interval-${i.name}`}>
-      <IntervalGuesserButton onClick={() => compareToSecretInterval(i) } fixedSize={true}>
+      <IntervalGuesserButton onClick={() => compareToSecretInterval(i)} fixedSize={true}>
         <span>{i.name}</span>
       </IntervalGuesserButton>
     </li>
@@ -126,7 +126,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
 
   return (
     <div className="container mx-auto">
-      { /* oscillator */ }
+      { /* oscillator */}
       <div className="px-6">
         <Oscillator waveform={waveform} />
         <FFT fft={fft} />
@@ -134,7 +134,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
       <ul className="flex justify-center flex-wrap">
         {displayIntervals}
       </ul>
-      <Knob onUpdate={setDecibels} value={decibels} min={-100} max={0} label={t('mtts.controls.volume.title')}/>
+      <Knob onUpdate={setDecibels} value={decibels} min={-100} max={0} label={t('mtts.controls.volume.title')} />
     </div>
   )
 }
