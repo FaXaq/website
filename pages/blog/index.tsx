@@ -3,12 +3,14 @@ import React from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import path from 'path'
+import Tags from '../../components/blog/Tags'
 import { useTranslation } from 'react-i18next'
 
 export interface ArticleMetaData {
   title: string
   description: string
-  creationDate: Date
+  creationDate: Date,
+  tags: string[]
 }
 
 interface Article {
@@ -31,6 +33,7 @@ const Blog: NextPage<BlogProps> = function ({ articles }: BlogProps) {
             <div>
               <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
               <p>{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
+              <Tags tags={a.meta.tags || []} />
             </div>
           </a>
         </Link>

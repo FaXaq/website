@@ -1,35 +1,55 @@
 import React, { useState, useEffect } from 'react'
-import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES } from 'mtts'
+import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES, Chord } from 'mtts'
 import SquareButton from '../../square-button'
 import { useTranslation } from 'react-i18next'
+import GuitarNeck from '../instruments/guitar/guitar-neck'
 
 const possibleAccidentals: Accidental[] =
-ACCIDENTALS
-  .filter(a => !a.includes('DOUBLE'))
-  .map(a => new Accidental({ semitones: ACCIDENTAL[a] }))
+  ACCIDENTALS
+    .filter(a => !a.includes('DOUBLE'))
+    .map(a => new Accidental({ semitones: ACCIDENTAL[a] }))
 
 const possibleIntervals: Interval[] =
-Object.keys(INTERVALS)
-  .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
-  .map(i => Interval.fromName(i))
+  Object.keys(INTERVALS)
+    .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
+    .map(i => Interval.fromName(i))
 
 const possibleNotes: Note[] = NOTES.map(n => new Note({ name: n }))
 
-function BuildScale () {
+function BuildScale() {
   const [rootNote, setRootNote] = useState(possibleNotes[0])
   const [scale, setScale] = useState<Scale>(new Scale({ key: rootNote }))
   const [scaleIntervals, setScaleIntervals] = useState<Interval[]>(SCALES.MAJOR.intervals)
+  const [selectedNotes, setSelectedNotes] = useState<Note[]>([])
 
-  function getIntervalIndexInScale (interval: Interval) {
+  const chord = selectedNotes.length > 0 ? new Chord({
+    root: selectedNotes[0],
+    notes: selectedNotes
+  }) : undefined
+
+  function getIntervalIndexInScale(interval: Interval) {
     return scaleIntervals.findIndex(si => interval.name === si.name)
   }
 
-  function toggleScaleInterval (interval: Interval) {
+  function toggleScaleInterval(interval: Interval) {
     const intervalIndexInScale = getIntervalIndexInScale(interval)
     if (intervalIndexInScale > -1) {
       setScaleIntervals(si => si.reduce((p, c, i) => i !== intervalIndexInScale ? [...p, c] : [...p], []))
     } else {
       setScaleIntervals(si => [...si, interval])
+    }
+  }
+
+  function getSelectNoteIndex(note: Note) {
+    return selectedNotes.findIndex(sn => note.SPN === sn.SPN)
+  }
+
+  function toggleSelectedNote(note: Note) {
+    const selecteNoteIndex = getSelectNoteIndex(note)
+    if (selecteNoteIndex > -1) {
+      setSelectedNotes(sn => sn.reduce((p, c, i) => i !== selecteNoteIndex ? [...p, c] : [...p], []))
+    } else {
+      setSelectedNotes(sn => [...sn, note].sort((a, b) => a.frequency - b.frequency))
     }
   }
 
@@ -41,7 +61,7 @@ function BuildScale () {
   return (
     <div>
       <ul className="flex flex-wrap">
-        { possibleNotes.map(n =>
+        {possibleNotes.map(n =>
           <li key={n.name}>
             <SquareButton
               text={t(`mtts.notes.${n.name}`)}
@@ -53,7 +73,7 @@ function BuildScale () {
         }
       </ul>
       <ul className="flex flex-wrap">
-        { possibleAccidentals.map(a =>
+        {possibleAccidentals.map(a =>
           <li key={a.name}>
             <SquareButton
               text={t(`mtts.accidentals.${a.name}`)}
@@ -65,7 +85,7 @@ function BuildScale () {
         }
       </ul>
       <ul className="flex flex-wrap">
-        { possibleIntervals.map(i =>
+        {possibleIntervals.map(i =>
           <li key={i.name}>
             <SquareButton
               text={i.name}
@@ -77,15 +97,26 @@ function BuildScale () {
         }
       </ul>
       <p>{rootNote.SPN}</p>
-      <p>Scale notes : {scale.notes.sort((n1, n2) => n1.frequency - n2.frequency).map(n => <span key={`note-${n.SPN}`}>{n.SPN} /</span>)}</p>
       <p>Scale name : {scale.name}</p>
-      <p>Scale name : {scale.mode}</p>
+      <p>Scale mode : {scale.mode}</p>
       <select onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
-        { Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
+        {Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
       </select>
       <ul>
-        { scale.scaleChords.map((sc, i) => <li key={`chord-${i}`}>{sc.notes.map(n => n.SPN)} {sc.notation}</li>) }
+        {scale.notes.map(n => (
+          <li key={n.name}>
+            <SquareButton
+              text={t(`mtts.notes.${n.name}`) + (n.hasAccidental() ? t(`mtts.accidentals.${n.accidental.name}`) : '')}
+              isActive={getSelectNoteIndex(n) > -1}
+              onClick={() => toggleSelectedNote(n)}
+            />
+          </li>
+        ))}
       </ul>
+      {chord ? <p>
+        <span>{t(`mtts.notes.${chord.root.name}`)}</span>
+        <span>{chord.notation}</span>
+      </p> : null}
     </div>
   )
 }
