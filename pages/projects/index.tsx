@@ -1,8 +1,14 @@
-import { useTranslation } from "react-i18next";
+import React from 'react'
+import Link from 'next/link'
 
-const Aigrenys = () => {
-  const { t } = useTranslation()
-  return <h1>{t('aigrenys.title')}</h1>
+const Projects = () => {
+  return <ul>
+    <li>
+      <Link href="/projects/mtts">
+        <a>MTTS</a>
+      </Link>
+    </li>
+  </ul>
 }
 
-export default Aigrenys;
+export default Projects
