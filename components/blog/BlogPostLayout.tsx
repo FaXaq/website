@@ -19,11 +19,15 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
 
   return (
     <div className="article container md:max-w-1/2">
-      <h1>{meta.title}</h1>
-      <div className="article-info">
-        <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
-      </div>
-      {children}
+      <header>
+        <h1>{meta.title}</h1>
+        <div className="article-info">
+          <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
+        </div>
+      </header>
+      <article>
+        {children}
+      </article>
     </div>
   )
 }
