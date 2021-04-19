@@ -10,10 +10,22 @@
     "content": {
       "experiences": {
         "title": "Expériences",
+        "current": {
+          "title": "Développeur front-end senior @ Gandi",
+          "period": "Mai 2020",
+          "links": [
+            "https://gandi.net"
+          ],
+          "missions": [
+            "Développement de features (Flow.js, React, Redux, custom SSR)",
+            "Planning roadmap court terme & planning sprints pour la partie front-end",
+            "Triage des bugs & priorisation"
+          ]
+        },
         "past": [
           {
             "title": "Ingénieur front-end @ Liberkeys",
-            "period": "Jul 2019 - Jan 2020",
+            "period": "Jul 2019 - May 2020",
             "links": [
               "https://liberkeys.com"
             ],

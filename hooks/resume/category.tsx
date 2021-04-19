@@ -25,6 +25,9 @@ export default function useCategory (
       <h2 className="text-dark-marine text-2xl font-bold">
         {t(`resume.content.${name}.title`)}
       </h2>
+      { name === 'experiences' &&
+        <Category key='current' object={t(`resume.content.${name}.current`)} icon={CustomIcon} />
+      }
       {elements}
     </div>
   )

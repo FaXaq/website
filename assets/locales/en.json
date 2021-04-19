@@ -13,10 +13,22 @@
     "content": {
       "experiences": {
         "title": "Experiences",
+        "current": {
+          "title": "Front-end engineer @ Gandi",
+          "period": "May 2020",
+          "links": [
+            "https://gandi.net"
+          ],
+          "missions": [
+            "Feature development (Flow.js, React, Redux, custom SSR)",
+            "Short term roadmap & sprint plannings for front-end development",
+            "Bug triage & prioritization"
+          ]
+        },
         "past": [
           {
             "title": "Front-end engineer @ Liberkeys",
-            "period": "Jul 2019 - Jan 2020",
+            "period": "Jul 2019 - May 2020",
             "links": [
               "https://liberkeys.com"
             ],
