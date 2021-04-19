@@ -152,7 +152,7 @@
     "games": {
       "intervalGuesser": {
         "title": "Interval Guesser",
-        "description": "Le but est de découvrir quel interval est joué actuellement sur la page. Pour cela vous avez 5 propositions en dessous. Pour augmenter le son cliquer sur l'oscilateur.",
+        "description": "Le but est de découvrir quel interval est joué actuellement sur la page. Pour cela vous avez 5 propositions en dessous.",
         "levels": {
           "easy": {
             "title": "Facile",
@@ -178,27 +178,27 @@
           {
             "title": "Constructeur de gamme",
             "description": "Construit une game à partir d'une note via mtts",
-            "link": "/mtts/scale-builder"
+            "link": "/projects/mtts/scale-builder"
           },
           {
             "title": "Malo",
             "description": "Piano hexagonal, relié à un Synthéthiseur multi voix, permettant de jouer des notes suivant une disposition différente de celle d'un piano classique.",
-            "link": "/mtts/malo"
+            "link": "/projects/mtts/malo"
           },
           {
             "title": "Piano-Roll",
             "description": "Piano classique relié à un Synthéthiseur multi voix.",
-            "link": "/mtts/piano-roll"
+            "link": "/projects/mtts/piano-roll"
           },
           {
             "title": "Daw",
             "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
-            "link": "/mtts/daw"
+            "link": "/projects/mtts/daw"
           },
           {
             "title": "Interval Guesser",
             "description": "Découvrir quel interval est actuellement joué sur la page avec mtts & tonejs",
-            "link": "/mtts/games/interval-guesser"
+            "link": "/projects/mtts/games/interval-guesser"
           }
         ],
         "research": {

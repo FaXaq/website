@@ -120,7 +120,7 @@
             "title": "MTTS",
             "period": "2018 - 2019",
             "links": [
-              "https://github.com/faxaq/mtts"
+              "https://github.com/faxaq/projects/mtts"
             ],
             "missions": [
               "The goal is to provide a deterministic API to music theory in Typescript",
@@ -162,27 +162,27 @@
           {
             "title": "Scale builder",
             "description": "Build a scale from a root note",
-            "link": "/mtts/scale-builder"
+            "link": "/projects/mtts/scale-builder"
           },
           {
             "title": "Malo",
             "description": "Hexagonal keys, linked to a multi-voices synth, allowing playing keys from a different perspective w/ tonejs.",
-            "link": "/mtts/malo"
+            "link": "/projects/mtts/malo"
           },
           {
             "title": "Piano-Roll",
             "description": "Classic keys setup linked linked to a multi-voices synth w/ tonejs.",
-            "link": "/mtts/piano-roll"
+            "link": "/projects/mtts/piano-roll"
           },
           {
             "title": "Daw",
             "description": "Digital Audio Workstation (early WIP) in react w/ tonejs",
-            "link": "/mtts/daw"
+            "link": "/projects/mtts/daw"
           },
           {
             "title": "Interval Guesser",
             "description": "Discover which interval is currently played on the page",
-            "link": "/mtts/games/interval-guesser"
+            "link": "/projects/mtts/games/interval-guesser"
           }
         ],
         "research": {
