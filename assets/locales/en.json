@@ -218,7 +218,8 @@
     }
   },
   "blog": {
-    "title": "Blog"
+    "title": "Blog",
+    "tagsSearch": "Filtering on tags : "
   },
   "format": {
     "date": "{{date, DD-MMMM-YYYY}}"
