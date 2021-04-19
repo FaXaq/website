@@ -47,7 +47,7 @@ const IntervalGuesser = () => {
   const [randomNote, setRandomNote] = useState<Note>(getRandomEntity(level.notes))
   const [hasWon, setHasWon] = useState(false)
 
-  function endGame(win: boolean) {
+  function endGame (win: boolean) {
     if (win) {
       setHasWon(true)
     } else {
@@ -57,13 +57,13 @@ const IntervalGuesser = () => {
     setIsShowingModal(true)
   }
 
-  function startGame() {
+  function startGame () {
     setIsShowingModal(false)
     setRandomNote(getRandomEntity(level.notes))
     setIsPlaying(true)
   }
 
-  function setLevelAndStartGame(level: Level) {
+  function setLevelAndStartGame (level: Level) {
     setLevel(level)
     setIsChoosingLevel(false)
     startGame()
