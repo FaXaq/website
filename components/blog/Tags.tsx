@@ -8,6 +8,10 @@ interface TagsProps {
 }
 
 const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
+  if (tags.length === 0) {
+    return
+  }
+
   function handleOnClick (tag) {
     if (!onClick) {
       console.warn('no onClick handle for', tags)

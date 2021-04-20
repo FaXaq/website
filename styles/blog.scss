@@ -2,7 +2,7 @@
   @apply pt-4;
   @apply pb-8;
 
-  * {
+  .content {
     @apply font-mtts-text;
     @apply text-mtts-dark-violet;
   }
@@ -79,6 +79,10 @@
     &::before {
       content: '*';
       @apply mr-2;
+    }
+
+    > p {
+      display: inline;
     }
   }
 

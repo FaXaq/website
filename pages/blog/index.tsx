@@ -96,12 +96,12 @@ const Blog: NextPage<BlogProps> = function ({ articles, tags }: BlogProps) {
 
   const links = articles.map((a, i) => {
     return (
-      <li key={`article-${i}`} className="my-4">
+      <li key={`article-${i}`} className="mt-2">
         <Link href={`${a.link}`}>
           <a>
             <div>
               <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
-              <p>{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
+              <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
             </div>
           </a>
         </Link>
@@ -165,7 +165,9 @@ Blog.getInitialProps = async (context) => {
    */
   const filteredArticles = articles
     .filter(article => article.meta.published || context.query.notPublished !== undefined)
-    .filter(article => tags.every(tag => article.meta.tags.includes(tag)))
+    .filter(article => tags.every(tag => article.meta.tags.includes(tag))).sort((article1, article2) =>
+      new Date(article2.meta.creationDate).valueOf() - new Date(article1.meta.creationDate).valueOf()
+    )
 
   return {
     articles: filteredArticles,
