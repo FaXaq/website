@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import Prism from 'prismjs'
+import Head from 'next/head'
 import { useTranslation } from 'react-i18next'
 
 interface BlogPostLayoutProps {
@@ -18,17 +19,22 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
   }, [])
 
   return (
-    <div className="article container md:max-w-1/2">
-      <header>
-        <h1>{meta.title}</h1>
-        <div className="article-info">
-          <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
-        </div>
-      </header>
-      <article>
-        {children}
-      </article>
-    </div>
+    <>
+      <Head>
+        <title>{meta.title}</title>
+      </Head>
+      <div className="article container md:max-w-1/2">
+        <header>
+          <h1>{meta.title}</h1>
+          <div className="article-info">
+            <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
+          </div>
+        </header>
+        <article>
+          {children}
+        </article>
+      </div>
+    </>
   )
 }
 

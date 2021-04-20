@@ -19,15 +19,17 @@ const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
 
   return (
     <div>
-      <ul className="flex py-4">
+      <ul className="flex flex-wrap py-4">
         {tags.map(tag => (
-          <li key={tag} className="flex mr-2 cursor-pointer">
+          <li key={tag} className="flex mr-2 mb-2 cursor-pointer text-sm">
             <div className="px-2 py-1 bg-gray-500" onClick={() => handleOnClick(tag)}>
               <span>{tag}</span>
             </div>
-            <button onClick={() => onDelete(tag)}>
-              {removable && <span className='px-2 py-1 bg-gray-900 text-white border-none'>x</span>}
-            </button>
+            {removable && (
+              <button onClick={() => onDelete(tag)} className='px-2 py-1 bg-gray-900 text-white border-none'>
+                <span >x</span>
+              </button>
+            )}
           </li>
         ))}
       </ul>

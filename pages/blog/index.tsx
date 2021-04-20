@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 // eslint-disable-next-line no-unused-vars
 import { ParsedUrlQuery } from 'querystring'
+import Head from 'next/head'
 
 export interface ArticleMetaData {
   title: string
@@ -110,24 +111,29 @@ const Blog: NextPage<BlogProps> = function ({ articles, tags }: BlogProps) {
   })
 
   return (
-    <div className="font-sans container mx-auto px-4">
-      <header>
-        <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
-        {tags.length > 0 && (
-          <div>
-            <p>{t('blog.tagsSearch')}</p>
-            <ul>
-              <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
-            </ul>
-          </div>
-        )}
-      </header>
-      <article>
-        <ul className="flex flex-col">
-          {links.length > 0 ? links : 'No blog post here...'}
-        </ul>
-      </article>
-    </div>
+    <>
+      <Head>
+        <title>Blog</title>
+      </Head>
+      <div className="font-sans container mx-auto px-4">
+        <header>
+          <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
+          {tags.length > 0 && (
+            <div>
+              <p>{t('blog.tagsSearch')}</p>
+              <ul>
+                <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
+              </ul>
+            </div>
+          )}
+        </header>
+        <article>
+          <ul className="flex flex-col">
+            {links.length > 0 ? links : 'No blog post here...'}
+          </ul>
+        </article>
+      </div>
+    </>
   )
 }
 
@@ -151,8 +157,6 @@ Blog.getInitialProps = async (context) => {
       } as Article
     }))
   })(require.context('./', true, /\.mdx/))
-
-  console.log(context.query)
 
   /**
    * remove articles that :
