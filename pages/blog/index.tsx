@@ -118,14 +118,16 @@ const Blog: NextPage<BlogProps> = function ({ articles, tags }: BlogProps) {
       <div className="font-sans container mx-auto px-4">
         <header>
           <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
-          {tags.length > 0 && (
-            <div>
-              <p>{t('blog.tagsSearch')}</p>
-              <ul>
-                <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
-              </ul>
-            </div>
-          )}
+          <section>
+            {tags.length > 0 && (
+              <div>
+                <p>{t('blog.tagsSearch')}</p>
+                <ul>
+                  <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
+                </ul>
+              </div>
+            )}
+          </section>
         </header>
         <article>
           <ul className="flex flex-col">

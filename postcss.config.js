@@ -14,7 +14,8 @@ module.exports = {
           ],
           // function used to extract class names from the templates
           defaultExtractor: (content) =>
-            content.match(/[\w-/:]+(?<!:)/g) || []
+            content.match(/[\w-/:]+(?<!:)/g) || [],
+          safelist: ['html', 'body']
         }
         : false
     ]

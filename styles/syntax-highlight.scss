@@ -1,6 +1,7 @@
+// Mandatory purgecss ignore because classes are in .mdx files not parsable before
+// rendered
+
 /* inspired by https://github.com/smlombardi/daylight-ui/blob/737cc2887a8e87da09756e72ad16a8bef5c09876/LICENSE.md */
-
-
 
 // Config -----------------------------------
 $syntax-hue:          230;
@@ -48,57 +49,59 @@ $syntax-color-snippet:    $hue-4;
 
 $block-code-shadow: 0px 0px 5px rgba(0, 0, 0, .1);
 
-p > code {
-  margin: 1rem 0;
-  padding: .3rem .7rem;
-  border-radius: .1rem;
-  background-color: $syntax-bg;
-  font-family: 'Monospace';
-  box-shadow: $block-code-shadow;
-}
+.article {
+  p > code {
+    margin: 1rem 0;
+    padding: .3rem .7rem;
+    border-radius: .1rem;
+    background-color: $syntax-bg;
+    font-family: 'Monospace';
+    box-shadow: $block-code-shadow;
+  }
 
-pre[class*="language-"] {
-  margin: 1rem 0;
-  padding: 1rem;
-  border-radius: .3rem;
-  background-color: $syntax-bg;
-  font-family: 'Monospace';
-  box-shadow: $block-code-shadow;
-  overflow-x: auto;
+  pre[class*="language-"] {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: .3rem;
+    background-color: $syntax-bg;
+    font-family: 'Monospace';
+    box-shadow: $block-code-shadow;
+    overflow-x: auto;
 
-  > code {
-    font-family: inherit;
-    color: $syntax-fg;
-
-    > .token {
+    > code {
       font-family: inherit;
+      color: $syntax-fg;
 
-      &.keyword {
-        color: $syntax-color-keyword;
-      }
+      > .token {
+        font-family: inherit;
 
-      &.function {
-        color: $syntax-color-method;
-      }
+        &.keyword {
+          color: $syntax-color-keyword;
+        }
 
-      &.parameter {
-        color: $syntax-color-variable;
-      }
+        &.function {
+          color: $syntax-color-method;
+        }
 
-      &.comment {
-        color: $syntax-color-snippet;
-      }
+        &.parameter {
+          color: $syntax-color-variable;
+        }
 
-      &.string {
-        color: $syntax-color-class;
-      }
+        &.comment {
+          color: $syntax-color-snippet;
+        }
 
-      &.operator {}
+        &.string {
+          color: $syntax-color-class;
+        }
 
-      &.punctuation {}
+        &.operator {}
 
-      &.number, &.boolean {
-        color: $syntax-color-import;
+        &.punctuation {}
+
+        &.number, &.boolean {
+          color: $syntax-color-import;
+        }
       }
     }
   }
