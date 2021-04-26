@@ -144,7 +144,7 @@ Blog.getInitialProps = async (context) => {
   // what is this ugly ternary
   const tags = context.query.tag
     ? context.query.tag instanceof Array
-      ? [...context.query.tag]
+      ? [...context.query.tag].sort()
       : [context.query.tag]
     : []
   /**
@@ -167,7 +167,8 @@ Blog.getInitialProps = async (context) => {
    */
   const filteredArticles = articles
     .filter(article => article.meta.published || context.query.notPublished !== undefined)
-    .filter(article => tags.every(tag => article.meta.tags.includes(tag))).sort((article1, article2) =>
+    .filter(article => tags.every(tag => article.meta.tags.includes(tag)))
+    .sort((article1, article2) =>
       new Date(article2.meta.creationDate).valueOf() - new Date(article1.meta.creationDate).valueOf()
     )
 
