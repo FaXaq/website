@@ -14,7 +14,7 @@
     "classnames": "^2.2.6",
     "gray-matter": "^4.0.2",
     "i18next": "^19.0.3",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "moment": "^2.24.0",
     "mtts": "https://github.com/FaXaq/mtts",
     "next": "^10.1.3",
