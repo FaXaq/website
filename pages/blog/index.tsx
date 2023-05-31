@@ -98,12 +98,10 @@ const Blog: NextPage<BlogProps> = function ({ articles, tags }: BlogProps) {
     return (
       <li key={`article-${i}`} className="mt-2">
         <Link href={`${a.link}`}>
-          <a>
-            <div>
-              <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
-              <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
-            </div>
-          </a>
+          <div>
+            <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
+            <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
+          </div>
         </Link>
         <Tags tags={a.meta.tags || []} onClick={addTagToQueryParams} />
       </li>
@@ -151,11 +149,14 @@ Blog.getInitialProps = async (context) => {
    * retrieve articles
    */
   const articles = await (async context => {
-    return await Promise.all(context.keys().map(async (k) => {
-      const postContent = await import(`./${k.replace('./', '')}`)
+    // Only retrieve those that are in this directory
+    const articlesPaths = context.keys().filter(path => path.startsWith("./"));
+
+    return await Promise.all(articlesPaths.map(async (articlePath) => {
+      const postContent = await import(`./${articlePath.replace('./', '')}`)
       return {
         meta: postContent.meta,
-        link: `/blog/${path.basename(k.replace('./', ''), '.mdx')}`
+        link: `/blog/${path.basename(articlePath.replace('./', ''), '.mdx')}`
       } as Article
     }))
   })(require.context('./', true, /\.mdx/))

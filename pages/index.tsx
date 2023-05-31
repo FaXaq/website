@@ -7,17 +7,17 @@ const Home = () => {
       <ul>
         <li>
           <Link href="/resume">
-            <a>Resume</a>
+            Resume
           </Link>
         </li>
         <li>
           <Link href="/projects">
-            <a>Projects</a>
+            Projects
           </Link>
         </li>
         <li>
           <Link href="/blog">
-            <a>Blog</a>
+            Blog
           </Link>
         </li>
       </ul>

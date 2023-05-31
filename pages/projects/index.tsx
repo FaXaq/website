@@ -5,7 +5,7 @@ const Projects = () => {
   return <ul>
     <li>
       <Link href="/projects/mtts">
-        <a>MTTS</a>
+        MTTS
       </Link>
     </li>
   </ul>

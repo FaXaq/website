@@ -1,5 +1,5 @@
 import React from 'react'
-import { HorizontalBar } from 'react-chartjs-2'
+import { Bar } from 'react-chartjs-2'
 import { theme } from '../../../tailwind.config'
 import { hexToRgb } from '../../../utils/misc'
 
@@ -50,7 +50,8 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
       text: title
     }
   }
-  return <HorizontalBar data={data} options={options} height={100} />
+
+  return <Bar data={data} options={options} height={100} />
 }
 
 export default Correlation

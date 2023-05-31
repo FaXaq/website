@@ -19,8 +19,8 @@ const HomePage: NextPage<{}> = () => {
       <li key={e.title} className="py-4">
         <h5 className="text-2xl">{e.title}</h5>
         <p>{e.description}</p>
-        <Link href={e.link}>
-          <a className="text-mtts-light-violet">{t('mtts.pages.index.experimentsLink')}</a>
+        <Link href={e.link} className="text-mtts-light-violet">
+          {t('mtts.pages.index.experimentsLink')}
         </Link>
       </li>
     )
