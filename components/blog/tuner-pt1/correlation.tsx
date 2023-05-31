@@ -31,14 +31,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
     ]
   }
   const options = {
-    scales: {
-      xAxes: [{
-        ticks: {
-          beginAtZero: true,
-          endAt: 100
-        }
-      }]
-    },
+    indexAxis: 'y' as const,
     tooltips: {
       enabled: false
     },
