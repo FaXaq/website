@@ -150,7 +150,7 @@ Blog.getInitialProps = async (context) => {
    */
   const articles = await (async context => {
     // Only retrieve those that are in this directory
-    const articlesPaths = context.keys().filter(path => path.startsWith("./"));
+    const articlesPaths = context.keys().filter(path => path.startsWith('./'))
 
     return await Promise.all(articlesPaths.map(async (articlePath) => {
       const postContent = await import(`./${articlePath.replace('./', '')}`)

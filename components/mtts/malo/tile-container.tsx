@@ -11,7 +11,7 @@ interface TileContainerProps {
 }
 
 const TileContainer = ({ notes, lineLength, lineNumber }: TileContainerProps) => {
-  const tileLines: JSX.Element[] = []
+  const tileLines: React.JSX.Element[] = []
   const {
     startPlaying,
     stopPlaying,

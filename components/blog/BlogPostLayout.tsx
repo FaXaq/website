@@ -9,11 +9,11 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
+  Legend
+} from 'chart.js'
 
 interface BlogPostLayoutProps {
-  children: JSX.Element | JSX.Element[]
+  children: React.JSX.Element | React.JSX.Element[]
   meta: {
     title: string,
     creationDate: string,
@@ -27,7 +27,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend
-);
+)
 
 const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
   const { t } = useTranslation()

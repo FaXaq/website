@@ -14,7 +14,7 @@ interface Experiment {
 
 const HomePage: NextPage<{}> = () => {
   const { t } = useTranslation()
-  const experiments: JSX.Element[] = (t('mtts.pages.index.experiments') as Experiment[]).map(e => {
+  const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as Experiment[]).map(e => {
     return (
       <li key={e.title} className="py-4">
         <h5 className="text-2xl">{e.title}</h5>

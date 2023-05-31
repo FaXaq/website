@@ -7,7 +7,7 @@ interface BeatBarOverlayProps {
 }
 
 const BeatBarOverlay = ({ timeSignature }: BeatBarOverlayProps) => {
-  const pattern: JSX.Element[] = []
+  const pattern: React.JSX.Element[] = []
 
   for (let i = 0; i < timeSignature.beats; i++) {
     pattern.push(

@@ -7,7 +7,7 @@ import IntervalGuesserButton from './button'
 
 interface IntervalGuesserModalProps {
   isShowing: boolean
-  children?: JSX.Element | JSX.Element[]
+  children?: React.JSX.Element | React.JSX.Element[]
   onClose: (level: Level) => any
   hasWon: boolean
   level: Level

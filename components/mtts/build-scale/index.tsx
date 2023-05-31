@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES, Chord } from 'mtts'
 import SquareButton from '../../square-button'
 import { useTranslation } from 'react-i18next'
-import GuitarNeck from '../instruments/guitar/guitar-neck'
 
 const possibleAccidentals: Accidental[] =
   ACCIDENTALS

@@ -22,10 +22,6 @@ export interface GuitarNeckProps {
   fretNumber?: number
 }
 
-interface GuitarString {
-  notes: Note[][]
-}
-
 function GuitarNeck ({
   highlight = () => false,
   tuning = DEFAULT_GUITAR_TUNING,

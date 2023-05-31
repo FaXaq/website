@@ -3,7 +3,7 @@ import LinkIcon from '../images/link-icon'
 
 export interface CategoryProps {
   object: any;
-  icon: () => JSX.Element;
+  icon: () => React.JSX.Element;
 }
 
 function Category (props: CategoryProps) {

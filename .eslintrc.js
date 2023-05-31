@@ -23,7 +23,9 @@ module.exports = {
     'react',
     '@typescript-eslint'
   ],
-  rules: {},
+  rules: {
+    "space-before-function-paren": "off"
+  },
   overrides: [
     {
       // workers

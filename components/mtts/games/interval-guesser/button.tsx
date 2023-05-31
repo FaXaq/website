@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 interface IntervalGuesserButtonProps {
-  children: JSX.Element | JSX.Element[]
+  children: React.JSX.Element | React.JSX.Element[]
   onClick?: (...e: any) => any
   title?: string
   fixedSize?: boolean

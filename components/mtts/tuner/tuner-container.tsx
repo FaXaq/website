@@ -7,6 +7,12 @@ interface TunerContainerProps {
   audioStream: MediaStream
 }
 
+export interface GuessedNote {
+  notes: Note[];
+  values: number[];
+  diffs: number[];
+}
+
 const FFT_SIZE = 32768
 
 const notesPerPitch = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => generateNotesForPitch(new Pitch({ value: i })))
@@ -32,26 +38,15 @@ function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourc
   return [analyser, sourceNode]
 }
 
-function getNoteFrequencyDiff (note: GuessedNote): number {
-  const coeffValues = note.values.map((v, i) => v * (1))
-  return coeffValues.reduce((p, c) => c - p, 0)
-}
-
 function getNoteTotalValue (note: GuessedNote): number {
   return note.values.reduce((p, c) => p + c, 0)
-}
-
-export interface GuessedNote {
-  notes: Note[];
-  values: number[];
-  diffs: number[];
 }
 
 const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   const canvas = useRef<HTMLCanvasElement>()
   const [guessedNotes, setGuessedNotes] = useState<GuessedNote[]>([])
   const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
-  const [frame, setFrame] = useState(-1)
+  const [frame] = useState(-1)
   const [fqRatio, setFqRatio] = useState(-1)
 
   useEffect(() => {
@@ -84,7 +79,6 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
           ctx.fill()
           ctx.fillRect(high, 0, 1, dataArray[high])
           ctx.fill()
-          const med = (dataArray[low] + dataArray[high]) / 2
           const currentNote: GuessedNote = { notes: n, values: [dataArray[low], dataArray[high]], diffs: [lowDiff, highDiff] }
           currentNotes.push(currentNote)
           if (!bigNote || getNoteTotalValue(bigNote) < getNoteTotalValue(currentNote)) {

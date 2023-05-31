@@ -46,7 +46,7 @@ const Piano = ({
     }).reduce((p: Note[][], c: Note[][]) => [...p, ...c], [])
   }, [pitches])
 
-  const pianoNotes: JSX.Element[] = notesToDisplay.map(n => {
+  const pianoNotes: React.JSX.Element[] = notesToDisplay.map(n => {
     const isPreviousToBlackKey = n.reduce((previousValue, currentValue) => {
       return previousValue || !currentValue.isCorF()
     }, false)

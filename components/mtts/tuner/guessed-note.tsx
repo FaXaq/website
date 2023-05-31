@@ -7,12 +7,6 @@ interface GuessedNoteProps {
   fqRatio: number;
 }
 
-/* complex function to simulate a more precise amplitude for our note frequency */
-function getEffectiveAmplitude (note: GuessedNote) {
-  const { multiplier, additioner } = getEquation(note)
-  return multiplier * note.notes[0].frequency + additioner
-}
-
 function getEquation (note: GuessedNote): {multiplier: number, additioner: number} {
   const fq = note.notes[0].frequency
   const fqInf = fq - note.diffs[0]
@@ -24,15 +18,6 @@ function getEquation (note: GuessedNote): {multiplier: number, additioner: numbe
     multiplier: (ampInf - ampSup) / (fqInf - fqSup),
     additioner: (ampInf - (fqInf * (ampInf - ampSup) / (fqInf - fqSup)))
   }
-}
-
-function calcPredictiveAmplitudeFromDiff (note: GuessedNote, fqRatio: number) {
-  const amp1 = note.values[0]
-  const amp2 = note.values[1]
-  const c1 = note.diffs[0] / fqRatio
-  const c2 = note.diffs[1] / fqRatio
-
-  return amp1 * c2 + amp2 * c1
 }
 
 const GuessedNoteItem = ({ guessedNote, fqRatio }: GuessedNoteProps) => {

@@ -4,11 +4,11 @@ import Category from '../../components/resume/category'
 
 export default function useCategory (
   name: string,
-  CustomIcon: () => JSX.Element
+  CustomIcon: () => React.JSX.Element
 ) {
   const { t } = useTranslation()
   const categoryObject: [] = t(`resume.content.${name}.past`)
-  const elements: JSX.Element[] = []
+  const elements: React.JSX.Element[] = []
 
   for (const s in categoryObject) {
     elements.push(

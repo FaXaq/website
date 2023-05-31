@@ -5,9 +5,6 @@ import { Provider } from 'react-redux'
 import store from '../../../redux'
 import DawToolbar from './toolbar'
 
-interface DawLayoutProps {
-}
-
 const DawLayout = () => {
   return (
     <Provider store={store}>

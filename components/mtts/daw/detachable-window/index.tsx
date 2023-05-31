@@ -4,7 +4,7 @@ import DetachableWindowMenu from './menu'
 
 interface DetachableWindowProps {
   attached: boolean;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 const DetachableWindow = ({ children, attached }: DetachableWindowProps) => {
