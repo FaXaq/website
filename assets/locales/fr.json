@@ -5,27 +5,44 @@
   },
   "resume": {
     "firstname": "Marin",
-    "workfield": "Architecte logiciel / Développeur Full Stack",
+    "workfield": "Ingénieur Web",
     "copy": "Code : ",
     "content": {
       "experiences": {
         "title": "Expériences",
         "current": {
-          "title": "Développeur front-end senior @ Gandi",
-          "period": "Mai 2020",
+          "title": "Staff engineer @ Hellowork",
+          "period": "Juilet 2021 - Juin 2023",
           "links": [
-            "https://gandi.net"
+            "https://hellowork.com",
+            "https://seekube.com"
           ],
           "missions": [
-            "Développement de features (Flow.js, React, Redux, custom SSR)",
-            "Planning roadmap court terme & planning sprints pour la partie front-end",
-            "Triage des bugs & priorisation"
+            "Définition et suivi des objectifs Roadmap tech de Seekube",
+            "Élaboration de la roadmap produit en accord avec l'équipe responsable produit",
+            "Mise en place des processus et d'un workflow du delivery au run en collaboration avec les équipes UI/UX, Support and Produit",
+            "Recrutement et Management d'une équipe technique distribuée (remote) de 2 à 6 personnes",
+            "Lotissement et développement de projets d'envergure (interconnexion avec des systèmes existants, respect des règles RGPD, améliorations de design applicatifs, performances, fonctionnalités)",
+            "Priorisation des bugs & Maintenance applicative"
           ]
         },
         "past": [
           {
+            "title": "Développeur front-end senior @ Gandi",
+            "period": "Mai 2020 - Juin 2021",
+            "links": [
+              "https://gandi.net"
+            ],
+            "missions": [
+              "Développement de features (Flow.js, React, Redux, custom SSR)",
+              "Planning roadmap court terme & planning sprints pour la partie front-end",
+              "Définition et suivi des objectifs Front-end du chapitre",
+              "Priorisation des bugs & Maintenance applicative"
+            ]
+          },
+          {
             "title": "Ingénieur front-end @ Liberkeys",
-            "period": "Jul 2019 - May 2020",
+            "period": "Juillet 2019 - Mai 2020",
             "links": [
               "https://liberkeys.com"
             ],

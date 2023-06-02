@@ -5,7 +5,7 @@
   },
   "resume": {
     "firstname": "Marin",
-    "workfield": "Software architect / Full-stack developer",
+    "workfield": "Staff web engineer",
     "copy": "Code : ",
     "blog": {
       "title": "Blog"
@@ -14,18 +14,35 @@
       "experiences": {
         "title": "Experiences",
         "current": {
-          "title": "Front-end engineer @ Gandi",
-          "period": "May 2020",
+          "title": "Staff engineer @ Hellowork",
+          "period": "Juilet 2021 - Juin 2023",
           "links": [
-            "https://gandi.net"
+            "https://hellowork.com",
+            "https://seekube.com"
           ],
           "missions": [
-            "Feature development (Flow.js, React, Redux, custom SSR)",
-            "Short term roadmap & sprint plannings for front-end development",
-            "Bug triage & prioritization"
+            "Defining and following Techical Roadmap objectives ()",
+            "Create product roadmap collectively with Product Team",
+            "Setting up processes, tools and workflow from delivery to run in collaboration with UI/UX, Support and Product teams",
+            "Growing & Managing a distributed remote tech team from 2 to 6 people",
+            "Ensuring sizing, specifications and understandings of significant projects (interconnections with existing systems, GDPR compliance, Applicative Design enhancements, performances issues)",
+            "Prioritising bugs & Application maintenance"
           ]
         },
         "past": [
+          {
+            "title": "Senior front-end developper @ Gandi",
+            "period": "Mai 2020 - Juin 2021",
+            "links": [
+              "https://gandi.net"
+            ],
+            "missions": [
+              "Feature development (Flow.js, React, Redux, custom SSR)",
+              "Short term roadmap planning & sprints organization",
+              "Defining & following of Front-end chapter objectives",
+              "Prioritising bugs & Application maintenance"
+            ]
+          },
           {
             "title": "Front-end engineer @ Liberkeys",
             "period": "Jul 2019 - May 2020",
