@@ -28,7 +28,7 @@ function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumbe
       highlight: highlightFret,
       getFret: getFret,
       stringNumber,
-      fretNumber: i,
+      fretNumber: i
     })
   }
 

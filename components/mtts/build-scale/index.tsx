@@ -14,7 +14,7 @@ const possibleIntervals: Interval[] =
     .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
     .map(i => Interval.fromName(i))
 
-function noteExistsInScale(scale: Scale, note: Note): boolean { 
+function noteExistsInScale(scale: Scale, note: Note): boolean {
   return scale.notes.filter(n => Note.getSemitonesBetween(note, n) % 12 === 0).length > 0
 }
 
