@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES, Chord } from 'mtts'
 import SquareButton from '../../square-button'
 import { useTranslation } from 'react-i18next'
+import GuitarNeck from '../instruments/guitar/guitar-neck'
 
 const possibleAccidentals: Accidental[] =
   ACCIDENTALS
@@ -12,6 +13,14 @@ const possibleIntervals: Interval[] =
   Object.keys(INTERVALS)
     .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
     .map(i => Interval.fromName(i))
+
+function noteExistsInScale(scale: Scale, note: Note): boolean { 
+  return scale.notes.filter(n => Note.getSemitonesBetween(note, n) % 12 === 0).length > 0
+}
+
+function getNoteNameWithoutPitch(note: Note): string {
+  return note.SPN.replace(/[0-9]/g, '')
+}
 
 const possibleNotes: Note[] = NOTES.map(n => new Note({ name: n }))
 
@@ -101,6 +110,10 @@ function BuildScale() {
       <select onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
         {Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
       </select>
+      <GuitarNeck
+        highlightFret={({ note }) => noteExistsInScale(scale, note)}
+        getFret={({ note }) => noteExistsInScale(scale, note) ? <p>{ getNoteNameWithoutPitch(note) }</p> : <p></p>}
+      />
       <ul>
         {scale.notes.map(n => (
           <li key={n.name}>

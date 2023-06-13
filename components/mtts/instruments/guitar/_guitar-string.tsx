@@ -2,31 +2,33 @@ import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 // eslint-disable-next-line no-unused-vars
-import { HighlightFunction } from './guitar-neck'
 // eslint-disable-next-line no-unused-vars
-import GuitarFret, { GuitarFretProps } from './_guitar-fret'
+import GuitarFret, { FGetFret, GuitarFretProps, FHighlight } from './_guitar-fret'
 
 export interface GuitarStringProps {
-  tuning: Note[],
+  tuning: string,
   stringNumber: number,
   fretNumber?: number,
-  highlight: HighlightFunction
+  highlightFret: FHighlight,
+  getFret: FGetFret
 }
 
-function GuitarString ({ tuning, fretNumber, highlight, stringNumber }: GuitarStringProps) {
+function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumber }: GuitarStringProps) {
   const frets: GuitarFretProps[] = [{
-    notes: tuning.map(n => n.duplicate()),
+    note: Note.fromSPN(tuning),
     stringNumber,
     fretNumber: 0,
-    highlight
+    highlight: highlightFret,
+    getFret: getFret
   }]
 
-  for (let i = 0; i < fretNumber; i++) {
+  for (let i = 1; i < fretNumber; i++) {
     frets.push({
-      notes: tuning.map(note => note.sharpenChromatically().duplicate()),
-      highlight,
+      note: Note.fromSPN(tuning).sharpenChromatically(i),
+      highlight: highlightFret,
+      getFret: getFret,
       stringNumber,
-      fretNumber: i
+      fretNumber: i,
     })
   }
 

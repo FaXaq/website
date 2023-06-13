@@ -3,33 +3,35 @@ import React from 'react'
 import { Note, Pitch } from 'mtts'
 // eslint-disable-next-line no-unused-vars
 import GuitarString, { GuitarStringProps } from './_guitar-string'
+import { FGetFret, FHighlight } from './_guitar-fret'
 
-const DEFAULT_GUITAR_TUNING = [
-  [new Note({ name: 'E', pitch: new Pitch({ value: 2 }) })],
-  [new Note({ name: 'A', pitch: new Pitch({ value: 2 }) })],
-  [new Note({ name: 'D', pitch: new Pitch({ value: 3 }) })],
-  [new Note({ name: 'G', pitch: new Pitch({ value: 3 }) })],
-  [new Note({ name: 'B', pitch: new Pitch({ value: 3 }) })],
-  [new Note({ name: 'E', pitch: new Pitch({ value: 4 }) })]
-]
+const DEFAULT_GUITAR_TUNING = (() => [
+  new Note({ name: 'E', pitch: new Pitch({ value: 2 }) }).SPN,
+  new Note({ name: 'A', pitch: new Pitch({ value: 2 }) }).SPN,
+  new Note({ name: 'D', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'G', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'B', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'E', pitch: new Pitch({ value: 4 }) }).SPN
+])()
 const DEFAULT_FRET_NUMBERS = 24
 
-export type HighlightFunction = (notes: Note[], stringNumber: number, fretNumber: number) => boolean
-
 export interface GuitarNeckProps {
-  highlight?: HighlightFunction,
-  tuning?: Note[][],
-  fretNumber?: number
+  tuning?: string[],
+  fretNumber?: number,
+  highlightFret?: FHighlight,
+  getFret?: FGetFret
 }
 
 function GuitarNeck ({
-  highlight = () => false,
+  highlightFret = () => false,
+  getFret = ({ note }) => note.SPN,
   tuning = DEFAULT_GUITAR_TUNING,
   fretNumber = DEFAULT_FRET_NUMBERS
 }: GuitarNeckProps) {
   const strings: GuitarStringProps[] = tuning.map((t, i) => ({
     tuning: t,
-    highlight,
+    highlightFret,
+    getFret,
     fretNumber,
     stringNumber: i
   }))
