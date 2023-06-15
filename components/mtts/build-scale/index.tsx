@@ -14,8 +14,12 @@ const possibleIntervals: Interval[] =
     .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
     .map(i => Interval.fromName(i))
 
+function getNoteInScale(scale: Scale, note: Note): Note {
+  return scale.notes.find(n => Note.getSemitonesBetween(note, n) % 12 === 0)
+}
+
 function noteExistsInScale(scale: Scale, note: Note): boolean {
-  return scale.notes.filter(n => Note.getSemitonesBetween(note, n) % 12 === 0).length > 0
+  return getNoteInScale(scale, note) !== undefined
 }
 
 function getNoteNameWithoutPitch(note: Note): string {
@@ -62,8 +66,14 @@ function BuildScale() {
   }
 
   useEffect(() => {
-    setScale(new Scale({ key: rootNote, intervals: scaleIntervals }))
+    try {
+      setScale(new Scale({ key: rootNote, intervals: scaleIntervals }))
+    } catch (err) {
+      console.error(err)
+    }
   }, [rootNote, scaleIntervals])
+
+  console.log(scale)
 
   const { t } = useTranslation()
   return (
@@ -112,13 +122,13 @@ function BuildScale() {
       </select>
       <GuitarNeck
         highlightFret={({ note }) => noteExistsInScale(scale, note)}
-        getFret={({ note }) => noteExistsInScale(scale, note) ? <p>{ getNoteNameWithoutPitch(note) }</p> : <p></p>}
+        getFret={({ note }) => noteExistsInScale(scale, note) ? <p>{ getNoteNameWithoutPitch(getNoteInScale(scale, note)) }</p> : <p></p>}
       />
-      <ul>
+      <ul className='flex'>
         {scale.notes.map(n => (
-          <li key={n.name}>
+          <li key={n.SPN}>
             <SquareButton
-              text={t(`mtts.notes.${n.name}`) + (n.hasAccidental() ? t(`mtts.accidentals.${n.accidental.name}`) : '')}
+              text={t(`mtts.notes.${n.name}`) + (n.accidental.semitones !== 0 ? t(`mtts.accidentals.${n.accidental.name}`) : '')}
               isActive={getSelectNoteIndex(n) > -1}
               onClick={() => toggleSelectedNote(n)}
             />
