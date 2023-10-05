@@ -90,6 +90,8 @@
   }
 
   img {
+    @apply block;
+    @apply w-auto;
     @apply border;
     @apply border-mtts-light-violet;
     border-radius: .2rem;
