@@ -20,6 +20,11 @@ const Home = () => {
             Blog
           </Link>
         </li>
+        <li>
+          <Link target="_blank" href="https://github.com/faxaq">
+            Github
+          </Link>
+        </li>
       </ul>
     </div>
   )
