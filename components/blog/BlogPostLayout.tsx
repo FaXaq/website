@@ -42,7 +42,10 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
       </Head>
       <div className="article container md:max-w-1/2">
         <header>
-          <h1>{meta.title}</h1>
+          <div className="flex items-center">
+            <a className="pr-4 font-bold" href="/blog" aria-label="Go back to blog home">←</a>
+            <h1>{meta.title}</h1>
+          </div>
           <div className="article-info text-sm text-opacity-25">
             <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
           </div>

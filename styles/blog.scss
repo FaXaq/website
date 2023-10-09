@@ -2,6 +2,13 @@
   @apply pt-4;
   @apply pb-8;
 
+  header {
+    a {
+      @apply no-underline;
+      @apply text-4xl;
+    }
+  }
+
   .content {
     @apply text-mtts-dark-violet;
   }
