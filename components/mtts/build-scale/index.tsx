@@ -3,6 +3,7 @@ import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, 
 import SquareButton from '../../square-button'
 import { useTranslation } from 'react-i18next'
 import GuitarNeck from '../instruments/guitar/guitar-neck'
+import Fret from './Fret'
 
 const possibleAccidentals: Accidental[] =
   ACCIDENTALS
@@ -20,10 +21,6 @@ function getNoteInScale(scale: Scale, note: Note): Note {
 
 function noteExistsInScale(scale: Scale, note: Note): boolean {
   return getNoteInScale(scale, note) !== undefined
-}
-
-function getNoteNameWithoutPitch(note: Note): string {
-  return note.SPN.replace(/[0-9]/g, '')
 }
 
 const possibleNotes: Note[] = NOTES.map(n => new Note({ name: n }))
@@ -52,6 +49,10 @@ function BuildScale() {
     }
   }
 
+  function isNoteScaleRoot(scale: Scale, note: Note) {
+    return scale.key.SPN.replace(/[0-9]/, '') === note.SPN.replace(/[0-9]/, '')
+  }
+
   function getSelectNoteIndex(note: Note) {
     return selectedNotes.findIndex(sn => note.SPN === sn.SPN)
   }
@@ -73,11 +74,10 @@ function BuildScale() {
     }
   }, [rootNote, scaleIntervals])
 
-  console.log(scale)
-
   const { t } = useTranslation()
   return (
     <div>
+      <p>Select your note :</p>
       <ul className="flex flex-wrap">
         {possibleNotes.map(n =>
           <li key={n.name}>
@@ -90,6 +90,7 @@ function BuildScale() {
         )
         }
       </ul>
+      <p>Select if there is an accidental :</p>
       <ul className="flex flex-wrap">
         {possibleAccidentals.map(a =>
           <li key={a.name}>
@@ -102,6 +103,7 @@ function BuildScale() {
         )
         }
       </ul>
+      <p>Select your intervals</p>
       <ul className="flex flex-wrap">
         {possibleIntervals.map(i =>
           <li key={i.name}>
@@ -114,16 +116,38 @@ function BuildScale() {
         )
         }
       </ul>
-      <p>{rootNote.SPN}</p>
+      <p>Scale root : {rootNote.SPN}</p>
       <p>Scale name : {scale.name}</p>
-      <p>Scale mode : {scale.mode}</p>
+      { scale.mode && <p>Scale mode : {scale.mode}</p> }
       <select onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
         {Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
       </select>
-      <GuitarNeck
-        highlightFret={({ note }) => noteExistsInScale(scale, note)}
-        getFret={({ note }) => noteExistsInScale(scale, note) ? <p>{ getNoteNameWithoutPitch(getNoteInScale(scale, note)) }</p> : <p></p>}
-      />
+      <div className='py-4'>
+        <GuitarNeck
+          highlightFret={({ note }) => noteExistsInScale(scale, note)}
+          getFret={(props) =>
+            <Fret
+              {...props}
+              getNoteInScale={(note) => getNoteInScale(scale, note)}
+              noteExistsInScale={(note) => noteExistsInScale(scale, note)}
+              isNoteScaleRoot={(note) => isNoteScaleRoot(scale, note)}
+            />
+          }
+        />
+      </div>
+      <p>Here are the chords I can identify for each note within the scale :</p>
+      <ul className='py-5'>
+        {scale.scaleChords.map(chord =>
+          chord.notation && <li key={`${chord.root.name}${chord.notation}`}>
+            <p>
+              <span>{chord.root.name}</span>
+              <span>{chord.notation} :</span>
+              <span>{chord.notes.map(note => ` ${note.SPN.replace(/[0-9]/, '')}`)}</span>
+            </p>
+          </li>
+        )}
+      </ul>
+      <p>Select notes from the scale to find a chord :</p>
       <ul className='flex'>
         {scale.notes.map(n => (
           <li key={n.SPN}>
@@ -135,10 +159,11 @@ function BuildScale() {
           </li>
         ))}
       </ul>
-      {chord ? <p>
+      {chord && (<p>
+        <span></span>
         <span>{t(`mtts.notes.${chord.root.name}`)}</span>
         <span>{chord.notation}</span>
-      </p> : null}
+      </p>)}
     </div>
   )
 }

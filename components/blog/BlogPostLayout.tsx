@@ -43,7 +43,7 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
       <div className="article container md:max-w-1/2">
         <header>
           <div className="flex items-center">
-            <a className="pr-4 font-bold" href="/blog" aria-label="Go back to blog home">←</a>
+            <a className="font-bold" href="/blog" aria-label="Go back to blog home">←</a>
             <h1>{meta.title}</h1>
           </div>
           <div className="article-info text-sm text-opacity-25">
