@@ -95,7 +95,6 @@ function collectAnalyserData(analyser) {
   // Uint8Array should be the same length as the frequencyBinCount
   const dataArray = new Uint8Array(analyser.frequencyBinCount)
   analyser.getByteFrequencyData(dataArray)
-  console.log("Working with a frequency bin range of ", dataArray)
 
   setTimeout(() => collectAnalyserData(analyser), 300)
 }
@@ -127,7 +126,6 @@ If I check the `sampleRate` from my current audio context I get `48000`. Let's u
 
 ```js
 const frequencyBinRange = ctx.sampleRate / analyserNode.fftSize
-console.log("Working with a frequency bin range of ", frequencyBinRange)
 ```
 
 With my values I end up with a `frequencyBinRange` of `23.4375`Hz. That's a huge range. Let's try to reduce it a bit. Can we increase the `fftSize` ? Yes ! As long that it's a power of 2 and within the range of `2⁵` and `2¹⁵`. Let's set it to the maximum, see where we can end up. So, let's set the `fftSize` to `32768` before calculating that range.
@@ -174,7 +172,6 @@ function collectAnalyserData(analyser) {
   const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
 
   const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
-  console.log(E2Magnitude)
 
   setTimeout(() => collectAnalyserData(analyser), 300)
 }
@@ -199,7 +196,6 @@ function collectAnalyserData(analyser) {
   })
 
   const guessedString = guitarStringWithMagnitudes.reduce((p, c) => p.magnitude < c.magnitude ? c : p)
-  console.log('Guessed string is : ', guessedString)
 
   setTimeout(() => collectAnalyserData(analyser), 300)
 }

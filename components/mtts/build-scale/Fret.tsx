@@ -17,14 +17,16 @@ function getNoteNameWithoutPitch(note: Note): string {
 }
 
 function Fret({ note, highlighted, noteExistsInScale, getNoteInScale, isNoteScaleRoot }: IFretProps) {
+  const classes = classNames({
+    'bg-mtts-cta-0 text-white': isNoteScaleRoot(note),
+    'bg-mtts-cta-2': highlighted && !isNoteScaleRoot(note),
+    'color-white rounded': highlighted,
+    'p-1 m-1 w-10 flex align-items border-left-1': true
+  })
+
   return (
     <div
-      className={classNames({
-        'bg-mtts-cta-0 text-white': isNoteScaleRoot(note),
-        'bg-mtts-cta-2': highlighted && !isNoteScaleRoot(note),
-        'color-white rounded': highlighted,
-        'p-1 m-1 w-10 flex align-items border-left-1': true
-      })}
+      className={classes}
     >
       <div className="m-auto">
         {noteExistsInScale(note) ? <p>{getNoteNameWithoutPitch(getNoteInScale(note))}</p> : <p></p>}

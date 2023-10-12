@@ -15,7 +15,7 @@ export function useMetronome () {
       if (monoSynth !== undefined) {
         monoSynth.triggerAttackRelease(440, 0.005)
       } else {
-        console.log('test')
+        //
       }
     }, (60 / bpm) * 1000)
   }

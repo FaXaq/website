@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Note, Pitch } from 'mtts'
-import { generateNotesForPitch } from '../../../utils/mtts'
 import GuessedNoteItem from './guessed-note'
 
 interface TunerContainerProps {
@@ -15,8 +14,6 @@ export interface GuessedNote {
 
 const FFT_SIZE = 32768
 
-const notesPerPitch = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => generateNotesForPitch(new Pitch({ value: i })))
-console.log(notesPerPitch[0].map(n => n.map(nn => `${nn.SPN} : ${nn.frequency}`)))
 const notes = [
   [new Note({ name: 'E', pitch: new Pitch({ value: 2 }) })],
   [new Note({ name: 'A', pitch: new Pitch({ value: 2 }) })],
@@ -25,9 +22,6 @@ const notes = [
   [new Note({ name: 'B', pitch: new Pitch({ value: 3 }) })],
   [new Note({ name: 'E', pitch: new Pitch({ value: 4 }) })]
 ]
-// const notes = notesPerPitch.reduce((p, c) => [...p, ...c], [])
-
-console.log(notes.map(n => n[0].frequency))
 
 function useAnalyser (stream: MediaStream): [AnalyserNode, MediaStreamAudioSourceNode] {
   const ctx = new AudioContext()
@@ -55,7 +49,6 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
     const bufferLength = analyser.frequencyBinCount
     const frequencyRatio = sampleRate / FFT_SIZE
     setFqRatio(frequencyRatio)
-    console.log(frequencyRatio)
 
     function loop (ctx: CanvasRenderingContext2D) {
       const dataArray = new Uint8Array(bufferLength)

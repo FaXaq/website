@@ -9,8 +9,6 @@ const Malo = () => {
   const [lineLength] = useState(20)
   const [lineNumber] = useState(10)
 
-  console.log('rendering malo')
-
   const notes = useMemo(() => {
     const n: Note[][] = []
     for (let i = 1; i < lineNumber + 1; i++) {

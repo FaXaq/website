@@ -24,7 +24,7 @@ function IJ () {
           {matrix[0].map(column => <th className="border" key={`header-${column}`}>{column}</th>)}
         </tr>
       </thead>
-      <tbody onClick={(e) => { console.log(e.target) }}>
+      <tbody>
         {matrix.map((line, lineIndex) =>
           <tr key={`line-${lineIndex}`} data-line data-row={lineIndex}>
             {line.map((cell, cellIndex) => (
