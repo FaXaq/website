@@ -15,6 +15,10 @@ const possibleIntervals: Interval[] =
     .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
     .map(i => Interval.fromName(i))
 
+function getNotationWithoutPitch(note: Note): string {
+  return note.SPN.replace(/[0-9]/, '')
+}
+
 function getNoteInScale(scale: Scale, note: Note): Note {
   return scale.notes.find(n => Note.getSemitonesBetween(note, n) % 12 === 0)
 }
@@ -50,7 +54,7 @@ function BuildScale() {
   }
 
   function isNoteScaleRoot(scale: Scale, note: Note) {
-    return scale.key.SPN.replace(/[0-9]/, '') === note.SPN.replace(/[0-9]/, '')
+    return Note.getSemitonesBetween(note, scale.key) % 12 === 0
   }
 
   function getSelectNoteIndex(note: Note) {
@@ -120,7 +124,7 @@ function BuildScale() {
       <select onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
         {Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
       </select>
-      <p>Scale root : {rootNote.SPN}</p>
+      <p>Scale root : {getNotationWithoutPitch(rootNote)}</p>
       <p>Scale name : {scale.name}</p>
       { scale.mode && <p>Scale mode : {scale.mode}</p> }
       <p>Here is the scale on a guitar neck :</p>
@@ -142,9 +146,9 @@ function BuildScale() {
         {scale.scaleChords.map(chord =>
           chord.notation && <li key={`${chord.root.name}${chord.notation}`}>
             <p>
-              <span>{chord.root.name}</span>
+              <span>{getNotationWithoutPitch(chord.root)}</span>
               <span>{chord.notation} :</span>
-              <span>{chord.notes.map(note => ` ${note.SPN.replace(/[0-9]/, '')}`)}</span>
+              <span>{chord.notes.map(note => ` ${getNotationWithoutPitch(note)}`)}</span>
             </p>
           </li>
         )}
