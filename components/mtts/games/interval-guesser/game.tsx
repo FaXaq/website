@@ -11,6 +11,7 @@ import FFT from './fft'
 import Knob from '../../controls/knob'
 import { useVolume, useFFT, useWaveform } from '../../../../hooks/mtts/tonejs'
 import { useTranslation } from 'react-i18next'
+import { usePolysynth } from '../../../../hooks/mtts/polysynth'
 
 interface IntervalGuesserGameProps {
   note: Note;
@@ -28,7 +29,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
   const [decibels, setDecibels, volume] = useVolume(DEFAULT_VOLUME)
   const fft = useFFT()
   const waveform = useWaveform()
-  const [polysynth, setPolysynth] = useState<Tone.PolySynth | undefined>()
+  const polysynth = usePolysynth()
   const [randomIntervals, setRandomIntervals] = useState<Interval[]>(getRandomEntities(level.intervals))
 
   // Generate random interval
@@ -71,17 +72,6 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
 
   // generate all notes from intervals to guess
   const notesToPlay = useMemo(() => [note, ...randomIntervals.map(i => i.apply(note))], [note, randomIntervals])
-
-  // create the polysynth
-  useEffect(() => {
-    setPolysynth(new Tone.PolySynth(2, Tone.Synth))
-
-    return () => {
-      if (polysynth) {
-        polysynth.dispose()
-      }
-    }
-  }, [])
 
   // setting up the polysynth
   useEffect(() => {

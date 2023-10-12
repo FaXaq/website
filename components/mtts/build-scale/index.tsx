@@ -116,12 +116,14 @@ function BuildScale() {
         )
         }
       </ul>
-      <p>Scale root : {rootNote.SPN}</p>
-      <p>Scale name : {scale.name}</p>
-      { scale.mode && <p>Scale mode : {scale.mode}</p> }
+      <p>Or select your scale directly here :</p>
       <select onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
         {Object.keys(SCALES).map(s => <option key={s}>{s}</option>)}
       </select>
+      <p>Scale root : {rootNote.SPN}</p>
+      <p>Scale name : {scale.name}</p>
+      { scale.mode && <p>Scale mode : {scale.mode}</p> }
+      <p>Here is the scale on a guitar neck :</p>
       <div className='py-4'>
         <GuitarNeck
           highlightFret={({ note }) => noteExistsInScale(scale, note)}
