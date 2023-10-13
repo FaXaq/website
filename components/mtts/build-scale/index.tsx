@@ -41,7 +41,8 @@ function getNoteInScale(scale: Scale, note: Note): Note {
   return scale.notes.find(n => Note.getSemitonesBetween(note, n) % 12 === 0)
 }
 
-function noteExistsInScale(scale: Scale, note: Note): boolean {
+function noteExistsInScale(scale: Scale, note: Note | string): boolean {
+  if (!(note instanceof Note)) return false
   return getNoteInScale(scale, note) !== undefined
 }
 

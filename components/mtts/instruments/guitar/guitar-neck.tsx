@@ -4,8 +4,10 @@ import { Note, Pitch } from 'mtts'
 // eslint-disable-next-line no-unused-vars
 import GuitarString, { GuitarStringProps } from './_guitar-string'
 import { FGetFret, FHighlight } from './_guitar-fret'
+import { FRET_MARKER } from './const'
 
 const DEFAULT_GUITAR_TUNING = (() => [
+  FRET_MARKER,
   new Note({ name: 'E', pitch: new Pitch({ value: 4 }) }).SPN,
   new Note({ name: 'B', pitch: new Pitch({ value: 3 }) }).SPN,
   new Note({ name: 'G', pitch: new Pitch({ value: 3 }) }).SPN,
@@ -24,7 +26,7 @@ export interface GuitarNeckProps {
 
 function GuitarNeck ({
   highlightFret = () => false,
-  getFret = ({ note }) => note.SPN,
+  getFret = ({ note }) => note instanceof Note ? note.SPN : FRET_MARKER,
   tuning = DEFAULT_GUITAR_TUNING,
   fretNumber = DEFAULT_FRET_NUMBERS
 }: GuitarNeckProps) {

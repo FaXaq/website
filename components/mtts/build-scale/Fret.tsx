@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Note } from 'mtts'
 
 interface IFretProps {
-  note: Note,
+  note: Note | string,
   stringNumber: number,
   fretNumber: number,
   highlighted: boolean,
@@ -16,7 +16,17 @@ function getNoteNameWithoutPitch(note: Note): string {
   return note.SPN.replace(/[0-9]/g, '')
 }
 
-function Fret({ note, highlighted, noteExistsInScale, getNoteInScale, getNoteIntervalIndexInScale }: IFretProps) {
+function Fret({ note, highlighted, noteExistsInScale, getNoteInScale, getNoteIntervalIndexInScale, fretNumber }: IFretProps) {
+  if (!(note instanceof Note)) {
+    return <div className="m-1 h-4 w-10 border-left-1 rounded">
+      <p className='text-lg text-center leading-3'>
+        {(fretNumber === 12 || fretNumber === 24) && '••'}
+        {(fretNumber === 3 || fretNumber === 5 || fretNumber === 7 || fretNumber === 9) && '•'}
+        {(fretNumber === 15 || fretNumber === 17 || fretNumber === 19 || fretNumber === 21) && '•'}
+      </p>
+    </div>
+  }
+
   const classes = classNames({
     'text-white': true,
     'bg-mtts-cta-0': highlighted && getNoteIntervalIndexInScale(note) === 1,
