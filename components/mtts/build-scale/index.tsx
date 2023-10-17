@@ -30,9 +30,6 @@ const possibleIntervals: {
 
 const INTERVAL_COLORS = Object.values(COLOR)
 
-console.log(INTERVAL_COLORS)
-console.log(possibleIntervals)
-
 function getNotationWithoutPitch(note: Note): string {
   return note.SPN.replace(/[0-9]/, '')
 }
@@ -91,8 +88,6 @@ function BuildScale() {
       console.error(err)
     }
   }, [rootNote, scaleIntervals])
-
-  console.log(scale.name)
 
   const { t } = useTranslation()
   return (
