@@ -1,0 +1,75 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+
+export const meta = {
+  title: '[Seekube] - Rewind',
+  description: "Ok c'était cool",
+  creationDate: '06/13/2023',
+  tags: ['français', 'gestion de projet', 'tech lead', "retour d'expérience", 'management'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+  J'ai rejoins <a href="https://app.seekube.com">Seekube</a> en Juillet 2021, après la levée des dernières restrictions liées au COVID-19. Mine de rien, pendant cette pandémie j'avais développé une anxiété sociale. Elle était certes faible mais présente. C'était donc en parallèle le début d'une nouvelle aventure professionnelle et le retour de vieux démons. Cette entreprise a été rachetée avec effet début 2023. D'où ce rewind, mais ... j'y viendrai plus tard.
+
+  ## Historique
+
+  J'ai été embauché pour faire grandir et organiser l'équipe technique. Y instaurer les processus nécessaires à son bon fonctionnement. Aussi, je devais être le référent pour la communication avec les autres équipes (commerciales, produit, ui/ux, support, et opérationnelles). L'équipe, à mon arrivée, était constituée de 4 personnes :
+  - 1 CPO et 1 PM junior
+  - 2 devs (1 back - CTO - et 1 front)
+  - 1 nouveau designer
+
+  Historiquement l'organisation de l'équipe était par sprints glissants (plutôt Kanban) et les priorités étaient définies par le CPO en accord verbal avec le CTO. La tech était au service du produit et c'était l'équipe produit qui animait les cérémonies. Le but de cette organisation était de permettre à l'équipe produit et technique de communiquer constamment et de pouvoir réagir rapidement à des problèmes techniques courants.
+
+  ## L'état technique
+
+  L'un des premiers éléments que j'ai eu à reprendre était de prioriser les chantiers techniques. Il y en avait beaucoup de débutés mais peu de terminés (migration de l'infrastructure, nettoyages et réécritures de code, suivi des erreurs en production, etc.). Le souci c'est que la création et le suivi d'une roadmap technique est toujours à mettre en parallèle d'une roadmap produit. Nous avons donc terminé des chantiers existants dans un premier temps :
+  - Migration du socle d'infrastructure sur AWS depuis (GCP, AWS, OVH)z
+  - Mise en place des logs applicatifs (Datadog + notification slack pour les traitements asynchrones)
+  
+  Progressivement nous avons pu prendre des projets plus importants (migration du systeme de build du front-end, revue des périmètres applicatifs des API, création d'un ORM léger en Go, Refonte de nos traitements asynchrones, création d'un design-system, etc.). Ces objectifs étaient définis et assumés par tous. Le but était qu'ils soient définis par l'équipe et que ces derniers les portes via les 7 étapes de création de fonctionalité (cf. gestion de projet).
+
+  ## Management à distance
+
+  Nous avons recruté 3 développeurs, 2 PM et 1 designer UI/UX pendant ces deux ans. Cela faisait suite au désir de l'entreprise de renforcer l'équipe Solution (Produit + Tech) suite au rachat par <a href="https://www.hellowork.com">Hellowork</a>. Avec ce renfort d'équipe, et étant donnée que nous sommes parti sur du 100% à distance (aux quatre coins de la France) il a fallu revoir la manière dont nous collaborions. J'ai mis en palce des instances courtes mais régulières dont les objectifs étaient définis en amont. Le but était avant tout social, notre manière de fonctionner permettait déjà à chaqun de se porter garant des tâches. Qui dit à distance dit autonomie. J'ai donc progressivement accordé une grande autonomie en dehors de ces cérémonies. Nous nous retrouvions quelques minutes par jour en visio seulement, mais nous avions une confiance en chacun•e.
+  
+  Une autre clé de du bon fonctionnement de l'équipe a été un suivi managérial régulier mais non invasif. Nous avons mis en place un suivi personnalisé avec projet professionnel a permis d'instaurer une confiance et surtout un axe de progression et une motivation pour les développeurs.
+
+  Enfin, régulièrement nous nous retrouvions en visio pour évoquer nos process et améliorer leurs fonctionnements, et ce, toujours à l'initiative des personnes de l'équipe. Nous avons pu tester des méthodes d'animation de réunions (animation tournante, CR écris sur slack, ODJ à amander en amont, etc.) pour trouver celle qui nous convenait. Jusqu'à ce qu'on ait besoin d'en re-changer.
+
+  Quelque chose de primordial à mon sens était d'être responsable du fonctionnement de l'équipe, mais pas le seul décideur.
+
+  ## Développer la communication inter-équipes
+
+  Une autre de mes missions a été de développer la communication entre l'équipe technique et les autres équipes. Historiquement, cette dernière était rattachée au produit, offrant donc une vision assez floue de ce qu'il s'y passait. Cependant, pour diverses raisons, notamment pour un gain d'autonomie et de responsabilité, il a été important de créer des ponts avec les autres équipes.
+  
+  Pour la résolution et priorisation des bugs avec le support et le produit, il a fallu mettre en place un processus de gestion des bugs avec la responsabilité de priorisation par l'équipe technique. Nous avons aussi repris l'entierté du processus de développement : de la reponsabilité sur le développement à la mise en production des fonctionnalités en passant par les validations des specs et les tests. Cela voulait donc dire, créer un canal de communication adequat pour prévenir les équipes et bien sûr célébrer.
+
+  ## La gestion de projet
+
+  Lors de mon arrivée Seekube, j'ai été très agréablement surpris de la qualité des spécifications produit. Elles étaient détaillées, expliquées et complètes. Nous avons pu rapidement mettre en place une méthodologie de travail en 7 étape pour n'importe quelle fonctionnalité :
+  - Découverte (équipe produit)
+  - Écriture des specs (équipe produit)
+  - Passation & Estimation (équipe technique)
+  - Développement (équipe technique)
+  - Tests (équipe technique)
+  - Mise en production (équipe technique)
+  - Suivi & Analyses (équipe produit)
+  
+  Le but de ce partage de responsabilités était que l'équipe responsable devait être l'équipe motrice. Cette dernière devait être à l'initiative des communications et tenir au courant l'autre équipe de ses avancées.
+
+  Aussi, nous avions pour chaque fonctionalité un responsable technique et un responsable produit. Le but était que ces derniers puissent demander aux personnes ayant les compétences et les connaissances les billes pour mener à bien le projet.
+
+  ## Le rachat
+
+  J'espère que ce n'est pas toujours comme ça. Le choc des manières de fonctionner des deux entreprise (Hellowork et Seekube) a été difficile. En effet, chez Seekube nous étions sur beaucoup d'autonomie donnée aux collaborateurs sur la prise de décision et d'initiatives et de responsabilité. Par contre, les processus étaient parfois peu définis et on manquait de moyens. C'est tout bonnement le contraire chez Hellowork, les processus sont définis et respectés, mais la responsabilité des différents produits et des différentes missions n'est pas claire. Passer de l'un à l'autre en terme d'organisation et en tant qu'employé a été très boulversant et assez désagréable.
+
+  ## En vrac: Les leçons tirées
+  - Toujours prendre en compte l'organisation historique et surtout __pourquoi__ est-ce que c'était ainsi.
+  - Construire et suivre une roadmap.
+  - Instaurer des rituels de cohésion d'équipe (cérémonies, célébrations, etc.)
+  - La communication en entreprise est une des pières angulaire de son bon fonctionnement.
+  - Cadrer et suivre un projet.
+  - Communiquer avec des équipes non techniques.
+  - Soyons flexibles sur notre organisation, ce qui fonctionnait hier peut ne pas fonctionner demain.
+  - Faire remonter les problématiques ainsi que les solutions par l'équipe concernée et la responsabiliser.
+</BlogPostLayout>
