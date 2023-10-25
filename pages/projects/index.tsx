@@ -8,6 +8,11 @@ const Projects = () => {
         MTTS
       </Link>
     </li>
+    <li>
+      <Link href="/projects/corsica">
+        Corsica
+      </Link>
+    </li>
   </ul>
 }
 

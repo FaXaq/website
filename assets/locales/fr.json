@@ -255,6 +255,16 @@
       "DOUBLE_FLAT": "𝄫"
     }
   },
+  "corsica": {
+    "pages": {
+      "index": {
+        "header": {
+          "title": "Corsica",
+          "subtitle": "GPX Merger tool"
+        }
+      }
+    } 
+  },
   "blog": {
     "title": "Blog"
   },

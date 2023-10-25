@@ -34,7 +34,12 @@ module.exports = {
         'mtts-violet': '#7768AE',
         'mtts-red': '#E15554',
         'mtts-success': '#8CE6AA',
-        'mtts-error': '#D65C5C'
+        'mtts-error': '#D65C5C',
+        'corsica-blue': '#5B89DE',
+        'corsica-light-brown': '#C59667',
+        'corsica-light-green': '#BFCC63',
+        'corsica-brown': '#835B38',
+        'corsica-green': '#445329'
       },
       fontSize: {
         '7xl': '5rem',
