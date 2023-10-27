@@ -1,6 +1,8 @@
+'use client'
+
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Category from '../../components/resume/category'
+import Category from '../../app/resume/components/category'
 
 export default function useCategory (
   name: string,

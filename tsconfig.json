@@ -17,7 +17,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "exclude": [
     "node_modules"
@@ -27,6 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     "node_modules/tone/tone.d.ts",
-    "node_modules/tone/index.d.ts"
+    "node_modules/tone/index.d.ts",
+    ".next/types/**/*.ts"
   ]
 }
