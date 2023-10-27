@@ -3,56 +3,25 @@
 import { NextPage } from 'next'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-interface FormData {
-    files: Array<File>
-}
+import MergeGPX from './components/mergeGPX'
+import AnalyseGPX from './components/analyseGPX'
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
+import classNames from 'classnames'
 
 const HomePage: NextPage<{}> = () => {
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const { t } = useTranslation()
-  const [isSanitizing, setIsSanitizing] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState<FormData>({
-    files: []
-  })
 
-  const mergeGPX: React.FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault()
-    setIsLoading(true)
-    const formElement: HTMLFormElement = event.target as HTMLFormElement
-    const apiUrl = formElement.action
-    const method = formElement.method
-
-    const body = new FormData()
-
-    for (let i = 0; i < formData.files.length; i++) {
-      body.append(`file-${i}`, formData.files[i])
+  const ACTIONS = [
+    {
+      tabLabel: t('corsica.pages.index.tabs.merge.tabLable'),
+      component: <MergeGPX />
+    },
+    {
+      tabLabel: t('corsica.pages.index.tabs.analyse.tabLable'),
+      component: <AnalyseGPX />
     }
-
-    // Frustrating but we have to not set manualy the Content-Type of the request
-    // Because the boundary of form-data has to be set by the web browser itself
-    const response = await fetch(apiUrl, {
-      method,
-      body
-    })
-
-    console.log(response)
-
-    setIsLoading(false)
-  }
-
-  const onFileInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setIsSanitizing(true)
-    const files = event.target.files
-    const sanitizedFiles = []
-    for (let i = 0; i < files.length; i++) {
-      sanitizedFiles.push(files.item(i))
-    }
-    setFormData({
-      files: sanitizedFiles
-    })
-    setIsSanitizing(false)
-  }
+  ]
 
   return (
     <div className="font-sans">
@@ -60,21 +29,27 @@ const HomePage: NextPage<{}> = () => {
         <h1 className='text-4xl text-center'>{t('corsica.pages.index.header.title')}</h1>
         <h3 className='text-xl text-center'>{t('corsica.pages.index.header.subtitle')}</h3>
       </header>
-      {
-        !isLoading && !isSanitizing && (
-          <form onSubmit={mergeGPX} method='POST' action='/api/corsica'>
-            <label htmlFor="gpx-inputs">{t('corsica.pages.index.form.inputLabel')}</label>
-            <input id="gpx-inputs" type="file" multiple onChange={onFileInputChange} accept=".gpx"/>
-            <input type="submit" />
-          </form>
-        )
-      }
+      <Tabs onSelect={(index) => setSelectedTabIndex(index)}>
+        <TabList className="flex">
+          {ACTIONS.map((action, actionIndex) => (
+            <Tab
+              key={`tab-label-${action.tabLabel}`}
+              className={classNames('p-2 border-b cursor-pointer rounded-t', { 'bg-corsica-green text-white': selectedTabIndex === actionIndex })}
+            >
+              {action.tabLabel}
+            </Tab>
+          ))}
+        </TabList>
+        {ACTIONS.map(action => (
+          <TabPanel key={`tab-content-${action.tabLabel}`}>
+            <div className="p-2">
+              {action.component}
+            </div>
+          </TabPanel>
+        ))}
+      </Tabs>
     </div>
   )
-}
-
-HomePage.getInitialProps = _ => {
-  return {}
 }
 
 export default HomePage
