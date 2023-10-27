@@ -3,8 +3,8 @@
 import { NextPage } from 'next'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import MergeGPX from './components/mergeGPX'
-import AnalyseGPX from './components/analyseGPX'
+import MergeGPX from './components/MergeGPX'
+import AnalyseGPX from './components/AnalyseGPX'
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs'
 import classNames from 'classnames'
 
