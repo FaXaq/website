@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
 import NoMicAccess from './components/no-mic-access'
 import TunerContainer from './components/tuner-container'
