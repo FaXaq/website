@@ -3,9 +3,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
-import { LEVELS, Level } from '../page'
+import { Level } from '../page'
 import classNames from 'classnames'
 import IntervalGuesserButton from './button'
+import { LEVELS } from '../const'
 
 interface IntervalGuesserModalProps {
   isShowing: boolean

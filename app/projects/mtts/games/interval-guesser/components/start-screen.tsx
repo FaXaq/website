@@ -3,8 +3,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line no-unused-vars
-import { Level, LEVELS } from '../page'
+import { Level } from '../page'
 import IntervalGuesserButton from './button'
+import { LEVELS } from '../const'
 
 interface IntervalGuesserStartScreenProps {
   onStart: (level: Level) => any;

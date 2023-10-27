@@ -4,40 +4,16 @@ import React, { useState, useMemo } from 'react'
 import { getRandomEntity } from '../../../../../utils/misc'
 import IntervalGuesserGame from './components/game'
 // eslint-disable-next-line no-unused-vars
-import { Note, Interval, NOTES, INTERVALS } from 'mtts'
+import { Note, Interval } from 'mtts'
 import IntervalGuesserModal from './components/modal'
 import { useTranslation } from 'react-i18next'
 import IntervalGuesserStartScreen from './components/start-screen'
+import { LEVELS } from './const'
 
 export interface Level {
   notes: Note[],
   intervals: Interval[],
   intervalsToGuess: number
-}
-
-export const LEVELS: { [key: string]: Level } = {
-  easy: {
-    notes: [new Note({ name: 'C' })],
-    intervals: Object.keys(INTERVALS)
-      .map(i => Interval.fromName(i))
-      .reduce((previous, current) => {
-        return previous.findIndex((pi) => current.semitones === pi.semitones) === -1 && current.semitones <= 12 && current.semitones > 0
-          ? [...previous, current]
-          : [...previous]
-      }, []),
-    intervalsToGuess: 1
-  },
-  intermediate: {
-    notes: NOTES.map(n => new Note({ name: n })),
-    intervals: Object.keys(INTERVALS)
-      .map(i => Interval.fromName(i))
-      .reduce((previous, current) => {
-        return previous.findIndex((pi) => current.semitones === pi.semitones) === -1 && current.semitones <= 12 && current.semitones > 0
-          ? [...previous, current]
-          : [...previous]
-      }, []),
-    intervalsToGuess: 1
-  }
 }
 
 const IntervalGuesser = () => {
