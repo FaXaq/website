@@ -1,10 +1,31 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { useMap, Polyline, Circle } from 'react-leaflet'
-import L from 'leaflet'
+import { useMap } from 'react-leaflet'
 import { MapAnalysis } from '../analyse/route'
 import { GPXTrkPart } from '../helpers/api/parseActivity'
+import dynamic from 'next/dynamic'
+
+const Circle = dynamic(
+  async () => (await import('react-leaflet')).Circle,
+  {
+    ssr: false
+  }
+)
+
+const Polyline = dynamic(
+  async () => (await import('react-leaflet')).Polyline,
+  {
+    ssr: false
+  }
+)
+
+const TileLayer = dynamic(
+  async () => (await import('react-leaflet')).TileLayer,
+  {
+    ssr: false
+  }
+)
 
 interface MapProps {
     mapAnalysis: MapAnalysis,
@@ -12,11 +33,8 @@ interface MapProps {
     activePoint: number | void
 }
 
-function Map({ mapAnalysis, points, activePoint }: MapProps) {
+export default function MapAnnotations({ mapAnalysis, points, activePoint }: MapProps) {
   const map = useMap()
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map)
 
   useEffect(() => {
     map.fitBounds([
@@ -28,9 +46,8 @@ function Map({ mapAnalysis, points, activePoint }: MapProps) {
   const zoom = map.getZoom()
 
   return <>
+    <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
     {activePoint && <Circle center={[parseFloat(points[activePoint].__ATTRIBUTE__lat), parseFloat(points[activePoint].__ATTRIBUTE__lon)]} radius={10000 / zoom} /> }
     <Polyline positions={...points.map(point => ([parseFloat(point.__ATTRIBUTE__lat), parseFloat(point.__ATTRIBUTE__lon)]))}/>
   </>
 }
-
-export default Map

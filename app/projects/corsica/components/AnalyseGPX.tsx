@@ -6,8 +6,8 @@ import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 import { Analysis } from '../analyse/route'
-import { MapContainer } from 'react-leaflet'
-import Map from './Map'
+import LeafletMap from './LeafletMap'
+import MapAnnotations from './MapAnnotations'
 
 interface FormState {
     files: Array<File>
@@ -147,11 +147,9 @@ export default function AnalyseGPX() {
           <p>{analysis.speed.maxSpeed} km/h</p>
           <p>{analysis.speed.averageSpeed} km/h</p>
           <div className='w-full h-96'>
-            <MapContainer
-              center={[analysis.map.center.lat, analysis.map.center.lon]}
-              className="w-full h-full">
-              <Map mapAnalysis={analysis.map} points={analysis.points} activePoint={activePoint} />
-            </MapContainer>
+            <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
+              <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activePoint} />
+            </LeafletMap>
           </div>
           <div>
             <div className='h-64 w-full'>
