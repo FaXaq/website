@@ -1,16 +1,35 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useMemo, useState } from 'react'
+import { CategoryScale, ChartData, Chart as ChartJS, ChartOptions, Legend, LineElement, LinearScale, PointElement, TimeScale, Title, Tooltip } from 'chart.js'
+import 'chartjs-adapter-date-fns'
+import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 import { Analysis } from '../analyse/route'
+import { MapContainer } from 'react-leaflet'
+import Map from './Map'
 
 interface FormState {
     files: Array<File>
 }
+
+ChartJS.register(
+  CategoryScale,
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 export default function AnalyseGPX() {
   const { t } = useTranslation()
   const [isSanitizing, setIsSanitizing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [analysis, setAnalysis] = useState<Analysis | void>()
+  const [activePoint, setActivePoint] = useState<number | void>()
   const [formState, setFormState] = useState<FormState>({
     files: []
   })
@@ -52,6 +71,65 @@ export default function AnalyseGPX() {
     setIsLoading(false)
   }
 
+  const elevationVariationData: ChartData<'line', number[], Date> = useMemo(() => {
+    if (analysis) {
+      return {
+        labels: analysis.points.map(point => new Date(point.time)),
+        datasets: [
+          {
+            label: 'test',
+            data: analysis.points.map(variation => Math.round(variation.ele)),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            pointRadius: 0.5,
+            pointBackgroundColor: 'rgba(255, 99, 132, 1',
+            fill: true,
+            tension: 0
+          }
+        ]
+      }
+    }
+  }, [analysis])
+
+  const speedVariationData: ChartData<'line', number[], Date> = useMemo(() => {
+    if (analysis) {
+      return {
+        labels: analysis.points.map(point => new Date(point.time)),
+        datasets: [
+          {
+            label: 'test',
+            data: analysis.speed.speedVariations.map(variation => variation),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            pointRadius: 0.5,
+            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+            tension: 0
+          }
+        ]
+      }
+    }
+  }, [analysis])
+
+  const LINE_TIME_OPTIONS: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'hour'
+        }
+      }
+    },
+    hover: {
+      mode: 'x',
+      intersect: false
+    },
+    onHover(_, elements) {
+      setActivePoint(elements[0]?.index)
+    }
+  }
+
   return (
     <div>
       { !isLoading && !isSanitizing && !analysis && (
@@ -61,12 +139,34 @@ export default function AnalyseGPX() {
           <input type="submit" value={t('corsica.components.analysis.submitLabel')}/>
         </form>
       )}
-      { analysis && (
+      { analysis && analysis.map && (
         <div>
           <p>{t('corsica.components.analysis.elevationGain', { elevationGain: Math.round(analysis.elevation.totalElevationGain) })}</p>
           <p>{t('corsica.components.analysis.elevationLoss', { elevationLoss: Math.round(analysis.elevation.totalElevationLoss) })}</p>
-          <p>{t('corsica.components.analysis.elevationVariation', { elevationVariation: Math.round(analysis.elevation.elevationVariation) })}</p>
-          <button className="inline-block bg-corsica-blue bg-opacity-90 m-y-6 p-2 rounded text-white hover:bg-opacity-100" onClick={() => setAnalysis()}>{t('corsica.components.analysis.retry')}</button>
+          <p>{t('corsica.components.analysis.totalDistance', { totalDistance: Math.round(analysis.distance.totalDistance / 1000) })}</p>
+          <p>{analysis.speed.maxSpeed} km/h</p>
+          <p>{analysis.speed.averageSpeed} km/h</p>
+          <div className='w-full h-96'>
+            <MapContainer
+              center={[analysis.map.center.lat, analysis.map.center.lon]}
+              className="w-full h-full">
+              <Map mapAnalysis={analysis.map} points={analysis.points} activePoint={activePoint} />
+            </MapContainer>
+          </div>
+          <div>
+            <div className='h-64 w-full'>
+              <Line data={elevationVariationData} options={LINE_TIME_OPTIONS} />
+            </div>
+            <div className='h-64 w-full'>
+              <Line data={speedVariationData} options={LINE_TIME_OPTIONS} />
+            </div>
+          </div>
+          <button
+            className="inline-block bg-corsica-blue bg-opacity-90 m-y-6 p-2 rounded text-white hover:bg-opacity-100"
+            onClick={() => setAnalysis()}
+          >
+            {t('corsica.components.analysis.retry')}
+          </button>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { XMLBuilder } from 'fast-xml-parser'
 import { getFilesFromRequest } from '../helpers/api/getFilesFromRequest'
-import { parseGPX } from '../helpers/api/parseGPX'
+import { parseGPX } from '../helpers/api/parseActivity'
 import { XML_ATTRIBUTE_PREFIX } from '../helpers/api/const'
 
 export async function POST(

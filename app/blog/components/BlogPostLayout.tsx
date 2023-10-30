@@ -4,15 +4,6 @@ import React, { useEffect } from 'react'
 import Prism from 'prismjs'
 import Head from 'next/head'
 import { useTranslation } from 'react-i18next'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
 
 interface BlogPostLayoutProps {
   children: React.JSX.Element | React.JSX.Element[]
@@ -21,15 +12,6 @@ interface BlogPostLayoutProps {
     creationDate: string,
     description: string
   }}
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-)
 
 const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
   const { t } = useTranslation()

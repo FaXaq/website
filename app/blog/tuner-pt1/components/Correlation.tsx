@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { theme } from '../../../../tailwind.config'
 import { hexToRgb } from '../../../../utils/misc'
@@ -8,6 +9,15 @@ import { hexToRgb } from '../../../../utils/misc'
 const CTA2_RGB = hexToRgb(theme.extend.colors['mtts-cta-2'])
 const BAR_COLOR = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.5)`
 const BAR_COLOR_HOVER = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.7)`
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 interface CorrelationProps {
   gsFq: number

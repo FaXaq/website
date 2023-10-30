@@ -56,7 +56,10 @@ module.exports = {
         'icon-m': '4rem',
         'icon-l': '8rem',
         'icon-xl': '16rem',
-        'icon-xxl': '32rem'
+        'icon-xxl': '32rem',
+        72: '18rem',
+        80: '20rem',
+        96: '24rem'
       },
       width: {
         '1/2': '50%',
@@ -64,7 +67,10 @@ module.exports = {
         'icon-m': '4rem',
         'icon-l': '8rem',
         'icon-xl': '16rem',
-        'icon-xxl': '32rem'
+        'icon-xxl': '32rem',
+        72: '18rem',
+        80: '20rem',
+        96: '24rem'
       },
       maxWidth: {
         '1/2': '50%'

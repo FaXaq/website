@@ -13,7 +13,8 @@ module.exports = {
           // function used to extract class names from the templates
           defaultExtractor: (content) =>
             content.match(/[\w-/:]+(?<!:)/g) || [],
-          safelist: ['html', 'body']
+          // necessary to include leaflet here
+          safelist: ['html', 'body', 'leaflet']
         }
         : false
     ]

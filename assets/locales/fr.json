@@ -283,6 +283,7 @@
         "elevationGain": "Il y a eu un total de {{elevationGain}}m de D+",
         "elevationLoss": "Il y a eu un total de {{elevationLoss}}m de D-",
         "elevationVariation": "Les points de départ et d'arrivée sont à une différence d'altitude de {{elevationVariation}}m",
+        "totalDistance": "Tu as parcouru une distance totale de {{totalDistance}} km",
         "retry": "Réessayer avec un nouveau fichier"
       }
     }
