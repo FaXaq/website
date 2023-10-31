@@ -7,7 +7,7 @@ function LocaleSelector () {
   const { t, i18n } = useTranslation()
   const fallbackLocales = []
 
-  for (const l of i18n.languages.sort()) {
+  for (const l of i18n.languages) {
     const classes = ['p-1']
     if (i18n.language === l) {
       classes.push('text-white')
