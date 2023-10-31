@@ -3,7 +3,7 @@
 import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import classNames from 'classnames'
 
 interface TileProps {

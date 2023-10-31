@@ -2,9 +2,7 @@
 
 import React from 'react'
 import MTTSHeader from './components/header'
-import { Trans, useTranslation } from 'react-i18next'
-// eslint-disable-next-line no-unused-vars
-import { NextPage } from 'next'
+import { Trans, useTranslation } from 'next-i18next'
 import ResearchIcon from '../../components/images/research-icon'
 import Link from 'next/link'
 
@@ -16,7 +14,7 @@ interface Experiment {
 
 function Page() {
   const { t } = useTranslation()
-  const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as Experiment[]).map(e => {
+  const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as unknown as Experiment[]).map(e => {
     return (
       <li key={e.title} className="py-4">
         <h5 className="text-2xl">{e.title}</h5>

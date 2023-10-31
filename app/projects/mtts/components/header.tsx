@@ -2,7 +2,7 @@
 
 import React from 'react'
 import MTTSLogo from '../../../components/images/mtts-logo'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 function MTTSHeader () {
   const { t } = useTranslation()

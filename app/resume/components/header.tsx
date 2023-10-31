@@ -3,7 +3,7 @@
 import React from 'react'
 
 import Mountains from '../../components/images/mountains'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import LocaleSelector from '../../components/locale-selector'
 
 function Header () {

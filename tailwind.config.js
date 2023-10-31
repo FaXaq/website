@@ -11,7 +11,9 @@ module.exports = {
     extend: {
       fontFamily: {
         'mtts-title': ['Nunito', 'Open Sans', 'sans'],
-        'mtts-text': ['Open Sans', 'sans']
+        'mtts-text': ['Open Sans', 'sans'],
+        'corsica-title': ['Nunito', 'Open Sans', 'sans'],
+        'corsica-text': ['Open Sans', 'sans']
       },
       colors: {
         'light-marine': '#3BA0B8',
@@ -35,11 +37,15 @@ module.exports = {
         'mtts-red': '#E15554',
         'mtts-success': '#8CE6AA',
         'mtts-error': '#D65C5C',
-        'corsica-blue': '#5B89DE',
-        'corsica-light-brown': '#C59667',
-        'corsica-light-green': '#BFCC63',
-        'corsica-brown': '#835B38',
-        'corsica-green': '#445329'
+        'corsica-gray': '#5a647c',
+        'corsica-blue': '#89a4d1',
+        'corsica-clay': '#c2b09c',
+        'corsica-brown': '#ac8259',
+        'corsica-green': '#7e8d4f',
+        'corsica-khaki': '#726949',
+        'corsica-olive': '#3c412a',
+        'corsica-white': '#E8E6E3',
+        'corsica-red': '#944747'
       },
       fontSize: {
         '7xl': '5rem',

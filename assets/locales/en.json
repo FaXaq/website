@@ -234,6 +234,19 @@
       "DOUBLE_FLAT": "𝄫"
     }
   },
+  "corsica": {
+    "components": {
+      "nav": {
+        "title": "Corsica",
+        "subtitle": "GPX manipulation & analysis tool"
+      }
+    },
+    "pages": {
+      "analyse": {
+        "subtitle": "{{date, translateDate(format:DD/MM)}}"
+      }
+    }
+  },
   "blog": {
     "title": "Blog",
     "tagsSearch": "Filtering on tags : "

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFilesFromRequest } from '../helpers/api/getFilesFromRequest'
-import { GPXTrkPart, parseGPX } from '../helpers/api/parseActivity'
-import { ApiError } from '../helpers/api/const'
+import { getFilesFromRequest } from '../helpers/getFilesFromRequest'
+import { GPXJson, GPXTrkPart, parseGPX } from '../helpers/parseActivity'
+import { ApiError } from '../helpers/const'
 import turfDistance from '@turf/distance'
 import turfCenter from '@turf/center'
 import { points as turfPoints } from '@turf/helpers'
@@ -35,20 +35,61 @@ interface SpeedAnalysis {
   speedVariations: Array<number>
 }
 
+interface ReverseGeocodingJSONAddress {
+  road: string,
+  village: string,
+  state_district: string,
+  state: string,
+  'ISO3166-2-lvl4'?: string,
+  'ISO3166-2-lvl6'?: string,
+  postcode: string,
+  municipality: string,
+  county: string,
+  region: string,
+  country: string,
+  country_code: string
+}
+
+interface ReverseGeocodingJSON {
+  place_id: number,
+  license: string,
+  osm_type: string,
+  osl_id: number,
+  lat: string,
+  lon: string,
+  category: string,
+  type: string,
+  place_rank: number,
+  importance: number,
+  addresstype: string,
+  name: string,
+  display_name: string,
+  address: ReverseGeocodingJSONAddress,
+  boundingbox: [string, string, string, string]
+}
+
 export interface MapAnalysis {
   center: Coordinates,
   boundaries: [
     Coordinates,
     Coordinates
-  ]
+  ],
+  reverseGeocodingSearchResult: ReverseGeocodingJSON
 }
 
 export interface Analysis {
+  name: string,
+  activity: string,
+  time?: string,
   map: MapAnalysis,
   elevation: ElevationVariationAnalysis,
   distance: DistanceAnalysis,
-  speed: SpeedAnalysis,
+  speed: SpeedAnalysis | void,
   points: Array<GPXTrkPart>
+}
+
+function trackHasTime(file: GPXJson): boolean {
+  return !!file.gpx.metadata?.time
 }
 
 function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalysis {
@@ -153,8 +194,22 @@ function getElevationVariations(trkpts: Array<GPXTrkPart>): ElevationVariationAn
   }
 }
 
-function getMapAnalysis(trkpts: Array<GPXTrkPart>): MapAnalysis {
+async function reverseGeocodingSearch({ lat, lon }: { lat: number, lon: number }): Promise<ReverseGeocodingJSON> {
+  return await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`, {
+    headers: {
+      Referer: 'https://norra.fr'
+    }
+  })).json() as unknown as ReverseGeocodingJSON
+}
+
+async function getMapAnalysis(trkpts: Array<GPXTrkPart>): Promise<MapAnalysis> {
   if (trkpts.length < 2) {
+    const center = {
+      lon: parseFloat(trkpts[0].__ATTRIBUTE__lon),
+      lat: parseFloat(trkpts[0].__ATTRIBUTE__lat)
+    }
+    const reverseGeocodingSearchResult = await reverseGeocodingSearch(center)
+
     return {
       boundaries: [
         {
@@ -166,10 +221,8 @@ function getMapAnalysis(trkpts: Array<GPXTrkPart>): MapAnalysis {
           lat: parseFloat(trkpts[0].__ATTRIBUTE__lat)
         }
       ],
-      center: {
-        lon: parseFloat(trkpts[0].__ATTRIBUTE__lon),
-        lat: parseFloat(trkpts[0].__ATTRIBUTE__lat)
-      }
+      center,
+      reverseGeocodingSearchResult
     }
   }
 
@@ -198,14 +251,22 @@ function getMapAnalysis(trkpts: Array<GPXTrkPart>): MapAnalysis {
     }
   }
 
-  const center = turfCenter(turfPoints([
+  const turfCenterResult = turfCenter(turfPoints([
     [minLon, maxLat],
     [maxLon, minLat],
     [minLon, minLat],
     [maxLon, maxLat]
   ]))
 
+  const center = {
+    lon: turfCenterResult.geometry.coordinates[0],
+    lat: turfCenterResult.geometry.coordinates[1]
+  }
+
+  const reverseGeocodingSearchResult = await reverseGeocodingSearch(center)
+
   return {
+    reverseGeocodingSearchResult,
     boundaries: [
       {
         lon: minLon,
@@ -216,10 +277,7 @@ function getMapAnalysis(trkpts: Array<GPXTrkPart>): MapAnalysis {
         lat: maxLat
       }
     ],
-    center: {
-      lon: center.geometry.coordinates[0],
-      lat: center.geometry.coordinates[1]
-    }
+    center
   }
 }
 
@@ -279,14 +337,29 @@ export async function POST(
 
   const { totalElevationGain, totalElevationLoss, elevationVariations } = getElevationVariations(trkpts)
   const { totalDistance, distanceVariations } = getDistanceVariations(trkpts)
-  const { center, boundaries } = getMapAnalysis(trkpts)
-  const { maxSpeed, minSpeed, averageSpeed, speedVariations } = getSpeedAnalysis(trkpts)
+  let maxSpeed = -1
+  let minSpeed = -1
+  let averageSpeed = -1
+  let speedVariations = []
+
+  if (trackHasTime(parsedFile)) {
+    const speedAnalysis = getSpeedAnalysis(trkpts)
+    maxSpeed = speedAnalysis.maxSpeed
+    minSpeed = speedAnalysis.minSpeed
+    averageSpeed = speedAnalysis.averageSpeed
+    speedVariations = speedAnalysis.speedVariations
+  }
+  const { center, boundaries, reverseGeocodingSearchResult } = await getMapAnalysis(trkpts)
 
   return NextResponse.json(
     {
+      name: parsedFile.gpx.trk.name,
+      activity: parsedFile.gpx.trk.type,
+      time: parsedFile.gpx.metadata?.time,
       map: {
         center,
-        boundaries
+        boundaries,
+        reverseGeocodingSearchResult
       },
       elevation: {
         totalElevationGain,
@@ -300,12 +373,12 @@ export async function POST(
       points: [
         ...trkpts
       ],
-      speed: {
+      speed: trackHasTime(parsedFile) ? {
         maxSpeed,
         minSpeed,
         averageSpeed,
         speedVariations
-      }
+      } : undefined
     },
     { status: 200 }
   )

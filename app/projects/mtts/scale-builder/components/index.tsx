@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES } from 'mtts'
 import SquareButton from '../../../../components/square-button'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import GuitarNeck from '../../components/guitar/guitar-neck'
 import Fret from './Fret'
 import ColorButton, { COLOR } from './ColorButton'

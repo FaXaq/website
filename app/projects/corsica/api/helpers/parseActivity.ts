@@ -54,10 +54,10 @@ export interface GPXTrkPart {
   __ATTRIBUTE__lat: string,
   __ATTRIBUTE__lon: string,
   ele: number,
-  time: string
+  time?: string
 }
 
-interface GPXJson {
+export interface GPXJson {
     '?xml': {
         __ATTRIBUTE__version: string,
         __ATTRIBUTE__encoding: string
@@ -68,8 +68,8 @@ interface GPXJson {
         '__ATTRIBUTE__xsi:schemaLocation': string,
         '__ATTRIBUTE__version': string,
         '__ATTRIBUTE__xmlns': string
-        metadata: {
-        time: string
+        metadata?: {
+          time?: string
         },
         trk: {
           name: string,

@@ -256,35 +256,15 @@
     }
   },
   "corsica": {
-    "pages": {
-      "index": {
-        "header": {
-          "title": "Corsica",
-          "subtitle": "Outil de manipulation et d'analyse de fichiers GPX"
-        },
-        "tabs": {
-          "merge": {
-            "tabLable": "Fusionner des fichiers"
-          },
-          "analyse": {
-            "tabLable": "Analyser un fichier"
-          }
-        }
+    "components": {
+      "nav": {
+        "title": "Corsica",
+        "subtitle": "GPX manipulation & analysis tool"
       }
     },
-    "components": {
-      "merge": {
-        "inputLabel": "Sélectionner des fichiers GPX à fusionner",
-        "submitLabel": "Fusionner les fichiers"
-      },
-      "analysis": {
-        "inputLabel": "Sélectionner un fichier GPX à analyser",
-        "submitLabel": "Analyser les données",
-        "elevationGain": "Il y a eu un total de {{elevationGain}}m de D+",
-        "elevationLoss": "Il y a eu un total de {{elevationLoss}}m de D-",
-        "elevationVariation": "Les points de départ et d'arrivée sont à une différence d'altitude de {{elevationVariation}}m",
-        "totalDistance": "Tu as parcouru une distance totale de {{totalDistance}} km",
-        "retry": "Réessayer avec un nouveau fichier"
+    "pages": {
+      "analyse": {
+        "subtitle": "{{date, translateDate}}"
       }
     }
   },

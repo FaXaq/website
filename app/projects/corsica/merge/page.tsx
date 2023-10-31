@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 interface FormState {
     files: Array<File>
@@ -17,7 +17,7 @@ function downloadFile(name: string, blob: Blob) {
   URL.revokeObjectURL(href)
 }
 
-export default function MergeGPX() {
+export default function Merge() {
   const { t } = useTranslation()
   const [isSanitizing, setIsSanitizing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -65,9 +65,9 @@ export default function MergeGPX() {
 
   return (
     !isLoading && !isSanitizing && (
-      <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/merge' className='flex flex-col'>
+      <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge' className='flex flex-col'>
         <label htmlFor="gpx-inputs">{t('corsica.components.merge.inputLabel')}</label>
-        <input id="gpx-inputs" type="file" multiple onChange={onFileInputChange} accept=".gpx"/>
+        <input id="gpx-inputs" type="file" multiple onChange={onFileInputChange} accept=".gpx" required/>
         <input type="submit" value={t('corsica.components.analysis.submitLabel')} />
       </form>
     )

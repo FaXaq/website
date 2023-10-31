@@ -6,7 +6,7 @@ import IntervalGuesserGame from './components/game'
 // eslint-disable-next-line no-unused-vars
 import { Note, Interval } from 'mtts'
 import IntervalGuesserModal from './components/modal'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import IntervalGuesserStartScreen from './components/start-screen'
 import { LEVELS } from './const'
 

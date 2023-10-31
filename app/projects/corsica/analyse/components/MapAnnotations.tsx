@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
-import { MapAnalysis } from '../analyse/route'
-import { GPXTrkPart } from '../helpers/api/parseActivity'
+import { MapAnalysis } from '../../api/analyse/route'
+import { GPXTrkPart } from '../../api/helpers/parseActivity'
 import dynamic from 'next/dynamic'
 
 const Circle = dynamic(

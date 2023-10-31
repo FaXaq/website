@@ -10,7 +10,7 @@ import Oscillator from './oscillator'
 import FFT from './fft'
 import Knob from '../../../components/controls/knob'
 import { useVolume, useFFT, useWaveform } from '../../../hooks/tonejs'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { usePolysynth } from '../../../hooks/polysynth'
 
 interface IntervalGuesserGameProps {
