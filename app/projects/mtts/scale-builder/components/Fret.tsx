@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames'
 import { Note } from 'mtts'
 
@@ -19,6 +19,12 @@ function getNoteNameWithoutPitch(note: Note): string {
 }
 
 function Fret({ note, highlighted, noteExistsInScale, getNoteInScale, getNoteIntervalIndexInScale, fretNumber }: IFretProps) {
+  const [active, setActive] = useState(false)
+
+  function toggleFret() {
+    setActive(!active)
+  }
+
   if (!(note instanceof Note)) {
     return <div className="m-1 h-4 w-10 border-left-1 rounded">
       <p className='text-lg text-center leading-3'>
@@ -38,15 +44,22 @@ function Fret({ note, highlighted, noteExistsInScale, getNoteInScale, getNoteInt
     'bg-mtts-blue': highlighted && getNoteIntervalIndexInScale(note) === 5,
     'bg-mtts-violet': highlighted && getNoteIntervalIndexInScale(note) === 6,
     'bg-mtts-red': highlighted && getNoteIntervalIndexInScale(note) === 7,
-    'p-1 m-1 w-10 flex align-items border-left-1 rounded': true
+    'p-1 w-10 flex align-items border-left-1 rounded': true
   })
 
   return (
-    <div
-      className={classes}
+    <div className={classNames({
+      'w-full h-full p-1': true,
+      'bg-mtts-dark-violet': active
+    })}
+    onClick={() => toggleFret()}
     >
-      <div className="m-auto">
-        {noteExistsInScale(note) ? <p>{getNoteNameWithoutPitch(getNoteInScale(note))}</p> : <p></p>}
+      <div
+        className={classes}
+      >
+        <div className="m-auto">
+          {noteExistsInScale(note) ? <p>{getNoteNameWithoutPitch(getNoteInScale(note))}</p> : <p></p>}
+        </div>
       </div>
     </div>
   )
