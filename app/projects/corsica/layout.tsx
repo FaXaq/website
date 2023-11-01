@@ -3,6 +3,7 @@
 import React from 'react'
 import Nav from './components/Nav'
 import { usePathname } from 'next/navigation'
+import Footer from './components/Footer'
 
 interface CorsicaLayoutProps {
     children: React.ReactNode
@@ -12,11 +13,14 @@ function CorsicaLayout({ children }: CorsicaLayoutProps) {
   const path = usePathname()
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row h-screen w-screen">
       <Nav />
       {path !== '/projects/corsica' && (
-        <div className="p-6 bg-corsica-white w-full h-screen overflow-auto">
-          {children}
+        <div className="flex-grow overflow-auto bg-corsica-white w-full flex flex-col">
+          <div className="p-6 w-full flex-grow overflow-auto">
+            {children}
+          </div>
+          <Footer nav={false} />
         </div>
       )}
     </div>

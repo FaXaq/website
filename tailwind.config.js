@@ -54,6 +54,8 @@ module.exports = {
         '10xl': '8rem'
       },
       flexGrow: {
+        0: 0,
+        1: 1,
         2: 2
       },
       height: {
