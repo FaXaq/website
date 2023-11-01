@@ -259,12 +259,26 @@
     "components": {
       "nav": {
         "title": "Corsica",
-        "subtitle": "GPX manipulation & analysis tool"
+        "subtitle": "Outil de manipulation et d'analyse de fichiers GPX"
       }
     },
     "pages": {
+      "merge": {
+        "title": "Fusionner des fichiers GPX",
+        "submitLabel": "Fusionner"
+      },
       "analyse": {
-        "subtitle": "{{date, translateDate}}"
+        "title": "Analyser un fichier GPX",
+        "submitLabel": "Analyser",
+        "subtitle": "{{date, translateDate(format:DD/MM)}}",
+        "retry": "Réessayer",
+        "totalDistance": "Distance parcourue",
+        "totalElevationGain": "Dénivelé positif",
+        "maxSpeed": "Vitesse maximale",
+        "averageSpeed": "Vitesse moyenne",
+        "speed": "{{value}}km/h",
+        "meters": "{{value}}m",
+        "kilometers": "{{value}}km"
       }
     }
   },

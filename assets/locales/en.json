@@ -242,8 +242,22 @@
       }
     },
     "pages": {
+      "merge": {
+        "title": "Merge GPX files",
+        "submitLabel": "Merge"
+      },
       "analyse": {
-        "subtitle": "{{date, translateDate(format:DD/MM)}}"
+        "title": "Analyse GPX file",
+        "submitLabel": "Analyse",
+        "subtitle": "{{date, translateDate(format:DD/MM)}}",
+        "retry": "Retry",
+        "totalDistance": "Distance",
+        "totalElevationGain": "Elevation",
+        "maxSpeed": "Max speed",
+        "averageSpeed": "Avg Speed",
+        "speed": "{{value}}km/h",
+        "meters": "{{value}}m",
+        "kilometers": "{{value}}km"
       }
     }
   },

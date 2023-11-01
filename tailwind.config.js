@@ -4,6 +4,10 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true
   },
+  content: [
+    './app/**/*.tsx',
+    './styles/*.scss'
+  ],
   purge: false,
   variants: {},
   plugins: [],

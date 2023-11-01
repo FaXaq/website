@@ -23,7 +23,7 @@ function Nav() {
         'w-full h-full relative flex flex-col items-center': true,
         'justify-center': fullPage
       })}>
-        <div className="px-2 md:py-12">
+        <div className="px-2 py-4 md:py-12">
           <h1 className="font-extrabold block w-full text-center text-4xl text-corsica-white font-corsica-title">{t('corsica.components.nav.title')}</h1>
           <h4 className={classNames({
             'hidden md:block': !fullPage,

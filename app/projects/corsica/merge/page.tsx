@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import Button from '../components/Button'
 
 interface FormState {
     files: Array<File>
@@ -64,12 +65,10 @@ export default function Merge() {
   }
 
   return (
-    !isLoading && !isSanitizing && (
-      <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge' className='flex flex-col'>
-        <label htmlFor="gpx-inputs">{t('corsica.components.merge.inputLabel')}</label>
-        <input id="gpx-inputs" type="file" multiple onChange={onFileInputChange} accept=".gpx" required/>
-        <input type="submit" value={t('corsica.components.analysis.submitLabel')} />
-      </form>
-    )
+    <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge' className='flex flex-col items-start'>
+      <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.merge.title')}</h2>
+      <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
+      <Button type="submit" loading={isLoading || isSanitizing}>{t('corsica.pages.merge.submitLabel')}</Button>
+    </form>
   )
 }

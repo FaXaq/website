@@ -16,8 +16,8 @@ function CorsicaLayout({ children }: CorsicaLayoutProps) {
     <div className="flex flex-col md:flex-row h-screen w-screen">
       <Nav />
       {path !== '/projects/corsica' && (
-        <div className="flex-grow overflow-auto bg-corsica-white w-full flex flex-col">
-          <div className="p-6 w-full flex-grow overflow-auto">
+        <div className="grow overflow-auto bg-corsica-white w-full flex flex-col">
+          <div className="p-6 w-full grow">
             {children}
           </div>
           <Footer nav={false} />

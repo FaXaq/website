@@ -9,7 +9,8 @@ import { Analysis } from '../api/analyse/route'
 import LeafletMap from './components/LeafletMap'
 import MapAnnotations from './components/MapAnnotations'
 import CyclingIcon from '../components/CyclingIcon'
-import { format, intervalToDuration } from 'date-fns'
+import { format, formatDuration, intervalToDuration } from 'date-fns'
+import Button from '../components/Button'
 
 interface FormState {
     files: Array<File>
@@ -161,11 +162,11 @@ export default function Analyse() {
 
   return (
     <div className='text-corsica-olive'>
-      { !isLoading && !isSanitizing && !analysis && (
-        <form onSubmit={AnalyseGPX} method='POST' action='/projects/corsica/api/analyse' className='flex flex-col'>
-          <label htmlFor="gpx-inputs">{t('corsica.components.analysis.inputLabel')}</label>
-          <input id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
-          <input type="submit" value={t('corsica.components.analysis.submitLabel')}/>
+      { !analysis && (
+        <form onSubmit={AnalyseGPX} method='POST' action='/projects/corsica/api/analyse' className='flex flex-col items-start'>
+          <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.analyse.title')}</h2>
+          <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
+          <Button loading={isLoading || isSanitizing} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
         </form>
       )}
       { analysis && analysis.map && (
@@ -173,13 +174,13 @@ export default function Analyse() {
           <div className="pb-4">
             <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">
               {analysis.activity === 'cycling' && (
-                <span className="inline-block h-12 pr-2">
+                <span className="inline-block w-16 pr-2">
                   <CyclingIcon />
                 </span>
               )}
               {analysis.name}
             </h2>
-            <h4>{analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time), 'PP')}`}</h4>
+            <h4>{analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time), 'PP')}`} { elapsedTime && ` - ${formatDuration(elapsedTime)} `}</h4>
           </div>
           <div>
             <div className='w-full h-80'>
@@ -188,30 +189,21 @@ export default function Analyse() {
               </LeafletMap>
             </div>
             <div className="grid grid-cols-4">
-              <div className="pr-4 py-4">
+              <div className="pr-4 py-4 col-span-4 md:col-span-1">
                 <p className="flex justify-between">
-                  <span>Distance parcourue</span>
-                  <span>{Math.round(analysis.distance.totalDistance / 100) / 10 } km</span>
+                  <span>{t('corsica.pages.analyse.totalDistance')}</span>
+                  <span>{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</span>
                 </p>
                 <p className="flex justify-between">
-                  {
-                    elapsedTime ? (
-                      <>
-                        <span>Elapsed time</span>
-                        <span>{elapsedTime?.days && `${elapsedTime?.days} days `}{elapsedTime.hours}h{elapsedTime.minutes}</span>
-                      </>
-                    ) : null
-                  }
-                </p>
-                <p className="flex justify-between">
-                  <span>Elevation Gain</span>
-                  <span>{Math.round(analysis.elevation.totalElevationGain)}m</span>
+                  <span>{t('corsica.pages.analyse.totalElevationGain')}</span>
+                  <span>{t('corsica.pages.analyse.meters', { value: Math.round(analysis.elevation.totalElevationGain) })}</span>
                 </p>
                 <p className="flex justify-between">
                   {
                     analysis.speed && (
                       <>
-                        <span>Max Speed</span><span>{Math.round(analysis.speed.maxSpeed * 100) / 100} km/h</span>
+                        <span>{t('corsica.pages.analyse.maxSpeed')}</span>
+                        <span>{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.maxSpeed * 100) / 100 })}</span>
                       </>
                     )}
                 </p>
@@ -219,16 +211,17 @@ export default function Analyse() {
                   {
                     analysis.speed && (
                       <>
-                        <span>Avg Speed</span><span>{Math.round(analysis.speed.averageSpeed * 100) / 100} km/h</span>
+                        <span>{t('corsica.pages.analyse.averageSpeed')}</span>
+                        <span>{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.averageSpeed * 100) / 100 })}</span>
                       </>
                     )}
                 </p>
               </div>
-              <div className='col-span-3'>
+              <div className='col-span-4 md:col-span-3'>
                 <Line data={elevationVariationData} options={LINE_TIME_OPTIONS} />
               </div>
             </div>
-            <div className='col-span-3'>
+            <div>
               <Line data={elevationGradientData} options={LINE_TIME_OPTIONS} />
             </div>
             <div>
@@ -242,12 +235,13 @@ export default function Analyse() {
                 )
               }
             </div>
-            <button
-              className="inline-block bg-corsica-blue bg-opacity-90 m-y-6 p-2 rounded text-white hover:bg-opacity-100"
+            <Button
+              type="button"
               onClick={() => setAnalysis()}
+              loading={false}
             >
-              {t('corsica.components.analysis.retry')}
-            </button>
+              {t('corsica.pages.analyse.retry')}
+            </Button>
           </div>
         </div>
       )}
