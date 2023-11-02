@@ -13,7 +13,7 @@ function Footer({ nav }: FooterProps) {
 
   return (
     <footer className={classNames({
-      'bg-corsica-brown py-2': true,
+      'bg-corsica-brown py-2 w-full': true,
       'block absolute bottom-0': fullPage || nav,
       'md:hidden self-end': !nav,
       'hidden md:block': nav && !fullPage,
