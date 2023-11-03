@@ -5,6 +5,7 @@ import MTTSHeader from './components/header'
 import { Trans, useTranslation } from 'next-i18next'
 import ResearchIcon from '../../components/images/research-icon'
 import Link from 'next/link'
+import MTTSFooter from './components/Footer'
 
 interface Experiment {
   title: string;
@@ -45,6 +46,9 @@ function Page() {
             {experiments}
           </ul>
         </div>
+      </div>
+      <div className="pt-8">
+        <MTTSFooter />
       </div>
     </div>
   )

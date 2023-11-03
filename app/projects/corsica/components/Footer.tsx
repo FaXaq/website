@@ -21,11 +21,12 @@ function Footer({ nav }: FooterProps) {
     })}>
       <p>Made with :</p>
       <ul className="flex justify-center flex-wrap py-2 px-4">
-        <li className="pr-2">turf.js</li>
-        <li className="pr-2">openstreetmap</li>
-        <li className="pr-2">leaflet</li>
-        <li>nominatim</li>
+        <li className="pr-2"><a href="https://turfjs.org/" target="_blank" rel="noreferrer">turf.js</a></li>
+        <li className="pr-2"><a href="https://www.openstreetmap.org" target="_blank" rel="noreferrer">openstreetmap</a></li>
+        <li className="pr-2"><a href="https://leafletjs.com/" target="_blank" rel="noreferrer">leaflet</a></li>
+        <li><a href="https://nominatim.org/" target="_blank" rel="noreferrer">nominatim</a></li>
       </ul>
+      <a href="https://github.com/FaXaq/website/tree/master/app/projects/corsica" target="_blank" rel="noreferrer">Code on Github</a>
     </footer>
   )
 }
