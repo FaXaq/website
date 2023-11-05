@@ -67,7 +67,7 @@ export default function Merge() {
   return (
     <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge' className='flex flex-col items-start'>
       <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.merge.title')}</h2>
-      <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
+      <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required multiple />
       <Button type="submit" loading={isLoading || isSanitizing}>{t('corsica.pages.merge.submitLabel')}</Button>
     </form>
   )

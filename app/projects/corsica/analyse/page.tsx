@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CategoryScale, ChartData, Chart as ChartJS, ChartOptions, Legend, LineElement, LinearScale, PointElement, TimeScale, Title, Tooltip } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
@@ -11,6 +11,9 @@ import MapAnnotations from './components/MapAnnotations'
 import CyclingIcon from '../components/CyclingIcon'
 import { format, formatDuration, intervalToDuration } from 'date-fns'
 import Button from '../components/Button'
+import { ListBlobResult } from '@vercel/blob'
+import { getBlobFileName } from '../api/helpers/blob'
+import LoadingIcon from '../components/LoadingIcon'
 
 interface FormState {
     files: Array<File>
@@ -27,6 +30,8 @@ ChartJS.register(
   Legend
 )
 
+const API_URL = '/projects/corsica/api/analyse'
+
 export default function Analyse() {
   const { t } = useTranslation()
   const [isSanitizing, setIsSanitizing] = useState(false)
@@ -36,6 +41,14 @@ export default function Analyse() {
   const [formState, setFormState] = useState<FormState>({
     files: []
   })
+  const [preLoadedFiles, setPreLoadedFiles] = useState<ListBlobResult | void>()
+
+  useEffect(() => {
+    (async () => {
+      const files = await (await fetch('/projects/corsica/api/analyse')).json() as unknown as ListBlobResult
+      setPreLoadedFiles(files)
+    })()
+  }, [])
 
   const onFileInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setIsSanitizing(true)
@@ -50,7 +63,7 @@ export default function Analyse() {
     setIsSanitizing(false)
   }
 
-  const AnalyseGPX: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  const analyseGPX: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     setIsLoading(true)
     const formElement: HTMLFormElement = event.target as HTMLFormElement
@@ -68,6 +81,20 @@ export default function Analyse() {
     const response = await fetch(apiUrl, {
       method,
       body
+    })
+
+    setAnalysis(await response.json())
+    setIsLoading(false)
+  }
+
+  const selectPreLoadedFile = async (fileUrl: string) => {
+    setIsLoading(true)
+    const body = new FormData()
+    body.append('fileUrl', fileUrl)
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: body
     })
 
     setAnalysis(await response.json())
@@ -162,11 +189,26 @@ export default function Analyse() {
 
   return (
     <div className='text-corsica-olive'>
-      { !analysis && (
-        <form onSubmit={AnalyseGPX} method='POST' action='/projects/corsica/api/analyse' className='flex flex-col items-start'>
+      { !preLoadedFiles && <LoadingIcon /> }
+      { !analysis && preLoadedFiles && (
+        <form onSubmit={analyseGPX} method='POST' action={API_URL} className='flex flex-col items-start'>
           <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.analyse.title')}</h2>
           <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
           <Button loading={isLoading || isSanitizing} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
+          <h4 className="py-2 text-xl font-semibold font-corsica-title">{t('corsica.pages.analyse.selectAFile')}</h4>
+          <ul className="w-full">
+            {
+              preLoadedFiles.blobs.map(file => (
+                <li
+                  className="p-2 cursor-pointer hover:bg-corsica-khaki hover:text-corsica-white"
+                  onClick={() => selectPreLoadedFile(file.url)}
+                  key={file.pathname}
+                >
+                  {getBlobFileName(file.pathname)}
+                </li>
+              ))
+            }
+          </ul>
         </form>
       )}
       { analysis && analysis.map && (

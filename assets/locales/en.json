@@ -250,6 +250,7 @@
         "title": "Analyse GPX file",
         "submitLabel": "Analyse",
         "subtitle": "{{date, translateDate(format:DD/MM)}}",
+        "selectAFile": "Or you can select a pre-loaded file :",
         "retry": "Retry",
         "totalDistance": "Distance",
         "totalElevationGain": "Elevation",

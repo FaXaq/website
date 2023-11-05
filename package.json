@@ -15,6 +15,7 @@
     "@turf/helpers": "^6.5.0",
     "@types/dom-mediacapture-record": "^1.0.4",
     "@types/mdx": "^2.0.9",
+    "@vercel/blob": "^0.14.1",
     "chart.js": "^4.3.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "classnames": "^2.2.6",

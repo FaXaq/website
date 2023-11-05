@@ -81,7 +81,7 @@ export interface GPXJson {
     }
 }
 
-export async function parseGPX(file: File): Promise<GPXJson> {
+export async function parseGPX(file: Blob): Promise<GPXJson> {
   const text = await file.text()
   const parser = new XMLParser({
     ignoreAttributes: false,

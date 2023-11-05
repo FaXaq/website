@@ -271,6 +271,7 @@
         "title": "Analyser un fichier GPX",
         "submitLabel": "Analyser",
         "subtitle": "{{date, translateDate(format:DD/MM)}}",
+        "selectAFile": "Ou vous pouvez sélectionner un fichier pré-chargé",
         "retry": "Réessayer",
         "totalDistance": "Distance parcourue",
         "totalElevationGain": "Dénivelé positif",
