@@ -7,7 +7,8 @@ import { XML_ATTRIBUTE_PREFIX } from '../helpers/const'
 export async function POST(
   request: NextRequest
 ) {
-  const files = await getFilesFromRequest(request)
+  const formData = await request.formData()
+  const files = await getFilesFromRequest(formData)
   const parsedFiles = await Promise.all(files.map(async (file) => parseGPX(file)))
   const sortedParsedFiles = parsedFiles
     .sort((a, b) => new Date(a.gpx.metadata.time).getTime() - new Date(b.gpx.metadata.time).getTime())

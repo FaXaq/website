@@ -1,8 +1,5 @@
-import { NextRequest } from 'next/server'
-
-export async function getFilesFromRequest(request: NextRequest): Promise<Array<File>> {
-  const data = await request.formData()
-  const values = data.values()
+export async function getFilesFromRequest(formData: FormData): Promise<Array<File>> {
+  const values = formData.values()
   let file = values.next()
   const files: Array<File> = []
 

@@ -28,14 +28,16 @@ function trackHasTime(file: GPXJson): boolean {
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<Analysis | ApiError>> {
-  const fileUrl = await getfileUrlFromRequest(request)
+  const formData = await request.formData()
+  const fileUrl = getfileUrlFromRequest(formData)
   let file
+
   if (fileUrl) {
     const downloadedFile = await fetch(fileUrl, { method: 'GET' })
     file = await downloadedFile.blob()
   } else {
   // Should be only one file, or if not, take the first one only anyway
-    file = (await getFilesFromRequest(request))[0]
+    file = (await getFilesFromRequest(formData))[0]
   }
 
   const parsedFile = await parseGPX(file)

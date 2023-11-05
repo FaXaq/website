@@ -1,9 +1,6 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { CategoryScale, ChartData, Chart as ChartJS, ChartOptions, Legend, LineElement, LinearScale, PointElement, TimeScale, Title, Tooltip } from 'chart.js'
-import 'chartjs-adapter-date-fns'
-import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'next-i18next'
 import { Analysis } from '../api/analyse/route'
 import LeafletMap from './components/LeafletMap'
@@ -14,21 +11,11 @@ import Button from '../components/Button'
 import { ListBlobResult } from '@vercel/blob'
 import { getBlobFileName } from '../api/helpers/blob'
 import LoadingIcon from '../components/LoadingIcon'
+import CorsicaLineChart from './components/CorsicaLineChart'
 
 interface FormState {
     files: Array<File>
 }
-
-ChartJS.register(
-  CategoryScale,
-  TimeScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-)
 
 const API_URL = '/projects/corsica/api/analyse'
 
@@ -37,7 +24,7 @@ export default function Analyse() {
   const [isSanitizing, setIsSanitizing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [analysis, setAnalysis] = useState<Analysis | void>()
-  const [activePoint, setActivePoint] = useState<number | void>()
+  const [activePoint] = useState<number>(-1)
   const [formState, setFormState] = useState<FormState>({
     files: []
   })
@@ -113,79 +100,29 @@ export default function Analyse() {
     }
   }, [analysis])
 
-  const elevationVariationData: ChartData<'line', number[], number> = useMemo(() => {
+  const elevationVariationData = useMemo(() => {
     if (analysis) {
-      return {
-        labels: analysis.distance.distanceVariations.map(dist => dist / 1000),
-        datasets: [
-          {
-            label: 'test',
-            data: analysis.points.map(variation => Math.round(variation.ele)),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            pointRadius: 0.5,
-            pointBackgroundColor: 'rgba(255, 99, 132, 1',
-            tension: 0.1
-          }
-        ]
-      }
+      return analysis.points.map((variation, index) => ({
+        data: Math.round(variation.ele),
+        label: analysis.distance.distanceVariations[index],
+        index
+      }))
     }
+
+    return []
   }, [analysis])
 
-  const elevationGradientData: ChartData<'line', number[], number> = useMemo(() => {
-    if (analysis) {
-      return {
-        labels: analysis.distance.distanceVariations.map(dist => dist / 1000),
-        datasets: [
-          {
-            label: 'test',
-            data: analysis.elevation.elevationVariations.map(variation => (variation.gradient * 100) % 10),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            pointRadius: 0.5,
-            pointBackgroundColor: 'rgba(255, 99, 132, 1',
-            tension: 0.1
-          }
-        ]
-      }
-    }
-  }, [analysis])
-
-  const speedVariationData: ChartData<'line', number[], number> = useMemo(() => {
+  const speedVariationData = useMemo(() => {
     if (analysis && analysis.speed) {
-      return {
-        labels: analysis.distance.distanceVariations.map(distance => distance / 1000),
-        datasets: [
-          {
-            label: 'test',
-            data: analysis.speed.speedVariations.map(variation => variation),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            pointRadius: 0.1,
-            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-            tension: 0.1
-          }
-        ]
-      }
+      return analysis.speed.speedVariations.map((variation, index) => ({
+        data: Math.round(variation),
+        label: analysis.distance.distanceVariations[index],
+        index
+      }))
     }
-  }, [analysis])
 
-  const LINE_TIME_OPTIONS: ChartOptions<'line'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        type: 'linear'
-      }
-    },
-    hover: {
-      mode: 'x',
-      intersect: false
-    },
-    onHover(_, elements) {
-      setActivePoint(elements[0]?.index)
-    }
-  }
+    return []
+  }, [analysis])
 
   return (
     <div className='text-corsica-olive'>
@@ -259,23 +196,15 @@ export default function Analyse() {
                     )}
                 </p>
               </div>
-              <div className='col-span-4 md:col-span-3'>
-                <Line data={elevationVariationData} options={LINE_TIME_OPTIONS} />
+              <div className='py-4 col-span-6 md:col-span-6 h-64'>
+                <p>elevation variations</p>
+                <CorsicaLineChart data={elevationVariationData} xUnit='km' yUnit='m' />
               </div>
-            </div>
-            <div>
-              <Line data={elevationGradientData} options={LINE_TIME_OPTIONS} />
-            </div>
-            <div>
-              {
-                analysis.speed && (
-                  <>
-                    <div className='h-64 w-full'>
-                      <Line data={speedVariationData} options={LINE_TIME_OPTIONS} />
-                    </div>
-                  </>
-                )
-              }
+              { speedVariationData.length > 0 && (
+                <div className="h-64 col-span-4">
+                  <CorsicaLineChart data={speedVariationData} xUnit='km' yUnit='km/h' />
+                </div>
+              )}
             </div>
             <Button
               type="button"
