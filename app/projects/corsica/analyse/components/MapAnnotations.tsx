@@ -6,13 +6,6 @@ import { MapAnalysis } from '../../api/analyse/helpers/getMapAnalysis'
 import { GPXTrkPart } from '../../api/helpers/parseActivity'
 import dynamic from 'next/dynamic'
 
-const Circle = dynamic(
-  async () => (await import('react-leaflet')).Circle,
-  {
-    ssr: false
-  }
-)
-
 const Polyline = dynamic(
   async () => (await import('react-leaflet')).Polyline,
   {
@@ -30,7 +23,7 @@ const TileLayer = dynamic(
 interface MapProps {
     mapAnalysis: MapAnalysis,
     points: Array<GPXTrkPart>,
-    activePoint: number
+    activePoint: number | void
 }
 
 export default function MapAnnotations({ mapAnalysis, points, activePoint }: MapProps) {
@@ -43,11 +36,8 @@ export default function MapAnnotations({ mapAnalysis, points, activePoint }: Map
     ])
   }, [mapAnalysis])
 
-  const zoom = map.getZoom()
-
   return <>
     <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
-    {activePoint > -1 && <Circle center={[parseFloat(points[activePoint].__ATTRIBUTE__lat), parseFloat(points[activePoint].__ATTRIBUTE__lon)]} radius={10000 / zoom} /> }
     <Polyline positions={...points.map(point => ([parseFloat(point.__ATTRIBUTE__lat), parseFloat(point.__ATTRIBUTE__lon)]))}/>
   </>
 }
