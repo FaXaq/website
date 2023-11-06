@@ -279,7 +279,21 @@
         "averageSpeed": "Vitesse moyenne",
         "speed": "{{value}}km/h",
         "meters": "{{value}}m",
-        "kilometers": "{{value}}km"
+        "kilometers": "{{value}}km",
+        "movingTime": "Temps en mouvement",
+        "elapsedTime": "Temps passé",
+        "durations": {
+          "days": "{{days}}d",
+          "hours": "{{hours}}",
+          "minutes": "{{minutes}}",
+          "seconds": "{{seconds}}"
+        },
+        "elevationChart": {
+          "tooltip":"{{yValue}}{{y}} à {{xValue}}{{x}}"
+        },
+        "speedChart": {
+          "tooltip": "{{yValue}}{{y}} à {{xValue}}{{x}}"
+        }
       }
     }
   },

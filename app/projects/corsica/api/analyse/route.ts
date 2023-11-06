@@ -1,19 +1,20 @@
+import { ListBlobResult } from '@vercel/blob'
 import { NextRequest, NextResponse } from 'next/server'
+import { ApiError } from '../helpers/const'
+import { getfileUrlFromRequest } from '../helpers/getFileUrlFromRequest'
 import { getFilesFromRequest } from '../helpers/getFilesFromRequest'
 import { GPXJson, GPXTrkPart, parseGPX } from '../helpers/parseActivity'
-import { ApiError } from '../helpers/const'
-import { ListBlobResult } from '@vercel/blob'
-import listBlobs from './helpers/listBlobs'
 import getDistanceVariations, { DistanceAnalysis } from './helpers/getDistanceVariations'
-import getSpeedAnalysis, { SpeedAnalysis } from './helpers/getSpeedAnalysis'
-import getMapAnalysis, { MapAnalysis } from './helpers/getMapAnalysis'
 import getElevationVariations, { ElevationVariationAnalysis } from './helpers/getElevationVariations'
-import { getfileUrlFromRequest } from '../helpers/getFileUrlFromRequest'
+import getMapAnalysis, { MapAnalysis } from './helpers/getMapAnalysis'
+import getSpeedAnalysis, { SpeedAnalysis } from './helpers/getSpeedAnalysis'
+import getTimeAnalysis, { TimeAnalysis } from './helpers/getTimeAnalysis'
+import listBlobs from './helpers/listBlobs'
 
 export interface Analysis {
   name: string,
   activity: string,
-  time?: string,
+  time: TimeAnalysis | void,
   map: MapAnalysis,
   elevation: ElevationVariationAnalysis,
   distance: DistanceAnalysis,
@@ -55,50 +56,29 @@ export async function POST(
     })
   }
 
-  const { totalElevationGain, totalElevationLoss, elevationVariations } = getElevationVariations(trkpts)
-  const { totalDistance, distanceVariations } = getDistanceVariations(trkpts)
-  let maxSpeed = -1
-  let minSpeed = -1
-  let averageSpeed = -1
-  let speedVariations = []
+  const elevationAnalysis = getElevationVariations(trkpts)
+  const distanceAnalysis = getDistanceVariations(trkpts)
+  let speedAnalysis: SpeedAnalysis | void
+  let timeAnalysis: TimeAnalysis | void
 
   if (trackHasTime(parsedFile)) {
-    const speedAnalysis = getSpeedAnalysis(trkpts)
-    maxSpeed = speedAnalysis.maxSpeed
-    minSpeed = speedAnalysis.minSpeed
-    averageSpeed = speedAnalysis.averageSpeed
-    speedVariations = speedAnalysis.speedVariations
+    timeAnalysis = getTimeAnalysis(parsedFile)
+    speedAnalysis = getSpeedAnalysis(trkpts)
   }
-  const { center, boundaries, reverseGeocodingSearchResult } = await getMapAnalysis(trkpts)
+  const mapAnalysis = await getMapAnalysis(trkpts)
 
   return NextResponse.json(
     {
       name: parsedFile.gpx.trk.name,
       activity: parsedFile.gpx.trk.type,
-      time: parsedFile.gpx.metadata?.time,
-      map: {
-        center,
-        boundaries,
-        reverseGeocodingSearchResult
-      },
-      elevation: {
-        totalElevationGain,
-        totalElevationLoss,
-        elevationVariations
-      },
-      distance: {
-        totalDistance,
-        distanceVariations
-      },
+      time: timeAnalysis,
+      map: mapAnalysis,
+      elevation: elevationAnalysis,
+      distance: distanceAnalysis,
       points: [
         ...trkpts
       ],
-      speed: trackHasTime(parsedFile) ? {
-        maxSpeed,
-        minSpeed,
-        averageSpeed,
-        speedVariations
-      } : undefined
+      speed: speedAnalysis
     },
     { status: 200 }
   )

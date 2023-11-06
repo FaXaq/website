@@ -256,9 +256,23 @@
         "totalElevationGain": "Elevation",
         "maxSpeed": "Max speed",
         "averageSpeed": "Avg Speed",
-        "speed": "{{value}}km/h",
-        "meters": "{{value}}m",
-        "kilometers": "{{value}}km"
+        "speed": "{{value}} km/h",
+        "meters": "{{value}} m",
+        "kilometers": "{{value}} km",
+        "movingTime": "Moving Time",
+        "elapsedTime": "Elapsed Time",
+        "durations": {
+          "days": "{{days}} days",
+          "hours": "{{hours}}",
+          "minutes": "{{minutes}}",
+          "seconds": "{{seconds}}"
+        },
+        "elevationChart": {
+          "tooltip":"{{yValue}}{{y}} at {{xValue}}{{x}}"
+        },
+        "speedChart": {
+          "tooltip": "{{yValue}}{{y}} at {{xValue}}{{x}}"
+        }
       }
     }
   },

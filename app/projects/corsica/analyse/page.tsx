@@ -6,12 +6,16 @@ import { Analysis } from '../api/analyse/route'
 import LeafletMap from './components/LeafletMap'
 import MapAnnotations from './components/MapAnnotations'
 import CyclingIcon from '../components/CyclingIcon'
-import { format, formatDuration, intervalToDuration } from 'date-fns'
+import { format, intervalToDuration } from 'date-fns'
 import Button from '../components/Button'
 import { ListBlobResult } from '@vercel/blob'
 import { getBlobFileName } from '../api/helpers/blob'
 import LoadingIcon from '../components/LoadingIcon'
 import CorsicaLineChart from './components/CorsicaLineChart'
+import CorsicaAreaChart from './components/CorsicaAreaChart'
+import { ChartData } from './types'
+import './recharts.scss'
+import { useFormatDuration } from './hooks/useFormatDuration'
 
 interface FormState {
     files: Array<File>
@@ -29,6 +33,7 @@ export default function Analyse() {
     files: []
   })
   const [preLoadedFiles, setPreLoadedFiles] = useState<ListBlobResult | void>()
+  const formatDuration = useFormatDuration()
 
   useEffect(() => {
     (async () => {
@@ -100,10 +105,16 @@ export default function Analyse() {
     }
   }, [analysis])
 
-  const elevationVariationData = useMemo(() => {
+  const movingTime = useMemo(() => {
+    if (analysis && analysis.time) {
+      return intervalToDuration({ start: 0, end: analysis.time.elapsedDuration })
+    }
+  }, [analysis])
+
+  const elevationVariationData: ChartData = useMemo(() => {
     if (analysis) {
       return analysis.points.map((variation, index) => ({
-        data: Math.round(variation.ele),
+        value: Math.round(variation.ele),
         label: analysis.distance.distanceVariations[index],
         index
       }))
@@ -112,10 +123,10 @@ export default function Analyse() {
     return []
   }, [analysis])
 
-  const speedVariationData = useMemo(() => {
+  const speedVariationData: ChartData = useMemo(() => {
     if (analysis && analysis.speed) {
       return analysis.speed.speedVariations.map((variation, index) => ({
-        data: Math.round(variation),
+        value: Math.round(variation),
         label: analysis.distance.distanceVariations[index],
         index
       }))
@@ -151,58 +162,82 @@ export default function Analyse() {
       { analysis && analysis.map && (
         <div>
           <div className="pb-4">
-            <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">
+            <h2 className="flex items-center text-3xl font-bold font-corsica-title text-corsica-olive">
+              {analysis.name}
+            </h2>
+            <h4 className="flex items-center">
               {analysis.activity === 'cycling' && (
-                <span className="inline-block w-16 pr-2">
+                <span className="inline-block h-6 pr-2">
                   <CyclingIcon />
                 </span>
               )}
-              {analysis.name}
-            </h2>
-            <h4>{analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time), 'PP')}`} { elapsedTime && ` - ${formatDuration(elapsedTime)} `}</h4>
+              {analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
           </div>
           <div>
-            <div className='w-full h-80'>
-              <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
-                <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activePoint} />
-              </LeafletMap>
-            </div>
             <div className="grid grid-cols-4">
-              <div className="pr-4 py-4 col-span-4 md:col-span-1">
-                <p className="flex justify-between">
-                  <span>{t('corsica.pages.analyse.totalDistance')}</span>
-                  <span>{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</span>
-                </p>
-                <p className="flex justify-between">
-                  <span>{t('corsica.pages.analyse.totalElevationGain')}</span>
-                  <span>{t('corsica.pages.analyse.meters', { value: Math.round(analysis.elevation.totalElevationGain) })}</span>
-                </p>
-                <p className="flex justify-between">
-                  {
-                    analysis.speed && (
-                      <>
-                        <span>{t('corsica.pages.analyse.maxSpeed')}</span>
-                        <span>{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.maxSpeed * 100) / 100 })}</span>
-                      </>
-                    )}
-                </p>
-                <p className="flex justify-between">
-                  {
-                    analysis.speed && (
-                      <>
-                        <span>{t('corsica.pages.analyse.averageSpeed')}</span>
-                        <span>{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.averageSpeed * 100) / 100 })}</span>
-                      </>
-                    )}
-                </p>
+              <div className='col-span-3 h-80'>
+                <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
+                  <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activePoint} />
+                </LeafletMap>
               </div>
-              <div className='py-4 col-span-6 md:col-span-6 h-64'>
-                <p>elevation variations</p>
-                <CorsicaLineChart data={elevationVariationData} xUnit='km' yUnit='m' />
+              <div className="col-span-1 grid grid-cols-2 grid-rows-4">
+                <div className="bg-white row-span-1 col-span-2 grid grid-cols-2">
+                  <div className="col-span-1 py-4 text-center">
+                    <p className="text-2xl">{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</p>
+                    <p className="text-xs">{t('corsica.pages.analyse.totalDistance')}</p>
+                  </div>
+                  <div className="col-span-1 py-4 text-center">
+                    <p className="text-2xl">{t('corsica.pages.analyse.meters', { value: Math.round(analysis.elevation.totalElevationGain) })}</p>
+                    <p className="text-xs">{t('corsica.pages.analyse.totalElevationGain')}</p>
+                  </div>
+                </div>
+                <div className="bg-white col-span-2 grid grid-rows-2 text-center w-full">
+                  <p className="text-2xl">{movingTime ? formatDuration(movingTime) : '--' }</p>
+                  <p className="text-xs">{t('corsica.pages.analyse.movingTime')}</p>
+                </div>
+                <div className="bg-white col-span-2 grid grid-rows-2 text-center w-full">
+                  <p className="text-xl">{elapsedTime ? formatDuration(elapsedTime) : '--'}</p>
+                  <p className="text-xs">{t('corsica.pages.analyse.elapsedTime')}</p>
+                </div>
+                <div className="bg-white row-span-1 col-span-2 grid grid-cols-2">
+                  <div className="col-span-1 py-4 text-center">
+                    {
+                      analysis.speed && (
+                        <>
+                          <p className="text-l">{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.maxSpeed * 100) / 100 })}</p>
+                          <p className="text-xs">{t('corsica.pages.analyse.maxSpeed')}</p>
+                        </>
+                      )}
+                  </div>
+                  <div className="col-span-1 py-4 text-center">
+                    {
+                      analysis.speed && (
+                        <>
+                          <p className="text-l">{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.averageSpeed * 100) / 100 })}</p>
+                          <p className="text-xs">{t('corsica.pages.analyse.averageSpeed')}</p>
+                        </>
+                      )}
+                  </div>
+                </div>
+              </div>
+              <div className='py-4 col-span-6 md:col-span-6 h-48'>
+                <CorsicaAreaChart
+                  data={elevationVariationData}
+                  xUnit='km'
+                  yUnit='m'
+                  tickFormatter={(value) => Math.round(parseFloat(value) / 1000).toString()}
+                  tooltipPayloadFormatter={(payload, x, y) => t('corsica.pages.analyse.elevationChart.tooltip', { yValue: payload.value, xValue: Math.round(payload.label / 100) / 10, x, y })}
+                />
               </div>
               { speedVariationData.length > 0 && (
                 <div className="h-64 col-span-4">
-                  <CorsicaLineChart data={speedVariationData} xUnit='km' yUnit='km/h' />
+                  <CorsicaLineChart
+                    data={speedVariationData}
+                    xUnit='km'
+                    yUnit='km/h'
+                    tickFormatter={(value) => Math.round(parseFloat(value) / 1000).toString()}
+                    tooltipPayloadFormatter={(payload, x, y) => t('corsica.pages.analyse.speedChart.tooltip', { yValue: payload.value, xValue: Math.round(payload.label / 100) / 10, x, y })}
+                  />
                 </div>
               )}
             </div>

@@ -1,18 +1,18 @@
 import React from 'react'
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, TooltipProps } from 'recharts'
 import CustomCharTooltip from './CustomChartTooltip'
 import tailwindConfig from '../../../../../tailwind.config'
 import { ChartData, ChartLabel, ChartValue } from '../types'
 
 interface CorsicaLineChartProps {
- data: ChartData,
+ data: ChartData
  xUnit: string,
  yUnit: string,
  tickFormatter?: (value: any, index: number) => string,
- tooltipPayloadFormatter?: (payload: any, xUnit: string, yUnit: string) => string,
+ tooltipPayloadFormatter?: (tooltipProps: any, xUnit: string, yUnit: string) => string,
 }
 
-export default function CorsicaLineChart({ data, xUnit, yUnit, tickFormatter, tooltipPayloadFormatter }: CorsicaLineChartProps) {
+export default function CorsicaAreaChart({ data, xUnit, yUnit, tickFormatter, tooltipPayloadFormatter }: CorsicaLineChartProps) {
   const proxyTickFormatter = (value: any, index: number) => {
     if (tickFormatter) {
       return tickFormatter(value, index)
@@ -29,30 +29,27 @@ export default function CorsicaLineChart({ data, xUnit, yUnit, tickFormatter, to
         return tooltipPayloadFormatter(activePayload.payload, xUnit, yUnit)
       }
     }
-
-    return ''
   }
 
   return (
     <ResponsiveContainer>
-      <LineChart data={data}>
+      <AreaChart data={data}>
         <CartesianGrid />
-        <XAxis dataKey="label" unit={xUnit} tickSize={6} minTickGap={30} tickFormatter={proxyTickFormatter} tickMargin={5}/>
+        <XAxis dataKey="label" unit={xUnit} tickSize={6} minTickGap={30} tickFormatter={proxyTickFormatter} />
         <YAxis dataKey="value" unit={yUnit} />
-        <Line
+        <Area
           type="monotone"
           dataKey="value"
-          stroke={tailwindConfig.theme.extend.colors['corsica-green']}
+          strokeWidth={0}
+          fill={tailwindConfig.theme.extend.colors['corsica-green']}
           dot={false}
-          strokeWidth={2}
         />
         <Tooltip
           isAnimationActive={false}
           trigger='hover'
-          content={(e: TooltipProps<number, number>) => tooltipPayloadFormatter && <CustomCharTooltip payload={proxyTooltipPayloadFormatter(e, xUnit, yUnit)}
-          />}
+          content={(e) => tooltipPayloadFormatter && <CustomCharTooltip payload={proxyTooltipPayloadFormatter(e as unknown, xUnit, yUnit)} />}
         />
-      </LineChart>
+      </AreaChart>
     </ResponsiveContainer>
   )
 }

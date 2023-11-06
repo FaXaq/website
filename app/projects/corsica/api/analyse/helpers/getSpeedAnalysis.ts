@@ -1,12 +1,12 @@
 import { GPXTrkPart } from '../../helpers/parseActivity'
-import turfDistance from '@turf/distance'
+import { getSpeedBetweenPoints } from './betweenPoints'
 
 export interface SpeedAnalysis {
-    maxSpeed: number,
-    minSpeed: number,
-    averageSpeed: number,
-    speedVariations: Array<number>
-  }
+  maxSpeed: number,
+  minSpeed: number,
+  averageSpeed: number,
+  speedVariations: Array<number>
+}
 
 export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalysis {
   if (trkpts.length < 2) {
@@ -27,15 +27,7 @@ export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalys
 
   for (let i = 1; i < trkpts.length; i++) {
     const currentPoint = trkpts[i]
-    const currentDistanceBetweenPoints = turfDistance(
-      [parseFloat(previousPoint.__ATTRIBUTE__lon), parseFloat(previousPoint.__ATTRIBUTE__lat)],
-      [parseFloat(currentPoint.__ATTRIBUTE__lon), parseFloat(currentPoint.__ATTRIBUTE__lat)],
-      {
-        units: 'kilometers'
-      }
-    )
-    const currentTimeBetweenPoints = (new Date(currentPoint.time).getTime() - new Date(previousPoint.time).getTime()) / (1000 * 60 * 60)
-    const currentSpeedBetweenPoints = currentDistanceBetweenPoints / currentTimeBetweenPoints
+    const currentSpeedBetweenPoints = getSpeedBetweenPoints(previousPoint, currentPoint, 'kilometers', 'hours')
 
     if (currentSpeedBetweenPoints < minSpeed || minSpeed === 0) {
       minSpeed = currentSpeedBetweenPoints

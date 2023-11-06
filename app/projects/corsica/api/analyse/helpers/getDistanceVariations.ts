@@ -1,5 +1,5 @@
 import { GPXTrkPart } from '../../helpers/parseActivity'
-import turfDistance from '@turf/distance'
+import { getDistanceBetweenPoints } from './betweenPoints'
 
 export interface DistanceAnalysis {
     totalDistance: number,
@@ -21,13 +21,7 @@ export default function getDistanceVariations(trkpts: Array<GPXTrkPart>): Distan
     // In this loop we're dealing with kilometers
     const currentPoint = trkpts[i]
     const eleDifference = Math.abs(previousPoint.ele - currentPoint.ele)
-    const distanceBetweenPoints = turfDistance(
-      [parseFloat(previousPoint.__ATTRIBUTE__lon), parseFloat(previousPoint.__ATTRIBUTE__lat)],
-      [parseFloat(currentPoint.__ATTRIBUTE__lon), parseFloat(currentPoint.__ATTRIBUTE__lat)],
-      {
-        units: 'meters'
-      }
-    )
+    const distanceBetweenPoints = getDistanceBetweenPoints(previousPoint, currentPoint)
     const distanceBetweenPointsWithEle = Math.sqrt((eleDifference * eleDifference) + (distanceBetweenPoints * distanceBetweenPoints))
     distanceVariations.push(distanceVariations[distanceVariations.length - 1] + distanceBetweenPointsWithEle)
     totalDistance += distanceBetweenPointsWithEle
