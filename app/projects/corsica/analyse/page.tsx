@@ -13,11 +13,14 @@ import TextAnalysisReport from './components/TextAnalysisReport'
 import ElevationChart from './components/ElevationChart'
 import './recharts.scss'
 import SpeedChart from './components/SpeedChart'
+import { ActiveChartPointProvider, useActiveChartPoint } from './Context/ActiveChartPoint'
 
 export default function Analyse() {
   const { t } = useTranslation()
   const [analysis, setAnalysis] = useState<Analysis | void>()
   const [activeIndex] = useState<number | void>()
+  const { activePoint } = useActiveChartPoint()
+  console.log(activePoint)
 
   return (
     <div className='text-corsica-olive'>
@@ -39,22 +42,26 @@ export default function Analyse() {
               {analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
           </div>
           <div>
-            <div className="grid grid-cols-4">
-              <div className='col-span-3 h-80'>
-                <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
-                  <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activeIndex} />
-                </LeafletMap>
-              </div>
-              <TextAnalysisReport analysis={analysis} />
-              <div className='py-4 col-span-6 md:col-span-6 h-48'>
-                <ElevationChart analysis={analysis} />
-              </div>
-              { analysis.time && (
-                <div className="h-48 col-span-4">
-                  <SpeedChart analysis={analysis} />
+            <ActiveChartPointProvider>
+              <div className="grid grid-cols-4">
+                <div className='col-span-4 lg:col-span-3 h-80 lg:h-full'>
+                  <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
+                    <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activeIndex} />
+                  </LeafletMap>
                 </div>
-              )}
-            </div>
+                <div className='col-span-4 lg:col-span-1'>
+                  <TextAnalysisReport analysis={analysis} />
+                </div>
+                <div className='py-4 col-span-4 md:col-span-4 h-48'>
+                  <ElevationChart analysis={analysis} />
+                </div>
+                { analysis.time && (
+                  <div className="h-48 col-span-4">
+                    <SpeedChart analysis={analysis} />
+                  </div>
+                )}
+              </div>
+            </ActiveChartPointProvider>
             <Button
               type="button"
               onClick={() => setAnalysis()}

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import { ChartData } from '../types'
 import { Analysis } from '../../api/analyse/route'
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, Customized, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { } from 'react-leaflet'
 import tailwindConfig from '../../../../../tailwind.config'
+import ActiveVerticalChartLine from './ActiveVerticalChartLine'
 
 interface ElevationChartProps {
     analysis: Analysis,
@@ -37,12 +38,10 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
             strokeWidth={0}
             fill={tailwindConfig.theme.extend.colors['corsica-green']}
             dot={false}
+            activeDot={false}
           />
-          <Tooltip
-            isAnimationActive={false}
-            trigger='hover'
-            content={() => (<></>)}
-          />
+          <Tooltip contentStyle={{ display: 'none' }} />
+          <Customized component={ActiveVerticalChartLine} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
