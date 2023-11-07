@@ -42,14 +42,14 @@ module.exports = {
         'mtts-success': '#8CE6AA',
         'mtts-error': '#D65C5C',
         'corsica-gray': '#5a647c',
-        'corsica-blue': '#89a4d1',
+        'corsica-blue': '#7FA9EF',
         'corsica-clay': '#c2b09c',
         'corsica-brown': '#ac8259',
-        'corsica-green': '#7e8d4f',
+        'corsica-green': '#51D43C',
         'corsica-khaki': '#726949',
         'corsica-olive': '#3c412a',
         'corsica-white': '#EFEBEB',
-        'corsica-red': '#944747'
+        'corsica-red': '#DE3B3B'
       },
       fontSize: {
         '7xl': '5rem',

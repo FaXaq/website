@@ -244,13 +244,16 @@
     "pages": {
       "merge": {
         "title": "Merge GPX files",
-        "submitLabel": "Merge"
+        "submitLabel": "Merge",
+        "description": "You select a few activites in a GPX format and I will merge them into one. You will then be able to analyse it with the analyse tool.",
+        "inputLabel": "Specify a name for your merged GPX activity"
       },
       "analyse": {
         "title": "Analyse GPX file",
         "submitLabel": "Analyse",
+        "description": "Import a GPX activity file and get a crude Strava like dashboard to analyse it. I will not store it.",
         "subtitle": "{{date, translateDate(format:DD/MM)}}",
-        "selectAFile": "Or you can select a pre-loaded file :",
+        "selectAFile": "Or you can use the files I saved for demo purposes. You can select one, nothing bad will happen :",
         "retry": "Retry",
         "totalDistance": "Distance",
         "totalElevationGain": "Elevation",

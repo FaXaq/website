@@ -31,11 +31,11 @@ export async function POST(
 ): Promise<NextResponse<Analysis | ApiError>> {
   const formData = await request.formData()
   const fileUrl = getfileUrlFromRequest(formData)
-  let file
+  let file: File
 
   if (fileUrl) {
     const downloadedFile = await fetch(fileUrl, { method: 'GET' })
-    file = await downloadedFile.blob()
+    file = await downloadedFile.blob() as File
   } else {
   // Should be only one file, or if not, take the first one only anyway
     file = (await getFilesFromRequest(formData))[0]

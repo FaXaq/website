@@ -265,13 +265,16 @@
     "pages": {
       "merge": {
         "title": "Fusionner des fichiers GPX",
-        "submitLabel": "Fusionner"
+        "submitLabel": "Fusionner",
+        "description": "Sélectionnez quelques activités au format GPX et je vous les fusionneraient en une seule. Vous pourrez ensuite l'analyser avec l'onglet Analyse.",
+        "inputLabel": "Spécifiez un nom pour votre activité GPX"
       },
       "analyse": {
         "title": "Analyser un fichier GPX",
         "submitLabel": "Analyser",
         "subtitle": "{{date, translateDate(format:DD/MM)}}",
-        "selectAFile": "Ou vous pouvez sélectionner un fichier pré-chargé",
+        "description": "Importez un fichier d'activité GPX et obtenez une implémentation naïve d'un dashboard similaire à Strava pour l'analyser. Je ne stockerai pas votre fichier.",
+        "selectAFile": "Ou alors, vous pouvez utiliser les fichiers que j'ai sauvegardé pour les démos. Vous pouvez en sélectionner un, il n'arrivera rien de mal :",
         "retry": "Réessayer",
         "totalDistance": "Distance parcourue",
         "totalElevationGain": "Dénivelé positif",

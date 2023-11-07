@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic'
 import { useActiveChartPoint } from '../Context/ActiveChartPoint'
 import 'leaflet/dist/leaflet.css'
 import MapIcon from './MapIcon'
+import { theme } from '../../../../../tailwind.config'
 
 const Polyline = dynamic(
   async () => (await import('react-leaflet')).Polyline,
@@ -27,6 +28,10 @@ interface MapProps {
     mapAnalysis: MapAnalysis,
     points: Array<GPXTrkPart>,
     activePoint: number | void
+}
+
+function pointToLatLng(point: GPXTrkPart): [number, number] {
+  return [parseFloat(point.__ATTRIBUTE__lat), parseFloat(point.__ATTRIBUTE__lon)]
 }
 
 export default function MapAnnotations({ mapAnalysis, points }: MapProps) {
@@ -53,9 +58,12 @@ export default function MapAnnotations({ mapAnalysis, points }: MapProps) {
 
   return <>
     <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
+    <Polyline positions={...points.map(point => (pointToLatLng(point)))} color={theme.extend.colors['corsica-red']}/>
+    <MapIcon type="start" position={pointToLatLng(points[0])} />
     { activePoint.index > -1 && (
-      <MapIcon size={10000 - (9100 * Math.log10(map.getZoom()))} type='active' position={activePointCoordinates}/>
+      <MapIcon type='active' position={activePointCoordinates} />
     )}
-    <Polyline positions={...points.map(point => ([parseFloat(point.__ATTRIBUTE__lat), parseFloat(point.__ATTRIBUTE__lon)]))}/>
+    <MapIcon type="start" position={pointToLatLng(points[0])} />
+    <MapIcon type="end" position={pointToLatLng(points[points.length - 1])} />
   </>
 }
