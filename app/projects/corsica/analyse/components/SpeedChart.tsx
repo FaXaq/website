@@ -35,7 +35,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
           dataKey="value"
           stroke={tailwindConfig.theme.extend.colors['corsica-green']}
           dot={false}
-          strokeWidth={2}
+          strokeWidth={1}
           activeDot={false}
         />
         <Tooltip

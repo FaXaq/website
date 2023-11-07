@@ -48,7 +48,7 @@ module.exports = {
         'corsica-green': '#7e8d4f',
         'corsica-khaki': '#726949',
         'corsica-olive': '#3c412a',
-        'corsica-white': '#E8E6E3',
+        'corsica-white': '#EFEBEB',
         'corsica-red': '#944747'
       },
       fontSize: {

@@ -3,7 +3,6 @@ import { Analysis } from '../../api/analyse/route'
 import { useTranslation } from 'react-i18next'
 import { useFormatDuration } from '../hooks/useFormatDuration'
 import { intervalToDuration } from 'date-fns'
-import { useActiveChartPoint } from '../Context/ActiveChartPoint'
 
 interface TextAnalysisReportProps {
     analysis: Analysis
@@ -12,8 +11,6 @@ interface TextAnalysisReportProps {
 export default function TextAnalysisReport({ analysis }: TextAnalysisReportProps) {
   const { t } = useTranslation()
   const formatDuration = useFormatDuration()
-  const { activePoint } = useActiveChartPoint()
-  console.log('text', activePoint)
 
   const elapsedTime = useMemo(() => {
     if (analysis) {
@@ -29,13 +26,13 @@ export default function TextAnalysisReport({ analysis }: TextAnalysisReportProps
 
   const movingTime = useMemo(() => {
     if (analysis && analysis.time) {
-      return intervalToDuration({ start: 0, end: analysis.time.movingTime })
+      return intervalToDuration({ start: 0, end: analysis.time.totalMovingTime })
     }
   }, [analysis])
 
   return (
-    <div className="grid grid-cols-2 grid-rows-4">
-      <div className="bg-white row-span-1 col-span-2 grid grid-cols-2">
+    <div className="grid grid-cols-2 grid-rows-4 bg-corsica-white">
+      <div className="row-span-1 col-span-2 grid grid-cols-2">
         <div className="col-span-1 p-4 text-center">
           <p className="text-lg lg:text-2xl">{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</p>
           <p className="text-xs">{t('corsica.pages.analyse.totalDistance')}</p>
@@ -45,15 +42,15 @@ export default function TextAnalysisReport({ analysis }: TextAnalysisReportProps
           <p className="text-xs">{t('corsica.pages.analyse.totalElevationGain')}</p>
         </div>
       </div>
-      <div className="bg-white col-span-2 grid grid-rows-2 text-center w-full">
+      <div className="col-span-2 grid grid-rows-2 text-center w-full">
         <p className="lg:text-2xl">{movingTime ? formatDuration(movingTime) : '--' }</p>
         <p className="text-xs">{t('corsica.pages.analyse.movingTime')}</p>
       </div>
-      <div className="bg-white col-span-2 grid grid-rows-2 text-center w-full">
+      <div className="col-span-2 grid grid-rows-2 text-center w-full">
         <p className="text-xl">{elapsedTime ? formatDuration(elapsedTime) : '--'}</p>
         <p className="text-xs">{t('corsica.pages.analyse.elapsedTime')}</p>
       </div>
-      <div className="bg-white row-span-1 col-span-2 grid grid-cols-2">
+      <div className="row-span-1 col-span-2 grid grid-cols-2">
         <div className="col-span-1 py-4 text-center">
           {
             analysis.speed && (

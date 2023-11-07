@@ -3,7 +3,8 @@ import React, { Reducer, createContext, useContext, useReducer } from 'react'
 
 type ActivePoint = {
   x: number,
-  y: number
+  y: number,
+  index: number
 }
 
 interface ActiveChartPointContextState {
@@ -12,7 +13,7 @@ interface ActiveChartPointContextState {
 }
 
 const INITIAL_STATE: ActiveChartPointContextState = {
-  activePoint: { x: -1, y: -1 },
+  activePoint: { x: -1, y: -1, index: -1 },
   setActivePoint: () => {}
 }
 

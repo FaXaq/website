@@ -4,14 +4,14 @@ import { CategoricalChartProps, CategoricalChartState } from 'recharts/types/cha
 
 type ChartProps = CategoricalChartProps & CategoricalChartState
 
-export default function ActiveVerticalChartLine({ isTooltipActive, activeCoordinate, offset }: ChartProps) {
+export default function ActiveVerticalChartLine({ isTooltipActive, activeCoordinate, offset, activeTooltipIndex }: ChartProps) {
   const { activePoint, setActivePoint } = useActiveChartPoint()
 
   useEffect(() => {
     if (isTooltipActive) {
-      setActivePoint(activeCoordinate)
+      setActivePoint({ ...activeCoordinate, index: activeTooltipIndex })
     } else {
-      setActivePoint({ x: -1, y: -1 })
+      setActivePoint({ x: -1, y: -1, index: -1 })
     }
   }, [isTooltipActive, activeCoordinate])
 

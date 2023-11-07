@@ -13,14 +13,14 @@ import TextAnalysisReport from './components/TextAnalysisReport'
 import ElevationChart from './components/ElevationChart'
 import './recharts.scss'
 import SpeedChart from './components/SpeedChart'
-import { ActiveChartPointProvider, useActiveChartPoint } from './Context/ActiveChartPoint'
+import { ActiveChartPointProvider } from './Context/ActiveChartPoint'
+import ElevationChartHover from './components/ElevationChartDetails'
+import SpeedChartHover from './components/SpeedChartDetails'
 
 export default function Analyse() {
   const { t } = useTranslation()
   const [analysis, setAnalysis] = useState<Analysis | void>()
   const [activeIndex] = useState<number | void>()
-  const { activePoint } = useActiveChartPoint()
-  console.log(activePoint)
 
   return (
     <div className='text-corsica-olive'>
@@ -52,12 +52,22 @@ export default function Analyse() {
                 <div className='col-span-4 lg:col-span-1'>
                   <TextAnalysisReport analysis={analysis} />
                 </div>
-                <div className='py-4 col-span-4 md:col-span-4 h-48'>
-                  <ElevationChart analysis={analysis} />
+                <div className='py-4 col-span-4 grid grid-cols-8 md:col-span-4 h-48'>
+                  <div className="col-span-7">
+                    <ElevationChart analysis={analysis} />
+                  </div>
+                  <div className='ml-2 bg-corsica-white'>
+                    <ElevationChartHover analysis={analysis} />
+                  </div>
                 </div>
                 { analysis.time && (
-                  <div className="h-48 col-span-4">
-                    <SpeedChart analysis={analysis} />
+                  <div className="h-32 col-span-4 grid grid-cols-8">
+                    <div className="col-span-7">
+                      <SpeedChart analysis={analysis} />
+                    </div>
+                    <div className="col-span-1 ml-2 bg-corsica-white">
+                      <SpeedChartHover analysis={analysis} />
+                    </div>
                   </div>
                 )}
               </div>

@@ -28,7 +28,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
   return (
     <div className="grid grid-cols-4 h-full">
       <ResponsiveContainer className="col-span-4">
-        <AreaChart data={elevationVariationData}>
+        <AreaChart data={elevationVariationData} margin={{ bottom: 0, left: 0, right: 0, top: 0 }}>
           <CartesianGrid />
           <XAxis dataKey="label" unit="km" tickSize={6} minTickGap={30} tickFormatter={tickFormatter} />
           <YAxis dataKey="value" unit="m" />
