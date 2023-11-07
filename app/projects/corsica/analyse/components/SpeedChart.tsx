@@ -25,26 +25,28 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <ResponsiveContainer>
-      <LineChart data={speedVariationData}>
-        <CartesianGrid />
-        <XAxis dataKey="label" unit="km" tickSize={6} minTickGap={30} tickFormatter={tickFormatter} tickMargin={5}/>
-        <YAxis dataKey="value" unit="km/h" />
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke={tailwindConfig.theme.extend.colors['corsica-green']}
-          dot={false}
-          strokeWidth={1}
-          activeDot={false}
-        />
-        <Tooltip
-          isAnimationActive={false}
-          trigger='hover'
-          content={() => <></>}
-        />
-        <Customized component={ActiveVerticalChartLine} />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="w-full h-full">
+      <ResponsiveContainer>
+        <LineChart data={speedVariationData}>
+          <CartesianGrid />
+          <XAxis dataKey="label" unit="km" tickSize={6} minTickGap={30} tickFormatter={tickFormatter} tickMargin={5}/>
+          <YAxis dataKey="value" unit="km/h" />
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke={tailwindConfig.theme.extend.colors['corsica-green']}
+            dot={false}
+            strokeWidth={1}
+            activeDot={false}
+          />
+          <Tooltip
+            isAnimationActive={false}
+            trigger='hover'
+            content={() => <></>}
+          />
+          <Customized component={ActiveVerticalChartLine} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   )
 }

@@ -43,29 +43,29 @@ export default function Analyse() {
           </div>
           <div>
             <ActiveChartPointProvider>
-              <div className="grid grid-cols-4">
-                <div className='col-span-4 lg:col-span-3 h-80 lg:h-full'>
+              <div className="md:grid md:grid-cols-4">
+                <div className='md:col-span-4 h-56'>
                   <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
                     <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activeIndex} />
                   </LeafletMap>
                 </div>
-                <div className='col-span-4 lg:col-span-1'>
+                <div className='md:col-span-4'>
                   <TextAnalysisReport analysis={analysis} />
                 </div>
-                <div className='py-4 col-span-4 grid grid-cols-8 md:col-span-4 h-48'>
-                  <div className="col-span-7">
+                <div className='py-4 md:col-span-4 flex flex-col md:grid md:grid-cols-8 h-32'>
+                  <div className="grow md:col-span-7">
                     <ElevationChart analysis={analysis} />
                   </div>
-                  <div className='ml-2 bg-corsica-white'>
+                  <div className='md:col-span-1 md:ml-2 bg-corsica-white'>
                     <ElevationChartHover analysis={analysis} />
                   </div>
                 </div>
                 { analysis.time && (
-                  <div className="h-32 col-span-4 grid grid-cols-8">
-                    <div className="col-span-7">
+                  <div className="py-4 col-span-4 flex flex-col md:grid md:grid-cols-8 h-32">
+                    <div className="grow  md:col-span-7">
                       <SpeedChart analysis={analysis} />
                     </div>
-                    <div className="col-span-1 ml-2 bg-corsica-white">
+                    <div className="md:col-span-1 md:ml-2 bg-corsica-white">
                       <SpeedChartHover analysis={analysis} />
                     </div>
                   </div>

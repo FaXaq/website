@@ -1,5 +1,3 @@
-import { points as turfPoints } from '@turf/helpers'
-import turfCenter from '@turf/center'
 import { GPXTrkPart } from '../../helpers/parseActivity'
 import reverseGeocodingSearch, { ReverseGeocodingJSON } from './reverseGeocodingSearch'
 
@@ -66,16 +64,9 @@ export default async function getMapAnalysis(trkpts: Array<GPXTrkPart>): Promise
     }
   }
 
-  const turfCenterResult = turfCenter(turfPoints([
-    [minLon, maxLat],
-    [maxLon, minLat],
-    [minLon, minLat],
-    [maxLon, maxLat]
-  ]))
-
   const center = {
-    lon: turfCenterResult.geometry.coordinates[0],
-    lat: turfCenterResult.geometry.coordinates[1]
+    lon: parseFloat(trkpts[0].__ATTRIBUTE__lon),
+    lat: parseFloat(trkpts[0].__ATTRIBUTE__lat)
   }
 
   const reverseGeocodingSearchResult = await reverseGeocodingSearch(center)

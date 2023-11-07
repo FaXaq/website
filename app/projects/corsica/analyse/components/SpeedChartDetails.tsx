@@ -12,7 +12,7 @@ export default function SpeedChartDetails({ analysis }: SpeedChartDetailsProps) 
   const { t } = useTranslation()
 
   return <div className="h-full flex flex-col justify-center text-center">
-    <p className="text-lg">
+    <p className="text-sm">
       {analysis.speed && t('corsica.pages.analyse.speed', { value: activePoint.index > -1 ? Math.round(analysis.speed.speedVariations[activePoint.index] * 10) / 10 : '-' })}
     </p>
   </div>
