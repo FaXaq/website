@@ -42,9 +42,9 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
   const [frame] = useState(-1)
   const [fqRatio, setFqRatio] = useState(-1)
+  const [analyser, sourceNode] = useAnalyser(audioStream)
 
   useEffect(() => {
-    const [analyser, sourceNode] = useAnalyser(audioStream)
     const sampleRate = sourceNode.context.sampleRate
     const bufferLength = analyser.frequencyBinCount
     const frequencyRatio = sampleRate / FFT_SIZE
