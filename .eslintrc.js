@@ -4,8 +4,7 @@ module.exports = {
     es6: true
   },
   extends: [
-    'plugin:react/recommended',
-    'standard'
+    'next'
   ],
   globals: {
     Atomics: 'readonly',
@@ -16,7 +15,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true
     },
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: 'module'
   },
   plugins: [
@@ -24,15 +23,15 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    "space-before-function-paren": "off"
+    'space-before-function-paren': 'off'
   },
   overrides: [
     {
       // workers
-      files: ["*.worker.ts"],
+      files: ['*.worker.ts'],
       rules: {
-        "no-restricted-globals": [0],
-        "no-isolated-modules": [0]
+        'no-restricted-globals': [0],
+        'no-isolated-modules': [0]
       }
     }
   ]

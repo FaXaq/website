@@ -17,6 +17,7 @@
     "@vercel/blob": "^0.14.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.30.0",
+    "eslint-config-next": "^14.0.1",
     "fast-xml-parser": "^4.3.2",
     "gray-matter": "^4.0.2",
     "i18next": "^23.6.0",

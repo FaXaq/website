@@ -19,15 +19,15 @@ import SpeedChartHover from './components/SpeedChartDetails'
 
 export default function Analyse() {
   const { t } = useTranslation()
-  const [analysis, setAnalysis] = useState<Analysis | void>()
-  const [activeIndex] = useState<number | void>()
+  const [analysis, setAnalysis] = useState<Analysis | undefined>()
+  const address = analysis?.map.reverseGeocodingSearchResult?.address
 
   return (
     <div className='text-corsica-olive'>
       { !analysis && (
         <AnalyseForm setAnalysis={setAnalysis} />
       )}
-      { analysis && analysis.map && (
+      { analysis?.map && (
         <div>
           <div className="pb-4">
             <h2 className="flex items-center text-3xl font-bold font-corsica-title text-corsica-olive">
@@ -39,14 +39,14 @@ export default function Analyse() {
                   <CyclingIcon />
                 </span>
               )}
-              {analysis.map.reverseGeocodingSearchResult.address.county}, {analysis.map.reverseGeocodingSearchResult.address.state}, {analysis.map.reverseGeocodingSearchResult.address.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
+              {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
           </div>
           <div>
             <ActiveChartPointProvider>
               <div className="md:grid md:grid-cols-4">
                 <div className='md:col-span-4 h-56'>
                   <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
-                    <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} activePoint={activeIndex} />
+                    <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
                   </LeafletMap>
                 </div>
                 <div className='md:col-span-4'>
@@ -74,7 +74,7 @@ export default function Analyse() {
             </ActiveChartPointProvider>
             <Button
               type="button"
-              onClick={() => setAnalysis()}
+              onClick={() => setAnalysis(undefined)}
               loading={false}
             >
               {t('corsica.pages.analyse.retry')}

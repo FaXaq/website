@@ -12,7 +12,7 @@ export interface MapAnalysis {
       Coordinates,
       Coordinates
     ],
-    reverseGeocodingSearchResult: ReverseGeocodingJSON
+    reverseGeocodingSearchResult?: ReverseGeocodingJSON
   }
 
 export default async function getMapAnalysis(trkpts: Array<GPXTrkPart>): Promise<MapAnalysis> {

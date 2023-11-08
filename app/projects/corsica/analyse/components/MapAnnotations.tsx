@@ -27,7 +27,6 @@ const TileLayer = dynamic(
 interface MapProps {
     mapAnalysis: MapAnalysis,
     points: Array<GPXTrkPart>,
-    activePoint: number | void
 }
 
 function pointToLatLng(point: GPXTrkPart): [number, number] {
