@@ -7,16 +7,14 @@
   position: relative;
 
   &:after {
-    position: absolute;
+    @apply border-mtts-white;
     bottom: -30px;
-    border-top-color: inherit;
     border-top-width: 30px;
     border-top-style: solid;
   }
 
   &:before {
-    border-color: inherit;
-    border-bottom-color: inherit;
+    @apply border-mtts-white;
     border-bottom-width: 30px;
     border-bottom-style: solid;
     top: -30px;

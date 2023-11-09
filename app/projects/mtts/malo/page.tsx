@@ -6,6 +6,7 @@ import React, { useState, useMemo } from 'react'
 import { Note, Pitch } from 'mtts'
 import { generateNotesForPitch } from '../../../../utils/mtts'
 import TileContainer from './components/tile-container'
+import './malo.scss'
 
 const Malo = () => {
   const [lineLength] = useState(20)

@@ -14,15 +14,21 @@ interface TileProps {
 const Tile = ({ notes, playing }: TileProps) => {
   const { t } = useTranslation()
 
+  const formatNoteString = (note: Note) => {
+    return '' + t(`mtts.notes.${note.name}`) +
+        (note.hasAccidental() && note.accidental.semitones !== 0
+        ? t(`mtts.accidentals.${note.accidental.name}`)
+        : '' + note.pitch.value)
+  }
+  
+
   const notesItems = notes.map(n => {
     return <li
-      className="text-white text-lg opacity-75"
+      className="h-full flex flex-col justify-center text-white bg-white text-lg"
       key={`tile-note-${n.name}-${n.pitch.value}`}>
-      {t(`mtts.notes.${n.name}`)}
-      {n.hasAccidental() && n.accidental.semitones !== 0
-        ? t(`mtts.accidentals.${n.accidental.name}`)
-        : ''}
-      <span> {n.pitch.value}</span>
+      <span className="text-mtts-dark-violet">
+        {formatNoteString(n)}
+      </span>
     </li>
   })
 
@@ -33,7 +39,6 @@ const Tile = ({ notes, playing }: TileProps) => {
       <ul className={classNames({
         'flex flex-col justify-center text-center flex-1 text-xs hexagon font-black': true,
         'opacity-50': !playing,
-        [`bg-mtts-${joinedNames} border-mtts-${joinedNames}`]: true
       })}>
         {notesItems}
       </ul>
