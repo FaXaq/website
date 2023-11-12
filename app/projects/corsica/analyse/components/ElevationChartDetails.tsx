@@ -1,6 +1,6 @@
 import React from 'react'
 import { Analysis } from '../../api/analyse/route'
-import { useActiveChartPoint } from '../Context/ActiveChartPoint'
+import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import { useTranslation } from 'react-i18next'
 import { useFormatDuration } from '../hooks/useFormatDuration'
 import { intervalToDuration } from 'date-fns'

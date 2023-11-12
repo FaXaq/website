@@ -13,7 +13,7 @@ import TextAnalysisReport from './components/TextAnalysisReport'
 import ElevationChart from './components/ElevationChart'
 import './recharts.scss'
 import SpeedChart from './components/SpeedChart'
-import { ActiveChartPointProvider } from './Context/ActiveChartPoint'
+import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
 

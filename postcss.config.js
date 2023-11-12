@@ -14,7 +14,7 @@ module.exports = {
           defaultExtractor: (content) =>
             content.match(/[\w-/:]+(?<!:)/g) || [],
           // necessary to include leaflet here
-          safelist: ['html', 'body', 'leaflet', 'recharts']
+          safelist: ['html', 'body', 'leaflet', 'recharts', 'grid-cols', 'grid-rows']
         }
         : false
     ]

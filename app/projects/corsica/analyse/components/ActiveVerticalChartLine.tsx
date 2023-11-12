@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useActiveChartPoint } from '../Context/ActiveChartPoint'
+import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import { CategoricalChartProps, CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart'
 
 type ChartProps = CategoricalChartProps & CategoricalChartState

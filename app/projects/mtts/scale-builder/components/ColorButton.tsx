@@ -3,16 +3,7 @@
 
 import React from 'react'
 import classNames from 'classnames'
-
-export enum COLOR {
-  DEFAULT = 'color-default',
-  YELLOW = 'color-yellow',
-  KHAKI = 'color-khaki',
-  GREEN = 'color-green',
-  BLUE = 'color-blue',
-  VIOLET = 'color-violet',
-  RED = 'color-red'
-}
+import { COLOR } from '../helpers/getNoteColor'
 
 interface ColorButtonProps {
     color: COLOR,

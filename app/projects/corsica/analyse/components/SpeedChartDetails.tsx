@@ -1,7 +1,7 @@
 import React from 'react'
 import { Analysis } from '../../api/analyse/route'
 import { useTranslation } from 'react-i18next'
-import { useActiveChartPoint } from '../Context/ActiveChartPoint'
+import { useActiveChartPoint } from '../context/ActiveChartPoint'
 
 interface SpeedChartDetailsProps {
     analysis: Analysis

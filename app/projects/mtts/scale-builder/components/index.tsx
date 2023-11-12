@@ -4,7 +4,12 @@ import SquareButton from '../../../../components/square-button'
 import { useTranslation } from 'next-i18next'
 import GuitarNeck from '../../components/guitar/guitar-neck'
 import Fret from './Fret'
-import ColorButton, { COLOR } from './ColorButton'
+import ColorButton from './ColorButton'
+import { COLOR } from '../helpers/getNoteColor'
+import { getNoteIntervalIndexInScale } from '../helpers/getNoteIndexInScale'
+import { getNotationWithoutPitch } from '../helpers/getNotationWithoutPitch'
+import { noteExistsInScale } from '../helpers/noteExistsInScale'
+import Chord from './Chord'
 
 const possibleAccidentals: Accidental[] =
   ACCIDENTALS
@@ -30,30 +35,6 @@ const possibleIntervals: {
 
 const INTERVAL_COLORS = Object.values(COLOR)
 
-function getNotationWithoutPitch(note: Note): string {
-  return note.SPN.replace(/[0-9]/, '')
-}
-
-function getNoteInScale(scale: Scale, note: Note): Note {
-  return scale.notes.find(n => Note.getSemitonesBetween(note, n) % 12 === 0)
-}
-
-function noteExistsInScale(scale: Scale, note: Note | string): boolean {
-  if (!(note instanceof Note)) return false
-  return getNoteInScale(scale, note) !== undefined
-}
-
-/**
- * return interval index in scale from note name
- * ie: if the scale is C major and we give an E, it will return a 3, because E is the major 3rd of C
- */
-function getNoteIntervalIndexInScale(scale: Scale, note: Note) {
-  const index = scale.notes.findIndex(n => Note.getSemitonesBetween(note, n) % 12 === 0)
-  if (index < 0) {
-    return -1
-  }
-  return scale.intervals[index].value
-}
 
 const possibleNotes: Note[] = NOTES.map(n => new Note({ name: n }))
 
@@ -93,7 +74,7 @@ function BuildScale() {
   return (
     <div className='grid grid-cols-2 gap-4'>
       <div>
-        <p>Select your note :</p>
+        <p>Select your root note :</p>
         <ul className="flex flex-wrap">
           {possibleNotes.map(n =>
             <li key={n.name}>
@@ -149,34 +130,33 @@ function BuildScale() {
         <p>Scale root : {getNotationWithoutPitch(rootNote)}</p>
         <p>Scale name : {scale.name}</p>
         { scale.mode && <p>Scale mode : {scale.mode}</p> }
+        <div>
         {scale.scaleChords.length > 0 && (
-          <>
-            <p>Here are the diatonic chords I can identify within the scale :</p>
-            <ul className='py-5'>
-              {scale.scaleChords.map(chord =>
-                chord.notation && <li key={`${chord.root.name}${chord.notation}`}>
-                  <p>
-                    <span>{getNotationWithoutPitch(chord.root)}</span>
-                    <span>{chord.notation} :</span>
-                    <span>{chord.notes.map(note => ` ${getNotationWithoutPitch(note)}`)}</span>
-                  </p>
-                </li>
-              )}
-            </ul>
-          </>
-        )}
+            <>
+              <p>Here are the diatonic chords I can identify within the scale :</p>
+              <ul className='py-5'>
+                {scale.scaleChords.map(chord =>
+                  chord.notation && (
+                    <li className="py-1" key={`${chord.root.name}${chord.notation}`}>
+                      <Chord chord={chord} scale={scale} />
+                    </li>
+                  )
+                )}
+              </ul>
+            </>
+          )}
+        </div>
       </div>
       <div className='flex flex-col col-span-2'>
         <p>Here is the scale on a guitar neck :</p>
-        <div className='py-4 self-center'>
+        <div className='py-4'>
           <GuitarNeck
+            layout='horizontal'
             highlightFret={({ note }) => noteExistsInScale(scale, note)}
             getFret={(props) =>
               <Fret
                 {...props}
-                getNoteInScale={(note) => getNoteInScale(scale, note)}
-                noteExistsInScale={(note) => noteExistsInScale(scale, note)}
-                getNoteIntervalIndexInScale={(note) => getNoteIntervalIndexInScale(scale, note)}
+                scale={scale}
               />
             }
           />

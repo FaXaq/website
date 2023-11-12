@@ -1,22 +1,23 @@
 'use client'
 
 import React from 'react'
-// eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
-// eslint-disable-next-line no-unused-vars
-// eslint-disable-next-line no-unused-vars
 import GuitarFret, { FGetFret, GuitarFretProps, FHighlight } from './_guitar-fret'
 import { FRET_MARKER } from './const'
+import classNames from 'classnames'
+import { useGuitarNeck } from './context'
 
 export interface GuitarStringProps {
   tuning: string,
   stringNumber: number,
   fretNumber?: number,
   highlightFret: FHighlight,
-  getFret: FGetFret
+  getFret: FGetFret,
 }
 
 function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumber }: GuitarStringProps) {
+  const { layout } = useGuitarNeck()
+
   const frets: GuitarFretProps[] = [{
     note: tuning === FRET_MARKER ? FRET_MARKER : Note.fromSPN(tuning),
     stringNumber,
@@ -35,7 +36,11 @@ function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumbe
     })
   }
 
-  return <ul className="flex flex-row">
+  return <ul className={classNames({
+    grid: true,
+    [`grid-cols-${fretNumber}`]: layout === 'horizontal',
+    [`grid-rows-${fretNumber}`]: layout === 'vertical'
+  })}>
     { frets.map((fret, i) => <GuitarFret key={`string-${stringNumber}-fret-${i}`} {...fret} />)}
   </ul>
 }
