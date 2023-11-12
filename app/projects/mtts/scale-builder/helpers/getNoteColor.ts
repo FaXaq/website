@@ -18,21 +18,21 @@ export function getNoteColor(scale: Scale, note: Note): string | undefined {
 
   const interval = scale.intervals[index]
   switch (interval.value) {
-    case 0:
-      return
-    case 1:
-      return COLOR.DEFAULT
-    case 2:
-      return COLOR.YELLOW
-    case 3: 
-      return COLOR.KHAKI
-    case 4: 
-      return COLOR.GREEN
-    case 5: 
-      return COLOR.BLUE
-    case 6:
-      return COLOR.VIOLET
-    case 7:
-      return COLOR.RED
+  case 0:
+    return
+  case 1:
+    return COLOR.DEFAULT
+  case 2:
+    return COLOR.YELLOW
+  case 3: 
+    return COLOR.KHAKI
+  case 4: 
+    return COLOR.GREEN
+  case 5: 
+    return COLOR.BLUE
+  case 6:
+    return COLOR.VIOLET
+  case 7:
+    return COLOR.RED
   } 
 }

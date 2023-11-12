@@ -20,13 +20,13 @@ export function getDurationBetweenPoints(pointA: GPXTrkPart, pointB: GPXTrkPart,
   const millisecondsDifference = Math.abs(differenceInMilliseconds(new Date(pointB.time), new Date(pointA.time)))
 
   switch (units) {
-    case 'hours':
-      return millisecondsDifference / (1000 * 60 * 60)
-    case 'seconds':
-      return millisecondsDifference / (1000)
-    case 'milliseconds':
-    default:
-      return millisecondsDifference
+  case 'hours':
+    return millisecondsDifference / (1000 * 60 * 60)
+  case 'seconds':
+    return millisecondsDifference / (1000)
+  case 'milliseconds':
+  default:
+    return millisecondsDifference
   }
 }
 

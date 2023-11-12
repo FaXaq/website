@@ -17,8 +17,8 @@ const Tile = ({ notes, playing }: TileProps) => {
   const formatNoteString = (note: Note) => {
     return '' + t(`mtts.notes.${note.name}`) +
         (note.hasAccidental() && note.accidental.semitones !== 0
-        ? t(`mtts.accidentals.${note.accidental.name}`)
-        : '' + note.pitch.value)
+          ? t(`mtts.accidentals.${note.accidental.name}`)
+          : '' + note.pitch.value)
   }
   
 

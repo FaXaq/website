@@ -131,7 +131,7 @@ function BuildScale() {
         <p>Scale name : {scale.name}</p>
         { scale.mode && <p>Scale mode : {scale.mode}</p> }
         <div>
-        {scale.scaleChords.length > 0 && (
+          {scale.scaleChords.length > 0 && (
             <>
               <p>Here are the diatonic chords I can identify within the scale :</p>
               <ul className='py-5'>

@@ -22,12 +22,12 @@ const GuitarNeckReducer: Reducer<GuitarNeckContextState, { type: ACTION_TYPE, pa
   const { type, payload } = action
 
   switch (type) {
-    case ACTION_TYPE.SET_LAYOUT:
-      return {
-        ...state,
-        layout: payload
-      }
-    default:
+  case ACTION_TYPE.SET_LAYOUT:
+    return {
+      ...state,
+      layout: payload
+    }
+  default:
   }
 
   return { ...state }

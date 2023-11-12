@@ -27,12 +27,12 @@ const ActiveChartPointReducer: Reducer<ActiveChartPointContextState, { type: ACT
   const { type, payload } = action
 
   switch (type) {
-    case ACTION_TYPE.SET:
-      return {
-        ...state,
-        activePoint: payload
-      }
-    default:
+  case ACTION_TYPE.SET:
+    return {
+      ...state,
+      activePoint: payload
+    }
+  default:
   }
 
   return { ...state }

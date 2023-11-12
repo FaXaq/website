@@ -27,10 +27,15 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['*.tsx', '*.ts'],
+      rules: {
+        'indent': ['error', 2]
+      }
+    },
+    {
       // workers
       files: ['*.worker.ts'],
       rules: {
-        'indent': ['error', 2],
         'no-restricted-globals': [0],
         'no-isolated-modules': [0]
       }
