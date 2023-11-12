@@ -2,6 +2,7 @@ import classNames from "classnames"
 import { Chord as MTTSChord, Scale } from "mtts"
 import { getNotationWithoutPitch } from "../helpers/getNotationWithoutPitch"
 import { COLOR, getNoteColor } from "../helpers/getNoteColor"
+import { useNoteTranslation } from "../hooks/useNoteTranslation"
 
 interface ChordProps {
     chord: MTTSChord,
@@ -9,7 +10,8 @@ interface ChordProps {
 }
 
 export default function Chord({ chord, scale }: ChordProps) {
-  const chordNotation = getNotationWithoutPitch(chord.root) + chord.notation
+  const { translateNote } = useNoteTranslation()
+  const chordNotation = translateNote(chord.root) + chord.notation
 
   return (
     <div className="flex">
@@ -31,7 +33,7 @@ export default function Chord({ chord, scale }: ChordProps) {
             })}
             key={`chord-${chordNotation}-${note.SPN}`}
           >
-            {getNotationWithoutPitch(note)}
+            {translateNote(note)}
           </li>
         ))}
       </ul>

@@ -7,6 +7,7 @@ import { COLOR, getNoteColor } from '../helpers/getNoteColor'
 import { getNoteInScale } from '../helpers/getNoteInScale'
 import { noteExistsInScale } from '../helpers/noteExistsInScale'
 import { useGuitarNeck } from '../../components/guitar/context'
+import { useNoteTranslation } from '../hooks/useNoteTranslation'
 
 interface IFretProps {
   note: Note | string,
@@ -22,7 +23,7 @@ function getNoteNameWithoutPitch(note: Note): string {
 
 function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   const [active, setActive] = useState(false)
-  const { layout } = useGuitarNeck()
+  const { translateNote } = useNoteTranslation()
 
   function toggleFret() {
     setActive(!active)
@@ -63,7 +64,7 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
         className={classes}
       >
         <div className="m-auto">
-          {noteExistsInScale(scale, note) ? <p>{getNoteNameWithoutPitch(getNoteInScale(scale, note))}</p> : <p></p>}
+          {noteExistsInScale(scale, note) ? <p>{translateNote(getNoteInScale(scale, note))}</p> : <p></p>}
         </div>
       </div>
     </div>

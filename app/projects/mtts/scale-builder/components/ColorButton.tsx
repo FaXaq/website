@@ -14,7 +14,7 @@ interface ColorButtonProps {
 
 function ColorButton({ children, isActive, onClick, color }: ColorButtonProps) {
   const classes = classNames({
-    'w-10 h-10 border-2 rounded-lg m-1 font-mtts-title font-semibold text-lg': true,
+    'w-10 h-10 border-2 rounded-lg m-1 font-mtts-title font-semibold': true,
     'text-white': isActive,
     'bg-mtts-cta-1': isActive && color === COLOR.DEFAULT,
     'hover:bg-mtts-yellow-active': color === COLOR.YELLOW,
