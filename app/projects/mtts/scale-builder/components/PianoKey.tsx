@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import { COLOR, getNoteColor } from '../helpers/getNoteColor'
 
 export default function PianoKey({ scale, note }: PianoKeyComponentProps) {
-  console.log(scale, note)
   return <div className={classNames({
     'h-full w-full': true,
     'bg-mtts-cta-0': getNoteColor(scale, note) === COLOR.DEFAULT,

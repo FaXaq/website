@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   prefix: '',
   future: {
@@ -13,7 +14,7 @@ module.exports = {
   plugins: [],
   safelist: [
     {
-      pattern: /grid-(cols|rows)-.*/
+      pattern: /grid-(cols|rows)-\d+/
     }
   ],
   theme: {

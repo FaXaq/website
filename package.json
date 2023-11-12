@@ -43,6 +43,7 @@
   "scripts": {
     "dev": "next dev -p 1234",
     "build": "next build",
+    "build:production": "NODE_ENV=production next build",
     "start": "next start"
   },
   "devDependencies": {
