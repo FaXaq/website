@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+'use client'
+
+import React, { useState, useEffect, useMemo } from 'react'
 import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES } from 'mtts'
-import SquareButton from '../../../../components/square-button'
-import { useTranslation } from 'next-i18next'
 import GuitarNeck from '../../components/guitar/guitar-neck'
 import Fret from './Fret'
 import ColorButton from './ColorButton'
 import { COLOR } from '../helpers/getNoteColor'
-import { getNotationWithoutPitch } from '../helpers/getNotationWithoutPitch'
 import { noteExistsInScale } from '../helpers/noteExistsInScale'
 import Chord from './Chord'
 import { useNoteTranslation } from '../hooks/useNoteTranslation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 const availableAccidentals: Accidental[] =
   ACCIDENTALS
@@ -49,11 +49,44 @@ availableNotes
       })
   })
 
+const ROOT_NOTE_SEARCH_PARAMS_KEY = 'rootNote'
+const SCALE_INTERVALS_SEARCH_PARAMS_KEY = 'intervals'
+
 function BuildScale() {
-  const [rootNote, setRootNote] = useState<Note>(availableNotes[0])
-  const [scale, setScale] = useState<Scale>(new Scale({ key: rootNote }))
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [rootNote, setRootNote] = useState<Note>(availableRootNotes[0])
   const [scaleIntervals, setScaleIntervals] = useState<Interval[]>(SCALES.MAJOR.intervals)
   const { translateNote } = useNoteTranslation()
+
+  const scale = useMemo(() => {
+    try {
+      return new Scale({ key: rootNote, intervals: scaleIntervals })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [rootNote, scaleIntervals])
+
+  const availableIntervals: {
+    [key:number]: Interval[]
+   } = useMemo(() => {
+     const intervals: { [key:number]: Interval[] } = {}
+     Object.keys(INTERVALS)
+       .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
+       .forEach(interval => {
+         const intervalNumber = interval.replace(/[a-zA-Z]/, '')
+         if (!intervals[intervalNumber]) {
+           intervals[intervalNumber] = []
+         }
+
+         try {
+           Interval.apply(rootNote, interval)
+           intervals[intervalNumber].push(Interval.fromName(interval))
+         } catch (err) {}
+       })
+     return intervals
+   }, [rootNote])
 
   function getIntervalIndexInScale(interval: Interval) {
     return scaleIntervals.findIndex(si => interval.name === si.name)
@@ -75,18 +108,29 @@ function BuildScale() {
   }
 
   useEffect(() => {
-    try {
-      setScale(new Scale({ key: rootNote, intervals: scaleIntervals }))
-    } catch (err) {
-      console.error(err)
-    }
-  }, [rootNote, scaleIntervals])
+    const searchParamsRootNote = searchParams.get(ROOT_NOTE_SEARCH_PARAMS_KEY);
+    const searchParamsScaleIntervals = searchParams.get(SCALE_INTERVALS_SEARCH_PARAMS_KEY)?.split(',');
+    setRootNote(searchParamsRootNote ? Note.fromSPN(searchParamsRootNote) : availableRootNotes[0])
+    setScaleIntervals(searchParamsScaleIntervals ? searchParamsScaleIntervals.map(interval => Interval.fromName(interval)) : SCALES.MAJOR.intervals)
+  }, [])
 
-  const scaleTitle = `${translateNote(rootNote)} ${scale.name || scale.mode ? scale.name : `(${scale.intervals.map(interval => `${interval.name}`)})`} ${scale.mode && `/ ${translateNote(rootNote)} ${scale.mode}`}`
+  const scaleTitle = useMemo(() => {
+    if (rootNote && scale) {
+      return `${translateNote(rootNote)} ${scale.name || scale.mode ? scale.name : `(${scale.intervals.map(interval => `${interval.name}`)})`} ${scale.mode && `/ ${translateNote(rootNote)} ${scale.mode}`}`
+    }
+  }, [scale, rootNote])
+  
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams({
+      [ROOT_NOTE_SEARCH_PARAMS_KEY]: rootNote.SPN,
+      [SCALE_INTERVALS_SEARCH_PARAMS_KEY]: scaleIntervals.map(interval => interval.name).join(',')
+    })
+
+    router.push(pathname + '?' + newSearchParams.toString())
+  }, [scaleIntervals, rootNote])
 
   return (
     <div>
-
       <header className="pb-4">
         <h1 className="font-mtts-title text-4xl font-bold">Scale Builder - {scaleTitle}</h1>
       </header>
@@ -100,7 +144,7 @@ function BuildScale() {
               onChange={(e) => setRootNote(availableRootNotes[e.target.value])}
             >
               {availableRootNotes.map((note, index) => (
-                <option value={index} key={note.name}>
+                <option value={index} key={translateNote(note)}>
                   {translateNote(note)}
                 </option>
               ))}
@@ -109,7 +153,7 @@ function BuildScale() {
           <div className="flex flex-col">
             <div className="flex flex-row justify-start items-center">
               <p>Select intervals for your scale :</p>
-              <select className="ml-2" value={scale.name.toUpperCase()} onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
+              <select className="ml-2" value={scale?.name.toUpperCase()} onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
                 <option value={null}>Not implemented yet</option>
                 {Object.keys(SCALES).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -143,15 +187,18 @@ function BuildScale() {
             ))}
           </ul>
           {scale.scaleChords.length > 0 && (
-            <ul>
-              {scale.scaleChords.map(chord =>
-                chord.notation && (
-                  <li className="py-1" key={`${chord.root.name}${chord.notation}`}>
-                    <Chord chord={chord} scale={scale} />
-                  </li>
-                )
-              )}
-            </ul>
+            <>
+              <p>Scale chords :</p>
+              <ul>
+                {scale.scaleChords.map(chord =>
+                  chord.notation && (
+                    <li className="py-1" key={`${chord.root.name}${chord.notation}`}>
+                      <Chord chord={chord} scale={scale} />
+                    </li>
+                  )
+                )}
+              </ul>
+            </>
           )}
         </div>
         <div className='col-span-2 flex flex-col'>
