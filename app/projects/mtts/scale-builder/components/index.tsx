@@ -10,6 +10,9 @@ import { noteExistsInScale } from '../helpers/noteExistsInScale'
 import Chord from './Chord'
 import { useNoteTranslation } from '../hooks/useNoteTranslation'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import PianoRoll from '../../components/keys/PianoRoll'
+import PianoBlackKey from './PianoBlackKey'
+import PianoKey from './PianoKey'
 
 const availableAccidentals: Accidental[] =
   ACCIDENTALS
@@ -174,8 +177,7 @@ function BuildScale() {
                       </li>))}
                   </ul>
                 </li>
-              )
-              }
+              )}
             </ul>
           </div>
         </div>
@@ -214,6 +216,12 @@ function BuildScale() {
                 />
               }
             />
+          </div>
+        </div>
+        <div className='col-span-2 flex flex-col'>
+          <p>Here is the scale on a piano :</p>
+          <div className='py-4 h-48'>
+            <PianoRoll scale={scale} PianoBlackKeyComponent={PianoBlackKey} PianoKeyComponent={PianoKey} />
           </div>
         </div>
       </div>

@@ -62,13 +62,15 @@ module.exports = {
         '9xl': '7rem',
         '10xl': '8rem'
       },
+      margin: {
+        '1/2': '50%',
+      },
       flexGrow: {
         0: 0,
         1: 1,
         2: 2
       },
       height: {
-        '1/2': '50%',
         'icon-s': '2rem',
         'icon-m': '4rem',
         'icon-l': '8rem',
@@ -78,8 +80,10 @@ module.exports = {
         80: '20rem',
         96: '24rem'
       },
+      translate: {
+        '3/2': '150%'
+      },
       width: {
-        '1/2': '50%',
         'icon-s': '2rem',
         'icon-m': '4rem',
         'icon-l': '8rem',
@@ -131,7 +135,7 @@ module.exports = {
         '28': 'repeat(28, minmax(0, 1fr))',
         '29': 'repeat(29, minmax(0, 1fr))',
         '30': 'repeat(30, minmax(0, 1fr))'
-      }
+      },
     }
   }
 }
