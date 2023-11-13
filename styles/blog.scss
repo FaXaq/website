@@ -2,6 +2,10 @@
   @apply pt-4;
   @apply pb-8;
 
+  .content pre {
+    @apply text-sm;
+  }
+
   header {
     a {
       @apply no-underline;

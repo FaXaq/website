@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-import '../styles/tailwind.scss'
 import '../styles/main.scss'
 import '../i18n'
 import { useTranslation } from 'next-i18next'

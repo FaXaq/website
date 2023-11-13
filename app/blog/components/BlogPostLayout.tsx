@@ -2,8 +2,11 @@
 
 import React, { useEffect } from 'react'
 import Prism from 'prismjs'
+import "prismjs/components/prism-typescript";
+import "prismjs/themes/prism.css";
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
+import { format } from 'date-fns'
 
 interface BlogPostLayoutProps {
   children: React.JSX.Element | React.JSX.Element[]
@@ -35,7 +38,7 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
             <h1>{meta.title}</h1>
           </div>
           <div className="article-info text-sm text-opacity-25">
-            <p>{meta.description ? meta.description : '' } - <em>{t('format.date', { date: new Date(meta.creationDate) })}</em></p>
+            <p>{meta.description ? meta.description : '' } - <em>{format(new Date(meta.creationDate), 'do MMMM yyyy')}</em></p>
           </div>
         </header>
         <article className="content">

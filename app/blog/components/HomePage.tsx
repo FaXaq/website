@@ -6,6 +6,7 @@ import Tags from './Tags'
 import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Head from 'next/head'
+import { format } from 'date-fns'
 
 export interface ArticleMetaData {
   title: string
@@ -66,7 +67,7 @@ function BlogHomePage({ articles, tags }: BlogProps) {
         <Link href={`${a.link}`}>
           <div>
             <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
-            <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{t('format.date', { date: new Date(a.meta.creationDate) })}</em></p>
+            <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{format(new Date(a.meta.creationDate), 'do MMMM yyyy')}</em></p>
           </div>
         </Link>
         <Tags tags={a.meta.tags || []} onClick={addTagToQueryParams} />
