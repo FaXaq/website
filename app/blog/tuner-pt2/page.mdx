@@ -1,0 +1,234 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+import Tuner from './components/Tuner'
+import ClearSineWave from './components/ClearSineWave'
+import SineWaveWithMultipleFrequencies from './components/SineWaveWithSumOfFrequencies'
+import SineWaveWithSumOfFrequenciesDifferentAmplitudes from './components/SineWaveWithSumOfFrequenciesDifferentAmplitudes'
+import MatchingSinWaves from './components/MatchingSinWaves'
+import BufferVisualiser from './components/BufferVisualiser'
+import NewBufferVisualiser from './components/NewBufferVisualiser'
+import CorrelationVisualiser from './components/CorrelationVisualiser'
+import CorrelationVisualiserWithPeriod from './components/CorrelationVisualiserWithPeriod'
+
+export const meta = {
+  title: 'How to build a (guitar) tuner in Javascript ? - Part 2',
+  description: 'With no prior Digital Signal Processing knowledge',
+  creationDate: '11/14/2023',
+  tags: ['music theory', 'programming', 'javascript', 'browser', 'english', 'dsp', 'tuner'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+[Part 1](/blog/tuner-pt1)
+
+## Let's take a step back
+
+Last time I said I had to try [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation) in order to guess a note from an audio input. To explain this principle, I need to come back on a few things. I forgot to mention that we can represent frequencies as sine waves. For instance, here is how we could represent a frequency of 440Hz :
+
+<ClearSineWave />
+
+But most of the time, a sound is a sum of frequencies, for instance if we combine A4 (440Hz) and C#5 (554.37Hz), it looks like this : 
+
+<SineWaveWithMultipleFrequencies />
+
+As notes are louder or quieter, their frequency amplitudes differ. For instance, if A has 4 times more amplitude than C#, it results in a sine wave looking like this : 
+
+<SineWaveWithSumOfFrequenciesDifferentAmplitudes />
+
+As you can see, a frequency is a [pattern replicated within each period](https://www.mathsisfun.com/algebra/amplitude-period-frequency-phase-shift.html). Previously we relied on `getByteFrequencyData` from the analyser to get frequencies in bins of `1.46484375Hz`. But this led us to nothing. What we will do now, is access the sound information at a given time and verify if it repeats within a period. With this period we will then be able to calculate our main frequency : `frequency = 1/period`.
+
+Remember when I said that frequencies are sine waves ? This is where is comes handy. By offsetting it gradually we can verify if it repeats.
+
+__Here is a proof of concept :__
+
+<div className="demo">
+  <div className="border p-4">
+    <MatchingSinWaves />
+  </div>
+</div>
+
+You will probably find that the frequency is around 450Hz, it's due to rendering but anyway, it's close to our 440Hz, so, you get the idea !
+
+## Let's build the tuner
+
+We can extract timebased data from our analyser :
+
+```ts
+const buffer = new Float32Array(analyser.fftSize)
+analyser.getByteTimeDomainData()
+```
+
+We then use this wonderful function made for us by a [PhD student](https://github.com/cwilso/PitchDetect/pull/23), rewritten for reading purposes to understand it :
+
+```ts
+// Thanks to
+// https://github.com/cwilso/PitchDetect/pull/23
+// https://github.com/dalatant
+// https://alexanderell.is/posts/tuner/
+
+// https://en.wikipedia.org/wiki/Root_mean_square
+function getRootMeanSquare(buffer: Float32Array) {
+  let sum = 0
+  for (let i = 0; i < buffer.length; i++) {
+    sum += buffer[i] * buffer[i]
+  }
+  return Math.sqrt(sum / buffer.length)
+}
+
+function buildBufferWithThreshold(buffer: Float32Array) {
+  // Since the main sound is a sum of frequencies it can be seen as a composed sine wave
+  // We can predict that it will repeat, so we can narrow the buffer down, to several occurences with a threshold
+  let r1 = 0;
+  let r2 = buffer.length - 1;
+  let thres = 0.2;
+
+  // Split buffer un half and check where we lose frequency amplitude so we can work on less data 
+  for (let i = 0; i < buffer.length / 2; i++) {
+    if (Math.abs(buffer[i]) < thres) {
+      r1 = i;
+      break;
+    }
+  }
+
+  for (let i = 1; i < buffer.length / 2; i++) {
+    if (Math.abs(buffer[buffer.length - i]) < thres) {
+      r2 = buffer.length - i;
+      break;
+    }
+  }
+
+  return buffer.slice(r1, r2)
+}
+
+// Implements the ACF2+ algorithm
+export function autoCorrelate(buffer: Float32Array, sampleRate: number) {
+  // Calculate the root mean square to see if we have enough signal to perform operations
+  let rootMeanSquare = getRootMeanSquare(buffer)
+
+  if (rootMeanSquare < 0.01) {
+    return -1;
+  }
+
+  const newBuffer = buildBufferWithThreshold(buffer)
+
+  // Build correlation array containing ordinates values multiplied by a moving offset.
+  // The index that will have the greater value will be the peak of our sine wave
+  let correlation = new Array(newBuffer.length).fill(0);
+  for (let i = 0; i < newBuffer.length; i++) {
+    for (let j = 0; j < newBuffer.length-i; j++) {
+      correlation[i] += newBuffer[j] * newBuffer[j+i];
+    }
+  }
+
+  let d = 0;
+
+  // Find the first bottom within our new range
+  while (correlation[d] > correlation[d + 1]) {
+    d++;
+  }
+
+  let maxVal = -1
+  let maxPos = -1;
+
+  // From that index find the first peak within the correlation array, our desired abscissa
+  for (var i = d; i < newBuffer.length; i++) {
+    if (correlation[i] > maxVal) {
+      maxVal = correlation[i];
+      maxPos = i;
+    }
+  }
+  var T0 = maxPos;
+
+  // From the original author:
+  // interpolation is parabolic interpolation. It helps with precision. We suppose that a parabola pass through the
+  // three points that comprise the peak. 'a' and 'b' are the unknowns from the linear equation system and b/(2a) is
+  // the "error" in the abscissa. Well x1,x2,x3 should be y1,y2,y3 because they are the ordinates.
+  // ----
+  // Note: x1, x2 and x3 were the previous names of y1, y2 and y3
+  // ----
+  // From me:
+  // What I can comprehend on this, is that we have a parabolic equation, but are unsure which of those three points
+  // is the closest to our desired frequency. This bits sorts it out by comparing which is closer to the parabolic 
+  // peak.
+  let y1 = correlation[T0 - 1]
+  let y2 = correlation[T0]
+  let y3 = correlation[T0 + 1];
+
+  let a = (y1 + y3 - 2 * y2) / 2;
+  let b = (y3 - y1) / 2;
+  if (a) {
+    T0 = T0 - b / (2 * a);
+  }
+
+  return sampleRate / T0;
+}
+```
+
+It may seem complicated but it only is what I was writing about before. Calculate the autocorrelation, finding it's first peak, and boom, we have our __period__.
+
+## The process explained with charts
+
+At a given time, we extract our timebased values, notice how there is 2048 values, it's our FFT_SIZE :
+
+<BufferVisualiser />
+
+We filter values that are above a specific threshold. Well, it doesn't do that much in our case, but anyway :
+
+<NewBufferVisualiser />
+
+We calculate correlation for each abscissa :
+
+<CorrelationVisualiser />
+
+And we find our period :
+
+<CorrelationVisualiserWithPeriod />
+
+We have a period of 401, but our sample rate is 44100 samples per second. What remains is dividing our sample rate by our period, to obtain our desired frequency : `44100 / 401 = 109.975062344Hz`. Which is really close to the frequency of an A string on a guitar : `110.0Hz` ! This is the string I plucked for the test. It means that it works, and I am in tune, just barely barely flat !
+
+To finish it up (without the UI/UX matter), I've added the 6 strings of a guitar as reference to check the current frequency against. I have to find the closest note : 
+
+```ts
+function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
+  if (notesInRange.length <= 3) {
+    let noteFound = notesInRange[0]
+    let closest = Math.abs(searchedFrequency - noteFound.frequency)
+    for (let i = 1; i < notesInRange.length; i++) {
+      const frequencyDifference = Math.abs(searchedFrequency - notesInRange[i].frequency)
+      if (closest > frequencyDifference) {
+        noteFound = notesInRange[i]
+        closest = frequencyDifference
+      }
+    }
+    return noteFound
+  }
+
+  const secondHalf = notesInRange.slice(notesInRange.length / 2, notesInRange.length)
+
+  if (searchedFrequency < secondHalf[0].frequency) {
+    return findClosestNote(searchedFrequency, notesInRange.slice(0, (notesInRange.length / 2) + 1))
+  }
+
+  return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
+}
+```
+
+Then, I can tell by substracting it the reference note if what I'm playing is flat or sharp. There is one last trick, when we play a note by plucking it, we create fluctuations that can make the frequency vary a bit. To avoid testing against a fixed frequency, we add a margin of `0.3Hz`.
+
+```ts
+const AVERAGE_FLUCTUATION = 0.3
+const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
+const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
+const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
+```
+
+And here we have our tuner :
+
+
+<div className="demo">
+  <div className="border p-4 h-64">
+    <Tuner />
+  </div>
+</div>
+
+The full code of this project can be found here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2)
+</BlogPostLayout>
