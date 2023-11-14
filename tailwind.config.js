@@ -15,6 +15,9 @@ module.exports = {
   safelist: [
     {
       pattern: /grid-(cols|rows)-\d+/
+    },
+    {
+      pattern: /(h|w)-\d+/
     }
   ],
   theme: {

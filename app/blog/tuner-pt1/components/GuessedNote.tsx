@@ -2,7 +2,7 @@
 
 import React from 'react'
 // eslint-disable-next-line no-unused-vars
-import { GuessedNote } from './tuner-container'
+import { GuessedNote } from './TunerContainer'
 
 interface GuessedNoteProps {
   guessedNote: GuessedNote;
@@ -28,15 +28,14 @@ const GuessedNoteItem = ({ guessedNote, fqRatio }: GuessedNoteProps) => {
   const c2 = (guessedNote.diffs[1] / fqRatio) * 100
   const { multiplier } = getEquation(guessedNote)
 
-  return (
-    <li>
-      <p> SPN : {spn}</p>
-      <p> Amplitude diff : {guessedNote.values[0] - guessedNote.values[1]}</p>
-      <p> Coeff diff : {c1 - c2}</p>
-      <p>note frequency : {guessedNote.notes[0].frequency}</p>
-      <p> Line equation multiplier : {multiplier}</p>
-      <p>---------------------------</p>
-    </li>
+  return (<>
+    <p> SPN : {spn}</p>
+    <p> Amplitude diff : {guessedNote.values[0] - guessedNote.values[1]}</p>
+    <p> Coeff diff : {c1 - c2}</p>
+    <p>note frequency : {guessedNote.notes[0].frequency}</p>
+    <p> Line equation multiplier : {multiplier}</p>
+    <p>---------------------------</p>
+  </>
   )
 }
 

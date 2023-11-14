@@ -1,5 +1,6 @@
 import BlogPostLayout from '../components/BlogPostLayout'
 import Correlation from './components/Correlation'
+import Tuner from './components/Tuner'
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 1',
@@ -264,6 +265,14 @@ Ok so what I had as an intuition worked as expected. See data for the G3 string.
 
 
 After seeing those graphs I don't know how to procede and find the correlation. I tried looking at the lines equations' coefficients but ... nothing. If anyone has an idea, don't hesitate to fork the [github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner) and make a PR.
+
+You can try it here : 
+
+<div className="demo">
+  <div className="border p-4 h-72">
+    <Tuner />
+  </div>
+</div>
 
 ## Conclusion
 

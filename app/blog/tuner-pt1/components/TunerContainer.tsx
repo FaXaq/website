@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Note, Pitch } from 'mtts'
-import GuessedNoteItem from './guessed-note'
+import GuessedNoteItem from './GuessedNote'
 
 interface TunerContainerProps {
   audioStream: MediaStream
@@ -106,11 +106,16 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   }, [audioStream])
 
   return (
-    <div className="w-screen h-screen">
-      <canvas ref={canvas} />
+    <div className="h-full w-full overflow-auto">
+      <p className="m-0 p-0">Guessing the note :</p>
+      <canvas ref={canvas} className="w-full" height="h-64" />
       <ul>
         { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable } fqRatio={fqRatio} /> : null }
-        {guessedNotes.map((n, i) => <GuessedNoteItem guessedNote={n} key={`guessed-note-${i}`} fqRatio={fqRatio}/>)}
+        {guessedNotes.map((n, i) => (
+          <li className="p-0" key={`guessed-note-${i}`}> 
+            <GuessedNoteItem guessedNote={n}  fqRatio={fqRatio}/>
+          </li>
+        ))}
       </ul>
     </div>
   )
