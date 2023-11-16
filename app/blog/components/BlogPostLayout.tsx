@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react'
 import Prism from 'prismjs'
 import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-rust";
 import "prismjs/themes/prism.css";
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
