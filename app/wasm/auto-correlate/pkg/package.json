@@ -1,0 +1,17 @@
+{
+  "name": "auto-correlate",
+  "collaborators": [
+    "Marin <marin.procureur@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "auto_correlate_bg.wasm",
+    "auto_correlate.js",
+    "auto_correlate.d.ts"
+  ],
+  "module": "auto_correlate.js",
+  "types": "auto_correlate.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

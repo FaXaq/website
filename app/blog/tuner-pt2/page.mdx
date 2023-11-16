@@ -50,14 +50,45 @@ You will probably find that the frequency is around 450Hz, it's due to rendering
 
 ## Let's build the tuner
 
-We can extract timebased data from our analyser :
+First, I prefer to extract the logic to create our analyser inside a hook and use it on demand :
 
 ```ts
-const buffer = new Float32Array(analyser.fftSize)
-analyser.getByteTimeDomainData()
+export const FFT_SIZE = 32768
+
+export function useAnalyser(stream: MediaStream, fftSize: number = FFT_SIZE): [] | [AnalyserNode, MediaStreamAudioSourceNode] {
+  if (!stream ) {
+    return []
+  }
+  const ctx = new AudioContext()
+  const analyser = ctx.createAnalyser()
+  analyser.fftSize = fftSize
+  analyser.minDecibels = -100;
+  analyser.maxDecibels = -10;
+  analyser.smoothingTimeConstant = 0.85;
+  const sourceNode = ctx.createMediaStreamSource(stream)
+  sourceNode.connect(analyser)
+  return [analyser, sourceNode]
+}
 ```
 
-We then use this wonderful function made for us by a [PhD student](https://github.com/cwilso/PitchDetect/pull/23), rewritten for reading purposes to understand it :
+Then invoke the hook and create a function to start using our tuner extract timebased data from our analyser. It will use a setInterval that we can stop when we later want the tuner to stop. 
+
+```ts
+const [analyser] = useAnalyser(audioStream, 2048)
+
+function start() {
+  if (analyser) {
+    const interval = setInterval(() => {
+      const buffer = new Float32Array(analyser.fftSize)
+      analyser.getFloatTimeDomainData(buffer)
+      // This will be where we run our autoCorrelate function to guess the frequency
+    }, 500) as unknown as number
+    setGuessingInterval(interval)
+  }
+}
+```
+
+We then use this wonderful function made for us by a [PhD student](https://github.com/cwilso/PitchDetect/pull/23), rewritten for reading purposes :
 
 ```ts
 // Thanks to
@@ -163,7 +194,31 @@ export function autoCorrelate(buffer: Float32Array, sampleRate: number) {
 }
 ```
 
-It may seem complicated but it only is what I was writing about before. Calculate the autocorrelation, finding it's first peak, and boom, we have our __period__.
+It may seem complicated but it only is what I was writing about before. Calculate the autocorrelation, finding it's first peak, and boom, we have our __period__. We then just add it to our `start` function :
+
+```ts
+function start() {
+  if (analyser) {
+    const interval = setInterval(() => {
+      const buffer = new Float32Array(analyser.fftSize)
+      analyser.getFloatTimeDomainData(buffer)
+      // Guess the frequency
+      setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+    }, 500) as unknown as number
+    setGuessingInterval(interval)
+  }
+}
+```
+
+Let's just add a function to stop the tuner, and we'll be ready to wrap it up !
+
+```ts
+function stop() {
+  clearInterval(guessingInterval)
+}
+```
+
+That's it, we have a tuner, that every 500ms will take the sound input and guess its main pitch.
 
 ## The process explained with charts
 
@@ -185,7 +240,23 @@ And we find our period :
 
 We have a period of 401, but our sample rate is 44100 samples per second. What remains is dividing our sample rate by our period, to obtain our desired frequency : `44100 / 401 = 109.975062344Hz`. Which is really close to the frequency of an A string on a guitar : `110.0Hz` ! This is the string I plucked for the test. It means that it works, and I am in tune, just barely barely flat !
 
-To finish it up (without the UI/UX matter), I've added the 6 strings of a guitar as reference to check the current frequency against. I have to find the closest note : 
+## What if we want to use it to tune a guitar ?
+
+Well, that was the purpose of this whole experiment.
+Let's use [MTTS](https://github.com/faxaq/mtts) to generate an array containing tuning notes for our guitar. It is a library that I created to manipulate music theory conceps in typescript. We can use it to easily create notes, scales, chords, etc. :
+
+```ts
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+```
+
+We now have an array containing notes to test our guesssed frequency against. Let's create a function that recursively take a frequency and an array of notes and returns the note with the closest frequency.
 
 ```ts
 function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
@@ -212,7 +283,21 @@ function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note 
 }
 ```
 
-Then, I can tell by substracting it the reference note if what I'm playing is flat or sharp. There is one last trick, when we play a note by plucking it, we create fluctuations that can make the frequency vary a bit. To avoid testing against a fixed frequency, we add a margin of `0.3Hz`.
+And use it on our frequency inside our component : 
+
+```ts
+useEffect(() => {
+  if (guessedFrequency > 0) {
+    setGuessedNote(findClosestNote(guessedFrequency, notes))
+  } else {
+    setGuessedNote(undefined)
+  }
+
+  return undefined
+}, [setGuessedNote, guessedFrequency])
+```
+
+Just to wrap it up, we add wheter our frequency is flat or sharp to our closest note. To avoid testing against a fixed frequency, that is impossible to have on a guitar, we add a margin of `0.3Hz`.
 
 ```ts
 const AVERAGE_FLUCTUATION = 0.3
@@ -222,7 +307,6 @@ const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCT
 ```
 
 And here we have our tuner :
-
 
 <div className="demo">
   <div className="border p-4 h-64">

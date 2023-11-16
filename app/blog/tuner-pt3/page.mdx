@@ -1,0 +1,365 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+import WorkingWasm from './components/WorkingWasm'
+
+export const meta = {
+  title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
+  description: 'With no prior Digital Signal Processing knowledge',
+  creationDate: '11/15/2023',
+  tags: ['music theory', 'programming', 'javascript', 'browser', 'english', 'dsp', 'tuner', 'next', 'rust', 'wasm'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+[Part 1](/blog/tuner-pt1)
+
+[Part 2](/blog/tuner-pt2)
+
+We made it ! We have a tuner that works. But some operations may be costly. We'll measure those operations and see if delegating those to a Web Assembly binary can help us.
+
+As we used an FFT of 2048 we had 2048 samples to define our signal. But we may use more to gain accuracy.
+
+First, let's measure the calculation time or our function with different FFT_SIZE. FFT_SIZE comes in pow of 2, and the first size that may be relevant to us is 1024. This is where the tuner starts to work, up until the max FFT_SIZE supported : 32768.
+
+<table>
+  <thead>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td></tr>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td></tr>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td></tr>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td></tr>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td></tr>
+    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td></tr>
+  </tbody>
+</table>
+
+## Creating a wasm package
+
+Let's extract our function and create a wasm package with it. We'll follow the instructions of [https://rustwasm.github.io/docs/book](https://rustwasm.github.io/docs/book) to install the required dependencies.
+
+Create a folder inside the app forlder called `wasm`. Inside, run `wasm-pack new <my-package-name>`, it will create a rust lib. In my case, I have chosen to name it `auto-correlate`. `wasm-pack` will create use a boilerplate project to install all that is needed for us.
+
+You should have something that looks like that : 
+
+```text
+app/
+└── wasm/
+    └── auto-correlate/
+        ├── src/
+        │   ├── lib.rs
+        │   └── utils.rs
+        ├── tests/
+        ├── Cargo.toml
+        ├── LICENSE_APACHE
+        ├── LICENSE_MIT
+        ├── README.md
+        ├── .gitignore
+        ├── .github/
+        └── .travis.yml
+```
+
+`utils.rs` contains an utility to map Rust errors into our browser console. Let's modify what's inside `lib.rs` with one simple function to check if it works.
+
+```rust
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+```
+
+Line per line here is what it does. First, we import `wasm_bindgen` to create bindings between javascript and rust.
+
+`#[wasm_bindgen]` used before a public function will create an export accessible from Javascript.
+
+The function itself is simple, it does take a string as a parameter and adds it into a the `{}` placeholder. If we pass it `Marin` for instance, it will return `Hello, Marin !`.
+
+Now, to build our rust create to a WebAssembly package we use `wasm-pack build --target web`. It creates a `pkg` folder containing several files.
+
+```text
+pkg/
+├── .gitignore
+├── auto_correlate_bg.js
+├── auto_correlate_bg.wasm
+├── auto_correlate_bg.wasm.d.ts
+├── auto_correlate.d.ts
+├── auto_correlate.js
+├── package.json
+└── README.md
+```
+
+You already know what are `.gitignore`, `package.json` and `README.md` for. But let's have a look at the others.
+The files `*.d.ts` are the types of the javascript and wasm having the same name.
+
+<table>
+  <thead>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Filename</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Description</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className="border py-1 px-2 border-mtts-dark-violet">*.d.ts</td>
+      <td className="border py-1 px-2 border-mtts-dark-violet">Those are the typescript types of the generated files.</td>
+    </tr>
+    <tr>
+      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate.js</td>
+      <td className="border py-1 px-2 border-mtts-dark-violet">This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</td>
+    </tr>
+    <tr>
+      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate_bg.wasm</td>
+      <td className="border py-1 px-2 border-mtts-dark-violet">This is the WebAssembly file. This is the binary that executes natively within the browser.</td>
+    </tr>
+  </tbody>
+</table>
+
+To use our WASM file, we can add it to a small react component :
+
+```typescript
+'use client'
+
+import init, { greet } from '../../../wasm/auto-correlate/pkg/auto_correlate'
+import React, { useEffect, useState } from 'react'
+
+export default function WorkingWasm() {
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      await init()
+      setGreeting(greet('Marin'))
+    })()
+  }, [])
+
+  return <p>{greeting}</p>
+}
+```
+
+And here it is working in a component : 
+<div className="demo">
+  <div className="border rounded p-4">
+    <WorkingWasm />
+  </div>
+</div>
+
+## Porting the autoCorrelate function to Rust
+
+```rust
+use wasm_bindgen::prelude::*;
+use js_sys::*;
+extern crate console_error_panic_hook;
+
+#[path = "utils.rs"] mod utils;
+
+// Extract functions from javascript
+#[wasm_bindgen]
+extern "C" {
+    // console.log is polymorphic so we have to declare one for each type we need
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_usize(s: usize);
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_f64(s: f64);
+}
+
+fn root_mean_square(vec: &Vec<f32>) -> f32 {
+  let total_sum: f32 = vec.iter().sum();
+  // casting is mandatory since rust only allows
+  // operations between variables of the same type
+  let vec_len: f32 = vec.len() as f32;
+  (total_sum / vec_len).sqrt()
+}
+
+fn apply_buffer_threshold(vec: &Vec<f32>) -> Vec<f32> {
+  let mut r1: usize = 0;
+  let mut r2: usize = vec.len() - 1;
+  let threshold: f32 = 0.2;
+
+  for i in 0..vec.len()/2 {
+    if vec[i].abs() < threshold {
+      r1 = i;
+      break;
+    }
+  }
+
+  for i in 1..vec.len()/2 {
+    let current_index:usize = vec.len() - i;
+    if vec[current_index].abs() < threshold {
+      r2 = current_index;
+      break;
+    }
+  }
+
+  // We need to create a new vector with the capacity required
+  // before copying the slice into it
+  let mut new_vec: Vec<f32> = Vec::with_capacity(r2 - r1);
+  new_vec.extend_from_slice(&vec[r1..r2]);
+  new_vec
+}
+
+#[wasm_bindgen]
+pub fn auto_correlate(buffer: &Float32Array, sample_rate: i32) -> f32 {
+  // This is to have rust errors showing up in console.
+  utils::set_panic_hook();
+  let start: f64 = Date::now();
+  // Convert buffer to Vector
+  let vec: Vec<f32> = buffer.to_vec();
+  let rms: f32 = root_mean_square(&vec);
+
+  if rms < 0.01 {
+    -1 as f32
+  } else {
+    let new_buffer: Vec<f32> = apply_buffer_threshold(&vec);
+    // create a correlation_array with the same size as the new_buffer
+    let mut correlation_array: Vec<f32> = vec![0.0;new_buffer.len()];
+    
+    for i in 0..correlation_array.len() {
+      // Here is a tweak to speed up rust. Do not access vector every iteration
+      // create a variable and assign it at the vector index at the end
+      let mut sum: f32 = 0.0;
+      let item_correlation_len = correlation_array.len() - i;
+      for j in 0..item_correlation_len {
+        sum += new_buffer[i] * new_buffer[j+i];
+      }
+      correlation_array[i] = sum;
+    }
+
+    let mut d: usize = 0;
+
+    while correlation_array[d] > correlation_array[d+1] {
+      d += 1;
+    }
+
+    let mut max_val: f32 = -1.0;
+    let mut max_pos: usize = usize::MIN;
+
+    for i in d..new_buffer.len() {
+      if correlation_array[i] > max_val {
+        max_val = correlation_array[i];
+        max_pos = i;
+      }
+    }
+
+    let y1: f32 = correlation_array[max_pos - 1];
+    let y2: f32 = correlation_array[max_pos];
+    let y3: f32 = correlation_array[max_pos + 1];
+
+    let a: f32 = (y1 + y3 - 2.0 * y2) / 2.0;
+    let b: f32 = (y3 - y1) / 2.0;
+
+    let mut abscissa: f32 = max_pos as f32;
+
+    if a != 0.0 {
+      abscissa = ((max_pos as f32) - b) / (2.0 * a)
+    }
+
+    log_f64(Date::now() - start);
+
+    sample_rate as f32 / abscissa
+  }
+}
+
+// keep the function greet to allow usage for demo
+#[wasm_bindgen]
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+```
+
+## Building it and running it with Next.js
+
+Inside the folder of our wasm project, run `wasm-pack build --target web` and that's it ! For it to be included in our deployments, we may have to modify the content of the `.gitignore` files. One at the root of our WASM project to keep the `pkg` directory. And one at the root of the `pkg` directory to ignore only the `README.md` file. The downside of this method is that binaries will be stored directly in the github repository. We could run a build on the deployment server but this is something I'd rather keep simple.
+
+Finally, we import the WASM file as we did before previously with our test function and safely replace the `autoCorrelate` function with its WASM clone `auto_correlate`. Obviously, do not forget to wait on init during component first render, in order to have access to the WASM : 
+
+```ts
+  // Import our WASM module at the start of the file
+  import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
+```
+
+```ts
+  // Inside our component :
+  const [isLoadingWebAssembly, setIsLoadingWebAssembly] = useState<boolean>(false)
+
+  useEffect(() => {
+    (async () => {
+      setIsLoadingWebAssembly(true)
+      try {
+        await init()
+        setIsLoadingWebAssembly(false)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [])
+
+  // And we can safely use our auto_correlate WASM method inside our component !
+  if (!isLoadingWebAssembly) {
+    const guessedFrequency = auto_correlate(buffer, analyser.context.sampleRate)
+  }
+```
+
+We no redo the calculations by modifying the analyser initial FFT_SIZE with our hook and __boom__ here are the results :
+
+<table>
+  <thead>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (JS)</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (WASM)</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Speed increase</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+250%</td>
+    </tr>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+440%</td>
+    </tr>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">20ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+325%</td>
+    </tr>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">61ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+267%</td>
+    </tr>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">166ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+294%</td>
+    </tr>
+    <tr>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet">532ms</td>
+      <td className="border text-center py-1 px-2 border-mtts-dark-violet text-mtts-green">+366%</td>
+    </tr>
+  </tbody>
+</table>
+
+We can see that there is a clear improvement ! We can safely use 4096 FFT_SIZE without our user noticing it. Is there any need for that ? I don't think so... but it was a worth it first project to play around WASM.
+
+The full source code of this article is available here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3)
+
+The full source code of the WASM bit is available here : [https://github.com/FaXaq/website/tree/master/app/wasm/auto-correlate](https://github.com/FaXaq/website/tree/master/app/wasm/auto-correlate)
+
+</BlogPostLayout>
