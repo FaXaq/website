@@ -6,94 +6,108 @@
   "resume": {
     "firstname": "Marin",
     "workfield": "Ingénieur Web",
+    "description": "Je suis développeur web Full-Stack avec 9 ans d'expérience sur les technologies Typescript et Javascript (Node et React principalement) . J'ai évolué en équipe sur des produits orienté client avec back-offices accueillant jusqu'à 5 millions d'utilisateurs annuels. Je suis sensible aux problématiques de gestion de la donnée (NoSQL/SQL + RGPD) et d'infrastructure.",
     "copy": "Code : ",
     "content": {
       "experiences": {
         "title": "Expériences",
         "current": {
           "title": "Staff engineer @ Hellowork",
-          "period": "Juilet 2021 - Juin 2023",
+          "period": "2 ans",
           "links": [
             "https://hellowork.com",
             "https://seekube.com"
           ],
           "missions": [
-            "Définition et suivi des objectifs Roadmap tech de Seekube",
-            "Élaboration de la roadmap produit en accord avec l'équipe responsable produit",
-            "Mise en place des processus et d'un workflow du delivery au run en collaboration avec les équipes UI/UX, Support and Produit",
-            "Recrutement et Management d'une équipe technique distribuée (remote) de 2 à 6 personnes",
-            "Lotissement et développement de projets d'envergure (interconnexion avec des systèmes existants, respect des règles RGPD, améliorations de design applicatifs, performances, fonctionnalités)",
-            "Priorisation des bugs & Maintenance applicative"
+            "Développement: Définition, rédaction de spécifications techniques et technico-fonctionnelles",
+            "Développement: Développement des interfaces utilisateurs et des API métiers",
+            "Développement: Mise en conformité RGPD",
+            "Développement: Migration des infrastructures depuis des serveurs dediés vers AWS avec auto-adaptation au traffic utilisateur",
+            "Développement: Développement des tests (unitaires, fonctionnels, e2e, staging)",
+            "Développement: Développpement de la chaine d'integration / déploiement (CI/CD)",
+            "Développement: Développement des fonctionnalités back-office pour le support",
+            "Développement: Priorisation des bugs & Maintenance applicative",
+            "Management: Définition et suivi des objectifs de la feuille de route technique",
+            "Management: Élaboration de la roadmap produit en accord avec l'équipe responsable produit",
+            "Management: Mise en place des processus et d'un workflow du delivery au run en collaboration avec les équipes UI/UX, Support and Produit",
+            "Management: Recrutement et Management d'une équipe technique distribuée (remote) de 2 à 6 personnes",
+            "Management: Lotissement de projets d'envergure"
           ]
         },
         "past": [
           {
-            "title": "Développeur front-end senior @ Gandi",
-            "period": "Mai 2020 - Juin 2021",
+            "title": "Développeur Senior @ Gandi",
+            "period": "1 an et 1 mois",
             "links": [
               "https://gandi.net"
             ],
             "missions": [
-              "Développement de features (Flow.js, React, Redux, custom SSR)",
-              "Planning roadmap court terme & planning sprints pour la partie front-end",
-              "Définition et suivi des objectifs Front-end du chapitre",
-              "Priorisation des bugs & Maintenance applicative"
+              "Management: Planning roadmap court terme & planning sprints pour la partie front-end",
+              "Management: Définition et suivi des objectifs Front-end du chapitre",
+              "Managemenemt: Priorisation des bugs & Maintenance applicative",
+              "Développement: Définition, rédaction de spécifications techniques et développement d'objectifs annuels inter-équipes",
+              "Développement: Développement d'interfaces utilisateurs et d'API métiers",
+              "Développement: Développements des tests unitaires et fonctionnels",
+              "Développement: Développement de fonctionnalités back-office pour le support et pour les utilisateurs à hauts volumes de produits"
             ]
           },
           {
-            "title": "Ingénieur front-end @ Liberkeys",
-            "period": "Juillet 2019 - Mai 2020",
+            "title": "Développeur Full-Stack @ Liberkeys",
+            "period": "9 mois",
             "links": [
               "https://liberkeys.com"
             ],
             "missions": [
-              "Développement d'une application mobile (nativescript, vuejs) & designs (figma)",
-              "Architecture (Project / API / OPS) & Développement d'un front-end SAAS en PWA (vuejs, nuxt, typescript, jest, normalizr)",
-              "Mise en place des analytics (mixpanel, GA)"
+              "Développement: Développement d'une application mobile (nativescript, vuejs) & designs",
+              "Développement: Architecture (Project / API / OPS)",
+              "Développement: Développement d'un front-end SAAS en PWA (vuejs, nuxt, typescript, jest, normalizr)",
+              "Développement: Mise en place des analytics (mixpanel, GA)"
             ]
           },
           {
             "title": "Responsable pédagogique / Co-fondateur @ _blank - Belleville Citoyenne",
-            "period": "Nov 2015 - Jun 2019",
+            "period": "4 ans",
             "links": [
               "https://github.com/blank-project"
             ],
             "missions": [
-              "Sourcing & sélection des étudiants",
-              "Enseignements (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
-              "Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-              "Définition d'une roadmap annuelle & plannings",
-              "Reconnu 'Grande École du Numérique' délivrant un Bac+1"
+              "Management: Sourcing & sélection des étudiants",
+              "Management: Enseignements (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
+              "Management: Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)",
+              "Management: Définition d'une roadmap annuelle & plannings",
+              "Management: Reconnu 'Grande École du Numérique' délivrant un Bac+1",
+              "Développement: Développement et intégration de logiciels open-source pour des associations"
             ]
           },
           {
             "title": "Architecte front-end / Consultant @ enioka",
-            "period": "Aug 2014 - Jan 2019",
+            "period": "5 ans",
             "links": [
               "https://enioka.com",
               "https://github.com/enioka/ij.js",
               "https://itlivemaps.com"
             ],
             "missions": [
-              "Développement & maintenance d'un outil de modélisation IT appelé le Modeler",
-              "Référencement de différentes DSI sous quatre plans (functionnal, applicative, infrastructure, and process) dans le modeler",
-              "Déploiement & support du modeler chez différents clients",
-              "Participation à la définition d'une roadmap pour le modeler",
-              "Design applicatif et amélioration du coeur du modeler (Java)",
-              "Création d'une libraire de représentation matricielle des données (ij.js)"
+              "Développement: Développement et maintenance d'un outil de modélisation des systèmes d'information",
+              "Développement: Référencement de différentes DSI sous quatre plans (functionnal, applicative, infrastructure, and process)",
+              "Développement: Déploiement & support chez différents clients",
+              "Développement: Modélisation et suivi de l'évolution des systèmes d'information dans des grandes entreprises (Criteo, SFR, Pickup,...)",
+              "Développement: Design applicatif et amélioration du coeur du modeler (Java)",
+              "Développement: Création d'une libraire de représentation matricielle des données (ij.js)",
+              "Management: Définition d'une roadmap pour le modeler"
             ]
           },
           {
             "title": "Ingénieur Full-Stack @ Storefront",
-            "period": "Mar 2017 - Oct 2017",
+            "period": "1 an",
             "links": [
               "https://thestorefront.com"
             ],
             "missions": [
-              "Traduction des différentes platformes (i18n)",
-              "Mise en place des paiements dans de nouvelles zones (Stripe)",
-              "Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics (Segment, mixpanel, GA, etc.)",
-              "Refonte de fonctionalités clés (listing page, user signup funnel)"
+              "Développement: Traduction des différentes platformes (i18n)",
+              "Développement: Mise en place des paiements dans de nouvelles zones (Stripe)",
+              "Développement: Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics (Segment, mixpanel, GA, etc.)",
+              "Développement: Refonte de fonctionalités clés (listing page, user signup funnel)"
             ]
           }
         ]
@@ -118,11 +132,10 @@
             ]
           },
           {
-            "title": "Manager des relations publiques @ Supinfo",
-            "period": "2015 - 2017",
+            "title": "Voyages à vélo",
+            "period": "2021 - en cours",
             "missions": [
-              "Management de 50 étudiants représentant l'écoles lors de salons",
-              "Planning et budgétisation anuelle"
+              "Pédaler pendant des semaines, voir différents lieux, en autonomie"
             ]
           }
         ]
@@ -132,13 +145,23 @@
         "past": [
           {
             "title": "MTTS",
-            "period": "2018 - 2019",
+            "period": "2018 - en cours",
             "links": [
-              "https://github.com/faxaq/mtts"
+              "https://norra.fr/projects/mtts"
             ],
             "missions": [
-              "Le but est de fournir une API déterministe au solfège en Typescript",
-              "Implémenté pour le moment : accords, gammes, notes"
+              "API déterministe pour manipuer les concepts de théorie musicale en Typescript"
+            ]
+          },
+
+          {
+            "title": "Corsica",
+            "period": "2018 - en cours",
+            "links": [
+              "https://norra.fr/projects/corsica"
+            ],
+            "missions": [
+              "Outil de manipulation et d'analyse des fichiers GPX"
             ]
           }
         ]
@@ -156,9 +179,7 @@
           {
             "title": "Passions",
             "missions": [
-              "Musique, Théorie Musicale, Guitare, Live Shows",
-              "Vélo",
-              "Design"
+              "Musique, Théorie Musicale, Guitare, Live Shows, Vélo, Design"
             ]
           }
         ]

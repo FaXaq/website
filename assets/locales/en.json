@@ -6,6 +6,7 @@
   "resume": {
     "firstname": "Marin",
     "workfield": "Staff web engineer",
+    "description": "I am a Full-Stack web developer with 9 years of experience. I'm proficient in Typescript & Javascript technologies (mainly Node + React). I worked in teams on B2C + back-offices products, up to 5 millions yearly active users. I'm keen on data (NoSQL/SQL + GDPR) and ops subjects.",
     "copy": "Code : ",
     "blog": {
       "title": "Blog"
@@ -15,88 +16,91 @@
         "title": "Experiences",
         "current": {
           "title": "Staff engineer @ Hellowork",
-          "period": "Juilet 2021 - Juin 2023",
+          "period": "2 years",
           "links": [
             "https://hellowork.com",
             "https://seekube.com"
           ],
           "missions": [
-            "Defining and following Techical Roadmap objectives ()",
-            "Create product roadmap collectively with Product Team",
-            "Setting up processes, tools and workflow from delivery to run in collaboration with UI/UX, Support and Product teams",
-            "Growing & Managing a distributed remote tech team from 2 to 6 people",
-            "Ensuring sizing, specifications and understandings of significant projects (interconnections with existing systems, GDPR compliance, Applicative Design enhancements, performances issues)",
-            "Prioritising bugs & Application maintenance"
+            "Development: Feature development (Typescript, Node, React, AWS, MongoDB, Go)",
+            "Development: Back-office development (Typescript, Node, React)",
+            "Development: Ensuring sizing, specifications and understandings of significant projects (interconnections with existing systems, GDPR compliance, Applicative Design enhancements, performances issues)",
+            "Development: Prioritising bugs & Application maintenance",
+            "Management: Creating a product roadmap with Product Team",
+            "Management: Setting up processes, tools and workflow from delivery to run in collaboration with UI/UX, Support and Product teams",
+            "Management: Growing & Managing a distributed remote tech team from 2 to 6 people",
+            "Management: Defining and following Techical Roadmap objectives"
           ]
         },
         "past": [
           {
-            "title": "Senior front-end developper @ Gandi",
-            "period": "Mai 2020 - Juin 2021",
+            "title": "Senior developer @ Gandi",
+            "period": "1 year 1 month",
             "links": [
               "https://gandi.net"
             ],
             "missions": [
-              "Feature development (Flow.js, React, Redux, custom SSR)",
-              "Short term roadmap planning & sprints organization",
-              "Defining & following of Front-end chapter objectives",
-              "Prioritising bugs & Application maintenance"
+              "Development: Feature development (Flow.js, React, Redux, Node, custom SSR, Python, Postgres)",
+              "Development: Prioritising bugs & Application maintenance",
+              "Management: Short term roadmap planning & sprints organization",
+              "Management: Defining & following of chapter objectives"
             ]
           },
           {
             "title": "Front-end engineer @ Liberkeys",
-            "period": "Jul 2019 - May 2020",
+            "period": "9 months",
             "links": [
               "https://liberkeys.com"
             ],
             "missions": [
-              "Mobile app development (nativescript, vuejs) & designs (figma)",
-              "Architecture (Project / API / OPS) & Development of a SAAS front-end PWA (vuejs, nuxt, typescript, jest, normalizr)",
-              "Set up of analytics with tagging plan (mixpanel, GA)"
+              "Development: Feature development PWA",
+              "Development: Mobile app development (nativescript, vuejs) & designs",
+              "Development: Bootstrap V2 (API + Front + Ops)",
+              "Development: Set up of analytics with tagging plan (mixpanel, GA)"
             ]
           },
           {
-            "title": "Director of Studies / Co-founder @ _blank - Belleville Citoyenne",
-            "period": "Nov 2015 - Jun 2019",
+            "title": "Director of Studies @ _blank - Belleville Citoyenne",
+            "period": "4 years",
             "links": [
               "https://github.com/blank-project"
             ],
             "missions": [
-              "Student sourcing & selection",
-              "Teaching (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
-              "Writing of classes about web development essentials and concepts (Algorithmic, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-              "Defining roadmap & Setting up processes",
-              "Recognized as a 'Grande École du Numérique' and providing a Bac+1 diploma"
+              "Management: Recognized as a 'Grande École du Numérique' and providing a Bac+1 diploma",
+              "Management: Student sourcing & selection",
+              "Management: Teaching (HTML5 / CSS3 / JS / Algorithmic / Node.js / MongoDB)",
+              "Management: Writing of classes about web development essentials and concepts (Algorithmic, UI/UX, MVVM, OOP, MVC, Git, Agile)",
+              "Management: Defining roadmap & Setting up processes",
+              "Development: Development & Integration of open-sourced softwares for non-profits"
             ]
           },
           {
-            "title": "Front-end architect / Consultant @ enioka",
-            "period": "Aug 2014 - Jan 2019",
+            "title": "IT Architect / Consultant @ enioka",
+            "period": "5 years",
             "links": [
               "https://enioka.com",
               "https://github.com/enioka/ij.js",
               "https://itlivemaps.com"
             ],
             "missions": [
-              "Development & maintenance of an IT modelisation tool called the Modeler",
-              "Map several clients' informations systems on four plans (functionnal, applicative, infrastructure, and process) into the modeler",
-              "Deployment & support of the modeler at clients' places",
-              "Participating in the roadmap for the modeler",
-              "Applicative design enhancement of the modeler core (Java)",
-              "Creation of a matrix data representation librabry (ij.js)"
+              "Development: Development & maintenance of an IT modelisation tool",
+              "Development: Map several clients' informations systems on four plans (functionnal, applicative, infrastructure, process)",
+              "Development: Deployment & support on premise",
+              "Development: Applicative design enhancement on back-end (Java)",
+              "Development: Creation of a matrix data representation librabry in javascript (ij.js)"
             ]
           },
           {
             "title": "Full-stack engineer @ Storefront",
-            "period": "Mar 2017 - Oct 2017",
+            "period": "1 year",
             "links": [
               "https://thestorefront.com"
             ],
             "missions": [
-              "Internationalization (i18n)",
-              "Setting up payments for new areas (Stripe)",
-              "Focus on User Growth and Web Marketing tools implementation (Segment, mixpanel, GA, etc.)",
-              "Some key features (listing page, user signup funnel)"
+              "Development: Development of key feature (listing page, user signup funnel)",
+              "Development: Focus on User Growth and Web Marketing tools implementation (Segment, mixpanel, GA, etc.)",
+              "Development: Setting up payments for new areas (Stripe)",
+              "Development: Internationalization (i18n)"
             ]
           }
         ]
@@ -105,8 +109,7 @@
         "title": "Studies",
         "past": [
           {
-            "title": "M.Sc.2 Computer Sciences @ Supinfo",
-            "period": "2012 - 2017"
+            "title": "M.Sc.2 Computer Sciences @ Supinfo"
           }
         ]
       },
@@ -115,17 +118,16 @@
         "past": [
           {
             "title": "Board member @ Belleville Citoyenne",
-            "period": "2018 - 2019",
+            "period": "4 years",
             "missions": [
-              "Ensure general assembly decisions were followed throughout the year by the association"
+              "Ensure general assembly decisions were followed throughout each year"
             ]
           },
           {
-            "title": "PR Manager @ Supinfo",
-            "period": "2015 - 2017",
+            "title": "Multi-weeks cycling solo trips",
+            "period": "2021 - now",
             "missions": [
-              "Management of 50 students representing school in exhibitions",
-              "Planning & budget yearly"
+              "Cycling through different areas without assistance during weeks. It's fun, I pormise !"
             ]
           }
         ]
@@ -135,13 +137,22 @@
         "past": [
           {
             "title": "MTTS",
-            "period": "2018 - 2019",
+            "period": "2018 - now",
             "links": [
-              "https://github.com/faxaq/projects/mtts"
+              "https://norra.fr/projects/mtts"
             ],
             "missions": [
-              "The goal is to provide a deterministic API to music theory in Typescript",
-              "Implemented so far : chords, scales, notes"
+              "Deterministic API for music theory in Typescript"
+            ]
+          },
+          {
+            "title": "Corsica",
+            "period": "2023 - now",
+            "links": [
+              "https://norra.fr/projects/corsica"
+            ],
+            "missions": [
+              "A tool to manipulate & analyse GPX files"
             ]
           }
         ]
@@ -159,9 +170,7 @@
           {
             "title": "Hobbies",
             "missions": [
-              "Music, Music Theory, Guitar, Live Shows",
-              "Biking",
-              "Design"
+              "Music, Music Theory, Guitar, Live Shows, Cycling, Design"
             ]
           }
         ]
