@@ -41,7 +41,7 @@ First, let's measure the calculation time or our function with different FFT_SIZ
 
 Let's extract our function and create a wasm package with it. We'll follow the instructions of [https://rustwasm.github.io/docs/book](https://rustwasm.github.io/docs/book) to install the required dependencies.
 
-Create a folder inside the app forlder called `wasm`. Inside, run `wasm-pack new <my-package-name>`, it will create a rust lib. In my case, I have chosen to name it `auto-correlate`. `wasm-pack` will create use a boilerplate project to install all that is needed for us.
+Create a folder at the root of your project called `wasm`. Inside, run `wasm-pack new <my-package-name>`, it will create a rust lib. In my case, I have chosen to name it `auto-correlate`. `wasm-pack` will create use a boilerplate project to install all that is needed for us.
 
 You should have something that looks like that : 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Note } from 'mtts'
 import { useAnalyser } from '../hooks/useAnalyser';
-import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
+import init, { auto_correlate } from '../../../../wasm/auto-correlate/pkg';
 
 interface TunerContainerProps {
   audioStream: MediaStream
