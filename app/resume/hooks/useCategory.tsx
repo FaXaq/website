@@ -2,11 +2,12 @@
 
 import React from 'react'
 import { useTranslation } from 'next-i18next'
-import Category from '../../app/resume/components/category'
+import Category from '../components/category'
 
 export default function useCategory (
   name: string,
-  CustomIcon: () => React.JSX.Element
+  CustomIcon: () => React.JSX.Element,
+  filter?: string
 ) {
   const { t } = useTranslation()
   const categoryObject: [] = t(`resume.content.${name}.past`)
@@ -17,7 +18,8 @@ export default function useCategory (
       <Category
         key={`${name}-${s}`}
         object={categoryObject[s]}
-        icon={CustomIcon}
+        Icon={CustomIcon}
+        filter={filter}
       />
     )
   }
@@ -27,9 +29,9 @@ export default function useCategory (
       <h2 className="text-dark-marine text-2xl font-bold">
         {t(`resume.content.${name}.title`)}
       </h2>
-      { name === 'experiences' &&
-        <Category key='current' object={t(`resume.content.${name}.current`)} icon={CustomIcon} />
-      }
+      { name === 'experiences' && (
+        <Category key='current' object={t(`resume.content.${name}.current`)} Icon={CustomIcon} filter={filter} />
+      )}
       {elements}
     </div>
   )

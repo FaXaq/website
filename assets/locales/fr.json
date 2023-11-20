@@ -7,6 +7,10 @@
     "firstname": "Marin",
     "workfield": "Ingénieur Web",
     "description": "Je suis développeur web Full-Stack avec 9 ans d'expérience sur les technologies Typescript et Javascript (Node et React principalement) . J'ai évolué en équipe sur des produits orienté client avec back-offices accueillant jusqu'à 5 millions d'utilisateurs annuels. Je suis sensible aux problématiques de gestion de la donnée (NoSQL/SQL + RGPD) et d'infrastructure.",
+    "howItWorks": "Durant ma carrière, j'ai évolué sur différents aspects. Vous trouverez principalement des expériences en développement et en management. Vous pouvez avoir le résumé complet, ou alors vous pouvez filtrer sur les expériences managériales ou de développeur.",
+    "fullCTA": "CV Complet",
+    "developerCTA": "CV Développeur",
+    "managerCTA": "CV managérial",
     "copy": "Code : ",
     "content": {
       "experiences": {
@@ -19,19 +23,21 @@
             "https://seekube.com"
           ],
           "missions": [
-            "Développement: Définition, rédaction de spécifications techniques et technico-fonctionnelles",
-            "Développement: Développement des interfaces utilisateurs et des API métiers",
-            "Développement: Mise en conformité RGPD",
-            "Développement: Migration des infrastructures depuis des serveurs dediés vers AWS avec auto-adaptation au traffic utilisateur",
-            "Développement: Développement des tests (unitaires, fonctionnels, e2e, staging)",
-            "Développement: Développpement de la chaine d'integration / déploiement (CI/CD)",
-            "Développement: Développement des fonctionnalités back-office pour le support",
-            "Développement: Priorisation des bugs & Maintenance applicative",
-            "Management: Définition et suivi des objectifs de la feuille de route technique",
-            "Management: Élaboration de la roadmap produit en accord avec l'équipe responsable produit",
-            "Management: Mise en place des processus et d'un workflow du delivery au run en collaboration avec les équipes UI/UX, Support and Produit",
-            "Management: Recrutement et Management d'une équipe technique distribuée (remote) de 2 à 6 personnes",
-            "Management: Lotissement de projets d'envergure"
+            { "type": "Development", "text": "Rédaction de spécifications techniques / technico-fonctionnelles et définition des lotissements" },
+            { "type": "Development", "text": "Développement des interfaces utilisateurs, des API métiers et des tests unitaires / fonctionnels", "techUsed": ["Node", "React", "Typescript", "Go", "MongoDB"] },
+            { "type": "Development", "text": "Migration des infrastructures depuis des serveurs dediés vers une plateforme cloud avec auto-adaptation au traffic utilisateur",  "techUsed": ["Docker", "AWS", "CloudFormation", "Python", "MongoDB Atlas"] },
+            { "type": "Development", "text": "Création des environnements de développement, staging et production et du monitoring", "techUsed": ["AWS", "Datadog"] },
+            { "type": "Development", "text": "Développpement de la chaine d'integration et de déploiement - CI/CD", "techUsed": ["Webpack", "Babel", "CircleCI", "Versioning"] },
+            { "type": "Development", "text": "Développement des fonctionnalités back-office pour le support", "techUsed": ["Node", "React", "Typescript", "MongoDB"] },
+            { "type": "Development", "text": "Priorisation des bugs & Maintenance applicative" },
+            { "type": "Development", "text": "Ouverture de flux de données avec applications internes et externes au SI" },
+            { "type": "Management", "text": "Définition et suivi des objectifs de la feuille de route technique" },
+            { "type": "Management", "text": "Élaboration de la roadmap produit en accord avec l'équipe produit, sales, tech et support" },
+            { "type": "Management", "text": "Mise en place des processus et d'un workflow de l'idée à la maintenance en collaboration avec les équipes UI/UX, Support et Produit" },
+            { "type": "Management", "text": "Recrutement et Management d'une équipe technique distribuée (remote) de 2 à 6 personnes" },
+            { "type": "Management", "text": "Mise en conformité RGPD" },
+            { "type": "Management", "text": "Animation des réunions quotidiennes et bi-mensuelles" },
+            { "type": "Management", "text": "Présentation des résultats techniques en réunions pleinières" }
           ]
         },
         "past": [
@@ -42,13 +48,12 @@
               "https://gandi.net"
             ],
             "missions": [
-              "Management: Planning roadmap court terme & planning sprints pour la partie front-end",
-              "Management: Définition et suivi des objectifs Front-end du chapitre",
-              "Managemenemt: Priorisation des bugs & Maintenance applicative",
-              "Développement: Définition, rédaction de spécifications techniques et développement d'objectifs annuels inter-équipes",
-              "Développement: Développement d'interfaces utilisateurs et d'API métiers",
-              "Développement: Développements des tests unitaires et fonctionnels",
-              "Développement: Développement de fonctionnalités back-office pour le support et pour les utilisateurs à hauts volumes de produits"
+              { "type": "Management", "text": "Planning roadmap court terme & planning sprints" },
+              { "type": "Management", "text": "Définition et suivi des objectifs Front-end du chapitre" },
+              { "type": "Management", "text": "Priorisation des bugs & Maintenance applicative" },
+              { "type": "Development", "text": "Développement d'interfaces utilisateurs, d'API métiers et des tests unitaires, fonctionnels et e2e", "techUsed": ["Node", "React", "Flow.js", "Python", "Postgres"] },
+              { "type": "Development", "text": "Rédaction de spécifications techniques et développement d'objectifs annuels inter-équipes" },
+              { "type": "Development", "text": "Développement de fonctionnalités back-office pour le support et pour les utilisateurs à hauts volumes de produits" }
             ]
           },
           {
@@ -58,10 +63,10 @@
               "https://liberkeys.com"
             ],
             "missions": [
-              "Développement: Développement d'une application mobile (nativescript, vuejs) & designs",
-              "Développement: Architecture (Project / API / OPS)",
-              "Développement: Développement d'un front-end SAAS en PWA (vuejs, nuxt, typescript, jest, normalizr)",
-              "Développement: Mise en place des analytics (mixpanel, GA)"
+              { "type": "Development", "text": "Développement d'une application mobile", "techUsed": ["nativescript", "vue.js"] },
+              { "type": "Development", "text": "Architecture (Front / API / OPS)", "techUsed": ["Webpack", "Babel", "Go", "Fiber"] },
+              { "type": "Development", "text": "Développement d'un front-end SAAS en PWA", "techUsed": ["vue.js", "nuxt", "Typescript", "jest"] },
+              { "type": "Development", "text": "Mise en place des analytics", "techUsed": ["Mixpanel", "GA"] }
             ]
           },
           {
@@ -71,30 +76,28 @@
               "https://github.com/blank-project"
             ],
             "missions": [
-              "Management: Sourcing & sélection des étudiants",
-              "Management: Enseignements (HTML5 / CSS3 / JS -ES6- / Algorithmic / Node.js -express- / MongoDB)",
-              "Management: Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-              "Management: Définition d'une roadmap annuelle & plannings",
-              "Management: Reconnu 'Grande École du Numérique' délivrant un Bac+1",
-              "Développement: Développement et intégration de logiciels open-source pour des associations"
+              { "type": "Management", "text": "Sourcing & sélection des étudiants" },
+              { "type": "Management", "text": "Enseignements (HTML5 / CSS3 / JS / React / Algorithmic / Node.js / Express / MongoDB)" },
+              { "type": "Management", "text": "Écriture des cours sur les essentiels du Développement Web et des concepts informatiques (Algorithmique, UI/UX, MVVM, OOP, MVC, Git, Agile)" },
+              { "type": "Management", "text": "Définition d'une roadmap annuelle & plannings" },
+              { "type": "Management", "text": "Reconnu 'Grande École du Numérique' délivrant un Bac+1" },
+              { "type": "Development", "text": "Développement et intégration de logiciels open-source pour des associations", "techUsed": ["React", "Node", "Express", "MongoDB"] }
             ]
           },
           {
             "title": "Architecte front-end / Consultant @ enioka",
             "period": "5 ans",
             "links": [
-              "https://enioka.com",
               "https://github.com/enioka/ij.js",
               "https://itlivemaps.com"
             ],
             "missions": [
-              "Développement: Développement et maintenance d'un outil de modélisation des systèmes d'information",
-              "Développement: Référencement de différentes DSI sous quatre plans (functionnal, applicative, infrastructure, and process)",
-              "Développement: Déploiement & support chez différents clients",
-              "Développement: Modélisation et suivi de l'évolution des systèmes d'information dans des grandes entreprises (Criteo, SFR, Pickup,...)",
-              "Développement: Design applicatif et amélioration du coeur du modeler (Java)",
-              "Développement: Création d'une libraire de représentation matricielle des données (ij.js)",
-              "Management: Définition d'une roadmap pour le modeler"
+              { "type": "Development", "text": "Développement et maintenance d'un outil de modélisation des systèmes d'information", "techUsed": ["React", "Typescript", "Java"] },
+              { "type": "Development", "text": "Modélisation de différentes DSI sous quatre plans (fonctionnel, applicatif, infrastructure, processus)" },
+              { "type": "Development", "text": "Déploiement & support chez différents clients" },
+              { "type": "Development", "text": "Design et amélioration du cœur applicatif", "techUsed": ["Java", "C"] },
+              { "type": "Development", "text": "Création d'une bibliothèque de représentation matricielle des données", "techUsed": ["Vanilla Javascript"] },
+              { "type": "Management", "text": "Définition d'une roadmap technique" }
             ]
           },
           {
@@ -104,10 +107,10 @@
               "https://thestorefront.com"
             ],
             "missions": [
-              "Développement: Traduction des différentes platformes (i18n)",
-              "Développement: Mise en place des paiements dans de nouvelles zones (Stripe)",
-              "Développement: Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics (Segment, mixpanel, GA, etc.)",
-              "Développement: Refonte de fonctionalités clés (listing page, user signup funnel)"
+              { "type": "Development", "text": "Mise en place d'un système de traduction - i18n", "techUsed": ["Javascript", "Angular", "Ruby on Rails", "i18n"] },
+              { "type": "Development", "text": "Mise en place des paiements dans de nouvelles zones", "techUsed": ["Ruby", "Ruby on Rails", "Postgres", "Stripe"] },
+              { "type": "Development", "text": "Amélioration de la croissance utilisateur et du Web Marketing avec implémentations d'analytics", "techUsed": ["Segment.io", "mixpanel", "GA"] },
+              { "type": "Development", "text": "Création de fonctionalités clés (page produit, funnel d'inscription utilisateur)" }
             ]
           }
         ]
@@ -128,20 +131,20 @@
             "title": "Membre du CA @ Belleville Citoyenne",
             "period": "2018 - 2019",
             "missions": [
-              "S'assurer que le bureau suit les décisions prises en assemblées générales"
+              { "type": "Management", "text": "S'assurer que le bureau suit les décisions prises en assemblées générales" }
             ]
           },
           {
             "title": "Voyages à vélo",
             "period": "2021 - en cours",
             "missions": [
-              "Pédaler pendant des semaines, voir différents lieux, en autonomie"
+              { "type": "Hobby", "text": "Pédaler pendant des semaines, voir différents lieux, en autonomie" }
             ]
           }
         ]
       },
       "projects": {
-        "title": "Projects",
+        "title": "Projets",
         "past": [
           {
             "title": "MTTS",
@@ -150,7 +153,7 @@
               "https://norra.fr/projects/mtts"
             ],
             "missions": [
-              "API déterministe pour manipuer les concepts de théorie musicale en Typescript"
+              { "type": "Development", "text": "API déterministe pour manipuer les concepts de théorie musicale en Typescript" }
             ]
           },
 
@@ -161,7 +164,7 @@
               "https://norra.fr/projects/corsica"
             ],
             "missions": [
-              "Outil de manipulation et d'analyse des fichiers GPX"
+              { "type": "Development", "text": "Outil de manipulation et d'analyse des fichiers GPX" }
             ]
           }
         ]
@@ -172,14 +175,14 @@
           {
             "title": "Langues",
             "missions": [
-              "Français C2",
-              "Anglais B2"
+              { "type": "Language", "text": "Français C2" },
+              { "type": "Language", "text": "Anglais B2" }
             ]
           },
           {
             "title": "Passions",
             "missions": [
-              "Musique, Théorie Musicale, Guitare, Live Shows, Vélo, Design"
+              { "type": "Hobby", "text": "Musique, Théorie Musicale, Guitare, Live Shows, Vélo, Design" }
             ]
           }
         ]

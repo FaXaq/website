@@ -7,6 +7,10 @@
     "firstname": "Marin",
     "workfield": "Staff web engineer",
     "description": "I am a Full-Stack web developer with 9 years of experience. I'm proficient in Typescript & Javascript technologies (mainly Node + React). I worked in teams on B2C + back-offices products, up to 5 millions yearly active users. I'm keen on data (NoSQL/SQL + GDPR) and ops subjects.",
+    "howItWorks": "I've grown on different topics during my carreer. You will find mainly developer and manager experiences. You can have the full resume, or focus on the developer or manager side.",
+    "fullCTA": "Full Resume",
+    "developerCTA": "Developer Resume",
+    "managerCTA": "Manager Resume",
     "copy": "Code : ",
     "blog": {
       "title": "Blog"
@@ -19,88 +23,97 @@
           "period": "2 years",
           "links": [
             "https://hellowork.com",
-            "https://seekube.com"
+            "https://www.seekube.com"
           ],
           "missions": [
-            "Development: Feature development (Typescript, Node, React, AWS, MongoDB, Go)",
-            "Development: Back-office development (Typescript, Node, React)",
-            "Development: Ensuring sizing, specifications and understandings of significant projects (interconnections with existing systems, GDPR compliance, Applicative Design enhancements, performances issues)",
-            "Development: Prioritising bugs & Application maintenance",
-            "Management: Creating a product roadmap with Product Team",
-            "Management: Setting up processes, tools and workflow from delivery to run in collaboration with UI/UX, Support and Product teams",
-            "Management: Growing & Managing a distributed remote tech team from 2 to 6 people",
-            "Management: Defining and following Techical Roadmap objectives"
+            { "type": "Development", "text": "Writing of technical and functional specifications" },
+            { "type": "Development", "text": "UI & API development, functional and unit testing", "techUsed": ["Node", "React", "Typescript", "Go", "MongoDB"] },
+            { "type": "Development", "text": "On-premise ops migration into auto-scalling cloud solution",  "techUsed": ["Docker", "AWS", "CloudFormation", "Python", "MongoDB Atlas"] },
+            { "type": "Development", "text": "Dev, staging and prod env creation and monitoring", "techUsed": ["AWS", "Datadog"] },
+            { "type": "Development", "text": "CI/CD development", "techUsed": ["Webpack", "Babel", "CircleCI", "Versioning"] },
+            { "type": "Development", "text": "Back-office development", "techUsed": ["Node", "React", "Typescript", "MongoDB"] },
+            { "type": "Development", "text": "Issue prioritization & applicative maintenance" },
+            { "type": "Development", "text": "Data flow opening with internal and external application" },
+            { "type": "Management", "text": "Defining and following technical roadmap objectives" },
+            { "type": "Management", "text": "Defining product roadmap with sales, tech, support and product teams" },
+            { "type": "Management", "text": "Setting work processes from idea to maintenance with tech, support and product teams" },
+            { "type": "Management", "text": "Managing and hiring a distributed technical team from 2 to 6 people" },
+            { "type": "Management", "text": "GDPR compliance" },
+            { "type": "Management", "text": "Daily and bi-monthly meeting organization" },
+            { "type": "Management", "text": "Tech results presentations during all hands meetings" }
           ]
         },
         "past": [
           {
-            "title": "Senior developer @ Gandi",
-            "period": "1 year 1 month",
+            "title": "Senior web developer @ Gandi",
+            "period": "1 year, 1 month",
             "links": [
               "https://gandi.net"
             ],
             "missions": [
-              "Development: Feature development (Flow.js, React, Redux, Node, custom SSR, Python, Postgres)",
-              "Development: Prioritising bugs & Application maintenance",
-              "Management: Short term roadmap planning & sprints organization",
-              "Management: Defining & following of chapter objectives"
+              { "type": "Management", "text": "Short term roadmap planning & sprint planning" },
+              { "type": "Management", "text": "Defining and following front-end chapter objectives" },
+              { "type": "Management", "text": "Issue prioritization and applicative maintenance" },
+              { "type": "Development", "text": "UI & API development, functional, unit and e2e testing", "techUsed": ["Node", "React", "Flow.js", "Python", "Postgres"] },
+              { "type": "Development", "text": "Technical spec writing & development of cross-team and cross-functional objectives" },
+              { "type": "Development", "text": "Development of back-office features for support team and users with high volume of products" }
             ]
           },
           {
-            "title": "Front-end engineer @ Liberkeys",
+            "title": "Full-stack developer @ Liberkeys",
             "period": "9 months",
             "links": [
               "https://liberkeys.com"
             ],
             "missions": [
-              "Development: Feature development PWA",
-              "Development: Mobile app development (nativescript, vuejs) & designs",
-              "Development: Bootstrap V2 (API + Front + Ops)",
-              "Development: Set up of analytics with tagging plan (mixpanel, GA)"
+              { "type": "Development", "text": "Development of a mobile app", "techUsed": ["nativescript", "vue.js"] },
+              { "type": "Development", "text": "Architecture (Front-end / API / OPS)", "techUsed": ["Webpack", "Babel", "Go", "Fiber"] },
+              { "type": "Development", "text": "Front-end SAAS PWA Development", "techUsed": ["vue.js", "nuxt", "Typescript", "jest"] },
+              { "type": "Development", "text": "Analytics setup", "techUsed": ["Mixpanel", "GA"] }
             ]
           },
           {
-            "title": "Director of Studies @ _blank - Belleville Citoyenne",
+            "title": "Director of studies / Co-founder @ _blank - Belleville Citoyenne",
             "period": "4 years",
             "links": [
               "https://github.com/blank-project"
             ],
             "missions": [
-              "Management: Recognized as a 'Grande École du Numérique' and providing a Bac+1 diploma",
-              "Management: Student sourcing & selection",
-              "Management: Teaching (HTML5 / CSS3 / JS / Algorithmic / Node.js / MongoDB)",
-              "Management: Writing of classes about web development essentials and concepts (Algorithmic, UI/UX, MVVM, OOP, MVC, Git, Agile)",
-              "Management: Defining roadmap & Setting up processes",
-              "Development: Development & Integration of open-sourced softwares for non-profits"
+              { "type": "Management", "text": "Sourcing & student selection" },
+              { "type": "Management", "text": "Teaching (HTML5 / CSS3 / JS / React / Algorithmic / Node.js / Express / MongoDB)" },
+              { "type": "Management", "text": "Writing classes about Web Development essentials and IT basis (Algorithms, UI/UX, MVVM, OOP, MVC, Git, Agile)" },
+              { "type": "Management", "text": "Yearly roadmap planning" },
+              { "type": "Management", "text": "Certified 'Grande École du Numérique' leading to a Bac+1" },
+              { "type": "Development", "text": "Open sourced development and integration for non-profits", "techUsed": ["React", "Node", "Express", "MongoDB"] }
             ]
           },
           {
-            "title": "IT Architect / Consultant @ enioka",
+            "title": "Front-end Architect / IT Consultant @ enioka",
             "period": "5 years",
             "links": [
-              "https://enioka.com",
               "https://github.com/enioka/ij.js",
               "https://itlivemaps.com"
             ],
             "missions": [
-              "Development: Development & maintenance of an IT modelisation tool",
-              "Development: Map several clients' informations systems on four plans (functionnal, applicative, infrastructure, process)",
-              "Development: Deployment & support on premise",
-              "Development: Applicative design enhancement on back-end (Java)",
-              "Development: Creation of a matrix data representation librabry in javascript (ij.js)"
+              { "type": "Development", "text": "Information System Modeling tool development", "techUsed": ["React", "Typescript", "Java"] },
+              { "type": "Development", "text": "Modeling Information Systems of huge companny IT Managements (functional, applicative, ops, process)" },
+              { "type": "Development", "text": "On-premise deployment & support" },
+              { "type": "Development", "text": "Applicative design enhancement", "techUsed": ["Java", "C"] },
+              { "type": "Development", "text": "Creating a matrix data visualisation tool", "techUsed": ["Vanilla Javascript"] },
+              { "type": "Management", "text": "Technical roadmap planing" }
             ]
           },
           {
-            "title": "Full-stack engineer @ Storefront",
+            "title": "Full-stack developer @ Storefront",
             "period": "1 year",
             "links": [
               "https://thestorefront.com"
             ],
             "missions": [
-              "Development: Development of key feature (listing page, user signup funnel)",
-              "Development: Focus on User Growth and Web Marketing tools implementation (Segment, mixpanel, GA, etc.)",
-              "Development: Setting up payments for new areas (Stripe)",
-              "Development: Internationalization (i18n)"
+              { "type": "Development", "text": "Setting up translation - i18n", "techUsed": ["Javascript", "Angular", "Ruby on Rails", "i18n"] },
+              { "type": "Development", "text": "Enabling payment in more market areas", "techUsed": ["Ruby", "Ruby on Rails", "Postgres", "Stripe"] },
+              { "type": "Development", "text": "Enhancing user growth through web marketing and analysics analysis", "techUsed": ["Segment.io", "mixpanel", "GA"] },
+              { "type": "Development", "text": "Key feature development (listing page, user signup funnel)" }
             ]
           }
         ]
@@ -109,7 +122,8 @@
         "title": "Studies",
         "past": [
           {
-            "title": "M.Sc.2 Computer Sciences @ Supinfo"
+            "title": "M.Sc.2 Computer Sciences @ Supinfo",
+            "period": "2012 - 2017"
           }
         ]
       },
@@ -118,16 +132,16 @@
         "past": [
           {
             "title": "Board member @ Belleville Citoyenne",
-            "period": "4 years",
+            "period": "2018 - 2019",
             "missions": [
-              "Ensure general assembly decisions were followed throughout each year"
+              { "type": "Management", "text": "Making sure general assembly decisions are carried out by the organization" }
             ]
           },
           {
-            "title": "Multi-weeks cycling solo trips",
+            "title": "Cycling trips",
             "period": "2021 - now",
             "missions": [
-              "Cycling through different areas without assistance during weeks. It's fun, I pormise !"
+              { "type": "Hobby", "text": "Cycling during weeks, seeing different places, without assitance" }
             ]
           }
         ]
@@ -142,9 +156,10 @@
               "https://norra.fr/projects/mtts"
             ],
             "missions": [
-              "Deterministic API for music theory in Typescript"
+              { "type": "Development", "text": "Deterministic API to manipulate music theory concepts" }
             ]
           },
+
           {
             "title": "Corsica",
             "period": "2023 - now",
@@ -152,7 +167,7 @@
               "https://norra.fr/projects/corsica"
             ],
             "missions": [
-              "A tool to manipulate & analyse GPX files"
+              { "type": "Development", "text": "GPX merging & analysis tool" }
             ]
           }
         ]
@@ -163,14 +178,14 @@
           {
             "title": "Languages",
             "missions": [
-              "French C2",
-              "English B2"
+              { "type": "Language", "text": "Français C2" },
+              { "type": "Language", "text": "English C1" }
             ]
           },
           {
-            "title": "Hobbies",
+            "title": "Interests",
             "missions": [
-              "Music, Music Theory, Guitar, Live Shows, Cycling, Design"
+              { "type": "Hobby", "text": "Music, Music Theory, Guitar, Live Shows, Cycling, Design" }
             ]
           }
         ]
