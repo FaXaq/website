@@ -3,9 +3,15 @@ import * as Tone from 'tone'
 
 function usePolysynth() {
   const [polysynth, setPolysynth] = useState<Tone.PolySynth | undefined>()
+  
+  function setVolume(db: number) {
+    if (polysynth) {
+      polysynth.volume.value = db
+    }
+  }
 
   useEffect(() => {
-    setPolysynth(new Tone.PolySynth(2, Tone.Synth))
+    setPolysynth(new Tone.PolySynth().toDestination())
 
     return () => {
       if (polysynth) {
@@ -14,7 +20,10 @@ function usePolysynth() {
     }
   }, [])
 
-  return polysynth
+  return {
+    polysynth,
+    setVolume
+  }
 }
 
 export { usePolysynth }

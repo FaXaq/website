@@ -26,10 +26,10 @@ const DEFAULT_VOLUME = -15
 const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: IntervalGuesserGameProps) => {
   const { t } = useTranslation()
   const [playingSound, setPlayingSound] = useState(false)
-  const [decibels, setDecibels, volume] = useVolume(DEFAULT_VOLUME)
+  const { db, setDb } = useVolume(DEFAULT_VOLUME)
   const fft = useFFT()
   const waveform = useWaveform()
-  const polysynth = usePolysynth()
+  const { polysynth, setVolume } = usePolysynth()
   const [randomIntervals, setRandomIntervals] = useState<Interval[]>(getRandomEntities(level.intervals))
 
   // Generate random interval
@@ -75,8 +75,8 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
 
   // setting up the polysynth
   useEffect(() => {
-    if (polysynth && volume && waveform && fft) {
-      polysynth.chain(volume, waveform, fft, Tone.Master)
+    if (polysynth && waveform && fft) {
+      polysynth.chain(waveform, fft)
       polysynth.set({
         envelope: {
           attack: 0.5,
@@ -89,7 +89,11 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
         }
       })
     }
-  }, [polysynth, volume, waveform, fft])
+  }, [polysynth, waveform, fft])
+
+  useEffect(() => {
+    setVolume(db)
+  }, [setVolume, db])
 
   // player handler
   useEffect(() => {
@@ -124,7 +128,7 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
       <ul className="flex justify-center flex-wrap">
         {displayIntervals}
       </ul>
-      <Knob onUpdate={setDecibels} value={decibels} min={-100} max={0} label={t('mtts.controls.volume.title')} />
+      <Knob onUpdate={setDb} value={db} min={-100} max={0} label={t('mtts.controls.volume.title')} />
     </div>
   )
 }

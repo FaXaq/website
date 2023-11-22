@@ -2,32 +2,12 @@ import * as Tone from 'tone'
 import { useState, useEffect } from 'react'
 
 export function useVolume(decibels: number = -10) {
-  const [volume, setVolume] = useState<Tone.Volume | undefined>()
   const [db, setDb] = useState<number>(decibels)
 
-  useEffect(() => {
-    setVolume(new Tone.Volume(db))
-
-    return () => {
-      if (volume) {
-        volume.dispose()
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (volume) {
-      volume.volume.value = db
-    } else {
-      console.error("Cannot modify volume that doesn't exists")
-    }
-  }, [db])
-
-  return [
+  return {
     db,
-    setDb,
-    volume
-  ]
+    setDb
+  }
 }
 
 export function useFFT (fftNumber: number = 256) {
