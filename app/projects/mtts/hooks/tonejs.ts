@@ -1,7 +1,7 @@
 import * as Tone from 'tone'
 import { useState, useEffect } from 'react'
 
-export function useVolume (decibels: number = -10) {
+export function useVolume(decibels: number = -10) {
   const [volume, setVolume] = useState<Tone.Volume | undefined>()
   const [db, setDb] = useState<number>(decibels)
 
@@ -60,4 +60,21 @@ export function useWaveform (fftNumber: number = 256) {
   }, [])
 
   return waveform
+}
+
+
+export function useToneSynth() {
+  const synth = new Tone.Synth()
+
+  useEffect(() => {
+    synth.toDestination()
+
+    return () => {
+      synth.dispose()
+    }
+  }, [])
+
+  return {
+    synth
+  }
 }

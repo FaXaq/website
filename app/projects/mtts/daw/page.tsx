@@ -1,13 +1,15 @@
 'use client'
 
 import React from 'react'
+import Metronome from './components/Metronome'
 
 function Daw() {
   return (
-    <div className="h-screen w-screen flex flex-wrap">
-      <div className="w-full h-12">
+    <div className="h-screen w-screen flex flex-col">
+      <div className="w-full">
+        <Metronome />
       </div>
-      <div className="grid grid-cols-6 h-full w-screen">
+      <div className="grow w-full grid grid-cols-6">
         <div className="col-span-1 bg-mtts-violet">
 
         </div>

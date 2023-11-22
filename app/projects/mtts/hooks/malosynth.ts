@@ -10,7 +10,7 @@ export function useMaloSynth () {
   const [polysynth, setPolySynth] = useState<PolySynth | undefined>()
 
   useEffect(() => {
-    setPolySynth(new PolySynth(6, Synth).toMaster())
+    setPolySynth(new PolySynth().toDestination())
 
     return () => {
       if (polysynth) {

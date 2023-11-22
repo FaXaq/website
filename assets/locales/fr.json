@@ -227,19 +227,24 @@
             "link": "/projects/mtts/malo"
           },
           {
-            "title": "Piano-Roll",
-            "description": "Piano classique relié à un Synthéthiseur multi voix.",
-            "link": "/projects/mtts/piano-roll"
+            "title": "Tuner",
+            "description": "Un accordeur qui vous donnera la fréquence ou la note que vous êtes en train de jouer.",
+            "link": "/projects/mtts/tuner"
           },
           {
-            "title": "Daw",
-            "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
-            "link": "/projects/mtts/daw"
+            "title": "Metronome",
+            "description": "Un métronome. Juste un métronome, précis jusqu'au centième de seconde.",
+            "link": "/projects/mtts/metronome"
           },
           {
             "title": "Interval Guesser",
             "description": "Découvrir quel interval est actuellement joué sur la page avec mtts & tonejs",
             "link": "/projects/mtts/games/interval-guesser"
+          },
+          {
+            "title": "Daw",
+            "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
+            "link": "/projects/mtts/daw"
           }
         ],
         "research": {
