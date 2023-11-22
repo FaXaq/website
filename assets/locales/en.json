@@ -196,19 +196,24 @@
             "link": "/projects/mtts/malo"
           },
           {
-            "title": "Piano-Roll",
-            "description": "Classic keys setup linked linked to a multi-voices synth w/ tonejs.",
-            "link": "/projects/mtts/piano-roll"
+            "title": "Interval Guesser",
+            "description": "Discover which interval is currently played on the page",
+            "link": "/projects/mtts/games/interval-guesser"
+          },
+          {
+            "title": "Tuner",
+            "description": "Get an accurate prediction of the note and frequency you're playing.",
+            "link": "/projects/mtts/tuner"
+          },
+          {
+            "title": "Metronome",
+            "description": "Get a metronome. Just a metronome, accurate to 0.01 second.",
+            "link": "/projects/mtts/metronome"
           },
           {
             "title": "Daw",
             "description": "Digital Audio Workstation (early WIP) in react w/ tonejs",
             "link": "/projects/mtts/daw"
-          },
-          {
-            "title": "Interval Guesser",
-            "description": "Discover which interval is currently played on the page",
-            "link": "/projects/mtts/games/interval-guesser"
           }
         ],
         "research": {
