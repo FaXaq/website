@@ -9,5 +9,5 @@ export function getNoteIntervalIndexInScale(scale: Scale, note: Note): number {
   if (index < 0) {
     return -1
   }
-  return scale.intervals[index].value
+  return index
 }

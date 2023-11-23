@@ -13,6 +13,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import PianoRoll from '../../components/keys/PianoRoll'
 import PianoBlackKey from './PianoBlackKey'
 import PianoKey from './PianoKey'
+import { NOTE_DISPLAY, ScaleBuilderSettingsProvider, useScaleBuilderSettings } from '../context/settings'
 
 const availableAccidentals: Accidental[] =
   ACCIDENTALS
@@ -61,6 +62,7 @@ function BuildScale() {
   const searchParams = useSearchParams()
   const [rootNote, setRootNote] = useState<Note>(availableRootNotes[0])
   const [scaleIntervals, setScaleIntervals] = useState<Interval[]>(SCALES.MAJOR.intervals)
+  const { noteDisplay, setNoteDisplay } = useScaleBuilderSettings()
   const { translateNote } = useNoteTranslation()
 
   const scale = useMemo(() => {
@@ -204,6 +206,19 @@ function BuildScale() {
           )}
         </div>
         <div className='col-span-2 flex flex-col'>
+          <p>Select how you want to show the notes on the fretboard</p>
+          <ul>
+            {Object.values(NOTE_DISPLAY).map(displaySetting => (
+              <li className="flex flex-row" key={`noteDisplayOption-${displaySetting}`}>
+                <input
+                  type="checkbox"
+                  checked={noteDisplay === displaySetting}
+                  onChange={() => setNoteDisplay(displaySetting) }
+                />
+                <p className="pl-2">{displaySetting}</p>
+              </li>
+            ))}
+          </ul>
           <p>Here is the scale on a guitar neck :</p>
           <div className='py-4'>
             <GuitarNeck
