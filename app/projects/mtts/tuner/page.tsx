@@ -49,7 +49,7 @@ export default function Tuner() {
   const [display, setDisplay] = useState<DISPLAY>(DISPLAY.HZ)
   const [fq, setFq] = useState<number>(-1)
   const { isLoading, hasLoaded,  hasErrored, error } = useWasmInit(init)
-  const { isActive, requestAccess, micStream } = useMicInput()
+  const { isActive, requestAccess, micStream, revokeAccess } = useMicInput()
   const { analyser } = useAnalyser(micStream, 2048)
 
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function Tuner() {
     } else {
       setFq(-1)
       setIsGuessing(false)
+      revokeAccess()
     }
   }
 
