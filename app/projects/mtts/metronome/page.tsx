@@ -1,12 +1,12 @@
 'use client'
 
 import classNames from 'classnames'
+import dynamic from 'next/dynamic'
 import React, { useRef, useState } from 'react'
 import { useToneSynth } from '../hooks/tonejs'
 import useMetronome from '../hooks/useMetronome/useMetronome'
 
-
-export default function Metronome() {
+function Metronome() {
   const [previousTap, setPreviousTap] = useState<number>(0)
   const [metronomeBeat, setMetronomeBeat] = useState<number>(0)
   const [editing, setEditing] = useState<boolean>(false)
@@ -63,7 +63,15 @@ export default function Metronome() {
         </button>
         <div className="p-4 w-24">
           {!editing && <p onDoubleClick={() => startEditing()}>{bpm}</p> }
-          {editing && <input className="text-center block w-full h-full" ref={input} type="number" onBlur={() => setEditing(false)} value={bpm} onChange={(e) => updateBpm(parseInt(e.target.value))} />}
+          {editing && (
+            <input
+              className="text-center block w-full h-full bg-mtts-white text-mtts-dark-violet border-transparent focus:outline-none"
+              ref={input}
+              onBlur={() => setEditing(false)}
+              value={bpm}
+              onChange={(e) => updateBpm(Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}
+            />
+          )}
         </div>
         <button onClick={() => triggerTap()}>
           Tap
@@ -72,3 +80,10 @@ export default function Metronome() {
     </div>
   )
 }
+
+export default dynamic(
+  () => Promise.resolve(Metronome), 
+  {
+    ssr: false
+  }
+)

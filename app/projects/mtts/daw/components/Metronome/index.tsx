@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
 import { useToneSynth } from '../../../hooks/tonejs'
 import useMetronome from '../../../hooks/useMetronome/useMetronome'
@@ -11,7 +13,6 @@ export default function Metronome() {
     setMetronomeSide((bipNumber) % 2)
   }
   const { bpm, updateBpm, toggleMetronome } = useMetronome(bip)
-
     
   return (
     <div className="flex flex-row">
