@@ -222,7 +222,7 @@
           },
           {
             "title": "Metronome",
-            "description": "Get a metronome. Just a metronome, accurate to 0.01 second.",
+            "description": "Get a metronome. Just a metronome, accurate to 0.01 Hz.",
             "link": "/projects/mtts/metronome"
           },
           {
