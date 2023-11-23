@@ -3,17 +3,25 @@
 import { useEffect, useRef, useState } from "react"
 import { IncomingMessageType, OutgoingMessageType, OutgoingMessage } from "./worker/const"
 
+type MetronomeCallback = (bipNumber: number) => any
 
-export default function useMetronome(beatCallback: (bipNumber: number) => any) {
+
+export default function useMetronome(beatCallback: MetronomeCallback) {
   let bipNumber = 0
   const workerRef = useRef<Worker>()
+  const callbackRef = useRef<MetronomeCallback>()
   const [bpm, setBpm] = useState<number>(60)
   const [isActive, setIsActive] = useState<boolean>(false)
+
+  useEffect(() => {
+    console.log('new callabck')
+    callbackRef.current = beatCallback
+  }, [beatCallback])
 
   function onMetronomeWorkerReceiveMessage(event: MessageEvent<OutgoingMessage>) {
     switch (event.data.type) {
     case OutgoingMessageType.BIP:
-      beatCallback(bipNumber)
+      callbackRef.current(bipNumber)
       bipNumber ++
       break;
     case OutgoingMessageType.BPM_UPDATE:

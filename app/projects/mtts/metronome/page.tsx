@@ -2,35 +2,29 @@
 
 import classNames from 'classnames'
 import dynamic from 'next/dynamic'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useToneSynth } from '../hooks/tonejs'
 import useMetronome from '../hooks/useMetronome/useMetronome'
+import EditableText from './components/editableText'
 
 function Metronome() {
   const [previousTap, setPreviousTap] = useState<number>(0)
+  const [beatNumber, setBeatNumber] = useState<number>(4)
   const [metronomeBeat, setMetronomeBeat] = useState<number>(0)
-  const [editing, setEditing] = useState<boolean>(false)
-  const input = useRef<HTMLInputElement>()
-  const { synth } = useToneSynth()
+  const { synthRef } = useToneSynth()
 
-  function onBip(beatNumber: number) {
-    if (beatNumber % 2 === 0) {
-      synth.triggerAttackRelease("A4", "16n")
-    } else {
-      synth.triggerAttackRelease("C4", "16n")
+  const onBip = useCallback((metronomeBeat: number) => {
+    if (synthRef) {
+      if (metronomeBeat % beatNumber === 0) {
+        synthRef.current.triggerAttackRelease("A4", "16n")
+      } else {
+        synthRef.current.triggerAttackRelease("C4", "16n")
+      }
     }
-    setMetronomeBeat((beatNumber) % 2)
-  }
+    setMetronomeBeat((metronomeBeat) % beatNumber)
+  }, [synthRef, beatNumber])
 
   const { bpm, updateBpm, toggleMetronome, isActive } = useMetronome(onBip)
-
-  function startEditing() {
-    setEditing(true)
-    setTimeout(() => {
-      input.current.focus()
-      input.current.select()
-    }, 25)
-  }
 
   function triggerTap() {
     const now = Date.now()
@@ -48,34 +42,31 @@ function Metronome() {
   return (
     <div className="h-screen w-screen flex flex-col">
       <div className="grow flex flex-col md:flex-row">
-        <div className={classNames({
-          "grow": true,
-          "bg-mtts-dark-violet": metronomeBeat === 0
-        })}></div>
-        <div className={classNames({
-          "grow": true,
-          "bg-mtts-dark-violet-200": metronomeBeat === 1
-        })}></div>
+        {
+          Array.from(new Array(beatNumber).keys()).map((v, i) => (
+            <div key={`beat-${i}`} className={classNames({
+              "grow border": true,
+              "border-mtts-dark-violet": i === 0,
+              "border-mtts-light-violet": i !== 0,
+              "bg-mtts-dark-violet": metronomeBeat === 0 && i === 0,
+              "bg-mtts-light-violet": metronomeBeat === i && i !== 0
+            })}></div>
+          ))
+        }
       </div>
       <div className="text-center flex flex-row justify-center items-center bg-mtts-light-violet text-white">
         <button onClick={() => toggleMetronome()}>
           {isActive ? 'stop' : 'start'}
         </button>
         <div className="p-4 w-24">
-          {!editing && <p onDoubleClick={() => startEditing()}>{bpm}</p> }
-          {editing && (
-            <input
-              className="text-center block w-full h-full bg-mtts-white text-mtts-dark-violet border-transparent focus:outline-none"
-              ref={input}
-              onBlur={() => setEditing(false)}
-              value={bpm}
-              onChange={(e) => updateBpm(Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value))}
-            />
-          )}
+          <EditableText value={bpm.toString()} updateValue={(e) => updateBpm(Number.isNaN(parseInt(e)) ? 0 : parseInt(e))} />
         </div>
         <button onClick={() => triggerTap()}>
           Tap
         </button>
+        <div className="p-4 w-24">
+          <EditableText value={beatNumber.toString()} updateValue={(e) => setBeatNumber(Number.isNaN(parseInt(e)) ? 0 : parseInt(e))} />
+        </div>
       </div>
     </div>
   )

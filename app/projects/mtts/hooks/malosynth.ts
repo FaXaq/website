@@ -35,7 +35,7 @@ export function useMaloSynth () {
     notes.map(n => {
       // if note is in unique notes array play it
       if (uniqueNotes.findIndex(un => un.SPN === n.SPN) > -1) {
-        polysynth.triggerAttack(n.frequency)
+        polysynth.triggerAttackRelease(n.frequency, "1n")
       }
     })
 

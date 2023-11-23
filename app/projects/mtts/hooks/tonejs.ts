@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useRef } from 'react'
 import * as Tone from 'tone'
 import { useState, useEffect } from 'react'
 
@@ -47,17 +47,21 @@ export function useWaveform (fftNumber: number = 256) {
 
 
 export function useToneSynth() {
+  const synthRef = useRef<Tone.Synth>()
   const synth = new Tone.Synth()
 
   useEffect(() => {
     synth.toDestination()
+    synthRef.current = synth
 
     return () => {
       synth.dispose()
+      synthRef.current = undefined
     }
   }, [])
 
   return {
-    synth
+    synth,
+    synthRef
   }
 }
