@@ -2,8 +2,10 @@
 
 import classNames from 'classnames'
 import dynamic from 'next/dynamic'
-import React, { useCallback, useRef, useState } from 'react'
-import { useToneSynth } from '../hooks/tonejs'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import Knob from '../components/controls/knob'
+import { useToneSynth, useVolume } from '../hooks/tonejs'
 import useMetronome from '../hooks/useMetronome/useMetronome'
 import EditableText from './components/editableText'
 
@@ -12,9 +14,11 @@ function Metronome() {
   const [beatNumber, setBeatNumber] = useState<number>(4)
   const [metronomeBeat, setMetronomeBeat] = useState<number>(0)
   const { synthRef } = useToneSynth()
+  const { db, setDb } = useVolume(-15)
+  const { t } = useTranslation()
 
   const onBip = useCallback((metronomeBeat: number) => {
-    if (synthRef) {
+    if (synthRef.current) {
       if (metronomeBeat % beatNumber === 0) {
         synthRef.current.triggerAttackRelease("A4", "16n")
       } else {
@@ -38,6 +42,12 @@ function Metronome() {
       setPreviousTap(0)
     }
   }
+
+  useEffect(() => {
+    if (synthRef.current) {
+      synthRef.current.volume.value = db
+    }
+  }, [synthRef, db])
     
   return (
     <div className="h-screen w-screen flex flex-col">
@@ -66,6 +76,9 @@ function Metronome() {
         </button>
         <div className="p-4 w-24">
           <EditableText value={beatNumber.toString()} updateValue={(e) => setBeatNumber(Number.isNaN(parseInt(e)) ? 0 : parseInt(e))} />
+        </div>
+        <div className="flex flex-row items-center">
+          <input type="range" value={db} min={-50} max={0} onChange={(e) => setDb(parseInt(e.target.value))} />
         </div>
       </div>
     </div>
