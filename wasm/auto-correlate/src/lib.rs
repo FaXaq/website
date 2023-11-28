@@ -98,17 +98,21 @@ pub fn auto_correlate(buffer: &Float32Array, sample_rate: i32) -> f32 {
         max_pos = i;
       }
     }
+
+    if max_pos == 0 || max_pos == correlation_array.len() {
+      sample_rate as f32 / max_pos as f32
+    } else {
+      let y1: f32 = correlation_array[max_pos - 1];
+      let y2: f32 = correlation_array[max_pos];
+      let y3: f32 = correlation_array[max_pos + 1];
   
-    let y1: f32 = correlation_array[max_pos - 1];
-    let y2: f32 = correlation_array[max_pos];
-    let y3: f32 = correlation_array[max_pos + 1];
-
-    let a: f32 = (y1 + y3 - 2.0 * y2) / 2.0;
-    let b: f32 = (y3 - y1) / 2.0;
-    
-    let corrected_abscissa: f32 = max_pos as f32 - (b / (2.0 * a));
-
-    sample_rate as f32 / corrected_abscissa
+      let a: f32 = (y1 + y3 - 2.0 * y2) / 2.0;
+      let b: f32 = (y3 - y1) / 2.0;
+      
+      let corrected_abscissa: f32 = max_pos as f32 - (b / (2.0 * a));
+  
+      sample_rate as f32 / corrected_abscissa
+    }
   }
 }
 
