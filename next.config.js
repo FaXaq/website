@@ -6,7 +6,6 @@ const withMDX = require('@next/mdx')()
 const nextConfig = {
   // Configure `pageExtensions`` to include MDX files
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-  // Optionally, add any other Next.js config below
   webpack(config) {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -15,7 +14,10 @@ const nextConfig = {
     }
 
     return config
-  }
+  },
+  experimental: {
+    mdxRs: true,
+  },
 }
 
 module.exports = withMDX(nextConfig)

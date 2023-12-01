@@ -99,6 +99,17 @@ function BlogHomePage({ articles, tags }: BlogProps) {
             {links.length > 0 ? links : 'No blog post here...'}
           </ul>
         </article>
+        <footer className="py-4">
+          <p>Links:</p>
+          <ul className="flex flex-row">
+            <li className="pr-2">
+              <Link href="/blog/rss">RSS</Link>
+            </li>
+            <li>
+              <Link href="https://github.com/faxaq/website">Code</Link>
+            </li>
+          </ul>
+        </footer>
       </div>
     </>
   )
