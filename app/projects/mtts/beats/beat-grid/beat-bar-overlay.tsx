@@ -13,12 +13,12 @@ const BeatBarOverlay = ({ timeSignature }: BeatBarOverlayProps) => {
 
   for (let i = 0; i < timeSignature.beats; i++) {
     pattern.push(
-      <li className="flex-grow border" key={`beat-overlay-${i}}`}></li>
+      <li  key={`beat-overlay-${i}}`}></li>
     )
   }
 
   return (
-    <ul className="absolute inset-0 flex">
+    <ul >
       {pattern}
     </ul>
   )

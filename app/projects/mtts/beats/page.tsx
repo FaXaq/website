@@ -5,7 +5,7 @@ import BeatGrid from './beat-grid/beat-grid'
 
 const Beats = () => {
   return (
-    <div className="h-screen w-screen bg-red-200">
+    <div >
       <BeatGrid lineNumber={5} />
     </div>
   )

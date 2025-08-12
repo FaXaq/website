@@ -1,5 +1,6 @@
 import BlogPostLayout from '../components/BlogPostLayout'
 import WorkingWasm from './components/WorkingWasm'
+import { Box, Table } from '@chakra-ui/react'
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
@@ -20,22 +21,42 @@ As we used an FFT of 2048 we had 2048 samples to define our signal. But we may u
 
 First, let's measure the calculation time or our function with different FFT_SIZE. FFT_SIZE comes in pow of 2, and the first size that may be relevant to us is 1024. This is where the tuner starts to work, up until the max FFT_SIZE supported : 32768.
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td></tr>
-  </tbody>
-</table>
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell>FFT_SIZE</Table.Cell>
+        <Table.Cell>Calculation time</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>1024</Table.Cell>
+        <Table.Cell>5ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>2048</Table.Cell>
+        <Table.Cell>22ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>4096</Table.Cell>
+        <Table.Cell>65ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>8192</Table.Cell>
+        <Table.Cell>163ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>16384</Table.Cell>
+        <Table.Cell>489ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>32768</Table.Cell>
+        <Table.Cell>1951ms</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 ## Creating a wasm package
 
@@ -96,28 +117,31 @@ pkg/
 You already know what are `.gitignore`, `package.json` and `README.md` for. But let's have a look at the others.
 The files `*.d.ts` are the types of the javascript and wasm having the same name.
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Filename</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Description</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">*.d.ts</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">Those are the typescript types of the generated files.</td>
-    </tr>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate.js</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</td>
-    </tr>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate_bg.wasm</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">This is the WebAssembly file. This is the binary that executes natively within the browser.</td>
-    </tr>
-  </tbody>
-</table>
+
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >Filename</Table.Cell>
+        <Table.Cell >Description</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >*.d.ts</Table.Cell>
+        <Table.Cell >Those are the typescript types of the generated files.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate.js</Table.Cell>
+        <Table.Cell >This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate_bg.wasm</Table.Cell>
+        <Table.Cell >This is the WebAssembly file. This is the binary that executes natively within the browser.</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 To use our WASM file, we can add it to a small react component :
 
@@ -142,11 +166,9 @@ export default function WorkingWasm() {
 ```
 
 And here it is working in a component : 
-<div className="demo">
-  <div className="border rounded p-4">
-    <WorkingWasm />
-  </div>
-</div>
+<Box rounded="sm" p={4} mt={2} border="1px solid">
+  <WorkingWasm />
+</Box>
 
 ## Porting the autoCorrelate function to Rust
 
@@ -308,54 +330,56 @@ Finally, we import the WASM file as we did before previously with our test funct
 
 We now redo the calculations by modifying the analyser initial FFT_SIZE with our hook and __boom__ here are the results :
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (JS)</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (WASM)</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Speed increase</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+250%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+440%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">20ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+325%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">61ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+267%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">166ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+294%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">532ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet text-mtts-green">+366%</td>
-    </tr>
-  </tbody>
-</table>
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >FFT_SIZE</Table.Cell>
+        <Table.Cell >Calculation time (JS)</Table.Cell>
+        <Table.Cell >Calculation time (WASM)</Table.Cell>
+        <Table.Cell >Speed increase</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >1024</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >2ms</Table.Cell>
+        <Table.Cell >+250%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >2048</Table.Cell>
+        <Table.Cell >22ms</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >+440%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >4096</Table.Cell>
+        <Table.Cell >65ms</Table.Cell>
+        <Table.Cell >20ms</Table.Cell>
+        <Table.Cell >+325%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >8192</Table.Cell>
+        <Table.Cell >163ms</Table.Cell>
+        <Table.Cell >61ms</Table.Cell>
+        <Table.Cell >+267%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >16384</Table.Cell>
+        <Table.Cell >489ms</Table.Cell>
+        <Table.Cell >166ms</Table.Cell>
+        <Table.Cell >+294%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >32768</Table.Cell>
+        <Table.Cell >1951ms</Table.Cell>
+        <Table.Cell >532ms</Table.Cell>
+        <Table.Cell >+366%</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 We can see that there is a clear improvement ! We can safely use 4096 FFT_SIZE without our user noticing it. Is there any need for that ? I don't think so... but it was a worth it first project to play around WASM.
 

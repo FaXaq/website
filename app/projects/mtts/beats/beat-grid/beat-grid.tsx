@@ -21,12 +21,12 @@ const BeatGrid = ({ lineNumber = 4 } : BeatGridProps) => {
   }, [lineNumber])
 
   const lines = scores.map((s, i) => (
-    <li className="flex-grow" key={i}>
+    <li  key={i}>
       <BeatLine score={s} />
     </li>
   ))
   return (
-    <ul className='flex flex-col h-full'>
+    <ul >
       {lines}
     </ul>
   )

@@ -27,10 +27,7 @@ const TileLine = ({ notes, index, isPlaying, playNotes }: TileLineProps) => {
   )
 
   return (
-    <div className={classNames({
-      'line flex': true,
-      'odd-line': index % 2 !== 0
-    })}>
+    <div>
       {tiles}
     </div>
   )

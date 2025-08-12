@@ -1,34 +1,49 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import { Link } from '@/components/Link'
+import { Container, Heading, List, Text } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
+import { LuArrowRight, LuExternalLink } from 'react-icons/lu'
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
-    <div>
-      <ul>
-        <li>
+    <Container p={4}>
+      <Heading as="h1" size="2xl" mb={4}>
+        {t("home.title")}
+      </Heading>
+      <Text>
+        {t("home.description")}
+      </Text>
+      <List.Root gap={2} py={4} variant="plain">
+        <List.Item>
           <Link href="/resume">
-            Resume
+            {t("home.resume")}
+            <LuArrowRight />
           </Link>
-        </li>
-        <li>
+        </List.Item>
+        <List.Item>
           <Link href="/projects">
-            Projects
+            {t("home.projects")}
+            <LuArrowRight />
           </Link>
-        </li>
-        <li>
+        </List.Item>
+        <List.Item>
           <Link href="/blog">
-            Blog
+            {t("home.blog")}
+            <LuArrowRight />
           </Link>
-        </li>
-        <li>
+        </List.Item>
+        <List.Item>
           <Link target="_blank" href="https://github.com/faxaq">
-            Github
+            {t("home.github")}
+            <LuExternalLink />
           </Link>
-        </li>
-      </ul>
-    </div>
+        </List.Item>
+      </List.Root>
+    </Container>
   )
 }
 

@@ -2,10 +2,11 @@ import React from 'react'
 import BlogHomePage from './components/HomePage'
 
 interface BlogProps {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-async function Blog({ searchParams }: BlogProps) {
+async function Blog(props: BlogProps) {
+  const searchParams = await props.searchParams;
   const tagsInSearchParams = searchParams.tag
   const tags = []
 

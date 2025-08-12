@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { PolySynth, Synth } from 'tone'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
 import { filterUniqueNotes } from '../../../../utils/mtts'
@@ -7,17 +6,18 @@ import { filterUniqueNotes } from '../../../../utils/mtts'
 export function useMaloSynth () {
   const [playingNotes, setPlayingNotes] =
     useState<{ [key: string]: boolean }>({})
-  const [polysynth, setPolySynth] = useState<PolySynth | undefined>()
+  const [polysynth, setPolysynth] = useState(null);
 
   useEffect(() => {
-    setPolySynth(new PolySynth().toDestination())
+    const loadTone = async () => {
+      const PolySynth = (await import('tone')).PolySynth;
+      const polySynth = new PolySynth().toDestination();
+      setPolysynth(polySynth);
+    };
 
-    return () => {
-      if (polysynth) {
-        polysynth.dispose()
-      }
-    }
-  }, [])
+    loadTone();
+  }, []);
+
 
   function startPlaying (notes: Note[]) {
     const uniqueNotes = filterUniqueNotes(notes)

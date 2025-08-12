@@ -21,20 +21,20 @@ function HomePage () {
   const misc = useCategory('misc', MiscIcon)
 
   return (
-    <div className="font-sans">
+    <div >
       <Header />
-      <div className="md:container mx-auto p-4 md:px-0">
-        <p className="py-4">
+      <div >
+        <p >
           {t('resume.description')}
         </p>
         <main>
           {experiences}
-          <div className="flex flex-col md:flex-row print:flex-row">
-            <div className="w-auto md:w-1/2 print:w-1/2 md:mr-5">
+          <div >
+            <div >
               {studies}
               {achievements}
             </div>
-            <div className="w-auto md:w-1/2 print:w-1/2 md:mr-5">
+            <div >
               {projects}
               {misc}
             </div>

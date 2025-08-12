@@ -29,28 +29,14 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   }
 
   if (!(note instanceof Note)) {
-    return <div className={classNames({
-      'm-1 rounded': true,
-    })}>
-      <p className='text-lg text-center leading-3'>
+    return <div>
+      <p>
         {(fretNumber === 12 || fretNumber === 24) && '••'}
         {(fretNumber === 3 || fretNumber === 5 || fretNumber === 7 || fretNumber === 9) && '•'}
         {(fretNumber === 15 || fretNumber === 17 || fretNumber === 19 || fretNumber === 21) && '•'}
       </p>
     </div>
   }
-
-  const classes = classNames({
-    'text-white text-xs': true,
-    'bg-mtts-cta-0': highlighted && getNoteColor(scale, note) === COLOR.DEFAULT,
-    'bg-mtts-yellow': highlighted && getNoteColor(scale, note) === COLOR.YELLOW,
-    'bg-mtts-khaki': highlighted && getNoteColor(scale, note) === COLOR.KHAKI,
-    'bg-mtts-green': highlighted && getNoteColor(scale, note) === COLOR.GREEN,
-    'bg-mtts-blue': highlighted && getNoteColor(scale, note) === COLOR.BLUE,
-    'bg-mtts-violet': highlighted && getNoteColor(scale, note) === COLOR.VIOLET,
-    'bg-mtts-red': highlighted && getNoteColor(scale, note) === COLOR.RED,
-    'p-1 flex align-items rounded': true,
-  })
 
   function getNoteText(scale: Scale, note: Note): string {
     if (!noteExistsInScale(scale, note)) {
@@ -81,16 +67,9 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   }
 
   return (
-    <div className={classNames({
-      'w-full h-full p-1': true,
-      'bg-mtts-dark-violet': active
-    })}
-    onClick={() => toggleFret()}
-    >
-      <div
-        className={classes}
-      >
-        <div className="m-auto">
+    <div onClick={() => toggleFret()}>
+      <div>
+        <div>
           {noteExistsInScale(scale, note)
             ? (<p>{getNoteText(scale, note)}</p>)
             : (<p></p>) }

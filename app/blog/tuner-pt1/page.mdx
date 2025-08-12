@@ -1,6 +1,7 @@
 import BlogPostLayout from '../components/BlogPostLayout'
 import Correlation from './components/Correlation'
 import Tuner from './components/Tuner'
+import { List } from "@chakra-ui/react"
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 1',
@@ -67,10 +68,12 @@ Now that we have an [Audio Context](https://developer.mozilla.org/en-US/docs/Web
 It seems that an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
 
 In the documentation there are two methods that we may have a use for :
+<List.Root>
 - [getFloatFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getFloatFrequencyData)
 > Copies the current frequency data into a Float32Array array passed into it.
 - [getByteFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData)
 > Copies the current frequency data into a Uint8Array (unsigned byte array) passed into it.
+</List.Root>
 
 We'll extract data from our mic input and see what it looks like.
 
@@ -227,6 +230,7 @@ But that leaves a range of ~1.46Hz for it to be out of tune.
 I have an idea : Try to see if the distance between our guitar string frequency and the starting frequency of its frequency bin has any relation with its surroundings magnitude.
 
 Let me try to explain my reasoning. In each data extraction we have 7 data :
+<List.Root>
 - Guitar string frequency
 - Guitar string frequency bin
 - Guitar string frequency bin magnitude
@@ -234,6 +238,7 @@ Let me try to explain my reasoning. In each data extraction we have 7 data :
 - Previous frequency bin magnitude
 - Next frequency bin
 - Next frequency bin magnitude
+</List.Root>
 
 _Note: Each time I talk about a frequency bin's frequency, I'm refering to its starting frequency._
 
@@ -268,8 +273,8 @@ After seeing those graphs I don't know how to procede and find the correlation. 
 
 You can try it here : 
 
-<div className="demo">
-  <div className="border p-4 h-72">
+<div>
+  <div>
     <Tuner />
   </div>
 </div>

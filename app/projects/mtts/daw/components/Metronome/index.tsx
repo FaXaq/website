@@ -15,7 +15,7 @@ export default function Metronome() {
   const { bpm, updateBpm, toggleMetronome } = useMetronome(bip)
     
   return (
-    <div className="flex flex-row">
+    <div >
       <p onClick={() => updateBpm(bpm - 1)}>-</p>
       <button onClick={() => toggleMetronome()}>{bpm}</button>
       <p onClick={() => updateBpm(bpm + 1)}>+</p>

@@ -21,14 +21,14 @@ const getPointFromTouch = (touch: React.Touch, element: Element) => {
 }
 
 const Knob = ({ value, onUpdate, min, max, label, step }: KnobProps) => {
-  const knob = useRef()
+  const knob = useRef(undefined)
   const localMin = useDefaultProp(min, 0)
   const localMax = useDefaultProp(max, 100)
   const localStep = useDefaultProp(step, 1)
 
   // creating a ref to avoid event listener calling the wrong function
-  const handlePointerLockMouseRef = useRef<(e: MouseEvent) => any>()
-  const handleTouchMoveRef = useRef<(e: React.TouchEvent<Element>) => any>()
+  const handlePointerLockMouseRef = useRef<(e: MouseEvent) => any>(undefined)
+  const handleTouchMoveRef = useRef<(e: React.TouchEvent<Element>) => any>(undefined)
   const onUpdateRef = useRef<typeof onUpdate>(onUpdate)
 
   // update ref to cb update function when necessary
@@ -112,22 +112,22 @@ const Knob = ({ value, onUpdate, min, max, label, step }: KnobProps) => {
   }, [value])
 
   return (
-    <div className="p-1">
+    <div >
       {
         label
-          ? <p className="text-center mb-1">{label}</p>
+          ? <p >{label}</p>
           : <></>
       }
       <div
-        className="w-16 h-16 bg-mtts-dark-violet rounded-full relative cursor-dial mx-auto"
+        
         ref={knob}
         onPointerDown={addPointerLock}
         onPointerUp={removePointerLock}
         onDoubleClick={toggleValue}
         onTouchMove={handleTouchMoveRef.current}
       >
-        <div className="w-12 h-12 bg-mtts-dark-violet-200 rounded-full absolute center-absolute">
-          <div className="dial-indicator w-1 bg-mtts-light-violet h-1/2 absolute rounded center-absolute" style={{
+        <div >
+          <div  style={{
             transform: `rotate(${deg}deg)`,
             transformOrigin: '50% 0%'
           }}></div>

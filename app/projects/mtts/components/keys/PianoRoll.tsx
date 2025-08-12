@@ -22,8 +22,8 @@ export default function PianoRoll({
   const blackNotes = notesWithinDomainRange.filter(note => note.hasAccidental())
 
   return (
-    <div className="w-full h-full">
-      <div className="h-full w-full flex flex-row">
+    <div >
+      <div >
         {whiteNotes.map(note => (
           <PianoKey
             key={`keys-key-${note.SPN}`}

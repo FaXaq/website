@@ -40,11 +40,7 @@ Remember when I said that frequencies are sine waves ? This is where is comes ha
 
 __Here is a proof of concept :__
 
-<div className="demo">
-  <div className="border p-4">
-    <MatchingSinWaves />
-  </div>
-</div>
+  <MatchingSinWaves />
 
 You will probably find that the frequency is around 450Hz, it's due to rendering but anyway, it's close to our 440Hz, so, you get the idea !
 
@@ -308,11 +304,7 @@ const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCT
 
 And here we have our tuner :
 
-<div className="demo">
-  <div className="border p-4 h-64">
-    <Tuner />
-  </div>
-</div>
+<Tuner />
 
 The full code of this project can be found here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2)
 </BlogPostLayout>

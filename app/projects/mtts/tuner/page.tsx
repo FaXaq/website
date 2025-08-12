@@ -12,8 +12,6 @@ enum DISPLAY {
   NOTE = 'Note'
 }
 
-
-
 const LOW_DOMAIN = Note.fromSPN('C0')
 const HIGH_DOMAIN = Note.fromSPN('C8')
 
@@ -91,29 +89,29 @@ export default function Tuner() {
     }
   }
 
-  return <div className="h-screen w-screen bg-mtts-white flex flex-col">
-    <div className="grow">
+  return <div>
+    <div>
       { isLoading && <p>loading...</p> } 
       { hasErrored && <p>{JSON.stringify(error)}</p> }
       { !hasErrored && hasLoaded && (
-        <div className="h-full w-full flex flex-col justify-center items-center">
-          <div className="text-2xl">
+        <div>
+          <div>
             { display === DISPLAY.HZ && <p>{fq} Hz</p> }
             { display === DISPLAY.NOTE && (
               <div>
-                <p className='text-center'>Note : {fq === -1 ? '-' : closestNote.SPN}</p>
-                <p className='text-center'>{fq === -1 ? '-' : frequencyDifference}</p>
+                <p>Note : {fq === -1 ? '-' : closestNote.SPN}</p>
+                <p>{fq === -1 ? '-' : frequencyDifference}</p>
               </div>
             ) }
           </div>
         </div>
       )}
     </div>
-    <div className="bg-mtts-light-violet text-mtts-white text-center py-4">
-      <button className="px-2" onClick={() => toggleTuner(!isGuessing)}>
+    <div>
+      <button onClick={() => toggleTuner(!isGuessing)}>
         {isGuessing ? 'stop' : 'start' }
       </button>
-      <button className="px-2" onClick={() => setDisplay(display === DISPLAY.HZ ? DISPLAY.NOTE : DISPLAY.HZ )}>
+      <button onClick={() => setDisplay(display === DISPLAY.HZ ? DISPLAY.NOTE : DISPLAY.HZ )}>
         { display === DISPLAY.HZ ? 'Pitch' : 'Hz' }
       </button>
     </div>

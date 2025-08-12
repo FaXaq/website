@@ -25,7 +25,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <div className="w-full h-full">
+    <div >
       <ResponsiveContainer>
         <LineChart data={speedVariationData}>
           <CartesianGrid />

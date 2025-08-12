@@ -22,17 +22,13 @@ interface PianoKeyProps {
 
 export default function PianoKey({ note, scale, blackNote, PianoBlackKeyComponent, PianoKeyComponent }: PianoKeyProps) {
   return (
-    <div className={classNames({
-      'text-center flex align-items border rounded-bl rounded-br grow relative border-mtts-dark-violet-200': true,
-    })}>
+    <div>
       {
         PianoKeyComponent !== undefined && <PianoKeyComponent scale={scale} note={note} />
       }
       {
         blackNote && (
-          <div className={classNames({
-            'absolute w-1/2 h-1/2 translate-x-3/2 z-10 rounded-bl rounded-br border border-mtts-dark-violet-200 bg-mtts-dark-violet': true,
-          })}>
+          <div>
             { PianoBlackKeyComponent !== undefined && <PianoBlackKeyComponent scale={scale} note={blackNote} /> }
           </div>
         )

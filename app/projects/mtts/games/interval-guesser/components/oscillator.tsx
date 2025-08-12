@@ -14,7 +14,7 @@ interface OscillatorProps {
 }
 
 const Oscillator = ({ waveform }: OscillatorProps) => {
-  const canvas = useRef<HTMLCanvasElement>()
+  const canvas = useRef<HTMLCanvasElement>(undefined)
   const [animationFrame, setAnimationFrame] = useState<number>(-1)
 
   useEffect(() => {

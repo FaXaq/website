@@ -12,16 +12,16 @@ interface BeatBarProps {
 const BeatBar = ({ bar }: BeatBarProps) => {
   const content = bar.content.map((c, i) => {
     return (
-      <li key={`beat-bar-${i}`} className="border flex-grow bg-blue-100 h-1/2" style={{ width: `${(c.dottedValue * 100)}%` }}>
+      <li key={`beat-bar-${i}`}  style={{ width: `${(c.dottedValue * 100)}%` }}>
         { JSON.stringify(c) }
       </li>
     )
   })
 
   return (
-    <div className="relative h-full w-full">
+    <div >
       <BeatBarOverlay timeSignature={ bar.timeSignature } />
-      <ul className="absolute h-full w-full flex">
+      <ul >
         { content }
       </ul>
     </div>

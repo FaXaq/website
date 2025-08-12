@@ -36,11 +36,7 @@ function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumbe
     })
   }
 
-  return <ul className={classNames({
-    grid: true,
-    [`grid-cols-${fretNumber}`]: layout === 'horizontal',
-    [`grid-rows-${fretNumber}`]: layout === 'vertical'
-  })}>
+  return <ul>
     { frets.map((fret, i) => <GuitarFret key={`string-${stringNumber}-fret-${i}`} {...fret} />)}
   </ul>
 }

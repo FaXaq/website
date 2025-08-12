@@ -57,7 +57,7 @@ export default function MapAnnotations({ mapAnalysis, points }: MapProps) {
 
   return <>
     <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
-    <Polyline positions={...points.map(point => (pointToLatLng(point)))} color={theme.extend.colors['corsica-red']}/>
+    <Polyline positions={points.map(point => pointToLatLng(point))} color={theme.extend.colors['corsica-red']}/>
     <MapIcon type="start" position={pointToLatLng(points[0])} />
     { activePoint.index > -1 && (
       <MapIcon type='active' position={activePointCoordinates} />

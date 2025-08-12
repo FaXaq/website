@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import * as Tone from 'tone'
+import { FFT, Waveform, Synth } from 'tone'
 import { useState, useEffect } from 'react'
 
 export function useVolume(decibels: number = -10) {
@@ -14,10 +14,10 @@ export function useVolume(decibels: number = -10) {
 }
 
 export function useFFT (fftNumber: number = 256) {
-  const [fft, setFFT] = useState<Tone.FFT | undefined>()
+  const [fft, setFFT] = useState<FFT | undefined>()
 
   useEffect(() => {
-    setFFT(new Tone.FFT(fftNumber))
+    setFFT(new FFT(fftNumber))
 
     return () => {
       if (fft) {
@@ -30,10 +30,10 @@ export function useFFT (fftNumber: number = 256) {
 }
 
 export function useWaveform (fftNumber: number = 256) {
-  const [waveform, setWaveform] = useState<Tone.Waveform | undefined>()
+  const [waveform, setWaveform] = useState<Waveform | undefined>()
 
   useEffect(() => {
-    setWaveform(new Tone.Waveform(fftNumber))
+    setWaveform(new Waveform(fftNumber))
 
     return () => {
       if (waveform) {
@@ -47,8 +47,8 @@ export function useWaveform (fftNumber: number = 256) {
 
 
 export function useToneSynth() {
-  const synthRef = useRef<Tone.Synth>()
-  const synth = new Tone.Synth()
+  const synthRef = useRef<Synth>(undefined)
+  const synth = new Synth()
 
   useEffect(() => {
     synth.toDestination()

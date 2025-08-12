@@ -39,7 +39,7 @@ function getNoteTotalValue (note: GuessedNote): number {
 }
 
 const TunerContainer = ({ audioStream }: TunerContainerProps) => {
-  const canvas = useRef<HTMLCanvasElement>()
+  const canvas = useRef<HTMLCanvasElement>(undefined)
   const [guessedNotes, setGuessedNotes] = useState<GuessedNote[]>([])
   const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
   const [frame] = useState(-1)
@@ -108,13 +108,13 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   }, [audioStream])
 
   return (
-    <div className="h-full w-full overflow-auto">
-      <p className="m-0 p-0">Guessing the note :</p>
-      <canvas ref={canvas} className="w-full" height="h-64" />
+    <div>
+      <p>Guessing the note :</p>
+      <canvas ref={canvas} height="h-64" />
       <ul>
         { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable } fqRatio={fqRatio} /> : null }
         {guessedNotes.map((n, i) => (
-          <li className="p-0" key={`guessed-note-${i}`}> 
+          <li key={`guessed-note-${i}`}> 
             <GuessedNoteItem guessedNote={n}  fqRatio={fqRatio}/>
           </li>
         ))}

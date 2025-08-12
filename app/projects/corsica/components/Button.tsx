@@ -20,11 +20,11 @@ export default function Button({ onClick, type, children, loading }: ButtonProps
   return (
     <button
       type={type}
-      className="bg-corsica-blue bg-opacity-90 py-2 px-4 rounded text-white hover:bg-opacity-100 flex items-center"
+      
       onClick={proxyOnClick}
       disabled={loading}
     >
-      { loading && <span className="pr-2"><LoadingIcon /></span> }
+      { loading && <span ><LoadingIcon /></span> }
       {children}
     </button>
   )

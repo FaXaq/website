@@ -25,8 +25,8 @@ export default function useCategory (
   }
 
   return (
-    <div className="category">
-      <h2 className="text-dark-marine text-2xl font-bold">
+    <div >
+      <h2 >
         {t(`resume.content.${name}.title`)}
       </h2>
       { name === 'experiences' && (

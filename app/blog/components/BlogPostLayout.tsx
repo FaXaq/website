@@ -8,6 +8,7 @@ import "prismjs/themes/prism.css";
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { format } from 'date-fns'
+import { Container, Em, Heading, Separator, Text, VStack } from '@chakra-ui/react';
 
 interface BlogPostLayoutProps {
   children: React.JSX.Element | React.JSX.Element[]
@@ -18,7 +19,6 @@ interface BlogPostLayoutProps {
   }}
 
 const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
-  const { t } = useTranslation()
   useEffect(() => {
     Prism.highlightAll()
   }, [])
@@ -32,20 +32,18 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
       <Head>
         <title>{meta.title}</title>
       </Head>
-      <div className="article container md:max-w-1/2">
-        <header>
-          <div className="flex items-center">
-            <a className="font-bold" href="/blog" aria-label="Go back to blog home">←</a>
-            <h1>{meta.title}</h1>
-          </div>
-          <div className="article-info text-sm text-opacity-25">
-            <p>{meta.description ? meta.description : '' } - <em>{format(new Date(meta.creationDate), 'do MMMM yyyy')}</em></p>
-          </div>
-        </header>
-        <article className="content">
-          {children}
-        </article>
-      </div>
+      <Container py={4}>
+        <VStack alignItems="start" gap={6}>
+          <Heading as="h1" fontSize="4xl">
+            {meta.title}
+          </Heading>
+          <Text fontSize={14} color="">{meta.description ? meta.description : '' } - <Em>{format(new Date(meta.creationDate), 'do MMMM yyyy')}</Em></Text>
+          <Separator variant="solid" />
+          <VStack gap={2} alignItems="start">
+            {children}
+          </VStack>
+        </VStack>
+      </Container>
     </>
   )
 }

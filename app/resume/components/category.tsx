@@ -31,13 +31,13 @@ function Category ({ object, Icon, filter }: CategoryProps) {
           href={object.links[l]}
           target="_blank"
           rel="noopener noreferrer"
-          className="block flex ml-2"
+          
           key={`link-${l}`}
         >
-          <div className="w-5 mr-1">
+          <div >
             <LinkIcon />
           </div>
-          <span className="whitespace-break-spaces">{object.links[l]}</span>
+          <span >{object.links[l]}</span>
         </a>
       )
     }
@@ -56,7 +56,7 @@ function Category ({ object, Icon, filter }: CategoryProps) {
     for (let i = 0; i < filteredMissions.length; i++) {
       const mission = filteredMissions[i]
       missions.push(
-        <li key={`mission-${i}`} className="print:text-sm">
+        <li key={`mission-${i}`} >
           * {filteredMissions[i].text} {filteredMissions[i].techUsed && `(${filteredMissions[i].techUsed.join(', ')})`}
         </li>
       )
@@ -65,15 +65,15 @@ function Category ({ object, Icon, filter }: CategoryProps) {
 
 
   return (
-    <div className="flex my-4">
-      <div className="h-6 w-6 mr-4 my-2 flex-shrink-0">
+    <div >
+      <div >
         <Icon />
       </div>
       <div>
-        <h3 className="text-light-marine font-bold text-lg">
+        <h3 >
           {object.title}
         </h3>
-        <div className="flex flex-row text-dark-sand flex-wrap">
+        <div >
           <p>{object.period}</p>
           {links}
         </div>

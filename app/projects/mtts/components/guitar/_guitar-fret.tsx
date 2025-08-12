@@ -20,7 +20,7 @@ export interface GuitarFretProps {
 
 function GuitarFret ({ note, stringNumber, fretNumber, highlight, getFret }: GuitarFretProps) {
   const highlighted = highlight({ note, stringNumber, fretNumber })
-  return <div className={classNames({ 'border border-collapse': fretNumber !== 0 })}>
+  return <div>
     {getFret({ note, stringNumber, fretNumber, highlighted })}
   </div>
 }

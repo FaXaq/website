@@ -13,23 +13,9 @@ function MultiSelector<T> (props: MultiSelectorProps<T>) {
   const elementsList = []
   for (let i = 0; i < props.elements.length; i++) {
     const element = props.elements[i]
-    const classNames = [
-      'cursor-pointer',
-      'border',
-      'border-solid',
-      'border-mtts-light-violet',
-      'py-2',
-      'px-4'
-    ]
-
-    if (i === 0) classNames.push('rounded-l')
-    if (i === props.elements.length - 1) classNames.push('rounded-r')
-
-    if (element === props.selected) { classNames.push('bg-mtts-dark-violet text-white border-none') }
 
     elementsList.push(
       <li
-        className={classNames.join(' ')}
         onClick={() => props.setSelected(element)}
         key={`multi-selector-${element}`}
       >
@@ -39,7 +25,7 @@ function MultiSelector<T> (props: MultiSelectorProps<T>) {
   }
   return (
     <div>
-      <ul className="flex">{elementsList}</ul>
+      <ul >{elementsList}</ul>
     </div>
   )
 }

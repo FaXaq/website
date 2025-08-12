@@ -17,6 +17,7 @@ const nextConfig = {
   },
   experimental: {
     mdxRs: true,
+    optimizePackageImports: ["@chakra-ui/react"],
   },
 }
 

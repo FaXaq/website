@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import React from 'react'
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
@@ -14,8 +15,8 @@ export default function SinWaveWithSumOfrequencies() {
   })
   
 
-  return <div>
-    <div className="w-full h-32">
+  return <Box width="100%">
+    <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
           <Line
@@ -38,9 +39,9 @@ export default function SinWaveWithSumOfrequencies() {
           <YAxis type="number" dataKey="value" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
     <p>But in real life, what we get is the sum of those frequencies, which looks like this :</p>
-    <div className="w-full h-32">
+    <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
           <Line
@@ -54,6 +55,6 @@ export default function SinWaveWithSumOfrequencies() {
           <YAxis type="number" dataKey="value" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  </div>
+    </Box>
+  </Box>
 }

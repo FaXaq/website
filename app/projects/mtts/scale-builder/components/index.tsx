@@ -136,15 +136,15 @@ function BuildScale() {
 
   return (
     <div>
-      <header className="pb-4">
-        <h1 className="font-mtts-title text-4xl font-bold">Scale Builder - {scaleTitle}</h1>
+      <header >
+        <h1 >Scale Builder - {scaleTitle}</h1>
       </header>
-      <div className='grid grid-cols-2 gap-4'>
-        <div className="flex flex-col">
-          <div className="flex">
+      <div >
+        <div >
+          <div >
             <p>Select your root note :</p>
             <select
-              className="ml-2 rounded inline-block h-auto"
+              
               value={availableRootNotes.findIndex((note: Note) => rootNote.SPN === note.SPN)}
               onChange={(e) => setRootNote(availableRootNotes[e.target.value])}
             >
@@ -155,15 +155,15 @@ function BuildScale() {
               ))}
             </select>
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-row justify-start items-center">
+          <div >
+            <div >
               <p>Select intervals for your scale :</p>
-              <select className="ml-2" value={scale?.name.toUpperCase()} onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
+              <select  value={scale?.name.toUpperCase()} onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
                 <option value={null}>Not implemented yet</option>
                 {Object.keys(SCALES).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
-            <ul className="pt-4 flex flex-wrap">
+            <ul >
               {Object.keys(availableIntervals).map((intervalKey) =>
                 <li key={intervalKey}>
                   <ul>
@@ -185,9 +185,9 @@ function BuildScale() {
         </div>
         <div>
           <p>Scale notes :</p>
-          <ul className='flex'>
+          <ul >
             {scale.notes.map(note => (
-              <li className="pr-2 pb-2" key={`${note.SPN}`}>{translateNote(note)}</li>
+              <li  key={`${note.SPN}`}>{translateNote(note)}</li>
             ))}
           </ul>
           {scale.scaleChords.length > 0 && (
@@ -196,7 +196,7 @@ function BuildScale() {
               <ul>
                 {scale.scaleChords.map(chord =>
                   chord.notation && (
-                    <li className="py-1" key={`${chord.root.name}${chord.notation}`}>
+                    <li  key={`${chord.root.name}${chord.notation}`}>
                       <Chord chord={chord} scale={scale} />
                     </li>
                   )
@@ -205,22 +205,22 @@ function BuildScale() {
             </>
           )}
         </div>
-        <div className='col-span-2 flex flex-col'>
+        <div >
           <p>Select how you want to show the notes on the fretboard</p>
           <ul>
             {Object.values(NOTE_DISPLAY).map(displaySetting => (
-              <li className="flex flex-row" key={`noteDisplayOption-${displaySetting}`}>
+              <li  key={`noteDisplayOption-${displaySetting}`}>
                 <input
                   type="checkbox"
                   checked={noteDisplay === displaySetting}
                   onChange={() => setNoteDisplay(displaySetting) }
                 />
-                <p className="pl-2">{displaySetting}</p>
+                <p >{displaySetting}</p>
               </li>
             ))}
           </ul>
           <p>Here is the scale on a guitar neck :</p>
-          <div className='py-4'>
+          <div >
             <GuitarNeck
               layout='horizontal'
               highlightFret={({ note }) => noteExistsInScale(scale, note)}
@@ -233,9 +233,9 @@ function BuildScale() {
             />
           </div>
         </div>
-        <div className='col-span-2 flex flex-col'>
+        <div >
           <p>Here is the scale on a piano :</p>
-          <div className='py-4 h-48'>
+          <div >
             <PianoRoll scale={scale} PianoBlackKeyComponent={PianoBlackKey} PianoKeyComponent={PianoKey} />
           </div>
         </div>

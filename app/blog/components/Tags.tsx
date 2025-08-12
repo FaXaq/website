@@ -1,6 +1,8 @@
 'use client'
 
+import { Badge, List } from '@chakra-ui/react'
 import React from 'react'
+import { LuCircleX } from 'react-icons/lu'
 
 interface TagsProps {
   tags: string[],
@@ -24,22 +26,20 @@ const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
   }
 
   return (
-    <div>
-      <ul className="flex flex-wrap py-4">
-        {tags.map(tag => (
-          <li key={tag} className="flex mr-2 mb-2 cursor-pointer text-sm">
-            <div className="px-2 py-1 bg-gray-500" onClick={() => handleOnClick(tag)}>
-              <span>{tag}</span>
-            </div>
+    <List.Root variant="plain" display="flex" flexDirection="row" gap={2}>
+      {tags.map(tag => (
+        <List.Item key={tag}>
+          <Badge onClick={() => handleOnClick(tag)} cursor="pointer">
+            {tag}
             {removable && (
-              <button onClick={() => onDelete(tag)} className='px-2 py-1 bg-gray-900 text-white border-none'>
-                <span >x</span>
-              </button>
+              <LuCircleX onClick={() => onDelete(tag)} cursor="pointer">
+              x
+              </LuCircleX>
             )}
-          </li>
-        ))}
-      </ul>
-    </div>
+          </Badge>
+        </List.Item>
+      ))}
+    </List.Root>
   )
 }
 

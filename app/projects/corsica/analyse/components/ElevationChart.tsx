@@ -26,7 +26,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <div className="w-full h-full">
+    <div>
       <ResponsiveContainer>
         <AreaChart data={elevationVariationData} margin={{ bottom: 0, left: 0, right: 0, top: 0 }}>
           <CartesianGrid />

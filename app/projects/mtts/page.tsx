@@ -17,10 +17,10 @@ function Page() {
   const { t } = useTranslation()
   const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as unknown as Experiment[]).map(e => {
     return (
-      <li key={e.title} className="py-4">
-        <h5 className="text-2xl">{e.title}</h5>
+      <li key={e.title} >
+        <h5 >{e.title}</h5>
         <p>{e.description}</p>
-        <Link href={e.link} className="text-mtts-light-violet">
+        <Link href={e.link} >
           {t('mtts.pages.index.experimentsLink')}
         </Link>
       </li>
@@ -28,26 +28,26 @@ function Page() {
   })
 
   return (
-    <div className="font-sans">
+    <div >
       <MTTSHeader />
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center py-8 md:py-16">
-          <div className="md:pr-32">
-            <h3 className="text-4xl font-bold pb-4">{t('mtts.pages.index.research.title')}</h3>
-            <p className="leading-loose"><Trans t={t}>mtts.pages.index.research.text</Trans></p>
+      <div >
+        <div >
+          <div >
+            <h3 >{t('mtts.pages.index.research.title')}</h3>
+            <p ><Trans t={t}>mtts.pages.index.research.text</Trans></p>
           </div>
-          <div className="w-icon-l h-icon-l p-4 md:w-icon-xl md:h-icon-xl md:p-8">
+          <div >
             <ResearchIcon />
           </div>
         </div>
         <div>
-          <h3 className="text-3xl font-bold pb-4">{t('mtts.pages.index.experimentsTitle')}</h3>
+          <h3 >{t('mtts.pages.index.experimentsTitle')}</h3>
           <ul>
             {experiments}
           </ul>
         </div>
       </div>
-      <div className="pt-8">
+      <div >
         <MTTSFooter />
       </div>
     </div>

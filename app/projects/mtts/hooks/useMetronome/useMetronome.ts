@@ -8,8 +8,8 @@ type MetronomeCallback = (bipNumber: number) => any
 
 export default function useMetronome(beatCallback: MetronomeCallback) {
   let bipNumber = 0
-  const workerRef = useRef<Worker>()
-  const callbackRef = useRef<MetronomeCallback>()
+  const workerRef = useRef<Worker>(undefined)
+  const callbackRef = useRef<MetronomeCallback>(undefined)
   const [bpm, setBpm] = useState<number>(60)
   const [isActive, setIsActive] = useState<boolean>(false)
 

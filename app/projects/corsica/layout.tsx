@@ -13,11 +13,11 @@ function CorsicaLayout({ children }: CorsicaLayoutProps) {
   const path = usePathname()
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-screen">
+    <div >
       <Nav />
       {path !== '/projects/corsica' && (
-        <div className="grow overflow-auto bg-white w-full flex flex-col">
-          <div className="p-6 w-full grow overflow-auto">
+        <div >
+          <div >
             {children}
           </div>
           <Footer nav={false} />

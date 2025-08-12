@@ -55,7 +55,7 @@ function setCanvasWidth (ctx: CanvasRenderingContext2D) {
 
 const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animated }: IntervalGuesserOscillatorProps) => {
   const [showAxes] = useState(false)
-  const canvas = useRef<HTMLCanvasElement>()
+  const canvas = useRef<HTMLCanvasElement>(undefined)
   const [animationFrames, setAnimationFrames] = useState<number[]>([])
 
   const drawSine = (ctx: CanvasRenderingContext2D, {
@@ -139,7 +139,7 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
   }, [highAmplitude, frequencies])
 
   return (
-    <div className="flex justify-center py-8">
+    <div >
       <canvas
         onClick={() => onClick()}
         ref={canvas}

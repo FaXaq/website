@@ -31,38 +31,38 @@ export default function TextAnalysisReport({ analysis }: TextAnalysisReportProps
   }, [analysis])
 
   return (
-    <div className="flex flex-row flex-wrap justify-center bg-corsica-white h-full">
-      <div className="inline-block p-2 text-center">
-        <p className="md:text-lg">{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</p>
-        <p className="text-xs">{t('corsica.pages.analyse.totalDistance')}</p>
+    <div >
+      <div >
+        <p >{t('corsica.pages.analyse.kilometers', { value: Math.round(analysis.distance.totalDistance / 100) / 10 })}</p>
+        <p >{t('corsica.pages.analyse.totalDistance')}</p>
       </div>
-      <div className="inline-block p-2 text-center">
-        <p className="md:text-lg">{t('corsica.pages.analyse.meters', { value: Math.round(analysis.elevation.totalElevationGain) })}</p>
-        <p className="text-xs">{t('corsica.pages.analyse.totalElevationGain')}</p>
+      <div >
+        <p >{t('corsica.pages.analyse.meters', { value: Math.round(analysis.elevation.totalElevationGain) })}</p>
+        <p >{t('corsica.pages.analyse.totalElevationGain')}</p>
       </div>
-      <div className="inline-block md:col-span-4 p-2 text-center">
-        <p className="md:text-lg">{movingTime ? formatDuration(movingTime) : '--' }</p>
-        <p className="text-xs">{t('corsica.pages.analyse.movingTime')}</p>
+      <div >
+        <p >{movingTime ? formatDuration(movingTime) : '--' }</p>
+        <p >{t('corsica.pages.analyse.movingTime')}</p>
       </div>
-      <div className="hidden md:block md:col-span-4 p-2 text-center">
-        <p className="lg:text-lg">{elapsedTime ? formatDuration(elapsedTime) : '--'}</p>
-        <p className="text-xs">{t('corsica.pages.analyse.elapsedTime')}</p>
+      <div >
+        <p >{elapsedTime ? formatDuration(elapsedTime) : '--'}</p>
+        <p >{t('corsica.pages.analyse.elapsedTime')}</p>
       </div>
-      <div className="hidden md:block p-2 text-center">
+      <div >
         {
           analysis.speed && (
             <>
-              <p className="lg:text-lg">{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.maxSpeed * 100) / 100 })}</p>
-              <p className="text-xs">{t('corsica.pages.analyse.maxSpeed')}</p>
+              <p >{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.maxSpeed * 100) / 100 })}</p>
+              <p >{t('corsica.pages.analyse.maxSpeed')}</p>
             </>
           )}
       </div>
-      <div className="inline-block p-2 text-center">
+      <div >
         {
           analysis.speed && (
             <>
-              <p className="lg:text-lg">{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.averageSpeed * 100) / 100 })}</p>
-              <p className="text-xs">{t('corsica.pages.analyse.averageSpeed')}</p>
+              <p >{t('corsica.pages.analyse.speed', { value: Math.round(analysis.speed.averageSpeed * 100) / 100 })}</p>
+              <p >{t('corsica.pages.analyse.averageSpeed')}</p>
             </>
           )}
       </div>

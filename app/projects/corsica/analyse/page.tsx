@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Analysis } from '../api/analyse/route'
-import LeafletMap from './components/LeafletMap'
 import MapAnnotations from './components/MapAnnotations'
 import CyclingIcon from '../components/CyclingIcon'
 import { format } from 'date-fns'
@@ -16,11 +15,20 @@ import SpeedChart from './components/SpeedChart'
 import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
+import dynamic from 'next/dynamic'
 
 export default function Analyse() {
   const { t } = useTranslation()
   const [analysis, setAnalysis] = useState<Analysis | undefined>()
   const address = analysis?.map.reverseGeocodingSearchResult?.address
+
+  const LeafletMap = useMemo(() => dynamic(
+    () => import('./components/Map/LeafletMap'),
+    {
+      loading: () => <p>A map is loading</p>,
+      ssr: false
+    }
+  ), [])
 
   return (
     <div className='text-corsica-olive'>

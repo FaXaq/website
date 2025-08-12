@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
@@ -14,8 +15,8 @@ export default function SinWaveWithSumOfrequenciesDifferentAmplitude() {
   })
   
 
-  return <div>
-    <div className="w-full h-32">
+  return <Box>
+    <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
           <Line
@@ -38,8 +39,8 @@ export default function SinWaveWithSumOfrequenciesDifferentAmplitude() {
           <YAxis type="number" dataKey="value" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-    <div className="w-full h-32">
+    </Box>
+    <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
           <Line
@@ -53,6 +54,6 @@ export default function SinWaveWithSumOfrequenciesDifferentAmplitude() {
           <YAxis type="number" dataKey="value" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  </div>
+    </Box>
+  </Box>
 }

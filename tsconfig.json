@@ -1,19 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es2015",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
     "allowJs": true,
-    "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -22,7 +18,16 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": [
+        "./app/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules"

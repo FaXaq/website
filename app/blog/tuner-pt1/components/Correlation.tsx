@@ -28,7 +28,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
     label: labels[index]
   }))
 
-  return <div className="h-48 w-full">
+  return <div>
     <ResponsiveContainer>
       <BarChart data={data} layout="vertical">
         <Bar dataKey="value" fill={BAR_COLOR} activeBar={{ fill: BAR_COLOR_HOVER }} />

@@ -3,7 +3,7 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import Button from '../components/Button'
-import { ObjectSchema, ValidationError, array, object, string } from 'yup'
+import z, { ZodError } from 'zod'
 import classNames from 'classnames'
 
 interface FormState {
@@ -30,12 +30,12 @@ export default function Merge() {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
-  const formStateSchema: ObjectSchema<FormState> = object({
-    newName: string().trim().required(),
-    files: array()
+  const formStateSchema = z.object({
+    newName: z.string().trim(),
+    files: z.array(z.file())
   })
   const [formErrors, setFormErrors] = useState<Array<string>>([])
-  const formRef = useRef<HTMLFormElement>()
+  const formRef = useRef<HTMLFormElement>(undefined)
 
   const onFileInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const files = event.target.files
@@ -67,11 +67,11 @@ export default function Merge() {
     const body = new FormData()
 
     try {
-      const { newName: validatedNewName } = await formStateSchema.validate(formState)
+      const { newName: validatedNewName } = formStateSchema.parse(formState)
       body.append('newName', validatedNewName)
     } catch (err: unknown) {
-      if (err instanceof ValidationError) {
-        setFormErrors(err.errors)
+      if (err instanceof ZodError) {
+        setFormErrors(err.issues.map(e => e.message))
       }
       setIsLoading(false)
       return
@@ -101,29 +101,22 @@ export default function Merge() {
   }
 
   return (
-    <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge' className='flex flex-col items-start' ref={formRef}>
+    <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge'  ref={formRef}>
       <header>
-        <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.merge.title')}</h2>
+        <h2 >{t('corsica.pages.merge.title')}</h2>
         <p>{t('corsica.pages.merge.description')}</p>
       </header>
-      <div className="my-4">
-        <div className="flex flex-col pb-4">
+      <div >
+        <div >
           <label htmlFor="new-name-input">{t('corsica.pages.merge.inputLabel')}</label>
           <input
             id="new-name-input"
-            className={
-              classNames({
-                'rounded border py-1 px-2': true,
-                'border-corsica-red': formErrors.length > 0,
-                'border-corsica-khaki': formErrors.length === 0
-              })
-            }
             type="text"
             onChange={onTextInputChange}
             accept=".gpx"
             required
           />
-          <div className="text-corsica-red">
+          <div >
             {formErrors.length > 0 && (
               formErrors.map((err, i) => <p key={`err-${i}`}>{err}</p>)
             )}

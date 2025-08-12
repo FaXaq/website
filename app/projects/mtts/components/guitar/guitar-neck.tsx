@@ -47,10 +47,7 @@ function GuitarNeck ({
   const { layout: contextLayout } = useGuitarNeck()
 
   return <div>
-    <ul className={classNames({
-      'flex flex-col': contextLayout === 'horizontal',
-      'flex flex-row': contextLayout === 'vertical'
-    })}>
+    <ul>
       { strings.map((string) => <GuitarString key={`string-${string.stringNumber}`} {...string} />)}
     </ul>
   </div>

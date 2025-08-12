@@ -19,7 +19,7 @@ const BeatLine = ({ score }: BeatLineProps) => {
     )
   })
   return (
-    <div className="h-full w-full">
+    <div >
       { bars }
     </div>
   )

@@ -21,7 +21,7 @@ const Malo = () => {
     return n
   }, [lineNumber])
 
-  return <div className="overflow-hidden bg-mtts-dark-violet">
+  return <div >
     <TileContainer lineLength={lineLength} lineNumber={lineNumber} notes={notes} />
   </div>
 }

@@ -27,7 +27,7 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
 
   useEffect(() => {
     (async () => {
-      const files = await (await fetch('/projects/corsica/api/analyse')).json() as unknown as ListBlobResult
+      const files = await (await fetch(API_URL)).json() as unknown as ListBlobResult
       setPreLoadedFiles(files)
     })()
   }, [])
@@ -84,21 +84,21 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
   }
 
   return (
-    <form onSubmit={analyseGPX} method='POST' action={API_URL} className='flex flex-col items-start'>
+    <form onSubmit={analyseGPX} method='POST' action={API_URL} >
       <header>
-        <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.analyse.title')}</h2>
+        <h2 >{t('corsica.pages.analyse.title')}</h2>
         <p>{t('corsica.pages.analyse.description')}</p>
       </header>
-      <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
+      <input  required/>
       <Button loading={isLoading || isSanitizing} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
-      <p className="py-2">{t('corsica.pages.analyse.selectAFile')}</p>
+      <p >{t('corsica.pages.analyse.selectAFile')}</p>
       { !preLoadedFiles ? (
         <LoadingIcon />
       ) : (
-        <ul className="w-full">
+        <ul >
           { preLoadedFiles.blobs.map(file => (
             <li
-              className="p-2 cursor-pointer hover:bg-corsica-khaki hover:text-corsica-white"
+              
               onClick={() => selectPreLoadedFile(file.url)}
               key={file.pathname}
             >

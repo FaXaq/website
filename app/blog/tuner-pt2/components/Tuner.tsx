@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import TunerContainer from './TunerContainer'
+import { Box } from '@chakra-ui/react'
 
 export default function Tuner() {
   const [audioStream, setAudioStream] = useState<MediaStream | undefined>()
@@ -14,7 +15,9 @@ export default function Tuner() {
     }
   }
 
-  return audioStream !== undefined
-    ? <TunerContainer audioStream={audioStream} />
-    : <button onClick={() => requestMicAccess()}>Request mic access</button>
+  return <Box p={6} rounded="md" border="1px solid">{
+    audioStream !== undefined
+      ? <TunerContainer audioStream={audioStream} />
+      : <button onClick={() => requestMicAccess()}>Request mic access</button>
+  }</Box>
 }

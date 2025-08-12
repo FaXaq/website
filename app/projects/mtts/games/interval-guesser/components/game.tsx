@@ -119,13 +119,13 @@ const IntervalGuesserGame = ({ note, level, onWin, onLoose, isPlaying }: Interva
   }, [isPlaying, playingSound, notesToPlay])
 
   return (
-    <div className="container mx-auto">
+    <div >
       { /* oscillator */}
-      <div className="px-6">
+      <div >
         <Oscillator waveform={waveform} />
         <FFT fft={fft} />
       </div>
-      <ul className="flex justify-center flex-wrap">
+      <ul >
         {displayIntervals}
       </ul>
       <Knob onUpdate={setDb} value={db} min={-100} max={0} label={t('mtts.controls.volume.title')} />
