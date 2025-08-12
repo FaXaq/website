@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useRef, useEffect, useState } from 'react'
 import { Note, Pitch } from 'mtts'
 import GuessedNoteItem from './GuessedNote'
