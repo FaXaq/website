@@ -23,7 +23,7 @@ const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
       <Head>
         <title>{meta.title}</title>
       </Head>
-      <Container py={4}>
+      <Container py={8}>
         <VStack alignItems="start" gap={6}>
           <Heading as="h1" fontSize="4xl">
             {meta.title}

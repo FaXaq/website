@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Head from 'next/head'
 import { format } from 'date-fns'
-import { Box, Container, Heading, List, Text, VStack } from '@chakra-ui/react'
+import { Box, Container, Heading, HStack, List, ListIndicator, Separator, Text, VStack } from '@chakra-ui/react'
+import { LuExternalLink, LuLink } from 'react-icons/lu'
 
 export interface ArticleMetaData {
   title: string
@@ -96,16 +97,20 @@ function BlogHomePage({ articles, tags }: BlogProps) {
           <List.Root variant="plain" gap={4}>
             {links.length > 0 ? links : 'No blog post here...'}
           </List.Root>
+          <Separator my={6} width="100%"/>
           <footer>
-            <p>Links:</p>
-            <ul>
-              <li>
-                <Link href="/blog/rss">RSS</Link>
-              </li>
-              <li>
-                <Link href="https://github.com/faxaq/website">Code</Link>
-              </li>
-            </ul>
+            <HStack>
+              <Heading as="h3">Links:</Heading>
+              <List.Root variant="plain" display="flex" flexDir="row">
+                <List.Item>
+                  <Link href="/blog/rss">RSS<LuLink /></Link>
+                </List.Item>
+                <List.Item px={3}>/</List.Item>
+                <List.Item>
+                  <Link href="https://github.com/faxaq/website">Code<LuExternalLink /></Link>
+                </List.Item>
+              </List.Root>
+            </HStack>
           </footer>
         </VStack>
       </Container>
