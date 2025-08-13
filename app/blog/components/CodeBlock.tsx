@@ -18,7 +18,7 @@ interface ICodeBlockProps {
   highlightLines?: Array<number>
 }
 
-export const CodeBlock = ({ file, enableCopy = true, showLineNumbers = true, addedLineNumbers = [], size = "md", highlightLines = [], removedLineNumbers = [] }: ICodeBlockProps) => {
+export const CodeBlock = ({ file, enableCopy = true, showLineNumbers = true, addedLineNumbers = [], size = "sm", highlightLines = [], removedLineNumbers = [] }: ICodeBlockProps) => {
   const { colorMode } = useColorMode();
 
   return (

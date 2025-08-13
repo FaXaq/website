@@ -15,7 +15,7 @@ export default function SinWaveWithSumOfrequenciesDifferentAmplitude() {
   })
   
 
-  return <Box>
+  return <Box height="400px" width="100%">
     <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
