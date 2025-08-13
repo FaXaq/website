@@ -1,6 +1,7 @@
 import BlogPostLayout from '../components/BlogPostLayout'
 import WorkingWasm from './components/WorkingWasm'
 import { Box, Table } from '@chakra-ui/react'
+import { CodeBlock } from '../components/CodeBlock'
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
@@ -66,8 +67,8 @@ Create a folder at the root of your project called `wasm`. Inside, run `wasm-pac
 
 You should have something that looks like that : 
 
-```text
-app/
+export const file1 = {
+code:`app/
 └── wasm/
     └── auto-correlate/
         ├── src/
@@ -81,18 +82,28 @@ app/
         ├── .gitignore
         ├── .github/
         └── .travis.yml
-```
+`,
+language: "text"
+}
+
+<CodeBlock file={file1} showLineNumbers={false} enableCopy={false} />
 
 `utils.rs` contains an utility to map Rust errors into our browser console. Let's modify what's inside `lib.rs` with one simple function to check if it works.
 
-```rust
+export const file2 = {
+code:`
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn greet(name: &str) -> String {
     format!("Hello, {}!", name)
 }
-```
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file2} />
 
 Line per line here is what it does. First, we import `wasm_bindgen` to create bindings between javascript and rust.
 
@@ -102,7 +113,8 @@ The function itself is simple, it does take a string as a parameter and adds it 
 
 Now, to build our rust create to a WebAssembly package we use `wasm-pack build --target web`. It creates a `pkg` folder containing several files.
 
-```text
+export const file3 = {
+code:`
 pkg/
 ├── .gitignore
 ├── auto_correlate_bg.js
@@ -112,11 +124,14 @@ pkg/
 ├── auto_correlate.js
 ├── package.json
 └── README.md
-```
+`,
+language: "text",
+}
+
+<CodeBlock file={file3} showLineNumbers={false} enableCopy={false}  />
 
 You already know what are `.gitignore`, `package.json` and `README.md` for. But let's have a look at the others.
 The files `*.d.ts` are the types of the javascript and wasm having the same name.
-
 
 <Box py={6}>
   <Table.Root variant="outline">
@@ -145,7 +160,8 @@ The files `*.d.ts` are the types of the javascript and wasm having the same name
 
 To use our WASM file, we can add it to a small react component :
 
-```typescript
+export const file5 = {
+code:`
 'use client'
 
 import init, { greet } from '../../../wasm/auto-correlate/pkg/auto_correlate'
@@ -163,7 +179,13 @@ export default function WorkingWasm() {
 
   return <p>{greeting}</p>
 }
-```
+`,
+language: "tsx",
+title: "components/WorkingWasm.tsx"
+}
+
+<CodeBlock file={file5}  />
+
 
 And here it is working in a component : 
 <Box rounded="sm" p={4} mt={2} border="1px solid">
@@ -172,7 +194,10 @@ And here it is working in a component :
 
 ## Porting the autoCorrelate function to Rust
 
-```rust
+Well it took me some time, but thanks to a few blog posts, a bit of AI and other pointer knowledge acquired in college, here is the port:
+
+export const file6 = {
+code:`
 use wasm_bindgen::prelude::*;
 use js_sys::*;
 extern crate console_error_panic_hook;
@@ -293,7 +318,12 @@ pub fn auto_correlate(buffer: &Float32Array, sample_rate: i32) -> f32 {
 pub fn greet(name: &str) -> String {
     format!("Hello, {}!", name)
 }
-```
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file6}  />
 
 ## Building it and running it with Next.js
 
@@ -327,6 +357,117 @@ Finally, we import the WASM file as we did before previously with our test funct
     const guessedFrequency = auto_correlate(buffer, analyser.context.sampleRate)
   }
 ```
+
+export const file7 = {
+  code:`
+import { Note } from "mtts"
+import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
+
+const AVERAGE_FLUCTUATION = 0.3
+
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+
+function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
+  if (notesInRange.length <= 3) {
+    let noteFound = notesInRange[0]
+    let closest = Math.abs(searchedFrequency - noteFound.frequency)
+    for (let i = 1; i < notesInRange.length; i++) {
+      const frequencyDifference = Math.abs(searchedFrequency - notesInRange[i].frequency)
+      if (closest > frequencyDifference) {
+        noteFound = notesInRange[i]
+        closest = frequencyDifference
+      }
+    }
+    return noteFound
+  }
+
+  const secondHalf = notesInRange.slice(notesInRange.length / 2, notesInRange.length)
+
+  if (searchedFrequency < secondHalf[0].frequency) {
+    return findClosestNote(searchedFrequency, notesInRange.slice(0, (notesInRange.length / 2) + 1))
+  }
+
+  return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
+}
+
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+  const [guessedNote, setGuessedNote] = useState<Note>()
+  const [isLoadingWebAssembly, setIsLoadingWebAssembly] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (guessedFrequency > 0) {
+      setGuessedNote(findClosestNote(guessedFrequency, notes))
+    } else {
+      setGuessedNote(undefined)
+    }
+
+    return undefined
+  }, [setGuessedNote, guessedFrequency])
+
+  useEffect(() => {
+    (async () => {
+      setIsLoadingWebAssembly(true)
+      try {
+        await init()
+        setIsLoadingWebAssembly(false)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [])
+
+  function stop() {
+    clearInterval(guessingInterval)
+  }
+
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        if (!isLoadingWebAssembly) {
+          setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+          setGuessedFrequency(auto_correlate(buffer, analyser.context.sampleRate))
+        }
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
+  const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
+  const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
+
+  <>
+    { inTune && <p>it's a flat...</p> }
+    <p>{guessedNote?.SPN}</p>
+    { inTune && <p>in tune !</p> }
+    { sharp && <p>...but it's sharp</p> }
+    { isLoadingWebAssembly && <p>(loading...)</p> }
+    { !isLoadingWebAssembly && (
+      <>
+        <button onClick={() => start()}>start</button>
+        <button onClick={() => stop()}>stop</button>
+      </>
+    )}
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file7} addedLineNumbers={[1,53,54,55,56,57,58,59,60,61,62,63,64,76,92,93,94,97,98]} removedLineNumbers={[75]} />
+
 
 We now redo the calculations by modifying the analyser initial FFT_SIZE with our hook and __boom__ here are the results :
 
