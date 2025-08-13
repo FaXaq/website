@@ -1,12 +1,7 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import Prism from 'prismjs'
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-rust";
-import "prismjs/themes/prism.css";
+import React from 'react'
 import Head from 'next/head'
-import { useTranslation } from 'next-i18next'
 import { format } from 'date-fns'
 import { Container, Em, Heading, Separator, Text, VStack } from '@chakra-ui/react';
 
@@ -19,10 +14,6 @@ interface BlogPostLayoutProps {
   }}
 
 const BlogPostLayout = ({ children, meta }: BlogPostLayoutProps) => {
-  useEffect(() => {
-    Prism.highlightAll()
-  }, [])
-
   if (!meta) {
     return
   }

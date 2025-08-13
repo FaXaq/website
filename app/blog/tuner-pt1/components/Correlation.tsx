@@ -4,6 +4,7 @@ import React from 'react'
 import { theme } from '../../../../tailwind.config'
 import { hexToRgb } from '../../../../utils/misc'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Box } from '@chakra-ui/react'
 
 const CTA2_RGB = hexToRgb(theme.extend.colors['mtts-cta-2'])
 const BAR_COLOR = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.5)`
@@ -28,7 +29,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
     label: labels[index]
   }))
 
-  return <div>
+  return <Box width="100%" height="200px">
     <ResponsiveContainer>
       <BarChart data={data} layout="vertical">
         <Bar dataKey="value" fill={BAR_COLOR} activeBar={{ fill: BAR_COLOR_HOVER }} />
@@ -37,7 +38,7 @@ const Correlation = ({ gsFq, fqBin, prevFqBin, nextFqBin, fqBinMag, prevFqBinMag
         <Tooltip />
       </BarChart>
     </ResponsiveContainer>
-  </div>
+  </Box>
 }
 
 export default Correlation
