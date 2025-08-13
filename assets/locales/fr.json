@@ -22,7 +22,7 @@
             "https://hellowork.com",
             "https://seekube.com"
           ],
-          "missions": [
+          "tasks": [
             {
               "type": "Development",
               "text": "Rédaction de spécifications techniques / technico-fonctionnelles et définition des lotissements"
@@ -122,7 +122,7 @@
             "links": [
               "https://gandi.net"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Management",
                 "text": "Planning roadmap court terme & planning sprints"
@@ -162,7 +162,7 @@
             "links": [
               "https://liberkeys.com"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Development",
                 "text": "Développement d'une application mobile",
@@ -207,7 +207,7 @@
             "links": [
               "https://github.com/blank-project"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Management",
                 "text": "Sourcing & sélection des étudiants"
@@ -247,7 +247,7 @@
               "https://github.com/enioka/ij.js",
               "https://itlivemaps.com"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Development",
                 "text": "Développement et maintenance d'un outil de modélisation des systèmes d'information",
@@ -292,7 +292,7 @@
             "links": [
               "https://thestorefront.com"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Development",
                 "text": "Mise en place d'un système de traduction - i18n",
@@ -345,7 +345,7 @@
           {
             "title": "Membre du CA @ Belleville Citoyenne",
             "period": "2018 - 2019",
-            "missions": [
+            "tasks": [
               {
                 "type": "Management",
                 "text": "S'assurer que le bureau suit les décisions prises en assemblées générales"
@@ -355,7 +355,7 @@
           {
             "title": "Voyages à vélo",
             "period": "2021 - en cours",
-            "missions": [
+            "tasks": [
               {
                 "type": "Hobby",
                 "text": "Pédaler pendant des semaines, voir différents lieux, en autonomie"
@@ -373,7 +373,7 @@
             "links": [
               "https://norra.fr/projects/mtts"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Development",
                 "text": "API déterministe pour manipuer les concepts de théorie musicale en Typescript"
@@ -386,7 +386,7 @@
             "links": [
               "https://norra.fr/projects/corsica"
             ],
-            "missions": [
+            "tasks": [
               {
                 "type": "Development",
                 "text": "Outil de manipulation et d'analyse des fichiers GPX"
@@ -400,7 +400,7 @@
         "past": [
           {
             "title": "Langues",
-            "missions": [
+            "tasks": [
               {
                 "type": "Language",
                 "text": "Français C2"
@@ -413,7 +413,7 @@
           },
           {
             "title": "Passions",
-            "missions": [
+            "tasks": [
               {
                 "type": "Hobby",
                 "text": "Musique, Théorie Musicale, Guitare, Live Shows, Vélo, Design"

@@ -3,21 +3,31 @@
 import React from 'react'
 
 import { useTranslation } from 'next-i18next'
+import { Box, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { LuMapPin } from 'react-icons/lu'
 
 function Header () {
   const { t } = useTranslation()
   return (
-    <header >
-      <div >
-        <div >
-          <h1 >
-            {t('resume.firstname')}
-          </h1>
-          <h2 >
-            {t('resume.workfield')}
-          </h2>
-        </div>
-      </div>
+    <header>
+      <VStack alignItems="start">
+        <HStack alignItems="start" justifyContent="space-between" width="100%">
+          <VStack gap={2} alignItems="start">
+            <Heading as="h1" size="4xl">
+              {t('resume.firstname')}
+            </Heading>
+            <Heading as="h2" size="2xl" fontWeight="bold">
+              {t('resume.workfield')}
+            </Heading>
+          </VStack>
+          <HStack justifyContent="start" alignItems="center">
+            <LuMapPin /><Text>Paris, FR</Text>
+          </HStack>
+        </HStack>
+        <Text>
+          {t('resume.description')}
+        </Text>
+      </VStack>
     </header>
   )
 }
