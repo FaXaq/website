@@ -5,9 +5,9 @@
   },
   "resume": {
     "firstname": "Hi, I'm Marin",
-    "workfield": "CTO @ Orion",
+    "workfield": "I am currently working as a CTO for Orion",
     "description": "I have been working in the web industry for 10 years. I am hands-on and have grown different products for entities (startups, companies, charities and public) from MVP to acquisition or handover. I worked on B2C, B2B and Back-office web applications. I thrive in fast paced products environments, and am keen on being user centric.",
-    "location": "Paris, FR",
+    "location": "Paris, FR / Remote, EU",
     "copy": "Code :",
     "content": {
       "experiences": {
@@ -318,7 +318,7 @@
             "links": [
               "https://thestorefront.com"
             ],
-            "myRole": "I developped features such as search, maps, payment funnel, ...",
+            "myRole": "I developped features such as search, maps, payment funnel, internationalization, for an professional space Airbnb (pop-up store, showrool, etc.).",
             "tasks": [
               {
                 "type": "Development",

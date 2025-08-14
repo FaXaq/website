@@ -21,7 +21,7 @@ function Header () {
             </Heading>
           </VStack>
           <HStack justifyContent="start" alignItems="center">
-            <LuMapPin /><Text>Paris, FR</Text>
+            <LuMapPin /><Text>{t('resume.location')}</Text>
           </HStack>
         </HStack>
         <Text>

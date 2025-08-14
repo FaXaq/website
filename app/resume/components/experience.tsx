@@ -13,14 +13,14 @@ export const Experience = ({ experience }: { experience: TExperience }) => {
     <Timeline.Item>
       <Timeline.Connector>
         <Timeline.Separator />
-        <Timeline.Indicator bg="bg.subtle" border="transparent">
+        <Timeline.Indicator bg="bg.subtle" border="transparent" borderImageWidth={0}>
           <ExperienceIcon />
         </Timeline.Indicator>
       </Timeline.Connector>
       <Timeline.Content>
         <Timeline.Title fontSize="md">{experience.title}</Timeline.Title>
         <Timeline.Description>{experience.period} - {experience.links.map(l =>
-          <ChakraLink key={l} as={NextLink} href={l} pr={2} color="fg.info">
+          <ChakraLink key={l} as={NextLink} href={l} pr={2} color="fg.info" target="_blank">
             {l.replace("https://","")}<LuExternalLink />
           </ChakraLink>
         )}
