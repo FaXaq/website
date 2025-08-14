@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import 'leaflet/dist/leaflet.css'
 import MapIcon from './MapIcon'
-import { theme } from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 
 const Polyline = dynamic(
   async () => (await import('react-leaflet')).Polyline,
@@ -57,7 +57,7 @@ export default function MapAnnotations({ mapAnalysis, points }: MapProps) {
 
   return <>
     <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
-    <Polyline positions={points.map(point => pointToLatLng(point))} color={theme.extend.colors['corsica-red']}/>
+    <Polyline positions={points.map(point => pointToLatLng(point))} color={theme.colors['corsica-red']}/>
     <MapIcon type="start" position={pointToLatLng(points[0])} />
     { activePoint.index > -1 && (
       <MapIcon type='active' position={activePointCoordinates} />

@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react'
 
 // eslint-disable-next-line no-unused-vars
 import { Note, Pitch } from 'mtts'
-import { generateNotesForPitch } from '../../../../utils/mtts'
+import { generateNotesForPitch } from '@/utils/mtts'
 import TileContainer from './components/tile-container'
 import './malo.scss'
 

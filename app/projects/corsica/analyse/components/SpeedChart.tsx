@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Analysis } from '../../api/analyse/route'
 import { ChartData } from '../types'
-import tailwindConfig from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 import { CartesianGrid, Customized, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
 
@@ -34,7 +34,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
           <Line
             type="monotone"
             dataKey="value"
-            stroke={tailwindConfig.theme.extend.colors['corsica-green']}
+            stroke={theme.colors['corsica-green']}
             dot={false}
             strokeWidth={1}
             activeDot={false}

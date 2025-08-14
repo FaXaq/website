@@ -3,7 +3,7 @@ import { ChartData } from '../types'
 import { Analysis } from '../../api/analyse/route'
 import { Area, AreaChart, CartesianGrid, Customized, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { } from 'react-leaflet'
-import tailwindConfig from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
 
 interface ElevationChartProps {
@@ -36,7 +36,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
             type="monotone"
             dataKey="value"
             strokeWidth={0}
-            fill={tailwindConfig.theme.extend.colors['corsica-green']}
+            fill={theme.colors['corsica-green']}
             dot={false}
             activeDot={false}
           />

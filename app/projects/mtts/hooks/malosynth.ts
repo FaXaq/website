@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note } from 'mtts'
-import { filterUniqueNotes } from '../../../../utils/mtts'
+import { filterUniqueNotes } from '@/utils/mtts'
 
 export function useMaloSynth () {
   const [playingNotes, setPlayingNotes] =

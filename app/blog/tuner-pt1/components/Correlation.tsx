@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react'
-import { theme } from '../../../../tailwind.config'
-import { hexToRgb } from '../../../../utils/misc'
+import { theme } from '@/components/ui/theme'
+import { hexToRgb } from '@/utils/misc'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Box } from '@chakra-ui/react'
 
-const CTA2_RGB = hexToRgb(theme.extend.colors['mtts-cta-2'])
+const CTA2_RGB = hexToRgb(theme.colors['mtts-cta-2'])
 const BAR_COLOR = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.5)`
 const BAR_COLOR_HOVER = `rgba(${CTA2_RGB.r}, ${CTA2_RGB.g}, ${CTA2_RGB.b}, 0.7)`
 

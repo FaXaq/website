@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 // eslint-disable-next-line no-unused-vars
 import { Note, Interval } from 'mtts'
 import IntervalGuesserButton from './button'
-import { shuffleArray, getRandomEntities } from '../../../../../../utils/misc'
+import { shuffleArray, getRandomEntities } from '@/utils/misc'
 import * as Tone from 'tone'
 // eslint-disable-next-line no-unused-vars
 import { Level } from '../page'

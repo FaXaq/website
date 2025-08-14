@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { getRandomEntity } from '../../../../../utils/misc'
+import { getRandomEntity } from '@/utils/misc'
 import IntervalGuesserGame from './components/game'
 // eslint-disable-next-line no-unused-vars
 import { Note, Interval } from 'mtts'

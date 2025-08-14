@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 // eslint-disable-next-line no-unused-vars
 import * as Tone from 'tone'
-import { scale } from '../../../../../../utils/misc'
-import { theme } from '../../../../../../tailwind.config'
-import { setCanvasToParentDimension } from '../../../../../../utils/canvas'
+import { scale } from '@/utils/misc'
+import { theme } from '@/components/ui/theme'
+import { setCanvasToParentDimension } from '@/utils/canvas'
 
 const FREQUENCY_COLORS = [
-  theme.extend.colors['mtts-cta-2']
+  theme.colors['mtts-cta-2']
 ]
 
 interface FFTProps {

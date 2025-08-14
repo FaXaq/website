@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useMemo, useRef, useEffect, useCallback, useState } from 'react'
-import { scale } from '../../../../../utils/misc'
-import { useDefaultProp } from '../../../../../hooks/misc'
+import { scale } from '@/utils/misc'
+import { useDefaultProp } from '@/hooks/useDefaultProp'
 
 interface KnobProps {
   value: number
