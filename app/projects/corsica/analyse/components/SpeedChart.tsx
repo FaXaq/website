@@ -4,6 +4,7 @@ import { ChartData } from '../types'
 import { theme } from '@/components/ui/theme'
 import { CartesianGrid, Customized, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
+import { Box } from '@chakra-ui/react'
 
 interface SpeedChartProps {
     analysis: Analysis
@@ -25,7 +26,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <div >
+    <Box h="full" w="full">
       <ResponsiveContainer>
         <LineChart data={speedVariationData}>
           <CartesianGrid />
@@ -47,6 +48,6 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
           <Customized component={ActiveVerticalChartLine} />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   )
 }

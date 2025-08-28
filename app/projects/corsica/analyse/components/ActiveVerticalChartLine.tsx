@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
-import { CategoricalChartProps, CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart'
+import { CategoricalChartProps, createDefaultState } from 'recharts/types/chart/generateCategoricalChart'
+
+type CategoricalChartState = ReturnType<typeof createDefaultState>
 
 type ChartProps = CategoricalChartProps & CategoricalChartState
 

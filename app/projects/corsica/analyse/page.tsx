@@ -16,6 +16,7 @@ import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
 import dynamic from 'next/dynamic'
+import { Box, VStack } from '@chakra-ui/react'
 
 export default function Analyse() {
   const { t } = useTranslation()
@@ -37,48 +38,43 @@ export default function Analyse() {
       )}
       { analysis?.map && (
         <div>
-          <div className="pb-4">
-            <h2 className="flex items-center text-3xl font-bold font-corsica-title text-corsica-olive">
+          <div>
+            <h2>
               {analysis.name}
             </h2>
-            <h4 className="flex items-center">
-              {analysis.activity === 'cycling' && (
-                <span className="inline-block h-6 pr-2">
-                  <CyclingIcon />
-                </span>
-              )}
+            <h4>
               {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
           </div>
           <div>
             <ActiveChartPointProvider>
-              <div className="md:grid md:grid-cols-4">
-                <div className='md:col-span-4 h-56'>
-                  <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
+              <Box>
+                <Box height="200px" width="500px">
+                  <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} style={{ width: "100%", height: "100%"}}>
                     <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
                   </LeafletMap>
-                </div>
-                <div className='md:col-span-4'>
+                </Box>
+                <Box width="full">
                   <TextAnalysisReport analysis={analysis} />
-                </div>
-                <div className='py-4 md:col-span-4 flex flex-col md:grid md:grid-cols-8 h-32'>
-                  <div className="grow md:col-span-7">
+                </Box>
+                <VStack width="full" alignItems="start">
+                  <Box height="100px" width="full">
                     <ElevationChart analysis={analysis} />
-                  </div>
-                  <div className='md:col-span-1 md:ml-2 bg-corsica-white'>
+                  </Box>
+                  <Box>
                     <ElevationChartHover analysis={analysis} />
-                  </div>
-                </div>
+                  </Box>
+                </VStack>
                 { analysis.time && (
-                  <div className="py-4 col-span-4 flex flex-col md:grid md:grid-cols-8 h-32">
-                    <div className="grow  md:col-span-7">
+                  <Box>
+                    <Box height="100px" width="full">
                       <SpeedChart analysis={analysis} />
-                    </div>
-                    <div className="md:col-span-1 md:ml-2 bg-corsica-white">
+                    </Box>
+                    <Box>
                       <SpeedChartHover analysis={analysis} />
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
                 )}
-              </div>
+              </Box>
             </ActiveChartPointProvider>
             <Button
               type="button"
