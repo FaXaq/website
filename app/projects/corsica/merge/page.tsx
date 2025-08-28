@@ -2,9 +2,10 @@
 
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import Button from '../components/Button'
 import z, { ZodError } from 'zod'
-import classNames from 'classnames'
+import { FileUpload, Button, Input, Field, VStack, Card, Heading, Text, Icon, Box } from '@chakra-ui/react'
+import { LuUpload } from 'react-icons/lu'
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface FormState {
     files: Array<File>,
@@ -30,10 +31,11 @@ export default function Merge() {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
-  const formStateSchema = z.object({
-    newName: z.string().trim(),
-    files: z.array(z.file())
-  })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>()
   const [formErrors, setFormErrors] = useState<Array<string>>([])
   const formRef = useRef<HTMLFormElement>(undefined)
 
@@ -57,18 +59,16 @@ export default function Merge() {
     })
   }
 
-  const mergeGPX: React.FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault()
+  const mergeGPX = async (data: FormState) => {
+    if (!formRef.current) return;
     setIsLoading(true)
-    const formElement: HTMLFormElement = event.target as HTMLFormElement
-    const apiUrl = formElement.action
-    const method = formElement.method
+    const apiUrl = formRef.current.action
+    const method = formRef.current.method
 
     const body = new FormData()
 
     try {
-      const { newName: validatedNewName } = formStateSchema.parse(formState)
-      body.append('newName', validatedNewName)
+      body.append('newName', data.newName)
     } catch (err: unknown) {
       if (err instanceof ZodError) {
         setFormErrors(err.issues.map(e => e.message))
@@ -77,8 +77,8 @@ export default function Merge() {
       return
     }
 
-    for (let i = 0; i < formState.files.length; i++) {
-      body.append(`file-${i}`, formState.files[i])
+    for (let i = 0; i < data.files.length; i++) {
+      body.append(`file-${i}`, data.files[i])
     }
 
     // Frustrating but we have to not set manualy the Content-Type of the request
@@ -88,7 +88,7 @@ export default function Merge() {
       body
     })
 
-    const sanitizedFileName = formState.newName
+    const sanitizedFileName = data.newName
       .replace(/[^a-zA-Z0-9 ]/g, '')
       .replace(/\s+/g, ' ')
       .replace(/\s/g, '_')
@@ -100,30 +100,33 @@ export default function Merge() {
     setIsLoading(false)
   }
 
+  const onSubmit: SubmitHandler<FormState> = (data) => mergeGPX(data)
+
   return (
-    <form onSubmit={mergeGPX} method='POST' action='/projects/corsica/api/merge'  ref={formRef}>
-      <header>
-        <h2 >{t('corsica.pages.merge.title')}</h2>
-        <p>{t('corsica.pages.merge.description')}</p>
-      </header>
-      <div >
-        <div >
-          <label htmlFor="new-name-input">{t('corsica.pages.merge.inputLabel')}</label>
-          <input
-            id="new-name-input"
-            type="text"
-            onChange={onTextInputChange}
-            accept=".gpx"
-            required
-          />
-          <div >
-            {formErrors.length > 0 && (
-              formErrors.map((err, i) => <p key={`err-${i}`}>{err}</p>)
-            )}
-          </div>
-        </div>
-        <input type="file" onChange={onFileInputChange} accept=".gpx" required multiple />
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)} method='POST' action='/projects/corsica/api/merge' ref={formRef}>
+      <Heading as="h3">{t('corsica.pages.merge.title')}</Heading>
+      <Text>{t('corsica.pages.merge.description')}</Text>
+      <VStack gap={2} alignItems="start" py={4}>
+        <Field.Root>
+          <Field.Label htmlFor="new-name-input">{t('corsica.pages.merge.inputLabel')}</Field.Label>
+          <Input type="text" id="new-name-input" {...register('newName')} />
+        </Field.Root>
+        <FileUpload.Root width="100%">
+          <FileUpload.HiddenInput accept=".gpx" {...register("files")} multiple />
+          <FileUpload.Dropzone width="100%" cursor="pointer">
+            <Icon size="md" color="fg.muted">
+              <LuUpload />
+            </Icon>
+            <FileUpload.DropzoneContent>
+              <Box>Drag and drop files here</Box>
+              <Box color="fg.muted">.gpx only</Box>
+            </FileUpload.DropzoneContent>
+          </FileUpload.Dropzone>
+          <FileUpload.ItemGroup>
+            <FileUpload.Items showSize clearable />
+          </FileUpload.ItemGroup>
+        </FileUpload.Root>
+      </VStack>
       <Button type="submit" loading={isLoading}>{t('corsica.pages.merge.submitLabel')}</Button>
     </form>
   )

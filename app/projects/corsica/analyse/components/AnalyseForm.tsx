@@ -89,7 +89,7 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
         <h2 >{t('corsica.pages.analyse.title')}</h2>
         <p>{t('corsica.pages.analyse.description')}</p>
       </header>
-      <input  required/>
+      <input id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
       <Button loading={isLoading || isSanitizing} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
       <p >{t('corsica.pages.analyse.selectAFile')}</p>
       { !preLoadedFiles ? (

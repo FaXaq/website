@@ -451,6 +451,18 @@
       }
     }
   },
+  "projects": {
+    "title": "My projects",
+    "description": "Here are the personal projects in an active state. Not that I'm working on it everyday, but those I'm coming back from time to time.",
+    "mtts": {
+      "title": "MTTS",
+      "description": "Deterministic API to manipulate music theory concepts"
+    },
+    "corsica": {
+      "title": "Corsica",
+      "description": "Tool to merge and analyse GPX (XML path coordinates storage system)"
+    }
+  },
   "mtts": {
     "pages": {
       "index": {
@@ -526,7 +538,17 @@
     "components": {
       "nav": {
         "title": "Corsica",
-        "subtitle": "GPX manipulation & analysis tool"
+        "subtitle": "GPX manipulation & analysis tool",
+        "actions": {
+          "merge": {
+            "label": "Merge",
+            "description": "Merge multiple GPX files to create a new one and upload it on any website to anlayse (Strava, Komoot, etc.)"
+          },
+          "analyse": {
+            "label": "Analyse",
+            "description": "Analyse GPX file and get a map, crude data on speed and altitude."
+          }
+        }
       }
     },
     "pages": {

@@ -1,12 +1,18 @@
 import { useCreateUrl } from '@/hooks/useCreateUrl';
-import { Link as ChakraLink } from '@chakra-ui/react'
+import { Link as ChakraLink, Span, VStack } from '@chakra-ui/react'
+import _ from 'lodash';
 import NextLink from 'next/link';
 import { ComponentProps } from 'react';
 
-type LinkProps = Omit<ComponentProps<typeof NextLink>, 'href'> & { href: string };
+type LinkDefaultProps = Omit<ComponentProps<typeof NextLink>, 'href'> & { href: string };
 
-export const Link = ({ href, children, ...props}: LinkProps) => {
+interface LinkProps extends LinkDefaultProps {
+  description?: string
+}
+
+export const Link = ({ href, children, description, ...props}: LinkProps) => {
   const createUrl = useCreateUrl();
+  const hasDescription = !_.isEmpty(description);
 
   return <ChakraLink
     {...props}
@@ -17,5 +23,13 @@ export const Link = ({ href, children, ...props}: LinkProps) => {
     style={{
       textDecoration: "none"
     }}
-  >{children}</ChakraLink>
+  >
+    {hasDescription && (
+      <VStack alignItems="start" gap={0}>
+        {children}
+        <Span fontSize="xs">{description}</Span>
+      </VStack>
+    )}
+    {!hasDescription && children}
+  </ChakraLink>
 }

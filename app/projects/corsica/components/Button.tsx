@@ -20,7 +20,6 @@ export default function Button({ onClick, type, children, loading }: ButtonProps
   return (
     <button
       type={type}
-      
       onClick={proxyOnClick}
       disabled={loading}
     >

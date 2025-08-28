@@ -21,11 +21,12 @@ function AppLayout ({ children }: AppLayoutProps) {
   const { i18n } = useTranslation()
 
   const [locale, setLocale] = useSearchParam('locale', LocaleEnum.en);
+
   useEffect(() => {
     if (locale && i18n.language !== locale) {
       i18n.changeLanguage(locale);
     }
-  }, [locale]);
+  }, [i18n, locale]);
 
   return (
     <html lang={i18n.language} suppressHydrationWarning>
