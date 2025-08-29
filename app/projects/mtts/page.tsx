@@ -17,7 +17,6 @@ function Page() {
   const { t } = useTranslation()
   const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as unknown as Experiment[]).map(e => {
     return (
-      
       <List.Item key={e.title}>
         <Link href={e.link} description={e.description}>
           <HStack>

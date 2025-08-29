@@ -6,6 +6,7 @@ import { LocaleSelector } from "./LocaleSelector"
 import { usePathname } from "next/navigation"
 import _ from "lodash"
 import React from "react"
+import { useCreateUrl } from "@/hooks/useCreateUrl"
 
 interface Crumb {
   label: string;
@@ -28,6 +29,8 @@ export const NavBar = () => {
     })
   })
 
+  const createUrl = useCreateUrl();
+
   return (
     <HStack p={2} style={{
       position: 'sticky',
@@ -47,7 +50,7 @@ export const NavBar = () => {
             {breadcrumbs.map((crumb, i) => (
               <React.Fragment key={crumb.label}>
                 <Breadcrumb.Item>
-                  <Breadcrumb.Link href={crumb.path}>
+                  <Breadcrumb.Link href={createUrl(crumb.path)}>
                     {_.capitalize(crumb.label).replaceAll("-", " ")}
                   </Breadcrumb.Link>
                 </Breadcrumb.Item>

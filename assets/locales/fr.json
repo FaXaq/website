@@ -452,6 +452,18 @@
       }
     }
   },
+  "projects": {
+    "title": "Mes projets",
+    "description": "Ici sont listés les projets sur lesquels je travail de temps en temps. Parfois, enfin quand j'ai le temps et l'envie. Ce sont principalement des expérimentations.",
+    "mtts": {
+      "title": "MTTS",
+      "description": "API déterministe pour manipuler les concepts de théorie musicale (notes, gammes, etc.)"
+    },
+    "corsica": {
+      "title": "Corsica",
+      "description": "Outil pour fusionner et analyser les fichiers GPX (XML path coordinates storage system)"
+    }
+  },
   "mtts": {
     "games": {
       "intervalGuesser": {
@@ -485,27 +497,27 @@
             "link": "/projects/mtts/scale-builder"
           },
           {
-            "title": "Malo",
+            "title": "(Cassé) Malo",
             "description": "Piano hexagonal, relié à un Synthéthiseur multi voix, permettant de jouer des notes suivant une disposition différente de celle d'un piano classique.",
             "link": "/projects/mtts/malo"
           },
           {
-            "title": "Tuner",
+            "title": "(Cassé) Tuner",
             "description": "Un accordeur qui vous donnera la fréquence ou la note que vous êtes en train de jouer.",
             "link": "/projects/mtts/tuner"
           },
           {
-            "title": "Metronome",
+            "title": "(Cassé) Metronome",
             "description": "Un métronome. Juste un métronome, précis jusqu'au centième de seconde.",
             "link": "/projects/mtts/metronome"
           },
           {
-            "title": "Interval Guesser",
+            "title": "(Cassé) Interval Guesser",
             "description": "Découvrir quel interval est actuellement joué sur la page avec mtts & tonejs",
             "link": "/projects/mtts/games/interval-guesser"
           },
           {
-            "title": "Daw",
+            "title": "(Cassé) Daw",
             "description": "Digital Audio Workstation (early WIP) en react avec mtts & tonejs",
             "link": "/projects/mtts/daw"
           }
