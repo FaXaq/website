@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Link } from '@/components/Link'
 import Tags from './Tags'
 import { useTranslation } from 'react-i18next'
@@ -118,4 +118,10 @@ function BlogHomePage({ articles, tags }: BlogProps) {
   )
 }
 
-export default BlogHomePage
+export default function SuspendedBlogHomePage(props: BlogProps) {
+  return (
+    <Suspense>
+      <BlogHomePage {...props} />
+    </Suspense>
+  )
+}

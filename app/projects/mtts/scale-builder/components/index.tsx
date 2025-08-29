@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, Suspense } from 'react'
 import { Note, NOTES, ACCIDENTALS, Accidental, INTERVALS, Interval, ACCIDENTAL, Scale, SCALES } from 'mtts'
 import GuitarNeck from '../../components/guitar/guitar-neck'
 import Fret from './Fret'
@@ -303,4 +303,6 @@ function BuildScale() {
   )
 }
 
-export default BuildScale
+export default function SuspendedBuildScale() {
+  return <Suspense><BuildScale /></Suspense>
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 
 import '../i18n'
 import { useTranslation } from 'next-i18next'
@@ -52,4 +52,6 @@ function AppLayout ({ children }: AppLayoutProps) {
   )
 }
 
-export default AppLayout
+export default function SuspendedAppLayout(props: AppLayoutProps) {
+  return <Suspense><AppLayout {...props} /></Suspense>
+}
