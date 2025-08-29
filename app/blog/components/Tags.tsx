@@ -26,10 +26,10 @@ const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
   }
 
   return (
-    <List.Root variant="plain" display="flex" flexDirection="row" gap={2}>
+    <List.Root variant="plain" display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
       {tags.map(tag => (
         <List.Item key={tag}>
-          <Badge onClick={() => handleOnClick(tag)} cursor="pointer">
+          <Badge onClick={() => handleOnClick(tag)} cursor="pointer" bg="bg.emphasized">
             {tag}
             {removable && (
               <LuCircleX onClick={() => onDelete(tag)} cursor="pointer">

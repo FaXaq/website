@@ -88,13 +88,13 @@ function BlogHomePage({ articles, tags }: BlogProps) {
         <VStack alignItems="start">
           <section>
             {tags.length > 0 && (
-              <Box>
+              <VStack pb={4} gap={4} alignItems="start">
                 <Text>{t('blog.tagsSearch')}</Text>
                 <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
-              </Box>
+              </VStack>
             )}
           </section>
-          <List.Root variant="plain" gap={4}>
+          <List.Root variant="plain" gap={4} w="full">
             {links.length > 0 ? links : 'No blog post here...'}
           </List.Root>
           <Separator my={6} width="100%"/>
