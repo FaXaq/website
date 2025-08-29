@@ -4,8 +4,8 @@ import React from 'react'
 import { Note } from 'mtts'
 import GuitarFret, { FGetFret, GuitarFretProps, FHighlight } from './_guitar-fret'
 import { FRET_MARKER } from './const'
-import classNames from 'classnames'
 import { useGuitarNeck } from './context'
+import { Grid } from '@chakra-ui/react'
 
 export interface GuitarStringProps {
   tuning: string,
@@ -15,7 +15,7 @@ export interface GuitarStringProps {
   getFret: FGetFret,
 }
 
-function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumber }: GuitarStringProps) {
+function GuitarString({ tuning, fretNumber, highlightFret, getFret, stringNumber }: GuitarStringProps) {
   const { layout } = useGuitarNeck()
 
   const frets: GuitarFretProps[] = [{
@@ -36,9 +36,12 @@ function GuitarString ({ tuning, fretNumber, highlightFret, getFret, stringNumbe
     })
   }
 
-  return <ul>
+  return <Grid
+    templateColumns={layout === "horizontal" ? `repeat(${fretNumber}, minmax(0, 1fr))` : undefined }
+    templateRows={layout === "vertical" ? `repeat(${fretNumber}, minmax(0, 1fr))` : undefined }
+  >
     { frets.map((fret, i) => <GuitarFret key={`string-${stringNumber}-fret-${i}`} {...fret} />)}
-  </ul>
+  </Grid>
 }
 
 export default GuitarString

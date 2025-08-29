@@ -10,6 +10,8 @@ import { useGuitarNeck } from '../../components/guitar/context'
 import { useNoteTranslation } from '../hooks/useNoteTranslation'
 import { NOTE_DISPLAY, useScaleBuilderSettings } from '../context/settings'
 import { getNoteIntervalIndexInScale } from '../helpers/getNoteIntervalIndexInScale'
+import { Badge, Box, Text } from '@chakra-ui/react'
+import { getColorString } from '../utils'
 
 interface IFretProps {
   note: Note | string,
@@ -67,15 +69,11 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   }
 
   return (
-    <div onClick={() => toggleFret()}>
-      <div>
-        <div>
-          {noteExistsInScale(scale, note)
-            ? (<p>{getNoteText(scale, note)}</p>)
-            : (<p></p>) }
-        </div>
-      </div>
-    </div>
+    <Box onClick={() => toggleFret()} bg={active ? "purple.muted" : "transparent"} w="full" h="full" p={1}>
+      {noteExistsInScale(scale, note)
+        ? (<Badge bg={getColorString({ color: getNoteColor(scale, note) })}>{getNoteText(scale, note)}</Badge>)
+        : (<Text></Text>) }
+    </Box>
   )
 }
 

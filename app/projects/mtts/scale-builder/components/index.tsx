@@ -14,6 +14,7 @@ import PianoRoll from '../../components/keys/PianoRoll'
 import PianoBlackKey from './PianoBlackKey'
 import PianoKey from './PianoKey'
 import { NOTE_DISPLAY, ScaleBuilderSettingsProvider, useScaleBuilderSettings } from '../context/settings'
+import { Box, createListCollection, Heading, HStack, List, Portal, RadioGroup, Select, Text } from '@chakra-ui/react'
 
 const availableAccidentals: Accidental[] =
   ACCIDENTALS
@@ -134,93 +135,151 @@ function BuildScale() {
     router.push(pathname + '?' + newSearchParams.toString())
   }, [scaleIntervals, rootNote])
 
+  const rootNoteOptions = createListCollection({
+    items: availableRootNotes.map((note) => ({
+      label: translateNote(note),
+      value: note.SPN
+    }))
+  })
+
+  const scaleOptions = createListCollection({
+    items: Object.keys(SCALES).map(s => ({
+      label: s,
+      value: s
+    }))
+  })
+
   return (
-    <div>
-      <header >
-        <h1 >Scale Builder - {scaleTitle}</h1>
-      </header>
-      <div >
-        <div >
-          <div >
-            <p>Select your root note :</p>
-            <select
-              
-              value={availableRootNotes.findIndex((note: Note) => rootNote.SPN === note.SPN)}
-              onChange={(e) => setRootNote(availableRootNotes[e.target.value])}
+    <Box>
+      <Heading as="h2">Scale Builder</Heading>
+      <Text fontSize="sm">{scaleTitle}</Text>
+      <div>
+        <div>
+          <div>
+            <Select.Root
+              collection={rootNoteOptions}
+              size="xs"
+              width="320px" 
+              value={[rootNoteOptions.items.find((option) => option.value === rootNote.SPN).value]}
+              onValueChange={(e) => setRootNote(Note.fromSPN(e.value[0]))}
+              multiple={false}
             >
-              {availableRootNotes.map((note, index) => (
-                <option value={index} key={translateNote(note)}>
-                  {translateNote(note)}
-                </option>
-              ))}
-            </select>
+              <Select.HiddenSelect />
+              <Select.Label>Select root note</Select.Label>
+              <Select.Control>
+                <Select.Trigger>
+                  <Select.ValueText placeholder="Select root note" />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+              <Portal>
+                <Select.Positioner>
+                  <Select.Content>
+                    {rootNoteOptions.items.map((option) => (
+                      <Select.Item item={option} key={option.value}>
+                        {option.label}
+                        <Select.ItemIndicator />
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Positioner>
+              </Portal>
+            </Select.Root>
           </div>
-          <div >
-            <div >
-              <p>Select intervals for your scale :</p>
-              <select  value={scale?.name.toUpperCase()} onChange={(e) => { setScaleIntervals(SCALES[e.target.value].intervals) }}>
-                <option value={null}>Not implemented yet</option>
-                {Object.keys(SCALES).map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
+          <div>
+            <div>
+              <Select.Root
+                collection={scaleOptions}
+                size="xs"
+                width="320px" 
+                value={[scale?.name.toUpperCase()]}
+                onValueChange={(e) => setScaleIntervals(SCALES[e.value[0]].intervals)}
+                multiple={false}
+              >
+                <Select.HiddenSelect />
+                <Select.Label>Select a scale</Select.Label>
+                <Select.Control>
+                  <Select.Trigger>
+                    <Select.ValueText placeholder="Select a scale" />
+                  </Select.Trigger>
+                  <Select.IndicatorGroup>
+                    <Select.Indicator />
+                  </Select.IndicatorGroup>
+                </Select.Control>
+                <Portal>
+                  <Select.Positioner>
+                    <Select.Content>
+                      {scaleOptions.items.map((option) => (
+                        <Select.Item item={option} key={option.value}>
+                          {option.label}
+                          <Select.ItemIndicator />
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Portal>
+              </Select.Root>
             </div>
-            <ul >
-              {Object.keys(availableIntervals).map((intervalKey) =>
-                <li key={intervalKey}>
-                  <ul>
-                    {availableIntervals[intervalKey].map(interval => (
-                      <li key={`${intervalKey}-${interval.name}`}>
-                        <ColorButton
-                          color={INTERVAL_COLORS[interval.value - 1]}
-                          isActive={getIntervalIndexInScale(interval) > -1}
-                          onClick={() => toggleScaleInterval(interval)}
-                        >
-                          <span>{interval.name}</span>
-                        </ColorButton>
-                      </li>))}
-                  </ul>
-                </li>
-              )}
-            </ul>
+              <Text>Here are the intervals you're working with</Text>
+              <List.Root variant="plain" display="flex" flexDir="row" gap={1}>
+                {Object.keys(availableIntervals).map((intervalKey) =>
+                  <List.Item key={intervalKey}>
+                    <List.Root variant="plain" display="flex" flexDir="column" gap={1}>
+                      {availableIntervals[intervalKey].map(interval => (
+                        <List.Item key={`${intervalKey}-${interval.name}`}>
+                          <ColorButton
+                            color={INTERVAL_COLORS[interval.value - 1]}
+                            isActive={getIntervalIndexInScale(interval) > -1}
+                            onClick={() => toggleScaleInterval(interval)}
+                          >
+                            <span>{interval.name}</span>
+                          </ColorButton>
+                        </List.Item>))}
+                    </List.Root>
+                  </List.Item>
+                )}
+              </List.Root>
           </div>
         </div>
         <div>
           <p>Scale notes :</p>
-          <ul >
+          <List.Root variant="plain" flexDir="row" gap={1}>
             {scale.notes.map(note => (
-              <li  key={`${note.SPN}`}>{translateNote(note)}</li>
+              <List.Item key={`${note.SPN}`}>{translateNote(note)}</List.Item>
             ))}
-          </ul>
+          </List.Root>
           {scale.scaleChords.length > 0 && (
             <>
               <p>Scale chords :</p>
-              <ul>
+              <List.Root variant="plain">
                 {scale.scaleChords.map(chord =>
                   chord.notation && (
-                    <li  key={`${chord.root.name}${chord.notation}`}>
+                    <List.Item key={`${chord.root.name}${chord.notation}`}>
                       <Chord chord={chord} scale={scale} />
-                    </li>
+                    </List.Item>
                   )
                 )}
-              </ul>
+              </List.Root>
             </>
           )}
         </div>
-        <div >
+        <div>
           <p>Select how you want to show the notes on the fretboard</p>
-          <ul>
-            {Object.values(NOTE_DISPLAY).map(displaySetting => (
-              <li  key={`noteDisplayOption-${displaySetting}`}>
-                <input
-                  type="checkbox"
-                  checked={noteDisplay === displaySetting}
-                  onChange={() => setNoteDisplay(displaySetting) }
-                />
-                <p >{displaySetting}</p>
-              </li>
-            ))}
-          </ul>
+          <RadioGroup.Root defaultValue="1" value={noteDisplay} onValueChange={(e) => setNoteDisplay(e.value as NOTE_DISPLAY)} size="sm">
+            <HStack gap="6">
+              {Object.values(NOTE_DISPLAY).map(displaySetting => (
+                <RadioGroup.Item key={displaySetting} value={displaySetting}>
+                  <RadioGroup.ItemHiddenInput />
+                  <RadioGroup.ItemIndicator />
+                  <RadioGroup.ItemText>{displaySetting}</RadioGroup.ItemText>
+                </RadioGroup.Item>
+              ))}
+            </HStack>
+          </RadioGroup.Root>
           <p>Here is the scale on a guitar neck :</p>
-          <div >
+          <div>
             <GuitarNeck
               layout='horizontal'
               highlightFret={({ note }) => noteExistsInScale(scale, note)}
@@ -233,14 +292,14 @@ function BuildScale() {
             />
           </div>
         </div>
-        <div >
+        <div>
           <p>Here is the scale on a piano :</p>
-          <div >
+          <div>
             <PianoRoll scale={scale} PianoBlackKeyComponent={PianoBlackKey} PianoKeyComponent={PianoKey} />
           </div>
         </div>
       </div>
-    </div>
+    </Box>
   )
 }
 

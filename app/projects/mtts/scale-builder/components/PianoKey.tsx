@@ -1,8 +1,10 @@
 import React from 'react'
 import { PianoKeyComponentProps } from "../../components/keys/PianoKey"
-import classNames from 'classnames'
-import { COLOR, getNoteColor } from '../helpers/getNoteColor'
+import { getNoteColor } from '../helpers/getNoteColor'
+import { Box } from '@chakra-ui/react'
+import { getColorString } from '../utils'
 
 export default function PianoKey({ scale, note }: PianoKeyComponentProps) {
-  return <div></div>
+  const noteColor = getNoteColor(scale, note);
+  return <Box bg={noteColor ? getColorString({ color: noteColor }) : "transparent" }></Box>
 }

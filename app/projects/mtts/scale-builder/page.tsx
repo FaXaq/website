@@ -6,11 +6,9 @@ import { ScaleBuilderSettingsProvider } from './context/settings'
 
 const ScaleBuilder = () => {
   return (
-    <div >
-      <ScaleBuilderSettingsProvider>
-        <BuildScale />
-      </ScaleBuilderSettingsProvider>
-    </div>
+    <ScaleBuilderSettingsProvider>
+      <BuildScale />
+    </ScaleBuilderSettingsProvider>
   )
 }
 

@@ -22,7 +22,6 @@ export const NavBar = () => {
   }];
 
   locations.forEach((l, i) => {
-    console.log(locations, l, i)
     breadcrumbs.push({
       label: l,
       path: `/${locations.slice(0, i + 1).join("/")}`

@@ -3,6 +3,7 @@ import { Chord as MTTSChord, Scale } from "mtts"
 import { getNotationWithoutPitch } from "../helpers/getNotationWithoutPitch"
 import { COLOR, getNoteColor } from "../helpers/getNoteColor"
 import { useNoteTranslation } from "../hooks/useNoteTranslation"
+import { List } from "@chakra-ui/react"
 
 interface ChordProps {
     chord: MTTSChord,
@@ -14,17 +15,17 @@ export default function Chord({ chord, scale }: ChordProps) {
   const chordNotation = translateNote(chord.root) + chord.notation
 
   return (
-    <div >
+    <div>
       <p>
         <span>{chordNotation} :</span>
       </p>
-      <ul >
+      <List.Root variant="plain" flexDir="row" gap={1}>
         {chord.notes.map(note => (
-          <li key={`chord-${chordNotation}-${note.SPN}`}>
+          <List.Item key={`chord-${chordNotation}-${note.SPN}`}>
             {translateNote(note)}
-          </li>
+          </List.Item>
         ))}
-      </ul>
+      </List.Root>
     </div>
   )
 }

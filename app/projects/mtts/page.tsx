@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import MTTSHeader from './components/header'
-import { Trans, useTranslation } from 'next-i18next'
+import { useTranslation } from 'next-i18next'
 import ResearchIcon from '../../components/images/research-icon'
-import Link from 'next/link'
-import MTTSFooter from './components/Footer'
+import { Box, Heading, HStack, List, Text, VStack } from '@chakra-ui/react'
+import { Link } from '@/components/Link'
+import { LuArrowRight } from 'react-icons/lu'
 
 interface Experiment {
   title: string;
@@ -17,40 +17,38 @@ function Page() {
   const { t } = useTranslation()
   const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as unknown as Experiment[]).map(e => {
     return (
-      <li key={e.title} >
-        <h5 >{e.title}</h5>
-        <p>{e.description}</p>
-        <Link href={e.link} >
-          {t('mtts.pages.index.experimentsLink')}
+      
+      <List.Item key={e.title}>
+        <Link href={e.link} description={e.description}>
+          <HStack>
+            {e.title}
+            <LuArrowRight />
+          </HStack>
         </Link>
-      </li>
+      </List.Item>
     )
   })
 
   return (
-    <div >
-      <MTTSHeader />
-      <div >
-        <div >
-          <div >
-            <h3 >{t('mtts.pages.index.research.title')}</h3>
-            <p ><Trans t={t}>mtts.pages.index.research.text</Trans></p>
-          </div>
-          <div >
+    <>
+    <VStack alignItems="start" gap={4}>
+      <Box>
+        <HStack>
+          <Box h={7} w={7}>
             <ResearchIcon />
-          </div>
-        </div>
-        <div>
-          <h3 >{t('mtts.pages.index.experimentsTitle')}</h3>
-          <ul>
-            {experiments}
-          </ul>
-        </div>
-      </div>
-      <div >
-        <MTTSFooter />
-      </div>
-    </div>
+          </Box>
+          <Heading as="h3">{t('mtts.pages.index.research.title')}</Heading>
+        </HStack>
+        <Text>{t('mtts.pages.index.research.text')}</Text>
+      </Box>
+      <VStack gap={2} alignItems="start">
+        <Heading as="h3">{t('mtts.pages.index.experimentsTitle')}</Heading>
+        <List.Root variant="plain" gap={4}>
+          {experiments}
+        </List.Root>
+      </VStack>
+    </VStack>
+    </>
   )
 }
 
