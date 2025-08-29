@@ -6,11 +6,9 @@ import { ScaleBuilderSettingsProvider } from './context/settings'
 
 const ScaleBuilder = () => {
   return (
-    <div className="container mx-auto py-8">
-      <ScaleBuilderSettingsProvider>
-        <BuildScale />
-      </ScaleBuilderSettingsProvider>
-    </div>
+    <ScaleBuilderSettingsProvider>
+      <BuildScale />
+    </ScaleBuilderSettingsProvider>
   )
 }
 

@@ -1,5 +1,6 @@
 import { Note, Scale } from "mtts"
 import PianoKey, { PianoBlackKeyComponentProps, PianoKeyComponentProps } from "./PianoKey"
+import { Box, HStack } from "@chakra-ui/react"
 
 interface PianoRollProps {
   domain?: [Note, Note],
@@ -22,8 +23,8 @@ export default function PianoRoll({
   const blackNotes = notesWithinDomainRange.filter(note => note.hasAccidental())
 
   return (
-    <div className="w-full h-full">
-      <div className="h-full w-full flex flex-row">
+    <Box h="full" w="full">
+      <HStack w="full" h="full" gap={1}>
         {whiteNotes.map(note => (
           <PianoKey
             key={`keys-key-${note.SPN}`}
@@ -34,7 +35,7 @@ export default function PianoRoll({
             PianoKeyComponent={PianoKeyComponent}
           />
         ))}
-      </div>
-    </div>
+      </HStack>
+    </Box>
   )
 }

@@ -1,6 +1,10 @@
+"use client"
+
 import React, { useRef, useEffect, useState } from 'react'
 import { Note, Pitch } from 'mtts'
 import GuessedNoteItem from './GuessedNote'
+import { Box, List, Text } from '@chakra-ui/react'
+import { useColorMode } from '@/components/ui/color-mode'
 
 interface TunerContainerProps {
   audioStream: MediaStream
@@ -37,12 +41,13 @@ function getNoteTotalValue (note: GuessedNote): number {
 }
 
 const TunerContainer = ({ audioStream }: TunerContainerProps) => {
-  const canvas = useRef<HTMLCanvasElement>()
+  const canvas = useRef<HTMLCanvasElement>(undefined)
   const [guessedNotes, setGuessedNotes] = useState<GuessedNote[]>([])
   const [mostProbable, setMostProbable] = useState<GuessedNote | undefined>()
   const [frame] = useState(-1)
   const [fqRatio, setFqRatio] = useState(-1)
   const [analyser, sourceNode] = useAnalyser(audioStream)
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     const sampleRate = sourceNode.context.sampleRate
@@ -56,7 +61,7 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
       const width = ctx.canvas.width
       const height = ctx.canvas.height
       ctx.clearRect(0, 0, width, height)
-      ctx.fillStyle = 'black'
+      ctx.fillStyle = colorMode === "dark" ? "white" : "black";
       const currentNotes: GuessedNote[] = []
       let bigNote: GuessedNote | undefined
       notes.forEach((n) => {
@@ -106,18 +111,18 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   }, [audioStream])
 
   return (
-    <div className="h-full w-full overflow-auto">
-      <p className="m-0 p-0">Guessing the note :</p>
-      <canvas ref={canvas} className="w-full" height="h-64" />
+    <Box>
+      <Text>Guessing the note :</Text>
+      <canvas ref={canvas} height="150px" />
       <ul>
         { mostProbable !== undefined ? <GuessedNoteItem guessedNote={ mostProbable } fqRatio={fqRatio} /> : null }
         {guessedNotes.map((n, i) => (
-          <li className="p-0" key={`guessed-note-${i}`}> 
+          <li key={`guessed-note-${i}`}> 
             <GuessedNoteItem guessedNote={n}  fqRatio={fqRatio}/>
           </li>
         ))}
       </ul>
-    </div>
+    </Box>
   )
 }
 

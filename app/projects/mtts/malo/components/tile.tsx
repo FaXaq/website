@@ -24,9 +24,9 @@ const Tile = ({ notes, playing }: TileProps) => {
 
   const notesItems = notes.map(n => {
     return <li
-      className="h-full flex flex-col justify-center text-white bg-white text-lg"
+      
       key={`tile-note-${n.name}-${n.pitch.value}`}>
-      <span className="text-mtts-dark-violet">
+      <span >
         {formatNoteString(n)}
       </span>
     </li>
@@ -35,11 +35,8 @@ const Tile = ({ notes, playing }: TileProps) => {
   const joinedNames = notes.map(n => n.name).join('-').toLowerCase()
 
   return (
-    <div className="px-2">
-      <ul className={classNames({
-        'flex flex-col justify-center text-center flex-1 text-xs hexagon font-black': true,
-        'opacity-50': !playing,
-      })}>
+    <div >
+      <ul>
         {notesItems}
       </ul>
     </div>

@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import MTTSHeader from './components/header'
-import { Trans, useTranslation } from 'next-i18next'
+import { useTranslation } from 'next-i18next'
 import ResearchIcon from '../../components/images/research-icon'
-import Link from 'next/link'
-import MTTSFooter from './components/Footer'
+import { Box, Heading, HStack, List, Text, VStack } from '@chakra-ui/react'
+import { Link } from '@/components/Link'
+import { LuArrowRight } from 'react-icons/lu'
 
 interface Experiment {
   title: string;
@@ -17,40 +17,37 @@ function Page() {
   const { t } = useTranslation()
   const experiments: React.JSX.Element[] = (t('mtts.pages.index.experiments') as unknown as Experiment[]).map(e => {
     return (
-      <li key={e.title} className="py-4">
-        <h5 className="text-2xl">{e.title}</h5>
-        <p>{e.description}</p>
-        <Link href={e.link} className="text-mtts-light-violet">
-          {t('mtts.pages.index.experimentsLink')}
+      <List.Item key={e.title}>
+        <Link href={e.link} description={e.description}>
+          <HStack>
+            {e.title}
+            <LuArrowRight />
+          </HStack>
         </Link>
-      </li>
+      </List.Item>
     )
   })
 
   return (
-    <div className="font-sans">
-      <MTTSHeader />
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center py-8 md:py-16">
-          <div className="md:pr-32">
-            <h3 className="text-4xl font-bold pb-4">{t('mtts.pages.index.research.title')}</h3>
-            <p className="leading-loose"><Trans t={t}>mtts.pages.index.research.text</Trans></p>
-          </div>
-          <div className="w-icon-l h-icon-l p-4 md:w-icon-xl md:h-icon-xl md:p-8">
+    <>
+    <VStack alignItems="start" gap={4}>
+      <Box>
+        <HStack>
+          <Box h={7} w={7}>
             <ResearchIcon />
-          </div>
-        </div>
-        <div>
-          <h3 className="text-3xl font-bold pb-4">{t('mtts.pages.index.experimentsTitle')}</h3>
-          <ul>
-            {experiments}
-          </ul>
-        </div>
-      </div>
-      <div className="pt-8">
-        <MTTSFooter />
-      </div>
-    </div>
+          </Box>
+          <Heading as="h3">{t('mtts.pages.index.research.title')}</Heading>
+        </HStack>
+        <Text>{t('mtts.pages.index.research.text')}</Text>
+      </Box>
+      <VStack gap={2} alignItems="start">
+        <Heading as="h3">{t('mtts.pages.index.experimentsTitle')}</Heading>
+        <List.Root variant="plain" gap={4}>
+          {experiments}
+        </List.Root>
+      </VStack>
+    </VStack>
+    </>
   )
 }
 

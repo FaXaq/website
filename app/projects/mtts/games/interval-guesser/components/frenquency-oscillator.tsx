@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
-import { theme } from '../../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 
 const CANVAS_HEIGHT = 150
 const AMPLITUDE = (CANVAS_HEIGHT / 2) - 10
 // Add default offset for X to prevent canvas sine being cut too sharp
 const X_DEFAULT_OFFSET = 4
 const FREQUENCY_COLORS = [
-  theme.extend.colors['mtts-cta-2'],
-  theme.extend.colors['mtts-cta-4']
+  theme.colors['mtts-cta-2'],
+  theme.colors['mtts-cta-4']
 ]
 
 interface IntervalGuesserOscillatorProps {
@@ -55,7 +55,7 @@ function setCanvasWidth (ctx: CanvasRenderingContext2D) {
 
 const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animated }: IntervalGuesserOscillatorProps) => {
   const [showAxes] = useState(false)
-  const canvas = useRef<HTMLCanvasElement>()
+  const canvas = useRef<HTMLCanvasElement>(undefined)
   const [animationFrames, setAnimationFrames] = useState<number[]>([])
 
   const drawSine = (ctx: CanvasRenderingContext2D, {
@@ -139,7 +139,7 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
   }, [highAmplitude, frequencies])
 
   return (
-    <div className="flex justify-center py-8">
+    <div >
       <canvas
         onClick={() => onClick()}
         ref={canvas}

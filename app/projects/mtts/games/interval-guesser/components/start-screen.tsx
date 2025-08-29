@@ -25,10 +25,10 @@ const IntervalGuesserStartScreen = ({ onStart }: IntervalGuesserStartScreenProps
   ))
   return (
     <div>
-      <p className="font-mtts-text font-thin text-mtts-dark-violet px-6 text-sm md:text-lg text-justify max-w-3xl mx-auto">
+      <p >
         {t('mtts.games.intervalGuesser.description')}
       </p>
-      <ul className="flex flex-wrap justify-center p-4">
+      <ul >
         {levelsButtons}
       </ul>
     </div>

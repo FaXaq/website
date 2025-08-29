@@ -2,19 +2,22 @@
 
 import React from 'react'
 import { useTranslation } from 'next-i18next'
+import { Heading, HStack, List, Link as ChakraLink } from '@chakra-ui/react'
+import NextLink from "next/link"
+import { LuExternalLink } from 'react-icons/lu'
 
 function Footer () {
   const { t } = useTranslation()
   return (
-    <footer className="bg-light-sand text-dark-sand print:hidden">
-      <div className="container px-4 lg:px-0 py-6 mx-auto">
-        <p>
-          {t('resume.copy')}
-          <a target="_blank" rel="noopener noreferrer" href="https://github.com/faxaq/website">
-            github
-          </a>
-        </p>
-      </div>
+    <footer>
+      <HStack>
+        <Heading as="h3">{t('resume.copy')}</Heading>
+        <List.Root variant="plain" display="flex" flexDir="row">
+          <List.Item>
+            <ChakraLink href="https://github.com/faxaq/website" rel="noopener noreferrer" as={NextLink} target="_blank">Github<LuExternalLink /></ChakraLink>
+          </List.Item>
+        </List.Root>
+      </HStack>
     </footer>
   )
 }

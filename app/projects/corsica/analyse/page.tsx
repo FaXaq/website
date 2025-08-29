@@ -1,13 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Analysis } from '../api/analyse/route'
-import LeafletMap from './components/LeafletMap'
 import MapAnnotations from './components/MapAnnotations'
-import CyclingIcon from '../components/CyclingIcon'
 import { format } from 'date-fns'
-import Button from '../components/Button'
 import AnalyseForm from './components/AnalyseForm'
 import TextAnalysisReport from './components/TextAnalysisReport'
 import ElevationChart from './components/ElevationChart'
@@ -16,62 +13,66 @@ import SpeedChart from './components/SpeedChart'
 import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
+import dynamic from 'next/dynamic'
+import { Box, Grid, GridItem, Heading, Button, Skeleton, VStack } from '@chakra-ui/react'
 
 export default function Analyse() {
   const { t } = useTranslation()
   const [analysis, setAnalysis] = useState<Analysis | undefined>()
   const address = analysis?.map.reverseGeocodingSearchResult?.address
 
+  const LeafletMap = useMemo(() => dynamic(
+    () => import('./components/Map/LeafletMap'),
+    {
+      loading: () => <Skeleton height="100%" width="100%" />,
+      ssr: false
+    }
+  ), [])
+
   return (
-    <div className='text-corsica-olive'>
+    <Box w="full">
       { !analysis && (
         <AnalyseForm setAnalysis={setAnalysis} />
       )}
       { analysis?.map && (
-        <div>
-          <div className="pb-4">
-            <h2 className="flex items-center text-3xl font-bold font-corsica-title text-corsica-olive">
+        <Box w="full">
+          <Box>
+            <Heading as="h2" size="xl">
               {analysis.name}
-            </h2>
-            <h4 className="flex items-center">
-              {analysis.activity === 'cycling' && (
-                <span className="inline-block h-6 pr-2">
-                  <CyclingIcon />
-                </span>
-              )}
-              {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
-          </div>
-          <div>
-            <ActiveChartPointProvider>
-              <div className="md:grid md:grid-cols-4">
-                <div className='md:col-span-4 h-56'>
-                  <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} className='w-full h-full'>
-                    <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
-                  </LeafletMap>
-                </div>
-                <div className='md:col-span-4'>
+            </Heading>
+            <Heading as="h4" size="sm">
+              {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}
+            </Heading>
+          </Box>
+          <ActiveChartPointProvider>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6} py={6}>
+              <GridItem colSpan={{ base: 4, md: 2, xl: 3 }} minHeight="300px">
+                <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} style={{ width: "100%", height: "100%"}}>
+                  <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
+                </LeafletMap>
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, xl: 1 }}>
+                <VStack justifyContent="center" h="full">
                   <TextAnalysisReport analysis={analysis} />
-                </div>
-                <div className='py-4 md:col-span-4 flex flex-col md:grid md:grid-cols-8 h-32'>
-                  <div className="grow md:col-span-7">
-                    <ElevationChart analysis={analysis} />
-                  </div>
-                  <div className='md:col-span-1 md:ml-2 bg-corsica-white'>
-                    <ElevationChartHover analysis={analysis} />
-                  </div>
-                </div>
-                { analysis.time && (
-                  <div className="py-4 col-span-4 flex flex-col md:grid md:grid-cols-8 h-32">
-                    <div className="grow  md:col-span-7">
+                </VStack>
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 3 }}>
+                <ElevationChart analysis={analysis} />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 1 }} minH="100px">
+                <ElevationChartHover analysis={analysis} />
+              </GridItem>
+              { analysis.time && (
+                <>
+                  <GridItem colSpan={{ base: 4, md: 3 }}>
                       <SpeedChart analysis={analysis} />
-                    </div>
-                    <div className="md:col-span-1 md:ml-2 bg-corsica-white">
+                  </GridItem>
+                  <GridItem colSpan={{ base: 4, md: 1 }} minH="100px">
                       <SpeedChartHover analysis={analysis} />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ActiveChartPointProvider>
+                  </GridItem>
+                </>
+              )}
+            </Grid>
             <Button
               type="button"
               onClick={() => setAnalysis(undefined)}
@@ -79,9 +80,9 @@ export default function Analyse() {
             >
               {t('corsica.pages.analyse.retry')}
             </Button>
-          </div>
-        </div>
+          </ActiveChartPointProvider>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }

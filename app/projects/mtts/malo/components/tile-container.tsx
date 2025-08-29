@@ -40,7 +40,7 @@ const TileContainer = ({ notes, lineLength, lineNumber }: TileContainerProps) =>
     />)
   }
 
-  return <div className="flex flex-col h-screen">{tileLines}</div>
+  return <div >{tileLines}</div>
 }
 
 export default TileContainer

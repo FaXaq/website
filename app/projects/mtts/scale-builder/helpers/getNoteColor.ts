@@ -10,7 +10,7 @@ export enum COLOR {
   RED = 'color-red'
 }
 
-export function getNoteColor(scale: Scale, note: Note): string | undefined {    
+export function getNoteColor(scale: Scale, note: Note): COLOR | undefined {    
   const index = scale.notes.findIndex(n => Note.getSemitonesBetween(note, n) % 12 === 0)
   if (index < 0) {
     return

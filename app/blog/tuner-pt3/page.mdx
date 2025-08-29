@@ -1,5 +1,7 @@
 import BlogPostLayout from '../components/BlogPostLayout'
 import WorkingWasm from './components/WorkingWasm'
+import { Box, Table } from '@chakra-ui/react'
+import { CodeBlock } from '../components/CodeBlock'
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
@@ -20,22 +22,42 @@ As we used an FFT of 2048 we had 2048 samples to define our signal. But we may u
 
 First, let's measure the calculation time or our function with different FFT_SIZE. FFT_SIZE comes in pow of 2, and the first size that may be relevant to us is 1024. This is where the tuner starts to work, up until the max FFT_SIZE supported : 32768.
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td></tr>
-    <tr><td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td><td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td></tr>
-  </tbody>
-</table>
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell>FFT_SIZE</Table.Cell>
+        <Table.Cell>Calculation time</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>1024</Table.Cell>
+        <Table.Cell>5ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>2048</Table.Cell>
+        <Table.Cell>22ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>4096</Table.Cell>
+        <Table.Cell>65ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>8192</Table.Cell>
+        <Table.Cell>163ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>16384</Table.Cell>
+        <Table.Cell>489ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>32768</Table.Cell>
+        <Table.Cell>1951ms</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 ## Creating a wasm package
 
@@ -45,8 +67,8 @@ Create a folder at the root of your project called `wasm`. Inside, run `wasm-pac
 
 You should have something that looks like that : 
 
-```text
-app/
+export const file1 = {
+code:`app/
 └── wasm/
     └── auto-correlate/
         ├── src/
@@ -60,18 +82,28 @@ app/
         ├── .gitignore
         ├── .github/
         └── .travis.yml
-```
+`,
+language: "text"
+}
+
+<CodeBlock file={file1} showLineNumbers={false} enableCopy={false} />
 
 `utils.rs` contains an utility to map Rust errors into our browser console. Let's modify what's inside `lib.rs` with one simple function to check if it works.
 
-```rust
+export const file2 = {
+code:`
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn greet(name: &str) -> String {
     format!("Hello, {}!", name)
 }
-```
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file2} />
 
 Line per line here is what it does. First, we import `wasm_bindgen` to create bindings between javascript and rust.
 
@@ -81,7 +113,8 @@ The function itself is simple, it does take a string as a parameter and adds it 
 
 Now, to build our rust create to a WebAssembly package we use `wasm-pack build --target web`. It creates a `pkg` folder containing several files.
 
-```text
+export const file3 = {
+code:`
 pkg/
 ├── .gitignore
 ├── auto_correlate_bg.js
@@ -91,37 +124,44 @@ pkg/
 ├── auto_correlate.js
 ├── package.json
 └── README.md
-```
+`,
+language: "text",
+}
+
+<CodeBlock file={file3} showLineNumbers={false} enableCopy={false}  />
 
 You already know what are `.gitignore`, `package.json` and `README.md` for. But let's have a look at the others.
 The files `*.d.ts` are the types of the javascript and wasm having the same name.
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Filename</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Description</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">*.d.ts</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">Those are the typescript types of the generated files.</td>
-    </tr>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate.js</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</td>
-    </tr>
-    <tr>
-      <td className="border py-1 px-2 border-mtts-dark-violet">auto_correlate_bg.wasm</td>
-      <td className="border py-1 px-2 border-mtts-dark-violet">This is the WebAssembly file. This is the binary that executes natively within the browser.</td>
-    </tr>
-  </tbody>
-</table>
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >Filename</Table.Cell>
+        <Table.Cell >Description</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >*.d.ts</Table.Cell>
+        <Table.Cell >Those are the typescript types of the generated files.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate.js</Table.Cell>
+        <Table.Cell >This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate_bg.wasm</Table.Cell>
+        <Table.Cell >This is the WebAssembly file. This is the binary that executes natively within the browser.</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 To use our WASM file, we can add it to a small react component :
 
-```typescript
+export const file5 = {
+code:`
 'use client'
 
 import init, { greet } from '../../../wasm/auto-correlate/pkg/auto_correlate'
@@ -139,18 +179,25 @@ export default function WorkingWasm() {
 
   return <p>{greeting}</p>
 }
-```
+`,
+language: "tsx",
+title: "components/WorkingWasm.tsx"
+}
+
+<CodeBlock file={file5}  />
+
 
 And here it is working in a component : 
-<div className="demo">
-  <div className="border rounded p-4">
-    <WorkingWasm />
-  </div>
-</div>
+<Box rounded="sm" p={4} mt={2} border="1px solid">
+  <WorkingWasm />
+</Box>
 
 ## Porting the autoCorrelate function to Rust
 
-```rust
+Well it took me some time, but thanks to a few blog posts, a bit of AI and other pointer knowledge acquired in college, here is the port:
+
+export const file6 = {
+code:`
 use wasm_bindgen::prelude::*;
 use js_sys::*;
 extern crate console_error_panic_hook;
@@ -271,7 +318,12 @@ pub fn auto_correlate(buffer: &Float32Array, sample_rate: i32) -> f32 {
 pub fn greet(name: &str) -> String {
     format!("Hello, {}!", name)
 }
-```
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file6}  />
 
 ## Building it and running it with Next.js
 
@@ -306,61 +358,174 @@ Finally, we import the WASM file as we did before previously with our test funct
   }
 ```
 
+export const file7 = {
+  code:`
+import { Note } from "mtts"
+import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
+
+const AVERAGE_FLUCTUATION = 0.3
+
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+
+function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
+  if (notesInRange.length <= 3) {
+    let noteFound = notesInRange[0]
+    let closest = Math.abs(searchedFrequency - noteFound.frequency)
+    for (let i = 1; i < notesInRange.length; i++) {
+      const frequencyDifference = Math.abs(searchedFrequency - notesInRange[i].frequency)
+      if (closest > frequencyDifference) {
+        noteFound = notesInRange[i]
+        closest = frequencyDifference
+      }
+    }
+    return noteFound
+  }
+
+  const secondHalf = notesInRange.slice(notesInRange.length / 2, notesInRange.length)
+
+  if (searchedFrequency < secondHalf[0].frequency) {
+    return findClosestNote(searchedFrequency, notesInRange.slice(0, (notesInRange.length / 2) + 1))
+  }
+
+  return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
+}
+
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+  const [guessedNote, setGuessedNote] = useState<Note>()
+  const [isLoadingWebAssembly, setIsLoadingWebAssembly] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (guessedFrequency > 0) {
+      setGuessedNote(findClosestNote(guessedFrequency, notes))
+    } else {
+      setGuessedNote(undefined)
+    }
+
+    return undefined
+  }, [setGuessedNote, guessedFrequency])
+
+  useEffect(() => {
+    (async () => {
+      setIsLoadingWebAssembly(true)
+      try {
+        await init()
+        setIsLoadingWebAssembly(false)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [])
+
+  function stop() {
+    clearInterval(guessingInterval)
+  }
+
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        if (!isLoadingWebAssembly) {
+          setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+          setGuessedFrequency(auto_correlate(buffer, analyser.context.sampleRate))
+        }
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
+  const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
+  const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
+
+  <>
+    { inTune && <p>it's a flat...</p> }
+    <p>{guessedNote?.SPN}</p>
+    { inTune && <p>in tune !</p> }
+    { sharp && <p>...but it's sharp</p> }
+    { isLoadingWebAssembly && <p>(loading...)</p> }
+    { !isLoadingWebAssembly && (
+      <>
+        <button onClick={() => start()}>start</button>
+        <button onClick={() => stop()}>stop</button>
+      </>
+    )}
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file7} addedLineNumbers={[1,53,54,55,56,57,58,59,60,61,62,63,64,76,92,93,94,97,98]} removedLineNumbers={[75]} />
+
+
 We now redo the calculations by modifying the analyser initial FFT_SIZE with our hook and __boom__ here are the results :
 
-<table>
-  <thead>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">FFT_SIZE</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (JS)</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Calculation time (WASM)</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">Speed increase</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1024</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+250%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">2048</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">22ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">5ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+440%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">4096</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">65ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">20ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+325%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">8192</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">163ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">61ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+267%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">16384</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">489ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">166ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">+294%</td>
-    </tr>
-    <tr>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">32768</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">1951ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet">532ms</td>
-      <td className="border text-center py-1 px-2 border-mtts-dark-violet text-mtts-green">+366%</td>
-    </tr>
-  </tbody>
-</table>
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >FFT_SIZE</Table.Cell>
+        <Table.Cell >Calculation time (JS)</Table.Cell>
+        <Table.Cell >Calculation time (WASM)</Table.Cell>
+        <Table.Cell >Speed increase</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >1024</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >2ms</Table.Cell>
+        <Table.Cell >+250%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >2048</Table.Cell>
+        <Table.Cell >22ms</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >+440%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >4096</Table.Cell>
+        <Table.Cell >65ms</Table.Cell>
+        <Table.Cell >20ms</Table.Cell>
+        <Table.Cell >+325%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >8192</Table.Cell>
+        <Table.Cell >163ms</Table.Cell>
+        <Table.Cell >61ms</Table.Cell>
+        <Table.Cell >+267%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >16384</Table.Cell>
+        <Table.Cell >489ms</Table.Cell>
+        <Table.Cell >166ms</Table.Cell>
+        <Table.Cell >+294%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >32768</Table.Cell>
+        <Table.Cell >1951ms</Table.Cell>
+        <Table.Cell >532ms</Table.Cell>
+        <Table.Cell >+366%</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
 
 We can see that there is a clear improvement ! We can safely use 4096 FFT_SIZE without our user noticing it. Is there any need for that ? I don't think so... but it was a worth it first project to play around WASM.
 
 The full source code of this article is available here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3)
 
-The full source code of the WASM bit is available here : [https://github.com/FaXaq/website/tree/master/app/wasm/auto-correlate](https://github.com/FaXaq/website/tree/master/app/wasm/auto-correlate)
+The full source code of the WASM bit is available here : [https://github.com/FaXaq/website/tree/master/wasm/auto-correlate](https://github.com/FaXaq/website/tree/master/wasm/auto-correlate)
 
 </BlogPostLayout>

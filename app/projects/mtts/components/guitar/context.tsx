@@ -1,53 +1,58 @@
-import React, { Reducer, createContext, useContext, useReducer } from 'react'
+import React, { Reducer, createContext, useContext, useReducer, useState } from 'react'
+import { FRET_MARKER } from './const'
+import { Note, Pitch } from 'mtts'
 
 export type GuitarNeckLayout = 'vertical' | 'horizontal'
+export type GuitarTuning = Array<string>
+
+const DEFAULT_GUITAR_TUNING: GuitarTuning = [
+  FRET_MARKER,
+  new Note({ name: 'E', pitch: new Pitch({ value: 4 }) }).SPN,
+  new Note({ name: 'B', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'G', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'D', pitch: new Pitch({ value: 3 }) }).SPN,
+  new Note({ name: 'A', pitch: new Pitch({ value: 2 }) }).SPN,
+  new Note({ name: 'E', pitch: new Pitch({ value: 2 }) }).SPN
+]
+const DEFAULT_FRET_NUMBER = 24
 
 interface GuitarNeckContextState {
   layout: GuitarNeckLayout,
   setGuitarNeckLayout: (layout: GuitarNeckLayout) => void,
+  tuning: GuitarTuning,
+  setGuitarTuning: (tuning: GuitarTuning) => void,
+  fretNumber: number,
+  setGuitarFretNumber: (fretNumber: number) => void
 }
 
 const INITIAL_STATE: GuitarNeckContextState = {
   layout: 'horizontal',
-  setGuitarNeckLayout: () => {}
-}
-
-enum ACTION_TYPE {
-    SET_LAYOUT = 'SET_LAYOUT'
+  setGuitarNeckLayout: () => {},
+  tuning: DEFAULT_GUITAR_TUNING,
+  setGuitarTuning: () => {},
+  fretNumber: DEFAULT_FRET_NUMBER,
+  setGuitarFretNumber: () => {}
 }
 
 const GuitarNeckContext = createContext(INITIAL_STATE)
-
-const GuitarNeckReducer: Reducer<GuitarNeckContextState, { type: ACTION_TYPE, payload: GuitarNeckLayout }> = (state, action) => {
-  const { type, payload } = action
-
-  switch (type) {
-  case ACTION_TYPE.SET_LAYOUT:
-    return {
-      ...state,
-      layout: payload
-    }
-  default:
-  }
-
-  return { ...state }
-}
-
 interface ProviderProps {
   children: React.ReactNode,
   value: Partial<GuitarNeckContextState>
 }
 
 export function GuitarNeckProvider({ children, value }: ProviderProps) {
-  const [state, dispatch] = useReducer(GuitarNeckReducer, Object.assign(INITIAL_STATE, value))
-
-  const setGuitarNeckLayout = (layout: GuitarNeckLayout) => {
-    dispatch({ type: ACTION_TYPE.SET_LAYOUT, payload: layout })
-  }
+  const [layout, setGuitarNeckLayout] = useState<GuitarNeckLayout>("horizontal")
+  const [tuning, setGuitarTuning] = useState<GuitarTuning>(DEFAULT_GUITAR_TUNING)
+  const [fretNumber, setGuitarFretNumber] = useState<number>(DEFAULT_FRET_NUMBER);
 
   const initialValue: GuitarNeckContextState = {
-    layout: state.layout,
-    setGuitarNeckLayout
+    layout: layout,
+    setGuitarNeckLayout,
+    tuning,
+    setGuitarTuning,
+    fretNumber,
+    setGuitarFretNumber,
+    ...value
   }
 
   return (

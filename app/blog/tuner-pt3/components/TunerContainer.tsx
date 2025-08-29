@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useMemo, useState } from 'react'
 import { Note } from 'mtts'
 import { useAnalyser } from '../hooks/useAnalyser';
@@ -106,8 +108,8 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
   const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
 
   return (
-    <div className="h-full w-full overflow-auto">
-      <p className="m-0 p-0">Guessing the note : { guessedNote ?
+    <div >
+      <p >Guessing the note : { guessedNote ?
         <span>{guessedNote.SPN} {inTune && 'in tune !' }{ flat && 'flat' }{ sharp && 'sharp' }</span> : <span>Not hearing much ...</span>}</p>
       { guessing ? <button onClick={() => stop()}>stop</button> : <button onClick={() => start()}>start</button> }
     </div>

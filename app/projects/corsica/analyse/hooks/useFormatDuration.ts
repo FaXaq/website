@@ -24,15 +24,16 @@ export function useFormatDuration() {
     }
     if (duration.minutes > 0 || string.length > 0) {
       if (string.length > 0) {
-        string += ':'
+        string += 'h '
       }
       string += t('corsica.pages.analyse.durations.minutes', { minutes: duration.minutes >= 10 ? duration.minutes : '0' + duration.minutes })
     }
     if (duration.seconds > 0 || string.length > 0) {
       if (string.length > 0) {
-        string += ':'
+        string += 'm '
       }
       string += t('corsica.pages.analyse.durations.seconds', { seconds: duration.seconds >= 10 ? duration.seconds : '0' + duration.seconds })
+      string += 's'
     }
 
     return string

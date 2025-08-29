@@ -6,7 +6,7 @@ interface EditableTextProps {
 }
 
 export default function EditableText({ value, updateValue }: EditableTextProps) {
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement>(undefined)
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
   function startEditing() {
@@ -21,7 +21,7 @@ export default function EditableText({ value, updateValue }: EditableTextProps) 
     {!isEditing && <p onDoubleClick={() => startEditing()}>{value}</p> }
     {isEditing && (
       <input
-        className="text-center block w-full h-full bg-mtts-white text-mtts-dark-violet border-transparent focus:outline-none"
+        
         ref={inputRef}
         onBlur={() => setIsEditing(false)}
         value={value}

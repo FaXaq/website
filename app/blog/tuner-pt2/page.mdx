@@ -8,6 +8,7 @@ import BufferVisualiser from './components/BufferVisualiser'
 import NewBufferVisualiser from './components/NewBufferVisualiser'
 import CorrelationVisualiser from './components/CorrelationVisualiser'
 import CorrelationVisualiserWithPeriod from './components/CorrelationVisualiserWithPeriod'
+import { CodeBlock } from '../components/CodeBlock'
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 2',
@@ -40,11 +41,7 @@ Remember when I said that frequencies are sine waves ? This is where is comes ha
 
 __Here is a proof of concept :__
 
-<div className="demo">
-  <div className="border p-4">
-    <MatchingSinWaves />
-  </div>
-</div>
+  <MatchingSinWaves />
 
 You will probably find that the frequency is around 450Hz, it's due to rendering but anyway, it's close to our 440Hz, so, you get the idea !
 
@@ -52,7 +49,8 @@ You will probably find that the frequency is around 450Hz, it's due to rendering
 
 First, I prefer to extract the logic to create our analyser inside a hook and use it on demand :
 
-```ts
+export const file1 = {
+  code:`
 export const FFT_SIZE = 32768
 
 export function useAnalyser(stream: MediaStream, fftSize: number = FFT_SIZE): [] | [AnalyserNode, MediaStreamAudioSourceNode] {
@@ -68,29 +66,44 @@ export function useAnalyser(stream: MediaStream, fftSize: number = FFT_SIZE): []
   const sourceNode = ctx.createMediaStreamSource(stream)
   sourceNode.connect(analyser)
   return [analyser, sourceNode]
+}`,
+language: "tsx",
+title: "hooks/useAnalyser.tsx"
 }
-```
+
+<CodeBlock file={file1} />
 
 Then invoke the hook and create a function to start using our tuner extract timebased data from our analyser. It will use a setInterval that we can stop when we later want the tuner to stop. 
 
-```ts
-const [analyser] = useAnalyser(audioStream, 2048)
+export const file2 = {
+  code:`
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
 
-function start() {
-  if (analyser) {
-    const interval = setInterval(() => {
-      const buffer = new Float32Array(analyser.fftSize)
-      analyser.getFloatTimeDomainData(buffer)
-      // This will be where we run our autoCorrelate function to guess the frequency
-    }, 500) as unknown as number
-    setGuessingInterval(interval)
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        // This will be where we run our autoCorrelate function to guess the frequency
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
   }
+
+  return <></>
 }
-```
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file2} />
 
 We then use this wonderful function made for us by a [PhD student](https://github.com/cwilso/PitchDetect/pull/23), rewritten for reading purposes :
 
-```ts
+export const file3 = {
+code:`
 // Thanks to
 // https://github.com/cwilso/PitchDetect/pull/23
 // https://github.com/dalatant
@@ -191,32 +204,48 @@ export function autoCorrelate(buffer: Float32Array, sampleRate: number) {
   }
 
   return sampleRate / T0;
+}`,
+language: "typescript",
+title: "helpers/autoCorrelate.ts"
 }
-```
 
-It may seem complicated but it only is what I was writing about before. Calculate the autocorrelation, finding it's first peak, and boom, we have our __period__. We then just add it to our `start` function :
+<CodeBlock file={file3} />
 
-```ts
-function start() {
-  if (analyser) {
-    const interval = setInterval(() => {
-      const buffer = new Float32Array(analyser.fftSize)
-      analyser.getFloatTimeDomainData(buffer)
-      // Guess the frequency
-      setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
-    }, 500) as unknown as number
-    setGuessingInterval(interval)
+It may seem complicated but it only is what I was writing about before. Calculate the autocorrelation, finding it's first peak, and boom, we have our __period__. We then just add it to our `start` function. Let's also create a stop function :
+
+export const file4 = {
+  code:`
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+
+  function stop() {
+    clearInterval(guessingInterval)
   }
-}
-```
 
-Let's just add a function to stop the tuner, and we'll be ready to wrap it up !
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
 
-```ts
-function stop() {
-  clearInterval(guessingInterval)
+  return <>
+    <p>{guessedFrequency}</p>
+    <button onClick={() => start()}>start</button>
+    <button onClick={() => stop()}>stop</button>
+  </>
 }
-```
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file4} addedLineNumbers={[2,4,5,6,19,20,21,22,23]} />
 
 That's it, we have a tuner, that every 500ms will take the sound input and guess its main pitch.
 
@@ -245,7 +274,11 @@ We have a period of 401, but our sample rate is 44100 samples per second. What r
 Well, that was the purpose of this whole experiment.
 Let's use [MTTS](https://github.com/faxaq/mtts) to generate an array containing tuning notes for our guitar. It is a library that I created to manipulate music theory conceps in typescript. We can use it to easily create notes, scales, chords, etc. :
 
-```ts
+export const file5 = {
+  code:`
+
+import { Note } from "mtts"
+
 const notes = [
   Note.fromSPN('E2'),
   Note.fromSPN('A2'),
@@ -254,11 +287,55 @@ const notes = [
   Note.fromSPN('B3'),
   Note.fromSPN('E4'),
 ]
-```
 
-We now have an array containing notes to test our guesssed frequency against. Let's create a function that recursively take a frequency and an array of notes and returns the note with the closest frequency.
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
 
-```ts
+  function stop() {
+    clearInterval(guessingInterval)
+  }
+
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  return <>
+    <p>{guessedFrequency}</p>
+    <button onClick={() => start()}>start</button>
+    <button onClick={() => stop()}>stop</button>
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file5} addedLineNumbers={[1,2,3,4,5,6,7,8,9]} />
+
+We now have an array containing notes to test our guesssed frequency against. Let's create a function that recursively take a frequency and an array of notes and returns the note with the closest frequency and add it to a react state.
+
+export const file6 = {
+  code:`
+
+import { Note } from "mtts"
+
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+
 function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
   if (notesInRange.length <= 3) {
     let noteFound = notesInRange[0]
@@ -281,38 +358,150 @@ function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note 
 
   return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
 }
-```
 
-And use it on our frequency inside our component : 
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+  const [guessedNote, setGuessedNote] = useState<Note>()
 
-```ts
-useEffect(() => {
-  if (guessedFrequency > 0) {
-    setGuessedNote(findClosestNote(guessedFrequency, notes))
-  } else {
-    setGuessedNote(undefined)
+  useEffect(() => {
+    if (guessedFrequency > 0) {
+      setGuessedNote(findClosestNote(guessedFrequency, notes))
+    } else {
+      setGuessedNote(undefined)
+    }
+
+    return undefined
+  }, [setGuessedNote, guessedFrequency])
+
+  function stop() {
+    clearInterval(guessingInterval)
   }
 
-  return undefined
-}, [setGuessedNote, guessedFrequency])
-```
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  return <>
+    <p>{guessedFrequency}</p>
+    <p>{guessedNote?.SPN}</p>
+    <button onClick={() => start()}>start</button>
+    <button onClick={() => stop()}>stop</button>
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file6} addedLineNumbers={[11,12,13,14,15,16,17,18,19,20,21,22,23,37,28,39,40,41,42,43,44,66]} removedLineNumbers={[65]} />
+
+And use it on our frequency inside our component : 
 
 Just to wrap it up, we add wheter our frequency is flat or sharp to our closest note. To avoid testing against a fixed frequency, that is impossible to have on a guitar, we add a margin of `0.3Hz`.
 
 ```ts
-const AVERAGE_FLUCTUATION = 0.3
-const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
-const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
-const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
 ```
+
+export const file7 = {
+  code:`
+
+import { Note } from "mtts"
+
+const AVERAGE_FLUCTUATION = 0.3
+
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+
+function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
+  if (notesInRange.length <= 3) {
+    let noteFound = notesInRange[0]
+    let closest = Math.abs(searchedFrequency - noteFound.frequency)
+    for (let i = 1; i < notesInRange.length; i++) {
+      const frequencyDifference = Math.abs(searchedFrequency - notesInRange[i].frequency)
+      if (closest > frequencyDifference) {
+        noteFound = notesInRange[i]
+        closest = frequencyDifference
+      }
+    }
+    return noteFound
+  }
+
+  const secondHalf = notesInRange.slice(notesInRange.length / 2, notesInRange.length)
+
+  if (searchedFrequency < secondHalf[0].frequency) {
+    return findClosestNote(searchedFrequency, notesInRange.slice(0, (notesInRange.length / 2) + 1))
+  }
+
+  return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
+}
+
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+  const [guessedNote, setGuessedNote] = useState<Note>()
+
+  useEffect(() => {
+    if (guessedFrequency > 0) {
+      setGuessedNote(findClosestNote(guessedFrequency, notes))
+    } else {
+      setGuessedNote(undefined)
+    }
+
+    return undefined
+  }, [setGuessedNote, guessedFrequency])
+
+  function stop() {
+    clearInterval(guessingInterval)
+  }
+
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
+  const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
+  const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
+
+  <>
+    { inTune && <p>it's a flat...</p> }
+    <p>{guessedNote?.SPN}</p>
+    { inTune && <p>in tune !</p> }
+    { sharp && <p>...but it's sharp</p> }
+    <button onClick={() => start()}>start</button>
+    <button onClick={() => stop()}>stop</button>
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file7} addedLineNumbers={[2,66,67,68,71,73,74]} />
 
 And here we have our tuner :
 
-<div className="demo">
-  <div className="border p-4 h-64">
-    <Tuner />
-  </div>
-</div>
+<Tuner />
 
 The full code of this project can be found here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt2)
 </BlogPostLayout>

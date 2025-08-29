@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import React from 'react'
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
@@ -11,7 +12,7 @@ export default function ClearSineWave() {
     }
   })
 
-  return <div className="w-full h-32">
+  return <Box height="200px" width="100%">
     <ResponsiveContainer>
       <LineChart data={clearSineWaveData}>
         <Line
@@ -25,5 +26,5 @@ export default function ClearSineWave() {
         <YAxis type="number" dataKey="value" />
       </LineChart>
     </ResponsiveContainer>
-  </div>
+  </Box>
 }

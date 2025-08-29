@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import Button from '../../components/Button'
+import React, { useEffect, useRef, useState } from 'react'
 import { getBlobFileName } from '../../api/helpers/blob'
 import { Analysis } from '../../api/analyse/route'
 import { ListBlobResult } from '@vercel/blob'
 import LoadingIcon from '../../components/LoadingIcon'
 import { useTranslation } from 'react-i18next'
+import { Box, Button, FileUpload, Float, Heading, HStack, Icon, List, SkeletonText, Span, Text, VStack } from '@chakra-ui/react'
+import { LuHardDriveUpload, LuUpload, LuX } from 'react-icons/lu'
+import _ from 'lodash'
 
 interface FormState {
     files: Array<File>
@@ -17,8 +19,10 @@ interface AnalysisFormProps {
 const API_URL = '/projects/corsica/api/analyse'
 
 export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
+  const clearFilesRef = useRef(undefined);
   const [isSanitizing, setIsSanitizing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingUrl, setLoadingUrl] = useState('')
   const [formState, setFormState] = useState<FormState>({
     files: []
   })
@@ -27,7 +31,7 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
 
   useEffect(() => {
     (async () => {
-      const files = await (await fetch('/projects/corsica/api/analyse')).json() as unknown as ListBlobResult
+      const files = await (await fetch(API_URL)).json() as unknown as ListBlobResult
       setPreLoadedFiles(files)
     })()
   }, [])
@@ -71,6 +75,7 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
 
   const selectPreLoadedFile = async (fileUrl: string) => {
     setIsLoading(true)
+    setLoadingUrl(fileUrl);
     const body = new FormData()
     body.append('fileUrl', fileUrl)
 
@@ -81,31 +86,72 @@ export default function AnalyseForm({ setAnalysis }: AnalysisFormProps) {
 
     setAnalysis(await response.json())
     setIsLoading(false)
+    setLoadingUrl('');
   }
 
   return (
-    <form onSubmit={analyseGPX} method='POST' action={API_URL} className='flex flex-col items-start'>
-      <header>
-        <h2 className="flex flex-center items-center text-3xl font-bold font-corsica-title text-corsica-olive">{t('corsica.pages.analyse.title')}</h2>
-        <p>{t('corsica.pages.analyse.description')}</p>
-      </header>
-      <input className="py-4" id="gpx-inputs" type="file" onChange={onFileInputChange} accept=".gpx" required/>
-      <Button loading={isLoading || isSanitizing} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
-      <p className="py-2">{t('corsica.pages.analyse.selectAFile')}</p>
+    <form onSubmit={analyseGPX} method='POST' action={API_URL}>
+      <Heading as="h3">{t('corsica.pages.analyse.title')}</Heading>
+      <Text>{t('corsica.pages.analyse.description')}</Text>
+      <VStack gap={2} alignItems="start" py={4}>
+        <FileUpload.Root width="100%" maxFiles={Infinity}>
+          <FileUpload.Label>{t('corsica.pages.analyse.fileInputLabel')}<Span fontSize="sm" color="fg.error">*</Span></FileUpload.Label>
+          <FileUpload.HiddenInput onChange={onFileInputChange} accept=".gpx" required />
+          <FileUpload.Dropzone width="100%" cursor="pointer" height="100px">
+            <Icon size="md" color="fg.muted">
+              <LuUpload />
+            </Icon>
+            <FileUpload.DropzoneContent>
+              <Box>{t('corsica.pages.analyse.fileInputDescription')}</Box>
+              <Box color="fg.muted">.gpx</Box>
+            </FileUpload.DropzoneContent>
+          </FileUpload.Dropzone>
+          <FileUpload.ItemGroup>
+            <HStack wrap="wrap">
+              <FileUpload.Context>
+                {({ acceptedFiles, clearFiles }) => {
+                  clearFilesRef.current = clearFiles;
+                  return acceptedFiles.map((file) => (
+                    <FileUpload.Item key={file.name} file={file} maxW="200px" p={2}>
+                      <VStack maxW="200px" pt={4}>
+                        <Float placement="top-end" m={3}>
+                          <FileUpload.ItemDeleteTrigger>
+                            <LuX />
+                          </FileUpload.ItemDeleteTrigger>
+                        </Float>
+                        <HStack w="full">
+                          <FileUpload.ItemPreview />
+                          <Text truncate w="75%">{file.name}</Text>
+                        </HStack>
+                        <FileUpload.ItemSizeText />
+                      </VStack>
+                    </FileUpload.Item>
+                  ))
+                }
+                }
+              </FileUpload.Context>
+            </HStack>
+          </FileUpload.ItemGroup>
+        </FileUpload.Root>
+        <Button loading={(isLoading || isSanitizing) && _.isEmpty(loadingUrl)} type="submit">{t('corsica.pages.analyse.submitLabel')}</Button>
+      </VStack>
+      <Text>{t('corsica.pages.analyse.selectAFile')}</Text>
       { !preLoadedFiles ? (
-        <LoadingIcon />
+        <>
+          <SkeletonText noOfLines={1} />
+          <SkeletonText noOfLines={1} />
+          <SkeletonText noOfLines={1} />
+        </>
       ) : (
-        <ul className="w-full">
+        <List.Root variant="plain" gap={2} py={4}>
           { preLoadedFiles.blobs.map(file => (
-            <li
-              className="p-2 cursor-pointer hover:bg-corsica-khaki hover:text-corsica-white"
-              onClick={() => selectPreLoadedFile(file.url)}
+            <List.Item
               key={file.pathname}
             >
-              {getBlobFileName(file.pathname)}
-            </li>
+              <Button variant="outline" onClick={() => selectPreLoadedFile(file.url)} loading={file.url === loadingUrl}>{getBlobFileName(file.pathname)}</Button>
+            </List.Item>
           ))}
-        </ul>
+        </List.Root>
       )}
     </form>
   )

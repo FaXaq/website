@@ -3,8 +3,9 @@ import { ChartData } from '../types'
 import { Analysis } from '../../api/analyse/route'
 import { Area, AreaChart, CartesianGrid, Customized, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { } from 'react-leaflet'
-import tailwindConfig from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
+import { Box } from '@chakra-ui/react'
 
 interface ElevationChartProps {
     analysis: Analysis,
@@ -26,7 +27,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <div className="w-full h-full">
+    <Box w="100%" h="100%">
       <ResponsiveContainer>
         <AreaChart data={elevationVariationData} margin={{ bottom: 0, left: 0, right: 0, top: 0 }}>
           <CartesianGrid />
@@ -36,7 +37,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
             type="monotone"
             dataKey="value"
             strokeWidth={0}
-            fill={tailwindConfig.theme.extend.colors['corsica-green']}
+            fill={theme.colors['corsica-green']}
             dot={false}
             activeDot={false}
           />
@@ -44,6 +45,6 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
           <Customized component={ActiveVerticalChartLine} />
         </AreaChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   )
 }

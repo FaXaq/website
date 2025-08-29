@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import React from 'react'
 import { Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
@@ -2081,7 +2082,7 @@ export default function CorrelationVisualiser() {
 
   const T0 = maxPos;
 
-  return <div className="w-full h-64">
+  return <Box height="200px" width="100%">
     <ResponsiveContainer>
       <LineChart data={data}>
         <Line
@@ -2095,5 +2096,5 @@ export default function CorrelationVisualiser() {
         <XAxis type="number" dataKey="label" />
       </LineChart>
     </ResponsiveContainer>
-  </div>
+  </Box>
 }

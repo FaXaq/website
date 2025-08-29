@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 'use client'
 
-import React from 'react'
-import classNames from 'classnames'
+import React, { useMemo } from 'react'
 import { COLOR } from '../helpers/getNoteColor'
+import { Badge, ColorSwatch } from '@chakra-ui/react'
+import { theme } from '@/components/ui/theme'
+import { getColorString } from '../utils'
 
 interface ColorButtonProps {
     color: COLOR,
@@ -13,27 +15,14 @@ interface ColorButtonProps {
 }
 
 function ColorButton({ children, isActive, onClick, color }: ColorButtonProps) {
-  const classes = classNames({
-    'w-10 h-10 border-2 rounded-lg m-1 font-mtts-title font-semibold': true,
-    'text-white': isActive,
-    'bg-mtts-cta-1': isActive && color === COLOR.DEFAULT,
-    'hover:bg-mtts-yellow-active': color === COLOR.YELLOW,
-    'bg-mtts-yellow': isActive && color === COLOR.YELLOW,
-    'hover:bg-mtts-khaki-active': color === COLOR.KHAKI,
-    'bg-mtts-khaki': isActive && color === COLOR.KHAKI,
-    'hover:bg-mtts-green-active': color === COLOR.GREEN,
-    'bg-mtts-green': isActive && color === COLOR.GREEN,
-    'hover:bg-mtts-blue-active': color === COLOR.BLUE,
-    'bg-mtts-blue': isActive && color === COLOR.BLUE,
-    'hover:bg-mtts-violet-active': color === COLOR.VIOLET,
-    'bg-mtts-violet': isActive && color === COLOR.VIOLET,
-    'hover:bg-mtts-red-active': color === COLOR.RED,
-    'bg-mtts-red': isActive && color === COLOR.RED
-  })
+  const swatchColor = getColorString({ color })
+
+  
   return (
-    <button className={classes} onClick={(e) => onClick(e)}>
+    <Badge onClick={(e) => onClick(e)} p={1} bg={isActive ? swatchColor : "transparent"}>
+      <ColorSwatch value={swatchColor} />
       {children}
-    </button>
+    </Badge>
   )
 }
 

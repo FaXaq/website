@@ -4,14 +4,24 @@ import FRTranslation from './assets/locales/fr.json'
 import ENTranslation from './assets/locales/en.json'
 import { setDefaultOptions, format as formatDate } from 'date-fns'
 import { enUS, fr } from 'date-fns/locale'
+import { z } from "zod";
+
+export const LocaleZodType = z.enum([
+  "en",
+  "fr"
+]);
+
+export const LocaleEnum = LocaleZodType.enum;
+export type Locale = z.infer<typeof LocaleZodType>;
+
 
 const dateFnsLocales = {
   en: enUS,
   fr
 }
 
-i18n.on('languageChange', (lng: string) => {
-  setDefaultOptions({ locale: dateFnsLocales[lng] })
+i18n.on('languageChange', (language: string) => {
+  setDefaultOptions({ locale: dateFnsLocales[language] })
 })
 
 setDefaultOptions({ locale: dateFnsLocales.en })
@@ -33,7 +43,6 @@ i18n
     debug: false,
     resources,
     returnObjects: true,
-
     interpolation: {
       escapeValue: false
     }

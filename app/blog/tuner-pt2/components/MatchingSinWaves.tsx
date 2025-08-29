@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
@@ -14,12 +15,12 @@ export default function MatchingSinWaves() {
   })
   
 
-  return <div>
+  return <Box width="100%">
     <p>Use the range input below to change the period of the red sine wave.</p>
     <input type="range" min="1" max="200" value={offset} onChange={(e) => setOffset(parseInt(e.target.value))}/>
     <p>P = {offset / (50 * 1000)}s</p>
     <p>F = 1/P = {Math.round(1 / (offset / (50 * 1000)))}Hz</p>
-    <div className="w-full h-32">
+    <Box height="200px" width="100%" p={2}>
       <ResponsiveContainer>
         <LineChart data={clearSineWaveData}>
           <Line
@@ -43,6 +44,6 @@ export default function MatchingSinWaves() {
           <YAxis type="number" dataKey="value" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  </div>
+    </Box>
+  </Box>
 }

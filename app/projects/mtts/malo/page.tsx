@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react'
 
 // eslint-disable-next-line no-unused-vars
 import { Note, Pitch } from 'mtts'
-import { generateNotesForPitch } from '../../../../utils/mtts'
+import { generateNotesForPitch } from '@/utils/mtts'
 import TileContainer from './components/tile-container'
 import './malo.scss'
 
@@ -21,7 +21,7 @@ const Malo = () => {
     return n
   }, [lineNumber])
 
-  return <div className="overflow-hidden bg-mtts-dark-violet">
+  return <div >
     <TileContainer lineLength={lineLength} lineNumber={lineNumber} notes={notes} />
   </div>
 }

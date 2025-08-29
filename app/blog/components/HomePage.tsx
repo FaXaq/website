@@ -1,12 +1,14 @@
 'use client'
 
-import React from 'react'
-import Link from 'next/link'
+import React, { Suspense } from 'react'
+import { Link } from '@/components/Link'
 import Tags from './Tags'
 import { useTranslation } from 'react-i18next'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Head from 'next/head'
 import { format } from 'date-fns'
+import { Box, Container, Heading, HStack, List, ListIndicator, Separator, Text, VStack } from '@chakra-ui/react'
+import { LuExternalLink, LuLink } from 'react-icons/lu'
 
 export interface ArticleMetaData {
   title: string
@@ -63,15 +65,17 @@ function BlogHomePage({ articles, tags }: BlogProps) {
 
   const links = articles.map((a, i) => {
     return (
-      <li key={`article-${i}`} className="mt-2">
-        <Link href={`${a.link}`}>
-          <div>
-            <h3 className="font-mtts-title font-semibold text-2xl my-2">{a.meta.title}</h3>
-            <p className="text-sm text-opacity-25">{a.meta.description ? a.meta.description : '' } - <em>{format(new Date(a.meta.creationDate), 'do MMMM yyyy')}</em></p>
-          </div>
-        </Link>
-        <Tags tags={a.meta.tags || []} onClick={addTagToQueryParams} />
-      </li>
+      <List.Item key={`article-${i}`}>
+        <VStack alignItems="start">
+          <Link href={`${a.link}`}>
+            <Box>
+              <Heading as="h3">{a.meta.title}</Heading>
+              <Text>{a.meta.description ? a.meta.description : '' } - <em>{format(new Date(a.meta.creationDate), 'do MMMM yyyy')}</em></Text>
+            </Box>
+          </Link>
+          <Tags tags={a.meta.tags || []} onClick={addTagToQueryParams} />
+        </VStack>
+      </List.Item>
     )
   })
 
@@ -80,39 +84,44 @@ function BlogHomePage({ articles, tags }: BlogProps) {
       <Head>
         <title>Blog</title>
       </Head>
-      <div className="font-sans container mx-auto px-4">
-        <header>
-          <h1 className="text-8xl font-bold font-mtts-title">{t('blog.title')}</h1>
+      <Container py={4}>
+        <VStack alignItems="start">
           <section>
             {tags.length > 0 && (
-              <div>
-                <p>{t('blog.tagsSearch')}</p>
-                <ul>
-                  <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
-                </ul>
-              </div>
+              <Box>
+                <Text>{t('blog.tagsSearch')}</Text>
+                <Tags tags={tags} removable onDelete={tag => removeTagFromQueryParams(tag)}/>
+              </Box>
             )}
           </section>
-        </header>
-        <article>
-          <ul className="flex flex-col">
+          <List.Root variant="plain" gap={4}>
             {links.length > 0 ? links : 'No blog post here...'}
-          </ul>
-        </article>
-        <footer className="py-4">
-          <p>Links:</p>
-          <ul className="flex flex-row">
-            <li className="pr-2">
-              <Link href="/blog/rss">RSS</Link>
-            </li>
-            <li>
-              <Link href="https://github.com/faxaq/website">Code</Link>
-            </li>
-          </ul>
-        </footer>
-      </div>
+          </List.Root>
+          <Separator my={6} width="100%"/>
+          <footer>
+            <HStack>
+              <Heading as="h3">Links:</Heading>
+              <List.Root variant="plain" display="flex" flexDir="row">
+                <List.Item>
+                  <Link href="/blog/rss">RSS<LuLink /></Link>
+                </List.Item>
+                <List.Item px={3}>/</List.Item>
+                <List.Item>
+                  <Link href="https://github.com/faxaq/website">Code<LuExternalLink /></Link>
+                </List.Item>
+              </List.Root>
+            </HStack>
+          </footer>
+        </VStack>
+      </Container>
     </>
   )
 }
 
-export default BlogHomePage
+export default function SuspendedBlogHomePage(props: BlogProps) {
+  return (
+    <Suspense>
+      <BlogHomePage {...props} />
+    </Suspense>
+  )
+}

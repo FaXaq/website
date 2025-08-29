@@ -3,6 +3,7 @@
 import React from 'react'
 // eslint-disable-next-line no-unused-vars
 import { GuessedNote } from './TunerContainer'
+import { Text } from '@chakra-ui/react';
 
 interface GuessedNoteProps {
   guessedNote: GuessedNote;
@@ -29,12 +30,12 @@ const GuessedNoteItem = ({ guessedNote, fqRatio }: GuessedNoteProps) => {
   const { multiplier } = getEquation(guessedNote)
 
   return (<>
-    <p> SPN : {spn}</p>
-    <p> Amplitude diff : {guessedNote.values[0] - guessedNote.values[1]}</p>
-    <p> Coeff diff : {c1 - c2}</p>
-    <p>note frequency : {guessedNote.notes[0].frequency}</p>
-    <p> Line equation multiplier : {multiplier}</p>
-    <p>---------------------------</p>
+    <Text> SPN : {spn}</Text>
+    <Text> Amplitude diff : {guessedNote.values[0] - guessedNote.values[1]}</Text>
+    <Text> Coeff diff : {c1 - c2}</Text>
+    <Text> note frequency : {guessedNote.notes[0].frequency}</Text>
+    <Text> Line equation multiplier : {multiplier}</Text>
+    <Text>---------------------------</Text>
   </>
   )
 }

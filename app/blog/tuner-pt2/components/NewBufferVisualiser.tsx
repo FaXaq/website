@@ -1,5 +1,6 @@
 'use client'
 
+import { Box } from "@chakra-ui/react"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 const buffer = [
@@ -2060,7 +2061,7 @@ export default function NewBufferVisualiser() {
   }))
 
 
-  return <div className="w-full h-64">
+  return <Box height="200px" width="100%" p={2}>
     <ResponsiveContainer>
       <LineChart data={data}>
         <Line
@@ -2072,5 +2073,5 @@ export default function NewBufferVisualiser() {
         <XAxis type="number" dataKey="label" />
       </LineChart>
     </ResponsiveContainer>
-  </div>
+  </Box>
 }

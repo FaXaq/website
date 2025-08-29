@@ -9,6 +9,7 @@ import { FGetFret, FHighlight } from './_guitar-fret'
 import { FRET_MARKER } from './const'
 import classNames from 'classnames'
 import { GuitarNeckLayout, GuitarNeckProvider, useGuitarNeck } from './context'
+import { Box, Grid, List } from '@chakra-ui/react'
 
 const DEFAULT_GUITAR_TUNING = (() => [
   FRET_MARKER,
@@ -34,7 +35,6 @@ function GuitarNeck ({
   getFret = ({ note }) => note instanceof Note ? note.SPN : FRET_MARKER,
   tuning = DEFAULT_GUITAR_TUNING,
   fretNumber = DEFAULT_FRET_NUMBERS,
-  layout = 'horizontal'
 }: GuitarNeckProps) {
   const strings: GuitarStringProps[] = tuning.map((t, i) => ({
     tuning: t,
@@ -43,17 +43,15 @@ function GuitarNeck ({
     fretNumber,
     stringNumber: i,
   }))
+  const { layout, tuning: guitarTunning } = useGuitarNeck()
+  const stringsInOrder = layout === "vertical" ? strings.reverse() : strings
 
-  const { layout: contextLayout } = useGuitarNeck()
-
-  return <div>
-    <ul className={classNames({
-      'flex flex-col': contextLayout === 'horizontal',
-      'flex flex-row': contextLayout === 'vertical'
-    })}>
-      { strings.map((string) => <GuitarString key={`string-${string.stringNumber}`} {...string} />)}
-    </ul>
-  </div>
+  return <Grid
+    templateColumns={layout === "vertical" ? `repeat(${tuning.length}, minmax(0, 1fr))` : undefined }
+    templateRows={layout === "horizontal" ? `repeat(${tuning.length}, minmax(0, 1fr))` : undefined }
+  >
+    { stringsInOrder.map((string) => <GuitarString key={`string-${string.stringNumber}`} {...string} />)}
+  </Grid>
 }
 
 export default function GuitarNeckWithProvider(props: GuitarNeckProps) {

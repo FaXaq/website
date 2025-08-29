@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import { Analysis } from '../../api/analyse/route'
 import { ChartData } from '../types'
-import tailwindConfig from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 import { CartesianGrid, Customized, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
+import { Box } from '@chakra-ui/react'
 
 interface SpeedChartProps {
     analysis: Analysis
@@ -25,7 +26,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
   const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString()
 
   return (
-    <div className="w-full h-full">
+    <Box h="full" w="full">
       <ResponsiveContainer>
         <LineChart data={speedVariationData}>
           <CartesianGrid />
@@ -34,7 +35,7 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
           <Line
             type="monotone"
             dataKey="value"
-            stroke={tailwindConfig.theme.extend.colors['corsica-green']}
+            stroke={theme.colors['corsica-green']}
             dot={false}
             strokeWidth={1}
             activeDot={false}
@@ -47,6 +48,6 @@ export default function SpeedChart({ analysis }: SpeedChartProps) {
           <Customized component={ActiveVerticalChartLine} />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   )
 }

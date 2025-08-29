@@ -1,15 +1,26 @@
 'use client'
 
+import { Link } from '@/components/Link'
+import { Heading, List, VStack } from '@chakra-ui/react'
 import React from 'react'
+import { LuExternalLink } from 'react-icons/lu'
 
 function MTTSFooter () {
   return (
-    <div className="bg-mtts-dark-violet text-mtts-white">
-      <div className="container mx-auto py-6 px-4 md:px-0 flex flex-col">
-        <a href="https://github.com/faxaq/mtts" target="_blank" rel="noreferrer">Library code on Github</a>
-        <a href="https://github.com/FaXaq/website/tree/master/app/projects/mtts" target="_blank" rel="noreferrer">Website code on Github</a>
-      </div>
-    </div>
+    <footer>
+      <VStack alignItems="start">
+        <Heading as="h3" fontSize="lg">Made with :</Heading>
+        <List.Root variant="plain" display="flex" flexDir="row" flexWrap="wrap" gap={2}>
+          <List.Item><Link href="https://github.com/faxaq/mtts" target="_blank" rel="noreferrer">MTTS<LuExternalLink /></Link></List.Item>
+          <List.Item><Link href="https://tonejs.github.io/" target="_blank" rel="noreferrer">Tone.js<LuExternalLink /></Link></List.Item>
+        </List.Root>
+        <Heading as="h3" fontSize="lg ">Links :</Heading>
+        <List.Root variant="plain" display="flex" flexDir="row" gap={2}>
+          <List.Item><Link href="https://github.com/faxaq/mtts" target="_blank" rel="noreferrer">Library code<LuExternalLink /></Link></List.Item>
+          <List.Item><Link href="https://github.com/faxaq/website/tree/master/app/projects/mtts" target="_blank" rel="noreferrer">Website code<LuExternalLink /></Link></List.Item>
+        </List.Root>
+      </VStack>
+    </footer>
   )
 }
 

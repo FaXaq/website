@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { theme } from '../../../../../tailwind.config'
+import { theme } from '@/components/ui/theme'
 import { LatLngTuple } from 'leaflet'
 import { useMap } from 'react-leaflet'
 import dynamic from 'next/dynamic'
@@ -33,16 +33,16 @@ export default function MapIcon({ type, position }: MapIconProps) {
   // eslint-disable-next-line no-unused-vars
   const color: { [key in MapIconType]: { color: string, fillColor: string } } = {
     start: {
-      color: theme.extend.colors['corsica-green'],
-      fillColor: theme.extend.colors['corsica-green']
+      color: theme.colors['corsica-green'],
+      fillColor: theme.colors['corsica-green']
     },
     end: {
-      color: theme.extend.colors['corsica-olive'],
-      fillColor: theme.extend.colors['corsica-olive']
+      color: theme.colors['corsica-olive'],
+      fillColor: theme.colors['corsica-olive']
     },
     active: {
-      color: theme.extend.colors['corsica-white'],
-      fillColor: theme.extend.colors['corsica-blue']
+      color: theme.colors['corsica-white'],
+      fillColor: theme.colors['corsica-blue']
     }
   }
 

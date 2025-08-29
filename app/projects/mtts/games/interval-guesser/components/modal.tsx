@@ -34,21 +34,17 @@ const IntervalGuesserModal = ({ isShowing, onClose, hasWon, level }: IntervalGue
     ? (
       <>
         <div
-          className="modal-overlay absolute inset-0 opacity-25 bg-mtts-dark-violet"
+          
           onClick={() => onClose(level)}
         >
         </div>
-        <div className="absolute top-0 left-0 bg-mtts-white rounded center-absolute shadow p-4">
-          <h3 className={classNames({
-            'text-3xl font-bold font-mtts-title text-center': true,
-            'text-mtts-success': hasWon,
-            'text-mtts-error': !hasWon
-          })}>{
-              hasWon
-                ? t('mtts.games.intervalGuesser.win')
-                : t('mtts.games.intervalGuesser.lost')
-            }</h3>
-          <ul className="flex jusitify-center p-4">
+        <div >
+          <h3>{
+            hasWon
+              ? t('mtts.games.intervalGuesser.win')
+              : t('mtts.games.intervalGuesser.lost')
+          }</h3>
+          <ul >
             {levelsButtons}
           </ul>
         </div>
