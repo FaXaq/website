@@ -2,9 +2,8 @@
 
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
-import z, { ZodError } from 'zod'
-import { FileUpload, Button, Input, Field, VStack, Card, Heading, Text, Icon, Box } from '@chakra-ui/react'
-import { LuUpload } from 'react-icons/lu'
+import { FileUpload, Button, Input, Field, VStack, Card, Heading, Text, Icon, Box, HStack, Span, Grid, GridItem, IconButton, Float } from '@chakra-ui/react'
+import { LuUpload, LuX } from 'react-icons/lu'
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface FormState {
@@ -29,53 +28,23 @@ const INITIAL_FORM_STATE: FormState = {
 
 export default function Merge() {
   const { t } = useTranslation()
+  const clearFilesRef = useRef(undefined);
   const [isLoading, setIsLoading] = useState(false)
-  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm<FormState>()
-  const [formErrors, setFormErrors] = useState<Array<string>>([])
   const formRef = useRef<HTMLFormElement>(undefined)
 
-  const onFileInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    const files = event.target.files
-    const sanitizedFiles = []
-    for (let i = 0; i < files.length; i++) {
-      sanitizedFiles.push(files.item(i))
-    }
-    setFormState({
-      ...formState,
-      files: sanitizedFiles
-    })
-  }
-
-  const onTextInputChange: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
-    setFormErrors([])
-    setFormState({
-      ...formState,
-      newName: event.target.value
-    })
-  }
-
-  const mergeGPX = async (data: FormState) => {
+  const mergeGPX = async (data: FormState, analyse: boolean = false) => {
     if (!formRef.current) return;
     setIsLoading(true)
     const apiUrl = formRef.current.action
     const method = formRef.current.method
 
     const body = new FormData()
-
-    try {
-      body.append('newName', data.newName)
-    } catch (err: unknown) {
-      if (err instanceof ZodError) {
-        setFormErrors(err.issues.map(e => e.message))
-      }
-      setIsLoading(false)
-      return
-    }
 
     for (let i = 0; i < data.files.length; i++) {
       body.append(`file-${i}`, data.files[i])
@@ -96,7 +65,8 @@ export default function Merge() {
 
     downloadFile(`${sanitizedFileName}.gpx`, await response.blob())
     formRef.current.reset()
-    setFormState(INITIAL_FORM_STATE)
+    setValue("files", [])
+    clearFilesRef.current();
     setIsLoading(false)
   }
 
@@ -108,26 +78,53 @@ export default function Merge() {
       <Text>{t('corsica.pages.merge.description')}</Text>
       <VStack gap={2} alignItems="start" py={4}>
         <Field.Root>
-          <Field.Label htmlFor="new-name-input">{t('corsica.pages.merge.inputLabel')}</Field.Label>
-          <Input type="text" id="new-name-input" {...register('newName')} />
+          <Field.Label htmlFor="new-name-input">{t('corsica.pages.merge.inputLabel')}<Span fontSize="sm" color="fg.error">*</Span></Field.Label>
+          <Input type="text" id="new-name-input" {...register('newName', { required: t('corsica.pages.merge.inputRequired') })} maxWidth="300px" />
+          { errors.newName?.message && <Field.ErrorText>{errors.newName?.message}</Field.ErrorText>}
         </Field.Root>
-        <FileUpload.Root width="100%">
-          <FileUpload.HiddenInput accept=".gpx" {...register("files")} multiple />
+        <FileUpload.Root width="100%" maxFiles={Infinity}>
+          <FileUpload.Label>{t('corsica.pages.merge.fileInputLabel')}<Span fontSize="sm" color="fg.error">*</Span></FileUpload.Label>
+          <FileUpload.HiddenInput accept=".gpx" {...register("files", { required: t('corsica.pages.merge.fileInputRequired') })} multiple />
           <FileUpload.Dropzone width="100%" cursor="pointer">
             <Icon size="md" color="fg.muted">
               <LuUpload />
             </Icon>
             <FileUpload.DropzoneContent>
-              <Box>Drag and drop files here</Box>
-              <Box color="fg.muted">.gpx only</Box>
+              <Box>{t('corsica.pages.merge.fileInputDescription')}</Box>
+              <Box color="fg.muted">.gpx</Box>
             </FileUpload.DropzoneContent>
           </FileUpload.Dropzone>
           <FileUpload.ItemGroup>
-            <FileUpload.Items showSize clearable />
+            <HStack wrap="wrap">
+              <FileUpload.Context>
+                {({ acceptedFiles, clearFiles }) => {
+                  clearFilesRef.current = clearFiles;
+                  return acceptedFiles.map((file) => (
+                    <FileUpload.Item key={file.name} file={file} maxW="200px" p={2}>
+                      <VStack maxW="200px" pt={4}>
+                        <Float placement="top-end" m={3}>
+                          <FileUpload.ItemDeleteTrigger>
+                            <LuX />
+                          </FileUpload.ItemDeleteTrigger>
+                        </Float>
+                        <HStack w="full">
+                          <FileUpload.ItemPreview />
+                          <Text truncate w="75%">{file.name}</Text>
+                        </HStack>
+                        <FileUpload.ItemSizeText />
+                      </VStack>
+                    </FileUpload.Item>
+                  ))
+                }
+                }
+              </FileUpload.Context>
+            </HStack>
           </FileUpload.ItemGroup>
         </FileUpload.Root>
       </VStack>
-      <Button type="submit" loading={isLoading}>{t('corsica.pages.merge.submitLabel')}</Button>
+      <HStack gap={2}>
+        <Button type="submit" loading={isLoading}>{t('corsica.pages.merge.submitLabel')}</Button>
+      </HStack>
     </form>
   )
 }

@@ -4,9 +4,7 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import { Analysis } from '../api/analyse/route'
 import MapAnnotations from './components/MapAnnotations'
-import CyclingIcon from '../components/CyclingIcon'
 import { format } from 'date-fns'
-import Button from '../components/Button'
 import AnalyseForm from './components/AnalyseForm'
 import TextAnalysisReport from './components/TextAnalysisReport'
 import ElevationChart from './components/ElevationChart'
@@ -16,7 +14,7 @@ import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
 import dynamic from 'next/dynamic'
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Heading, Button, Skeleton, VStack } from '@chakra-ui/react'
 
 export default function Analyse() {
   const { t } = useTranslation()
@@ -26,56 +24,55 @@ export default function Analyse() {
   const LeafletMap = useMemo(() => dynamic(
     () => import('./components/Map/LeafletMap'),
     {
-      loading: () => <p>A map is loading</p>,
+      loading: () => <Skeleton height="100%" width="100%" />,
       ssr: false
     }
   ), [])
 
   return (
-    <div className='text-corsica-olive'>
+    <Box w="full">
       { !analysis && (
         <AnalyseForm setAnalysis={setAnalysis} />
       )}
       { analysis?.map && (
-        <div>
-          <div>
-            <h2>
+        <Box w="full">
+          <Box>
+            <Heading as="h2" size="xl">
               {analysis.name}
-            </h2>
-            <h4>
-              {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}</h4>
-          </div>
-          <div>
-            <ActiveChartPointProvider>
-              <Box>
-                <Box height="200px" width="500px">
-                  <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} style={{ width: "100%", height: "100%"}}>
-                    <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
-                  </LeafletMap>
-                </Box>
-                <Box width="full">
+            </Heading>
+            <Heading as="h4" size="sm">
+              {address?.county}, {address?.state}, {address?.country}{analysis.time && ` - ${format(new Date(analysis.time.meta), 'PP')}`}
+            </Heading>
+          </Box>
+          <ActiveChartPointProvider>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6} py={6}>
+              <GridItem colSpan={{ base: 4, md: 2, xl: 3 }} minHeight="300px">
+                <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} style={{ width: "100%", height: "100%"}}>
+                  <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
+                </LeafletMap>
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 2, xl: 1 }}>
+                <VStack justifyContent="center" h="full">
                   <TextAnalysisReport analysis={analysis} />
-                </Box>
-                <VStack width="full" alignItems="start">
-                  <Box height="100px" width="full">
-                    <ElevationChart analysis={analysis} />
-                  </Box>
-                  <Box>
-                    <ElevationChartHover analysis={analysis} />
-                  </Box>
                 </VStack>
-                { analysis.time && (
-                  <Box>
-                    <Box height="100px" width="full">
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 3 }}>
+                <ElevationChart analysis={analysis} />
+              </GridItem>
+              <GridItem colSpan={{ base: 4, md: 1 }} minH="100px">
+                <ElevationChartHover analysis={analysis} />
+              </GridItem>
+              { analysis.time && (
+                <>
+                  <GridItem colSpan={{ base: 4, md: 3 }}>
                       <SpeedChart analysis={analysis} />
-                    </Box>
-                    <Box>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 4, md: 1 }} minH="100px">
                       <SpeedChartHover analysis={analysis} />
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            </ActiveChartPointProvider>
+                  </GridItem>
+                </>
+              )}
+            </Grid>
             <Button
               type="button"
               onClick={() => setAnalysis(undefined)}
@@ -83,9 +80,9 @@ export default function Analyse() {
             >
               {t('corsica.pages.analyse.retry')}
             </Button>
-          </div>
-        </div>
+          </ActiveChartPointProvider>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }

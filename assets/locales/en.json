@@ -554,17 +554,22 @@
     "pages": {
       "merge": {
         "title": "Merge GPX files",
-        "submitLabel": "Merge",
-        "description": "You select a few activites in a GPX format and I will merge them into one. You will then be able to analyse it with the analyse tool.",
-        "inputLabel": "Specify a name for your merged GPX activity"
+        "submitLabel": "Merge and download",
+        "fileInputLabel": "Upload your GPX files",
+        "fileInputRequired": "You have to specify at least two GPX files",
+        "fileInputDescription": "Drag and drop your GPX files here",
+        "description": "You select a few activites in a GPX format and I will merge them into one. You will then be able to analyse it with the analyse tool or any other tool (Strava, Komoot, etc.)",
+        "inputLabel": "Specify a name for your merged GPX activity",
+        "inputRequired": "You have to specify an activity name"
       },
       "analyse": {
         "title": "Analyse GPX file",
+        "fileInputLabel": "Upload the GPX file you want to analyse",
+        "fileInputDescription": "Drag and drop your GPX file here",
         "submitLabel": "Analyse",
-        "description": "Import a GPX activity file and get a crude Strava like dashboard to analyse it. I will not store it.",
+        "description": "This tool allows you to import a GPX activity file and get a crude Strava like dashboard to analyse it. No file is ever stored.",
         "subtitle": "{{date, translateDate(format:DD/MM)}}",
-        "selectAFile": "Or you can use the files I saved for demo purposes. You can select one, nothing bad will happen :",
-        "retry": "Retry",
+        "selectAFile": "Alternatively you can use the files I saved for demo purposes. You can select one, nothing bad will happen :",
         "totalDistance": "Distance",
         "totalElevationGain": "Elevation",
         "maxSpeed": "Max speed",
