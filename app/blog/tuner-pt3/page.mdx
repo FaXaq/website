@@ -331,33 +331,6 @@ Inside the folder of our wasm project, run `wasm-pack build --target web` and th
 
 Finally, we import the WASM file as we did before previously with our test function and safely replace the `autoCorrelate` function with its WASM clone `auto_correlate`. Obviously, do not forget to wait on init during component first render, in order to have access to the WASM : 
 
-```ts
-  // Import our WASM module at the start of the file
-  import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
-```
-
-```ts
-  // Inside our component :
-  const [isLoadingWebAssembly, setIsLoadingWebAssembly] = useState<boolean>(false)
-
-  useEffect(() => {
-    (async () => {
-      setIsLoadingWebAssembly(true)
-      try {
-        await init()
-        setIsLoadingWebAssembly(false)
-      } catch (err) {
-        console.error(err)
-      }
-    })()
-  }, [])
-
-  // And we can safely use our auto_correlate WASM method inside our component !
-  if (!isLoadingWebAssembly) {
-    const guessedFrequency = auto_correlate(buffer, analyser.context.sampleRate)
-  }
-```
-
 export const file7 = {
   code:`
 import { Note } from "mtts"

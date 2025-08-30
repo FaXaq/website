@@ -1,7 +1,7 @@
 'use client'
 
 import { useColorMode } from "@/components/ui/color-mode";
-import { CodeBlock as ChakraCodeBlock, createShikiAdapter, IconButton } from "@chakra-ui/react"
+import { Box, CodeBlock as ChakraCodeBlock, createShikiAdapter, IconButton } from "@chakra-ui/react"
 import { HighlighterGeneric } from "shiki"
 
 interface ICodeBlockProps {
@@ -22,30 +22,32 @@ export const CodeBlock = ({ file, enableCopy = true, showLineNumbers = true, add
   const { colorMode } = useColorMode();
 
   return (
-    <ChakraCodeBlock.AdapterProvider value={shikiAdapter}>
-      <ChakraCodeBlock.Root code={file.code} language={file.language} meta={{ showLineNumbers, colorScheme: colorMode, addedLineNumbers, highlightLines, removedLineNumbers }} size={size}>
-        { (file.title || enableCopy) && (
-          <ChakraCodeBlock.Header>
-            <ChakraCodeBlock.Title>{file.title}</ChakraCodeBlock.Title>
-            <ChakraCodeBlock.Control>
-              {
-                enableCopy && (
-                  <ChakraCodeBlock.CopyTrigger asChild>
-                    <IconButton variant="ghost" size="2xs">
-                      <ChakraCodeBlock.CopyIndicator />
-                    </IconButton>
-                  </ChakraCodeBlock.CopyTrigger>
-                )}
-            </ChakraCodeBlock.Control>
-          </ChakraCodeBlock.Header>
-        )}
-        <ChakraCodeBlock.Content>
-          <ChakraCodeBlock.Code>
-            <ChakraCodeBlock.CodeText />
-          </ChakraCodeBlock.Code>
-        </ChakraCodeBlock.Content>
-      </ChakraCodeBlock.Root>
-    </ChakraCodeBlock.AdapterProvider>
+    <Box maxW="full">
+      <ChakraCodeBlock.AdapterProvider value={shikiAdapter}>
+        <ChakraCodeBlock.Root code={file.code} language={file.language} meta={{ showLineNumbers, colorScheme: colorMode, addedLineNumbers, highlightLines, removedLineNumbers }} size={size} overflow="auto">
+          { (file.title || enableCopy) && (
+            <ChakraCodeBlock.Header>
+              <ChakraCodeBlock.Title>{file.title}</ChakraCodeBlock.Title>
+              <ChakraCodeBlock.Control>
+                {
+                  enableCopy && (
+                    <ChakraCodeBlock.CopyTrigger asChild>
+                      <IconButton variant="ghost" size="2xs">
+                        <ChakraCodeBlock.CopyIndicator />
+                      </IconButton>
+                    </ChakraCodeBlock.CopyTrigger>
+                  )}
+              </ChakraCodeBlock.Control>
+            </ChakraCodeBlock.Header>
+          )}
+          <ChakraCodeBlock.Content>
+            <ChakraCodeBlock.Code>
+              <ChakraCodeBlock.CodeText overflow="auto" />
+            </ChakraCodeBlock.Code>
+          </ChakraCodeBlock.Content>
+        </ChakraCodeBlock.Root>
+      </ChakraCodeBlock.AdapterProvider>
+    </Box>
   )
 }
 
