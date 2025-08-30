@@ -23,15 +23,14 @@ interface PianoKeyProps {
 }
 
 export default function PianoKey({ note, scale, blackNote, PianoBlackKeyComponent, PianoKeyComponent }: PianoKeyProps) {
-  console.log(system.token("sizes.2"))
   return (
-    <Box textAlign="center" h="full" bg="gray.50" position="relative" w={8} roundedBottom="md" border="1px solid" borderColor="fg">
+    <Box textAlign="center" h="full" bg="gray.50" position="relative" w={8} border="1px solid" borderColor="fg.subtle">
       {
         PianoKeyComponent !== undefined && <PianoKeyComponent scale={scale} note={note} />
       }
       {
         blackNote && (
-          <Box position="absolute" bg="gray.950" h="50%" w="full" transform={`translateX(${system.token("sizes.4.5")})`} zIndex="10" roundedBottom="md" overflow="hidden" border="1px solid" borderColor="fg.inverted">
+          <Box position="absolute" bg="gray.950" h="50%" zIndex="10" w="full" transform={"translateX(50%)"} roundedBottom="md" overflow="hidden">
             { PianoBlackKeyComponent !== undefined && <PianoBlackKeyComponent scale={scale} note={blackNote} /> }
           </Box>
         )

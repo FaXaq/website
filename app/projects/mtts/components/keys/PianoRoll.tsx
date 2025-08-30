@@ -24,7 +24,7 @@ export default function PianoRoll({
 
   return (
     <Box h="full" w="full">
-      <HStack w="full" h="full" gap={1}>
+      <HStack w="full" h="full" gap={0}>
         {whiteNotes.map(note => (
           <PianoKey
             key={`keys-key-${note.SPN}`}

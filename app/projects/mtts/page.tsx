@@ -29,7 +29,6 @@ function Page() {
   })
 
   return (
-    <>
     <VStack alignItems="start" gap={4}>
       <Box>
         <HStack>
@@ -47,7 +46,6 @@ function Page() {
         </List.Root>
       </VStack>
     </VStack>
-    </>
   )
 }
 

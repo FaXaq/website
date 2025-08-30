@@ -71,7 +71,7 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   return (
     <Box onClick={() => toggleFret()} bg={active ? "purple.muted" : "transparent"} w="full" h="full" p={1}>
       {noteExistsInScale(scale, note)
-        ? (<Badge bg={getColorString({ color: getNoteColor(scale, note) })}>{getNoteText(scale, note)}</Badge>)
+        ? (<Badge display="inline-block" bg={getColorString({ color: getNoteColor(scale, note) })}>{getNoteText(scale, note)}</Badge>)
         : (<Text></Text>) }
     </Box>
   )

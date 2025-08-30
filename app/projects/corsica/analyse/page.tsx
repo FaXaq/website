@@ -14,7 +14,7 @@ import { ActiveChartPointProvider } from './context/ActiveChartPoint'
 import ElevationChartHover from './components/ElevationChartDetails'
 import SpeedChartHover from './components/SpeedChartDetails'
 import dynamic from 'next/dynamic'
-import { Box, Grid, GridItem, Heading, Button, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, Heading, Button, Skeleton, VStack, Card } from '@chakra-ui/react'
 
 export default function Analyse() {
   const { t } = useTranslation()
@@ -46,7 +46,7 @@ export default function Analyse() {
           </Box>
           <ActiveChartPointProvider>
             <Grid templateColumns="repeat(4, 1fr)" gap={6} py={6}>
-              <GridItem colSpan={{ base: 4, md: 2, xl: 3 }} minHeight="300px">
+              <GridItem colSpan={{ base: 4, md: 2, xl: 3 }} minHeight="300px" rounded="md" overflow="hidden">
                 <LeafletMap center={[analysis.map.center.lat, analysis.map.center.lon]} style={{ width: "100%", height: "100%"}}>
                   <MapAnnotations mapAnalysis={analysis.map} points={analysis.points} />
                 </LeafletMap>
