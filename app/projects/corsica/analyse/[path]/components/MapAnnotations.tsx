@@ -2,13 +2,12 @@
 
 import React, { useEffect, useMemo } from 'react'
 import { useMap } from 'react-leaflet'
-import { MapAnalysis } from '../../api/analyse/helpers/getMapAnalysis'
-import { GPXTrkPart } from '../../api/helpers/parseActivity'
 import dynamic from 'next/dynamic'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import 'leaflet/dist/leaflet.css'
 import MapIcon from './MapIcon'
 import { theme } from '@/components/ui/theme'
+import { GPXTrkPart, MapAnalysis } from '../../types'
 
 const Polyline = dynamic(
   async () => (await import('react-leaflet')).Polyline,

@@ -4,3 +4,5 @@ node_modules
 .vercel
 .env.development.local
 .env*.local
+*.env
+.DS_Store

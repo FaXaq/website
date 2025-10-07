@@ -591,6 +591,12 @@
         "speedChart": {
           "tooltip": "{{yValue}}{{y}} at {{xValue}}{{x}}"
         }
+      },
+      "upload": {
+        "title": "Upload GPX file",
+        "fileInputLabel": "Upload the GPX file to set as example",
+        "fileInputDescription": "Drag and drop your GPX file here",
+        "submitLabel": "Upload"
       }
     }
   },

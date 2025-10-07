@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
-import { Analysis } from '../../api/analyse/route'
 import { useTranslation } from 'react-i18next'
-import { useFormatDuration } from '../hooks/useFormatDuration'
 import { intervalToDuration } from 'date-fns'
 import { Box, Card, Grid, GridItem, Text } from '@chakra-ui/react'
+import { useFormatDuration } from '../../hooks/useFormatDuration'
+import { Analysis } from '../../types'
 
 interface TextAnalysisReportProps {
     analysis: Analysis

@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react'
-import { Analysis } from '../../api/analyse/route'
-import { ChartData } from '../types'
 import { theme } from '@/components/ui/theme'
 import { CartesianGrid, Customized, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
 import { Box } from '@chakra-ui/react'
+import { Analysis, ChartData } from '../../types'
 
 interface SpeedChartProps {
     analysis: Analysis

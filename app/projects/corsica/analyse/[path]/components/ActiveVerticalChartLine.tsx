@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect } from 'react'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import { CategoricalChartProps, createDefaultState } from 'recharts/types/chart/generateCategoricalChart'

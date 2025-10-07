@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.901.0",
     "@chakra-ui/react": "^3.24.2",
     "@emotion/react": "^11.14.0",
     "@mdx-js/loader": "^3.1.0",
@@ -19,6 +20,7 @@
     "@vercel/blob": "^0.14.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.30.0",
+    "dotenv": "^17.2.3",
     "fast-xml-parser": "^4.3.2",
     "feed": "^4.2.2",
     "gray-matter": "^4.0.2",
@@ -46,7 +48,7 @@
     "zod": "^4.0.17"
   },
   "scripts": {
-    "dev": "next dev --turbopack -p 1234",
+    "dev": "NODE_ENV=development next dev --turbopack -p 1234",
     "build": "next build",
     "build:production": "NODE_ENV=production next build",
     "start": "next start"

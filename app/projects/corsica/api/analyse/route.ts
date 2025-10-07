@@ -1,26 +1,16 @@
 import { ListBlobResult } from '@vercel/blob'
 import { NextRequest, NextResponse } from 'next/server'
-import { ApiError } from '../helpers/const'
 import { getfileUrlFromRequest } from '../helpers/getFileUrlFromRequest'
 import { getFilesFromRequest } from '../helpers/getFilesFromRequest'
-import { GPXJson, GPXTrkPart, parseGPX } from '../helpers/parseActivity'
-import getDistanceVariations, { DistanceAnalysis } from './helpers/getDistanceVariations'
-import getElevationVariations, { ElevationVariationAnalysis } from './helpers/getElevationVariations'
-import getMapAnalysis, { MapAnalysis } from './helpers/getMapAnalysis'
-import getSpeedAnalysis, { SpeedAnalysis } from './helpers/getSpeedAnalysis'
-import getTimeAnalysis, { TimeAnalysis } from './helpers/getTimeAnalysis'
+import { parseGPX } from '../helpers/parseActivity'
+import getDistanceVariations from './helpers/getDistanceVariations'
+import getElevationVariations from './helpers/getElevationVariations'
+import getMapAnalysis from './helpers/getMapAnalysis'
+import getSpeedAnalysis from './helpers/getSpeedAnalysis'
 import listBlobs from './helpers/listBlobs'
-
-export interface Analysis {
-  name: string,
-  activity: string,
-  time: TimeAnalysis | void,
-  map: MapAnalysis,
-  elevation: ElevationVariationAnalysis,
-  distance: DistanceAnalysis,
-  speed: SpeedAnalysis | void,
-  points: Array<GPXTrkPart>
-}
+import { ApiError } from '../../const'
+import { Analysis, GPXJson, GPXTrkPart, SpeedAnalysis, TimeAnalysis } from '../../analyse/types'
+import getTimeAnalysis from './helpers/getTimeAnalysis'
 
 function trackHasTime(file: GPXJson): boolean {
   return !!file.gpx.metadata?.time

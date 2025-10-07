@@ -1,16 +1,4 @@
-import { GPXTrkPart } from '../../helpers/parseActivity'
-
-interface ElevationVariation {
-    elevationGain: number,
-    elevationLoss: number,
-    gradient: number
-  }
-
-export interface ElevationVariationAnalysis {
-    totalElevationGain: number,
-    totalElevationLoss: number,
-    elevationVariations: Array<ElevationVariation>
-}
+import { ElevationVariation, ElevationVariationAnalysis, GPXTrkPart } from "@/projects/corsica/analyse/types"
 
 export default function getElevationVariations(trkpts: Array<GPXTrkPart>): ElevationVariationAnalysis {
   if (trkpts.length < 2) {

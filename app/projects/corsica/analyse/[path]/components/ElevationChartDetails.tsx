@@ -1,10 +1,10 @@
 import React from 'react'
-import { Analysis } from '../../api/analyse/route'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import { useTranslation } from 'react-i18next'
-import { useFormatDuration } from '../hooks/useFormatDuration'
 import { intervalToDuration } from 'date-fns'
 import { Box, Card, Text } from '@chakra-ui/react'
+import { useFormatDuration } from '../../hooks/useFormatDuration'
+import { Analysis } from '../../types'
 
 interface ElevationChartDetailsProps {
     analysis: Analysis

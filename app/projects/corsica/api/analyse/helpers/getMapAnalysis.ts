@@ -1,19 +1,5 @@
-import { GPXTrkPart } from '../../helpers/parseActivity'
-import reverseGeocodingSearch, { ReverseGeocodingJSON } from './reverseGeocodingSearch'
-
-interface Coordinates {
-  lon: number,
-  lat: number
-}
-
-export interface MapAnalysis {
-    center: Coordinates,
-    boundaries: [
-      Coordinates,
-      Coordinates
-    ],
-    reverseGeocodingSearchResult?: ReverseGeocodingJSON
-  }
+import { GPXTrkPart, MapAnalysis } from '@/projects/corsica/analyse/types'
+import reverseGeocodingSearch from './reverseGeocodingSearch'
 
 export default async function getMapAnalysis(trkpts: Array<GPXTrkPart>): Promise<MapAnalysis> {
   if (trkpts.length < 2) {

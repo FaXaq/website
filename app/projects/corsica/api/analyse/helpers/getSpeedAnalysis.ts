@@ -1,12 +1,5 @@
-import { GPXTrkPart } from '../../helpers/parseActivity'
+import { GPXTrkPart, SpeedAnalysis } from '@/projects/corsica/analyse/types'
 import { getSpeedBetweenPoints } from './betweenPoints'
-
-export interface SpeedAnalysis {
-  maxSpeed: number,
-  minSpeed: number,
-  averageSpeed: number,
-  speedVariations: Array<number>
-}
 
 export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalysis {
   if (trkpts.length < 2) {

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Analysis } from '../../api/analyse/route'
 import { useTranslation } from 'react-i18next'
 import { useActiveChartPoint } from '../context/ActiveChartPoint'
 import { Box, Card, Text } from '@chakra-ui/react'
+import { Analysis } from '../../types'
 
 interface SpeedChartDetailsProps {
     analysis: Analysis

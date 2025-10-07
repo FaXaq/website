@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react'
-import { ChartData } from '../types'
-import { Analysis } from '../../api/analyse/route'
 import { Area, AreaChart, CartesianGrid, Customized, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { } from 'react-leaflet'
 import { theme } from '@/components/ui/theme'
 import ActiveVerticalChartLine from './ActiveVerticalChartLine'
 import { Box } from '@chakra-ui/react'
+import { Analysis, ChartData } from '../../types'
 
 interface ElevationChartProps {
     analysis: Analysis,

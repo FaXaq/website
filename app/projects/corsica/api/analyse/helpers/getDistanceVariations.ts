@@ -1,10 +1,5 @@
-import { GPXTrkPart } from '../../helpers/parseActivity'
+import { DistanceAnalysis, GPXTrkPart } from '@/projects/corsica/analyse/types'
 import { getDistanceBetweenPoints } from './betweenPoints'
-
-export interface DistanceAnalysis {
-    totalDistance: number,
-    distanceVariations: Array<number>
-}
 
 export default function getDistanceVariations(trkpts: Array<GPXTrkPart>): DistanceAnalysis {
   if (trkpts.length < 2) {

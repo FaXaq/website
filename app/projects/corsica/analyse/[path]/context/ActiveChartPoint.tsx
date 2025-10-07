@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+"use client"
+
 import React, { Reducer, createContext, useContext, useReducer } from 'react'
 
 type ActivePoint = {

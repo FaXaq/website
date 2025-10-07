@@ -1,13 +1,5 @@
-import { GPXJson } from '../../helpers/parseActivity'
+import { GPXJson, TimeAnalysis } from '@/projects/corsica/analyse/types'
 import { getDurationBetweenPoints, getSpeedBetweenPoints } from './betweenPoints'
-
-export interface TimeAnalysis {
-    meta: string,
-    start: string,
-    end: string,
-    movingTimeVariations: Array<number>,
-    totalMovingTime: number
-}
 
 // Arbitrary, in cycling if we move at less that 3km/h we are not considered in movement
 const MIN_KM_H_SPEED_FOR_MOVING_TIME = 2

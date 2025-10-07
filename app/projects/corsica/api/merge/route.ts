@@ -12,7 +12,6 @@ export async function POST(
   try {
     const files = await getFilesFromRequest(formData)
     const textValues = await getNewNameFromRequest(formData)
-    console.log(files, textValues);
 
     const parsedFiles = await Promise.all(files.map(async (file) => parseGPX(file)))
     const sortedParsedFiles = parsedFiles
