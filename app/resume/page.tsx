@@ -20,7 +20,7 @@ function HomePage () {
     <VStack alignItems="start" justifyContent="space-between">
       <Grid templateColumns="repeat(5, 1fr)">
         <GridItem colSpan={{ base: 5, lg: 4}}>
-          <VStack width={{ base: "100%", md: "80%" }} alignItems="start">
+          <VStack alignItems="start">
             <Heading as="h3" mt={4} mb={2}>{experiences.title}</Heading>
             <Timeline.Root>
               <Experience experience={experiences.current}/>
@@ -31,13 +31,15 @@ function HomePage () {
           </VStack>
         </GridItem>
         <GridItem colSpan={{ base: 5, lg: 1 }} pb={{ base: 4, lg: 0 }}>
-          <Separator mx={8} my={8} orientation={"vertical"} display={{ base: "none", lg: "block" }} />
-          <VStack width={{ base: "100%", md: "20%" }} justifyContent="start" alignItems="start">
-            <Heading as="h3" mt={4} mb={2}>{projects.title}</Heading>
-            {projects.current.map(project => (
-              <Project project={project} key={project.title} />
-            ))}
-          </VStack>
+          <HStack h="100%" alignItems="start">
+            <Separator orientation={"vertical"} display={{ base: "none", sm: "block" }} h="full" m={5} />
+            <VStack width="100%" justifyContent="start" alignItems="start">
+              <Heading as="h3" mt={4} mb={2}>{projects.title}</Heading>
+              {projects.current.map(project => (
+                <Project project={project} key={project.title} />
+              ))}
+            </VStack>
+          </HStack>
         </GridItem>
       </Grid>
       <Footer />
