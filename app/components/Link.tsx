@@ -1,4 +1,3 @@
-import { useCreateUrl } from '@/hooks/useCreateUrl';
 import { Link as ChakraLink, Span, VStack } from '@chakra-ui/react'
 import _ from 'lodash';
 import NextLink from 'next/link';
@@ -11,12 +10,11 @@ interface LinkProps extends LinkDefaultProps {
 }
 
 export const Link = ({ href, children, description, ...props}: LinkProps) => {
-  const createUrl = useCreateUrl();
   const hasDescription = !_.isEmpty(description);
 
   return <ChakraLink
     {...props}
-    href={createUrl(href)}
+    href={href}
     as={NextLink}
     _hover={{ color: "gray.400" }}
     transition="color 0.15s"
