@@ -14,7 +14,7 @@ import PianoRoll from '../../components/keys/PianoRoll'
 import PianoBlackKey from './PianoBlackKey'
 import PianoKey from './PianoKey'
 import { NOTE_DISPLAY, ScaleBuilderSettingsProvider, useScaleBuilderSettings } from '../context/settings'
-import { Box, Button, Card, createListCollection, Em, Grid, GridItem, Heading, HStack, List, Portal, RadioGroup, Select, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Card, createListCollection, Em, Grid, GridItem, Heading, HStack, List, Portal, RadioGroup, Select, Span, Text, VStack } from '@chakra-ui/react'
 
 const availableAccidentals: Accidental[] =
   ACCIDENTALS
@@ -240,12 +240,12 @@ function BuildScale() {
             <Card.Root shadow="md">
               <Card.Body gap="2">
                 <Card.Title mt="2">{scaleTitle}</Card.Title>
-                <Card.Description>
+                <Card.Description as="div">
                   <VStack alignItems="start">
                     <Text>This scale contains the following notes: <Em>{scale.notes.map(note => translateNote(note)).join(", ")}</Em></Text>
                     {scale.scaleChords.length > 0 && (
                       <>
-                        <Text>I have extracted the following diatonic chords:</Text>
+                        <Span>I have extracted the following diatonic chords:</Span>
                         <List.Root variant="plain">
                           {scale.scaleChords.map(chord =>
                             chord.notation && (
