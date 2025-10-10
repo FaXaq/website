@@ -20,6 +20,7 @@ const nextConfig = {
     mdxRs: true,
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  output: "standalone",
 };
 
 module.exports = withMDX(nextConfig);

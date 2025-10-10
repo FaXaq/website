@@ -1,0 +1,16 @@
+FROM node:24-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Enable Corepack for Yarn 4.x support
+RUN corepack enable
+
+# Install basic tools
+RUN apk add --no-cache git
+
+# Expose Next.js dev server port
+EXPOSE 1234
+
+# Keep container running
+CMD ["tail", "-f", "/dev/null"]

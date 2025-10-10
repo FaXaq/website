@@ -1,0 +1,78 @@
+# Temporary solution freeze NodeJs version https://github.com/vercel/next.js/discussions/69326
+# https://github.com/vercel/next.js/issues/69150
+FROM node:24-alpine AS builder_root
+WORKDIR /app
+RUN corepack enable
+
+COPY package.json package.json
+
+#### UI
+COPY ui/.yarnrc.yml ui/.yarnrc.yml
+COPY ui/package.json ui/package.json
+COPY ui/yarn.lock ui/yarn.lock
+
+RUN --mount=type=cache,target=/app/.yarn/cache corepack yarn workspace ui install --immutable
+
+FROM builder_root AS builder_ui
+WORKDIR /app
+COPY ./ui ./ui
+COPY ./ui/node_modules ./ui/node_modules
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+ARG PUBLIC_REPO_NAME
+ENV NEXT_PUBLIC_PRODUCT_REPO=$PUBLIC_REPO_NAME
+
+ARG PUBLIC_PRODUCT_NAME
+ENV NEXT_PUBLIC_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
+
+ARG PUBLIC_VERSION
+ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
+
+ARG PUBLIC_ENV
+ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
+
+RUN corepack yarn workspace ui build:production
+
+# Production image, copy all the files and run next
+FROM node:24-slim AS ui
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y ca-certificates curl && update-ca-certificates && apt-get clean
+
+ENV NODE_ENV=PRODUCTION
+# Uncomment the following line in case you want to disable telemetry during runtime.
+ENV NEXT_TELEMETRY_DISABLED=1
+
+ARG PUBLIC_REPO_NAME
+ENV NEXT_PUBLIC_PRODUCT_REPO=$PUBLIC_REPO_NAME
+
+ARG PUBLIC_PRODUCT_NAME
+ENV NEXT_PUBLIC_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
+
+ARG PUBLIC_VERSION
+ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
+
+ARG PUBLIC_ENV
+ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# You only need to copy next.config.js if you are NOT using the default configuration
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/next.config.ts /app/
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/public /app/ui/public
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/package.json /app/ui/package.json
+
+# Automatically leverage output traces to reduce image size 
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/standalone /app/
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/static /app/ui/.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+
+CMD ["node", "ui/server"]

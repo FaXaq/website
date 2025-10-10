@@ -4,7 +4,7 @@ import type { NextRequest} from "next/server";
 import { NextResponse } from "next/server";
 import path from 'path';
 
-const articlesDir = path.join(process.cwd(), 'app/blog');
+const articlesDir = path.join(process.cwd(), 'app/[locale]/blog');
 const files = readdirSync(articlesDir).filter(i => i.indexOf('.') === -1);
 const fileUrls = [];
 
@@ -12,7 +12,7 @@ for (let i = 0; i < files.length; i++) {
   const currentPath = path.join(articlesDir, files[i]);
   const f = readdirSync(currentPath);
   if (f.indexOf('page.mdx') > -1) {
-    const content = readFileSync(path.join(process.cwd(), 'app/blog', files[i], 'page.mdx'));
+    const content = readFileSync(path.join(process.cwd(), 'app/[locale]/blog', files[i], 'page.mdx'));
     fileUrls.push({
       url: `https://norra.fr/blog/${files[i]}`,
       content: content.toString()

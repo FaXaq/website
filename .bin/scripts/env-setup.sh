@@ -9,5 +9,4 @@ ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
   --extra-vars "@${VAULT_FILE}" \
   --vault-password-file=<($VAULT_PASSWORD_SCRIPT)
 
-corepack yarn
-corepack yarn workspaces foreach install
+corepack yarn setup

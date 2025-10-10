@@ -3,7 +3,7 @@
 import { Note } from 'mtts';
 import React, { useEffect, useState } from 'react';
 
-import init, { auto_correlate } from '../../../../wasm/auto-correlate/pkg';
+import init, { auto_correlate } from '../../../../../wasm/auto-correlate/pkg';
 import { useAnalyser } from '../hooks/useAnalyser';
 
 interface TunerContainerProps {

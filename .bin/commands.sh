@@ -9,6 +9,11 @@ function Help() {
    echo "  vault:edit                                 Edit vault file"
    echo "  vault:password:show                        Show vault password"
    echo "  vault:password:generate                    Generate vault password file from habilitations"
+   echo "  version:current                            Get current version of app"
+   echo "  version:generate                           Generate next version"
+   echo "  version:generate:rc                        Generate next rc version"
+   echo "  images:build                               Build images"
+   echo "  release:app                                Build app and upload it to ghcr.io"
 }
 
 function env:setup() {
@@ -28,4 +33,20 @@ function vault:password:generate() {
 
 function vault:password:show() {
   "${SCRIPT_DIR}/vault-password-show.sh" "$@"
+}
+
+function version:current() {
+  "${SCRIPT_DIR}/version-current.sh"
+}
+
+function version:generate() {
+  "${SCRIPT_DIR}/version-generate.sh" "$@"
+}
+
+function version:generate:rc() {
+  "${SCRIPT_DIR}/version-generate-rc.sh" "$@"
+}
+
+function images:build() {
+  "${SCRIPT_DIR}/images-build.sh" "$@"
 }

@@ -4,3 +4,4 @@
 
 infra/vault/.vault-password.gpg
 infra/habilitations/habilitations.yml
+node_modules

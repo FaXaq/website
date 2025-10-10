@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import init, { greet } from '../../../../wasm/auto-correlate/pkg/auto_correlate';
+import init, { greet } from '@/../wasm/auto-correlate/pkg/auto_correlate';
 
 export default function WorkingWasm() {
   const [greeting, setGreeting] = useState('');
