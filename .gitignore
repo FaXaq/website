@@ -1,3 +1,6 @@
 .pnp.cjs
 .pnp.loader.mjs
 .yarn
+
+infra/vault/.vault-password.gpg
+infra/habilitations/habilitations.yml

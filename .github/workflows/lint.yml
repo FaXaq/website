@@ -1,0 +1,30 @@
+name: Lint UI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+
+      - name: Install dependencies
+        working-directory: ./ui
+        run: yarn install --frozen-lockfile
+
+      - name: Run lint
+        working-directory: ./ui
+        run: yarn lint
