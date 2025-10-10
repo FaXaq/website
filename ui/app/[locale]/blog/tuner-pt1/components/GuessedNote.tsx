@@ -3,7 +3,6 @@
 import { Text } from '@chakra-ui/react';
 import React from 'react';
 
-// eslint-disable-next-line no-unused-vars
 import type { GuessedNote } from './TunerContainer';
 
 interface GuessedNoteProps {

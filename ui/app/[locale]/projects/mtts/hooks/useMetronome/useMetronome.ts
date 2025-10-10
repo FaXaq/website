@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { OutgoingMessage} from "./worker/const";
 import { IncomingMessageType,OutgoingMessageType } from "./worker/const";
 
-type MetronomeCallback = (bipNumber: number) => any
+type MetronomeCallback = (bipNumber: number) => void
 
 
 export default function useMetronome(beatCallback: MetronomeCallback) {

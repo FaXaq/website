@@ -31,7 +31,7 @@ export async function POST(
       );
     }
 
-    const uploadPromises = files.map(async (file: any) => {
+    const uploadPromises = files.map(async (file: File) => {
       const buffer = Buffer.from(await file.arrayBuffer());
       const command = new PutObjectCommand({
         Bucket: config.s3.bucketName,

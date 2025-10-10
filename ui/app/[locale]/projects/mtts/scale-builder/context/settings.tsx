@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 import type { Reducer} from 'react';
 import React, { createContext, useContext, useReducer } from 'react';
 

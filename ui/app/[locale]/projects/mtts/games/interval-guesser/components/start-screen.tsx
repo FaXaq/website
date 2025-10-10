@@ -4,12 +4,11 @@ import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { LEVELS } from '../const';
-// eslint-disable-next-line no-unused-vars
 import type { Level } from '../page';
 import IntervalGuesserButton from './button';
 
 interface IntervalGuesserStartScreenProps {
-  onStart: (level: Level) => any;
+  onStart: (level: Level) => void;
 }
 
 const IntervalGuesserStartScreen = ({ onStart }: IntervalGuesserStartScreenProps) => {

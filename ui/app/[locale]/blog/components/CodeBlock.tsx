@@ -52,7 +52,7 @@ export const CodeBlock = ({ file, enableCopy = true, showLineNumbers = true, add
   );
 };
 
-const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
+const shikiAdapter = createShikiAdapter<HighlighterGeneric<string, string>>({
   async load() {
     const { createHighlighter } = await import("shiki");
     return createHighlighter({

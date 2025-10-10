@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-type WasmInitFunction = (e?: any) => Promise<any>;
+type WasmInitFunction<Input, Output> = (module_or_path?: Input | Promise<Input>) => Promise<Output>;
 
-export default function useWasmInit(init: WasmInitFunction) {
+export default function useWasmInit<Input, Output>(init: WasmInitFunction<Input, Output>) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const [hasErrored, setHasErrored] = useState<boolean>(false);
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     (async () => {
@@ -17,7 +17,7 @@ export default function useWasmInit(init: WasmInitFunction) {
         setHasLoaded(true);
       } catch (err) {
         setHasErrored(true);
-        setError(err);
+        setError(err as Error);
         setHasLoaded(false);
       }
     })();

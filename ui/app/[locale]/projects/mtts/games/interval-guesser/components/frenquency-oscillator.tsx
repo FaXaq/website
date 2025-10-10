@@ -14,7 +14,7 @@ const FREQUENCY_COLORS = [
 interface IntervalGuesserOscillatorProps {
   frequencies: number[];
   highAmplitude: boolean;
-  onClick: (...e: any) => any;
+  onClick: React.MouseEventHandler<HTMLCanvasElement>
   animated: boolean;
 }
 
@@ -142,7 +142,7 @@ const IntervalGuesserOscillator = ({ frequencies, highAmplitude, onClick, animat
   return (
     <div >
       <canvas
-        onClick={() => onClick()}
+        onClick={(e) => onClick(e)}
         ref={canvas}
         width="100%"
         height={ CANVAS_HEIGHT }

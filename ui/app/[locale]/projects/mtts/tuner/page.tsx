@@ -3,7 +3,8 @@
 import { Note } from 'mtts';
 import React, { useEffect, useMemo, useState } from 'react';
 
-import init, { auto_correlate } from '../../../../wasm/auto-correlate/pkg';
+import type { InitInput, InitOutput } from "../../../../../wasm/auto-correlate/pkg";
+import init, { auto_correlate } from "../../../../../wasm/auto-correlate/pkg";
 import { useAnalyser } from '../hooks/useAnalyser';
 import useMicInput from '../hooks/useMicInput';
 import useWasmInit from '../hooks/useWasmInit';
@@ -47,7 +48,7 @@ export default function Tuner() {
   const [isGuessing, setIsGuessing] = useState<boolean>(false);
   const [display, setDisplay] = useState<DISPLAY>(DISPLAY.HZ);
   const [fq, setFq] = useState<number>(-1);
-  const { isLoading, hasLoaded,  hasErrored, error } = useWasmInit(init);
+  const { isLoading, hasLoaded,  hasErrored, error } = useWasmInit<InitInput, InitOutput>(init);
   const { isActive, requestAccess, micStream, revokeAccess } = useMicInput();
   const { analyser } = useAnalyser(micStream, 2048);
 

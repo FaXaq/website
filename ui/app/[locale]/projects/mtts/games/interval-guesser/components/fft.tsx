@@ -1,5 +1,4 @@
 import React, { useEffect, useRef,useState } from 'react';
-// eslint-disable-next-line no-unused-vars
 import type * as Tone from 'tone';
 
 import { theme } from '@/components/ui/theme';

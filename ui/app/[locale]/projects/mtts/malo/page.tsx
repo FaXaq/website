@@ -2,7 +2,6 @@
 
 import './malo.scss';
 
-// eslint-disable-next-line no-unused-vars
 import type { Note} from 'mtts';
 import { Pitch } from 'mtts';
 import React, { useMemo,useState } from 'react';

@@ -4,14 +4,13 @@ import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 import { LEVELS } from '../const';
-// eslint-disable-next-line no-unused-vars
 import type { Level } from '../page';
 import IntervalGuesserButton from './button';
 
 interface IntervalGuesserModalProps {
   isShowing: boolean
   children?: React.JSX.Element | React.JSX.Element[]
-  onClose: (level: Level) => any
+  onClose: (level: Level) => void
   hasWon: boolean
   level: Level
 }

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 'use client';
 
 import { Badge, ColorSwatch } from '@chakra-ui/react';
@@ -11,7 +11,7 @@ interface ColorButtonProps {
     color: COLOR,
     children: React.ReactNode,
     isActive: boolean,
-    onClick: (...e: any) => any
+    onClick: React.MouseEventHandler<HTMLSpanElement>
 }
 
 function ColorButton({ children, isActive, onClick, color }: ColorButtonProps) {

@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+
 import type { Note } from 'mtts';
 import { useEffect, useState } from 'react';
 

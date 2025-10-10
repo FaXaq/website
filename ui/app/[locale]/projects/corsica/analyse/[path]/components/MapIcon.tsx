@@ -31,7 +31,7 @@ export default function MapIcon({ type, position }: MapIconProps) {
 
   const size = 800000 / Math.pow(2, 0 + zoom);
 
-  // eslint-disable-next-line no-unused-vars
+
   const color: { [key in MapIconType]: { color: string, fillColor: string } } = {
     start: {
       color: theme.colors['corsica-green'],

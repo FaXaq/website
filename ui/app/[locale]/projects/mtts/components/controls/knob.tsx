@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useDefaultProp } from '@/hooks/useDefaultProp';
@@ -28,8 +28,8 @@ const Knob = ({ value, onUpdate, min, max, label, step }: KnobProps) => {
   const localStep = useDefaultProp(step, 1);
 
   // creating a ref to avoid event listener calling the wrong function
-  const handlePointerLockMouseRef = useRef<(e: MouseEvent) => any>(undefined);
-  const handleTouchMoveRef = useRef<(e: React.TouchEvent<Element>) => any>(undefined);
+  const handlePointerLockMouseRef = useRef<(e: MouseEvent) => void>(undefined);
+  const handleTouchMoveRef = useRef<(e: React.TouchEvent<Element>) => void>(undefined);
   const onUpdateRef = useRef<typeof onUpdate>(onUpdate);
 
   // update ref to cb update function when necessary
@@ -93,12 +93,20 @@ const Knob = ({ value, onUpdate, min, max, label, step }: KnobProps) => {
 
   function addPointerLock (e: React.PointerEvent<HTMLDivElement>) {
     const div: HTMLDivElement = e.currentTarget as HTMLDivElement;
-    div.requestPointerLock = div.requestPointerLock || (div as any).requestPointerLock;
+    div.requestPointerLock = div.requestPointerLock ||
+                              /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                              (div as any).mozRequestPointerLock ||
+                              /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                              (div as any).webkitPointerLockElement;
     div.requestPointerLock();
   }
 
   function removePointerLock () {
-    document.exitPointerLock = document.exitPointerLock || (document as any).mozExitPointerLock;
+    document.exitPointerLock = document.exitPointerLock ||
+                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                (document as any).mozExitPointerLock ||
+                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                (document as any).webkitExitPointerLock;
     document.exitPointerLock();
   }
 

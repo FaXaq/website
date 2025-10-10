@@ -1,6 +1,6 @@
 'use client';
 
-// eslint-disable-next-line no-unused-vars
+
 import type { Note } from 'mtts';
 import { useTranslation } from 'next-i18next';
 import React from 'react';

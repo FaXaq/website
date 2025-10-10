@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+
 import type {Note } from 'mtts';
 import { Interval } from 'mtts';
 import { useTranslation } from 'next-i18next';
@@ -9,7 +9,6 @@ import { getRandomEntities,shuffleArray } from '@/utils/misc';
 import Knob from '../../../components/controls/knob';
 import { usePolysynth } from '../../../hooks/polysynth';
 import { useFFT, useVolume, useWaveform } from '../../../hooks/tonejs';
-// eslint-disable-next-line no-unused-vars
 import type { Level } from '../page';
 import IntervalGuesserButton from './button';
 import FFT from './fft';
@@ -17,8 +16,8 @@ import Oscillator from './oscillator';
 
 interface IntervalGuesserGameProps {
   note: Note;
-  onWin: (...e: any) => any;
-  onLoose: (...e: any) => any;
+  onWin: () => void;
+  onLoose: () => void;
   level: Level;
   isPlaying: boolean;
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { GridItem } from '@chakra-ui/react';
-// eslint-disable-next-line no-unused-vars
 import type { Note } from 'mtts';
 import React from 'react';
 

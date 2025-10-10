@@ -16,7 +16,7 @@ interface AppLayoutProps {
   children: React.ReactNode
 }
 
-// eslint-disable-next-line react/prop-types
+
 function AppLayout ({ children }: AppLayoutProps) {
   const { i18n } = useTranslation();
   const { locale: urlLocale } = useParams();

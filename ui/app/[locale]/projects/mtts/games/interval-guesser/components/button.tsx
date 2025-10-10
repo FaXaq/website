@@ -4,7 +4,7 @@ import React from 'react';
 
 interface IntervalGuesserButtonProps {
   children: React.ReactNode
-  onClick?: (...e: any) => any
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   title?: string
   fixedSize?: boolean
 }

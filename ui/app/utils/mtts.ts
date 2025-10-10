@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import { Note, NOTES,Pitch } from 'mtts';
 
 export function generatePitches (valueStart: number, valueStop: number): Pitch[] {
