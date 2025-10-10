@@ -1,6 +1,7 @@
 import turfDistance from '@turf/distance';
 import { differenceInMilliseconds } from 'date-fns';
-import { GPXTrkPart } from '../../../analyse/types';
+
+import type { GPXTrkPart } from '../../../analyse/types';
 
 export type DistanceUnit = 'kilometers' | 'meters'
 

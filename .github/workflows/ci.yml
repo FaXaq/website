@@ -30,3 +30,7 @@ jobs:
       - name: Run lint
         working-directory: ./ui
         run: corepack yarn lint
+
+      - name: Run typecheck
+        working-directory: ./ui
+        run: corepack yarn typecheck
