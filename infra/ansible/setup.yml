@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - "{{playbook_dir}}/../vault/vault.yml"
+    - "{{playbook_dir}}/../habilitations.yml"
+  roles:
+    - setup

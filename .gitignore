@@ -3,5 +3,8 @@
 .yarn
 
 infra/vault/.vault-password.gpg
-infra/habilitations/habilitations.yml
+infra/habilitations.yml
 node_modules
+.bin/id_rsa_deploy.key
+
+.DS_Store

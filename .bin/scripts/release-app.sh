@@ -11,4 +11,4 @@ fi
 readonly next_version="${1}"
 readonly mode=${2:-$defaultMode}
 
-"$ROOT_DIR/.bin/scripts/build-images.sh" $next_version $mode production
+"$ROOT_DIR/.bin/scripts/images-build.sh" $next_version $mode production

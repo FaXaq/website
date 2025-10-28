@@ -1,0 +1,20 @@
+---
+- name: Configuration systemd-resolved
+  ansible.builtin.copy:
+    src: "{{playbook_dir}}/../files/setup/systemd/resolved.conf"
+    dest: /etc/systemd/resolved.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: __systemd_resolved_configuration
+
+- name: Activation de systemd-resolved service
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    enabled: yes
+    state: >-
+      {{
+        __systemd_resolved_configuration.changed |
+          default(False) |
+          ternary("restarted", "started")
+      }}

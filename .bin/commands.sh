@@ -14,6 +14,9 @@ function Help() {
    echo "  version:generate:rc                        Generate next rc version"
    echo "  images:build                               Build images"
    echo "  release:app                                Build app and upload it to ghcr.io"
+   echo "  infra:setup                                Setup a server with basic shared conf"
+   echo "  infra:images:build:reverse_proxy           Build reverse proxy image"
+   echo "  app:deploy                                 Deploy app"
 }
 
 function env:setup() {
@@ -47,6 +50,52 @@ function version:generate:rc() {
   "${SCRIPT_DIR}/version-generate-rc.sh" "$@"
 }
 
+function app:deploy() {
+  "${SCRIPT_DIR}/app-deploy.sh" "$@"
+}
+
+function infra:setup:initial() {
+  local PRODUCT_NAME=${1:?"Merci le produit (website)"}; shift;
+  local ENV_NAME=${1:?"Merci de préciser un environnement (ex. recette ou production)"}; shift;
+
+  read -p "Do you want to setup the server with a RSA key? [Y/n]" response
+
+  case $response in
+    [yY][eE][sS]|[yY]|"")
+      "$SCRIPT_DIR/get_technical_user_keyfile.sh"
+      export ANSIBLE_PRIVATE_KEY_FILE="$ROOT_DIR/.bin/id_rsa_deploy.key"
+      export ANSIBLE_BECOME_PASS="-"
+      infra:setup "$PRODUCT_NAME" "$ENV_NAME" "$@" --user ubuntu
+      rm -f "${ANSIBLE_PRIVATE_KEY_FILE}"
+      ;;
+    *)
+      infra:setup "$PRODUCT_NAME" "$ENV_NAME" "$@" --user ubuntu --ask-pass
+      return
+      ;;
+  esac
+
+  "$SCRIPT_DIR/run-infra-playbook.sh" "setup.yml" "$PRODUCT_NAME" "$ENV_NAME" "$@"
+}
+
+function infra:setup() {
+  local PRODUCT_NAME=${1:?"Merci le produit (website)"}; shift;
+  local ENV_NAME=${1:?"Merci de préciser un environnement (ex. recette ou production)"}; shift;
+
+  "$SCRIPT_DIR/run-infra-playbook.sh" "setup.yml" "$PRODUCT_NAME" "$ENV_NAME" "$@"
+}
+
+function infra:images:build:reverse_proxy() {
+  "$SCRIPT_DIR/image-build-infra.sh" reverse_proxy "$@"
+}
+
 function images:build() {
   "${SCRIPT_DIR}/images-build.sh" "$@"
+}
+
+function release:app() {
+  "${SCRIPT_DIR}/release-app.sh" "$@"
+}
+
+function release:manual() {
+  "${SCRIPT_DIR}/release-manual.sh" "$@"
 }

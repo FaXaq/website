@@ -10,10 +10,15 @@
     "./ui"
   ],
   "scripts": {
+    "setup:yarn": "corepack enable && corepack prepare",
     "lint": "yarn workspace ui lint",
-    "setup": "yarn install",
+    "setup": "yarn install && yarn setup",
     "dev:ui": "yarn workspace ui dev",
-    "ui:install": "yarn workspace ui install"
+    "ui:install": "yarn workspace ui install",
+    "release": "semantic-release"
   },
-  "packageManager": "yarn@4.10.3+sha512.c38cafb5c7bb273f3926d04e55e1d8c9dfa7d9c3ea1f36a4868fa028b9e5f72298f0b7f401ad5eb921749eb012eb1c3bb74bf7503df3ee43fd600d14a018266f"
+  "packageManager": "yarn@4.10.3+sha512.c38cafb5c7bb273f3926d04e55e1d8c9dfa7d9c3ea1f36a4868fa028b9e5f72298f0b7f401ad5eb921749eb012eb1c3bb74bf7503df3ee43fd600d14a018266f",
+  "devDependencies": {
+    "semantic-release": "^25.0.1"
+  }
 }

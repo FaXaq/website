@@ -1,0 +1,37 @@
+- name: Vérification de l'existence du groupe "ij"
+  group:
+    name: ij
+    state: present
+
+- name: "Création utilisateur {{ habilitation.username }}"
+  user:
+    name: "{{ habilitation.username }}"
+    password: "{{ vault.infra.USER.DEFAULT_PASSWORD }}"
+    update_password: on_create
+    shell: /bin/bash
+    groups: sudo,ij
+    append: yes
+    password_expire_max: 90
+    password_expire_min: 1
+  register: user
+
+- name: Force password update
+  command: "chage -d 0 {{ habilitation.username }}"
+  when: user.changed
+
+- name: "Ajout des clés d'autorisation à l'utilisateur {{habilitation.username}}"
+  authorized_key:
+    user: "{{ habilitation.username }}"
+    state: present
+    key: "{{key}}"
+  loop: "{{ habilitation.authorized_keys }}"
+  loop_control:
+    loop_var: key
+
+- name: Ensure .bash_logout file exists and has the required content for sudo users
+  copy:
+    src: "{{playbook_dir}}/../files/setup/homedir/bash_logout"
+    dest: "/home/{{ habilitation.username }}/.bash_logout"
+    owner: "{{ habilitation.username }}"
+    group: "{{ habilitation.username }}"
+    mode: "0644"
