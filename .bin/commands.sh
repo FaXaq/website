@@ -99,3 +99,15 @@ function release:app() {
 function release:manual() {
   "${SCRIPT_DIR}/release-manual.sh" "$@"
 }
+
+function release:candidate() {
+  "${SCRIPT_DIR}/release-manual.sh" "$@"
+}
+
+function deploy:log:decrypt() {
+  "${SCRIPT_DIR}/log-decrypt.sh" "$@"
+}
+
+function deploy:log:encrypt() {
+  "${SCRIPT_DIR}/log-encrypt.sh" "$@"
+}

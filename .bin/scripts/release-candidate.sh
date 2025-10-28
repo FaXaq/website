@@ -22,8 +22,8 @@ case $RC_TYPE in
     ;;
 esac
 
-readonly VERSION=$("${ROOT_DIR}/.bin/scripts/get-version.sh")
-NEXT_VERSION=$("$ROOT_DIR/.bin/scripts/generate-rc-label.sh" "$@")
+readonly VERSION=$("${ROOT_DIR}/.bin/scripts/version-current.sh")
+NEXT_VERSION=$("$ROOT_DIR/.bin/scripts/version-generate-rc.sh" "$@")
 
 echo "Creating release : $NEXT_VERSION"
 
