@@ -1,0 +1,16 @@
+- name: restart-ssh
+  service:
+    name: ssh
+    state: restarted
+
+- name: restart-fail2ban
+  service:
+    name: fail2ban
+    enabled: true
+    state: restarted
+
+- name: restart-logrotate
+  service:
+    name: logrotate
+    enabled: true
+    state: restarted

@@ -1,0 +1,37 @@
+[nginx-req-limit]
+enabled = true
+port = http,https
+filter = nginx-req-limit
+logpath = /opt/app/system/nginx/error.log
+findtime=1h
+chain = DOCKER-USER
+banaction = iptables-ipset-proto6
+banaction_allports=iptables-ipset-proto6-allports
+logtimezone = UTC
+bantime=1h
+maxretry=50
+
+[nginx-conn-limit]
+enabled = true
+port = http,https
+filter = nginx-conn-limit
+logpath = /opt/app/system/nginx/error.log
+findtime=1h
+chain = DOCKER-USER
+banaction = iptables-ipset-proto6
+banaction_allports=iptables-ipset-proto6-allports
+logtimezone = UTC
+bantime=1h
+maxretry=50
+
+[nginx-conn-limit-long]
+enabled = true
+port = http,https
+filter = nginx-conn-limit-long
+logpath = /opt/app/system/nginx/error.log
+bantime = 30d
+findtime=1h
+chain = DOCKER-USER
+banaction = iptables-ipset-proto6
+banaction_allports=iptables-ipset-proto6-allports
+logtimezone = UTC

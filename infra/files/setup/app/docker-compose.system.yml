@@ -1,0 +1,73 @@
+version: "3.8"
+
+# The following variables define reusable configurations for deployment, providing consistent and predefined
+# behaviors for updating, rolling back, and restarting services.
+
+x-deploy-default: &deploy-default
+  update_config:
+    failure_action: rollback
+    parallelism: 1
+    delay: 10s
+  rollback_config:
+    parallelism: 1
+    delay: 10s
+  restart_policy:
+    condition: on-failure
+    window: 360s
+    delay: 30s
+    # Max 24hours
+    max_attempts: 240
+
+x-default: &default
+  restart: on-failure:50
+  networks:
+    - website
+
+services:
+  reverse_proxy:
+    <<: *default
+    image: ghcr.io/faxaq/website_reverse_proxy:{{reverse_proxy_version}}
+    deploy:
+      <<: *deploy-default
+      restart_policy:
+        condition: any
+        window: 5s
+        delay: 5s
+      resources:
+        limits:
+          memory: 1g
+      mode: global
+    # Ingress port mode (default) is not able to provide user real-ip
+    # In order to bypass this, we need to use mode host port mapping
+    # But we cannot replicate the service on a single node
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    environment:
+      - SERVER_NAME={{dns_name}}
+      - MODSEC_REQ_BODY_LIMIT={{modsec_body_limit}}
+      - MODSEC_REQ_BODY_NOFILES_LIMIT={{modsec_body_limit}}
+      - MODSEC_RULE_ENGINE={{modsec_rule_engine}}
+      - DISALLOW_ROBOTS={{disallow_robots}}
+    volumes:
+      - /opt/app/system/certbot/conf/:/etc/nginx/ssl/:ro
+      - /opt/app/system/certbot/www/:/var/www/certbot/:ro
+      - /opt/app/configs/reverse_proxy/locations/:/etc/nginx/templates/locations/:ro
+      - /opt/app/configs/reverse_proxy/system/:/etc/nginx/system/:ro
+      - /opt/app/configs/reverse_proxy/extra-conf.d/:/etc/nginx/templates/extra-conf.d/:ro
+      - /opt/app/configs/reverse_proxy/owasp-crs/:/etc/modsecurity.d/owasp-crs/rules/:ro
+      - /opt/app/configs/reverse_proxy/extra-includes/:/etc/nginx/templates/extra-includes/:ro
+      - /opt/app/system/nginx/:/var/log/nginx/:rw
+
+networks:
+  website:
+    name: website
+    attachable: true
+    external: true
+    driver: overlay

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export BIN_DIR="$(dirname -- "$( readlink -f -- "$0"; )")"
+export ROOT_DIR="$(dirname "${BIN_DIR}")"
+export SCRIPT_DIR="$BIN_DIR/scripts"
+export INFRA_DIR="${ROOT_DIR}/infra"
+export TEMPLATES_DIR="${INFRA_DIR}/templates"
+export ANSIBLE_DIR="${INFRA_DIR}/ansible"
+export VAULT_DIR="${INFRA_DIR}/vault"
+export VAULT_FILE="${VAULT_DIR}/vault.yml"
+export VAULT_PASSWORD_FILE="${VAULT_DIR}/.vault-password.gpg"
+export HABILITATIONS_FILE="${ROOT_DIR}/infra/habilitations/habilitations.yml"
+
+source "${BIN_DIR}/product-meta.sh"
+source "${BIN_DIR}/commands.sh"
+
+################################################################################
+################################################################################
+# Main program                                                                 #
+################################################################################
+################################################################################
+
+readonly command=${1:-}
+if [ -z "$command" ]; then
+  Help
+fi;
+shift
+
+if [[ `command -v $command` != $command ]]; then
+  echo "Err: Command '$command' not found"
+  echo
+  Help
+fi;
+
+$command "$@"

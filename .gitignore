@@ -1,6 +1,10 @@
+.pnp.cjs
+.pnp.loader.mjs
+.yarn
+
+infra/vault/.vault-password.gpg
+infra/habilitations.yml
 node_modules
-.next
-.now
-.vercel
-.env.development.local
-.env*.local
+.bin/id_rsa_deploy.key
+
+.DS_Store
