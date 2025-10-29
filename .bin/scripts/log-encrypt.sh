@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly PASSPHRASE="${INFRA_DIR}/public_key.asc"
+readonly PUBLIC_KEY="${INFRA_DIR}/public_key.asc"
 
 touch /tmp/deploy.log
-gpg  -c --cipher-algo twofish --batch --passphrase-file "$PASSPHRASE" -o /tmp/deploy.log.gpg /tmp/deploy.log
+gpg  -e --batch --yes --recipient-file "$PUBLIC_KEY" -o /tmp/deploy.log.gpg /tmp/deploy.log
