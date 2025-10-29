@@ -35,6 +35,9 @@ on:
       VAULT_PASSWORD:
         description: Vault Password
         required: true
+      DEPLOYMENT_TOKEN:
+        description: Token used to specify deployment
+        required: true
 
 jobs:
   deploy:
@@ -69,6 +72,13 @@ jobs:
         if: always()
         env:
           ANSIBLE_VAULT_PASSWORD_FILE: .infra/.vault_pwd.txt
+      - name: Create Deployment
+        if: github.ref == 'refs/heads/master' && inputs.environment == 'production'
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
+          environment: production
+          ref: ${{ inputs.app_version }}
 
       - name: Upload logs artifacts
         if: always()
