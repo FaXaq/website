@@ -32,9 +32,6 @@ on:
       DEPLOY_PASS:
         description: SSH PWD TO DEPLOY
         required: true
-      SLACK_WEBHOOK:
-        description: Slack webhook URL
-        required: true
       VAULT_PWD:
         description: Vault Password
         required: true
@@ -44,15 +41,6 @@ jobs:
     name: Deploy ${{ inputs.app_version }} on ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - name: Notify new deployment on Slack
-        uses: ravsamhq/notify-slack-action@v2
-        if: always()
-        with:
-          status: ${{ job.status }}
-          notification_title: "Déploiement ${{ inputs.app_version }} en ${{ inputs.environment }} initié..."
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-
       - name: Checkout project
         uses: actions/checkout@v4
 
