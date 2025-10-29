@@ -26,13 +26,13 @@ on:
         required: false
         default: latest
     secrets:
-      DEPLOY_SSH_PRIVATE_KEY:
+      TECHNICAL_USER_PRIVATE_KEY:
         description: SSH private key
         required: true
-      DEPLOY_PASS:
-        description: SSH PWD TO DEPLOY
+      TECHNICAL_USER_PASSWORD:
+        description: SSH password
         required: true
-      VAULT_PWD:
+      VAULT_PASSWORD:
         description: Vault Password
         required: true
 
@@ -49,7 +49,7 @@ jobs:
         with:
           name: github_actions
           key: ${{ secrets.TECHNICAL_USER_PRIVATE_KEY }}
-          known_hosts: ${{ vars.SSH_KNOWN_HOSTS }}
+          known_hosts: ${{ vars.KNOWN_HOSTS }}
           config: |
             Host *
               IdentityFile ~/.ssh/github_actions
