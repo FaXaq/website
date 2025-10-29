@@ -10,7 +10,7 @@
     "./ui"
   ],
   "scripts": {
-    "setup:yarn": "corepack enable && corepack prepare",
+    "setup": "corepack enable && corepack prepare",
     "lint": "yarn workspace ui lint",
     "typecheck": "yarn workspace ui typecheck",
     "dev:ui": "yarn workspace ui dev",

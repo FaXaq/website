@@ -4,20 +4,20 @@ import { NextResponse } from 'next/server';
 import { S3_PATH_PREFIX } from '@/[locale]/projects/corsica/const';
 import { getServerConfig } from '@/lib/config';
 
-const config = getServerConfig();
-const s3Client = new S3Client({
-  region: config.s3.region,
-  endpoint: config.s3.endpoint,
-  credentials: {
-    accessKeyId: config.s3.accessKey,
-    secretAccessKey: config.s3.secretKey,
-  },
-});
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ path: string }> }
 ) {
+  const config = getServerConfig();
+  const s3Client = new S3Client({
+    region: config.s3.region,
+    endpoint: config.s3.endpoint,
+    credentials: {
+      accessKeyId: config.s3.accessKey,
+      secretAccessKey: config.s3.secretKey,
+    },
+  });
+
   try {
     const { path } = await params;
 

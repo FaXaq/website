@@ -55,7 +55,7 @@
   "scripts": {
     "dev": "NODE_ENV=development next dev --turbopack -p 1234",
     "build": "next build",
-    "build:production": "NODE_ENV=production next build --no-lint",
+    "build:ci": "next build --no-lint",
     "start": "next start",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx -c ./eslint.config.js .",
     "typecheck": "tsc --noEmit"
