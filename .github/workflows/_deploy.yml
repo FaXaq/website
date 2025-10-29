@@ -72,13 +72,25 @@ jobs:
         if: always()
         env:
           ANSIBLE_VAULT_PASSWORD_FILE: .infra/.vault_pwd.txt
+
+      - name: Resolve latest ref if needed
+        id: resolve-ref
+        run: |
+          if [ "${{ inputs.app_version }}" == "latest" ]; then
+            # Get the most recent tag matching v*.*.* pattern (excludes -rc, -beta, etc.)
+            RESOLVED_REF=$(git tag -l "v*.*.*" --sort=-version:refname | grep -v '-' | head -n 1)
+            echo "ref=$RESOLVED_REF" >> $GITHUB_OUTPUT
+          else
+            echo "ref=${{ inputs.app_version }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Deployment
         if: inputs.environment == 'production'
         uses: chrnorm/deployment-action@v2
         with:
           token: ${{ secrets.DEPLOYMENT_TOKEN }}
           environment: production
-          ref: ${{ inputs.app_version }}
+          ref: ${{ steps.resolve-ref.outputs.ref }}
           environment-url: https://norra.fr
 
       - name: Upload logs artifacts
