@@ -48,7 +48,7 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           name: github_actions
-          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.TECHNICAL_USER_PRIVATE_KEY }}
           known_hosts: ${{ vars.SSH_KNOWN_HOSTS }}
           config: |
             Host *

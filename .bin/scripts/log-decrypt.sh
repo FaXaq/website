@@ -16,17 +16,6 @@ else
     shift
 fi
 
-if [[ -z "${ANSIBLE_VAULT_PASSWORD_FILE:-}" ]]; then
-  ansible_extra_opts+=("--vault-password-file" "${SCRIPT_DIR}/vault-password-show.sh")
-else
-  echo "Récupération de la passphrase depuis l'environnement variable ANSIBLE_VAULT_PASSWORD_FILE" 
-fi
-
-delete_cleartext() {
-  rm -f "$PASSPHRASE"
-}
-trap delete_cleartext EXIT
-
 rm -f /tmp/deploy.log.gpg
 
 gh run download "$RUN_ID" -n "logs-$JOB_ID" -D /tmp
