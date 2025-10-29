@@ -79,6 +79,7 @@ jobs:
           token: ${{ secrets.DEPLOYMENT_TOKEN }}
           environment: production
           ref: ${{ inputs.app_version }}
+          environment-url: https://norra.fr
 
       - name: Upload logs artifacts
         if: always()
