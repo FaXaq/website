@@ -34,7 +34,7 @@ ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
 ARG PUBLIC_ENV
 ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
 
-RUN corepack yarn workspace ui build:production
+RUN corepack yarn workspace ui build:ci
 
 # Production image, copy all the files and run next
 FROM node:24-slim AS ui

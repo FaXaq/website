@@ -21,6 +21,20 @@ function Help() {
 
 function env:setup() {
     export VAULT_PASSWORD_SCRIPT="${SCRIPT_DIR}/vault-password-show.sh"
+    export ENV_NAME=${1:?"Merci de préciser un environnement (ex. recette ou production)"}; shift;
+    "${SCRIPT_DIR}/env-setup.sh" "$@"
+}
+
+function env:setup:local() {
+    export VAULT_PASSWORD_SCRIPT="${SCRIPT_DIR}/vault-password-show.sh"
+    export ENV_NAME="local"
+    "${SCRIPT_DIR}/env-setup.sh" "$@"
+}
+
+function env:setup:production() {
+    export VAULT_PASSWORD_SCRIPT="${SCRIPT_DIR}/vault-password-show.sh"
+    export ENV_NAME="production"
+    echo $ENV_NAME
     "${SCRIPT_DIR}/env-setup.sh" "$@"
 }
 
@@ -62,7 +76,7 @@ function infra:setup:initial() {
 
   case $response in
     [yY][eE][sS]|[yY]|"")
-      "$SCRIPT_DIR/get_technical_user_keyfile.sh"
+      "$SCRIPT_DIR/get-technical-user-keyfile.sh"
       export ANSIBLE_PRIVATE_KEY_FILE="$ROOT_DIR/.bin/id_rsa_deploy.key"
       export ANSIBLE_BECOME_PASS="-"
       infra:setup "$PRODUCT_NAME" "$ENV_NAME" "$@" --user ubuntu

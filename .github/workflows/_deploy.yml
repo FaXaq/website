@@ -26,17 +26,17 @@ on:
         required: false
         default: latest
     secrets:
-      DEPLOY_SSH_PRIVATE_KEY:
+      TECHNICAL_USER_PRIVATE_KEY:
         description: SSH private key
         required: true
-      DEPLOY_PASS:
-        description: SSH PWD TO DEPLOY
+      TECHNICAL_USER_PASSWORD:
+        description: SSH password
         required: true
-      SLACK_WEBHOOK:
-        description: Slack webhook URL
-        required: true
-      VAULT_PWD:
+      VAULT_PASSWORD:
         description: Vault Password
+        required: true
+      DEPLOYMENT_TOKEN:
+        description: Token used to specify deployment
         required: true
 
 jobs:
@@ -44,15 +44,6 @@ jobs:
     name: Deploy ${{ inputs.app_version }} on ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - name: Notify new deployment on Slack
-        uses: ravsamhq/notify-slack-action@v2
-        if: always()
-        with:
-          status: ${{ job.status }}
-          notification_title: "Déploiement ${{ inputs.app_version }} en ${{ inputs.environment }} initié..."
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-
       - name: Checkout project
         uses: actions/checkout@v4
 
@@ -60,17 +51,38 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           name: github_actions
-          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          known_hosts: ${{ vars.SSH_KNOWN_HOSTS }}
+          key: ${{ secrets.TECHNICAL_USER_PRIVATE_KEY }}
+          known_hosts: ${{ vars.KNOWN_HOSTS }}
           config: |
             Host *
               IdentityFile ~/.ssh/github_actions
+
+      - name: Resolve latest ref if needed
+        id: resolve-ref
+        run: |
+          if [ "${{ inputs.app_version }}" == "latest" ]; then
+            # Get the most recent tag matching v*.*.* pattern (excludes -rc, -beta, etc.)
+            RESOLVED_REF=$(git tag -l "v*.*.*" --sort=-version:refname | grep -v '-' | head -n 1)
+            echo "ref=$RESOLVED_REF" >> $GITHUB_OUTPUT
+          else
+            echo "ref=${{ inputs.app_version }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Deployment
+        if: inputs.environment == 'production'
+        id: create-deployment
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
+          environment: production
+          ref: ${{ steps.resolve-ref.outputs.ref }}
+          environment-url: https://norra.fr
 
       - name: Create vault pwd file
         run: echo ${{ secrets.VAULT_PASSWORD }} > infra/vault/.vault_pwd.txt
 
       - name: Run playbook
-        run: .bin/product deploy ${{ inputs.environment }} --extra-vars "app_version=${{ inputs.app_version }}"
+        run: .bin/product app:deploy ${{ inputs.environment }} --extra-vars "app_version=${{ inputs.app_version }}"
         env:
           ANSIBLE_VAULT_PASSWORD_FILE: infra/vault/.vault_pwd.txt
           ANSIBLE_REMOTE_USER: deploy
@@ -92,3 +104,20 @@ jobs:
       - name: Add Job summary
         if: always()
         run: echo 'You can get logs using `.bin/product deploy:log:decrypt ${{ github.run_id }} ${{ inputs.environment }}`' >> $GITHUB_STEP_SUMMARY
+
+      - name: Update Deployment Status
+        if: inputs.environment == 'production'
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
+          deployment-id: ${{ steps.create-deployment.outputs.deployment_id }}
+          state: success
+          environment-url: https://norra.fr
+
+      - name: Update Deployment Status on Failure
+        if: failure() && inputs.environment == 'production'
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
+          deployment-id: ${{ steps.create-deployment.outputs.deployment_id }}
+          state: failure

@@ -20,17 +20,11 @@ on:
         required: false
 
     secrets:
-      DEPLOY_SSH_PRIVATE_KEY:
-        description: SSH private key
+      REGISTRY_USER:
+        description: Docker registry user
         required: true
-      DEPLOY_PASS:
-        description: SSH PWD TO DEPLOY
-        required: true
-      SLACK_WEBHOOK:
-        description: Slack webhook URL
-        required: true
-      VAULT_PWD:
-        description: Vault Password
+      REGISTRY_TOKEN:
+        description: Docker registry token
         required: true
 
 jobs:
@@ -65,8 +59,11 @@ jobs:
           key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-
 
+      - name: Setup corepack
+        run: corepack enable && corepack prepare
+
       - name: Install dependencies
-        run: yarn install
+        run: yarn install && yarn ui:install
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2

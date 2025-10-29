@@ -65,23 +65,21 @@ const getConfig = (): Config => {
   }
 };
 
-const config = getConfig();
-
 export const getServerConfig = (): Config['server'] => {
   if (!isServer) {
     throw new Error("Server config can only be accessed on the server side.");
   }
-  return config.server;
+  return getConfig().server;
 };
 
 export const getClientConfig = (): Config['public'] => {
   if (!isClient) {
     throw new Error("Client config can only be accessed on the client side.");
   }
-  return config.public;
+  return getConfig().public;
 };
 
-export const isServerDev = isServer && config.server.nodeEnv === 'development';
-export const isClientDev = isClient && config.public.nodeEnv === 'development';
-export const clientConfig = isClient ? config.public : null;
-export const serverConfig = isServer ? config.server : null;
+export const isServerDev = () => isServer && getConfig().server.nodeEnv === 'development';
+export const isClientDev = () => isClient && getConfig().public.nodeEnv === 'development';
+export const clientConfig = () => isClient ? getConfig().public : null;
+export const serverConfig = () => isServer ? getConfig().server : null;
