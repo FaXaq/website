@@ -7,19 +7,19 @@ import { getServerConfig } from '@/lib/config';
 import { S3_PATH_PREFIX } from '../../const';
 import { getFilesFromRequest } from '../helpers/getFilesFromRequest';
 
-const config = getServerConfig();
-const s3Client = new S3Client({
-  region: config.s3.region,
-  endpoint: config.s3.endpoint,
-  credentials: {
-    accessKeyId: config.s3.accessKey,
-    secretAccessKey: config.s3.secretKey,
-  },
-});
-
 export async function POST(
   request: NextRequest
 ) {
+  const config = getServerConfig();
+  const s3Client = new S3Client({
+    region: config.s3.region,
+    endpoint: config.s3.endpoint,
+    credentials: {
+      accessKeyId: config.s3.accessKey,
+      secretAccessKey: config.s3.secretKey,
+    },
+  });
+
   try {
     const formData = await request.formData();
     const files = await getFilesFromRequest(formData);
