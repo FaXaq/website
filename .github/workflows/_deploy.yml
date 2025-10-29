@@ -73,7 +73,7 @@ jobs:
         env:
           ANSIBLE_VAULT_PASSWORD_FILE: .infra/.vault_pwd.txt
       - name: Create Deployment
-        if: github.ref == 'refs/heads/master' && inputs.environment == 'production'
+        if: inputs.environment == 'production'
         uses: chrnorm/deployment-action@v2
         with:
           token: ${{ secrets.DEPLOYMENT_TOKEN }}
