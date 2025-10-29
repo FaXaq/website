@@ -58,7 +58,7 @@ jobs:
         run: echo ${{ secrets.VAULT_PASSWORD }} > infra/vault/.vault_pwd.txt
 
       - name: Run playbook
-        run: .bin/product deploy ${{ inputs.environment }} --extra-vars "app_version=${{ inputs.app_version }}"
+        run: .bin/product app:deploy ${{ inputs.environment }} --extra-vars "app_version=${{ inputs.app_version }}"
         env:
           ANSIBLE_VAULT_PASSWORD_FILE: infra/vault/.vault_pwd.txt
           ANSIBLE_REMOTE_USER: deploy
