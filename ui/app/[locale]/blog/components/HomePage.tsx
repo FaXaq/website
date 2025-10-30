@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LuExternalLink, LuLink } from 'react-icons/lu';
+import { LuExternalLink } from 'react-icons/lu';
 
 import { Link } from '@/components/Link';
 
@@ -104,9 +104,9 @@ function BlogHomePage({ articles, tags }: BlogProps) {
             <HStack>
               <Heading as="h3">Links:</Heading>
               <List.Root variant="plain" display="flex" flexDir="row">
-                <List.Item>
+                {/* <List.Item>
                   <Link href="/blog/rss">RSS<LuLink /></Link>
-                </List.Item>
+                </List.Item> */}
                 <List.Item px={3}>/</List.Item>
                 <List.Item>
                   <Link href="https://github.com/faxaq/website">Code<LuExternalLink /></Link>
