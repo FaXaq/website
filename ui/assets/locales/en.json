@@ -475,31 +475,6 @@
             "title": "Scale builder",
             "description": "Build a scale from a root note",
             "link": "/projects/mtts/scale-builder"
-          },
-          {
-            "title": "(broken) Malo",
-            "description": "Hexagonal keys, linked to a multi-voices synth, allowing playing keys from a different perspective w/ tonejs.",
-            "link": "/projects/mtts/malo"
-          },
-          {
-            "title": "(broken) Interval Guesser",
-            "description": "Discover which interval is currently played on the page",
-            "link": "/projects/mtts/games/interval-guesser"
-          },
-          {
-            "title": "(broken) Tuner",
-            "description": "Get an accurate prediction of the note and frequency you're playing.",
-            "link": "/projects/mtts/tuner"
-          },
-          {
-            "title": "(broken) Metronome",
-            "description": "Get a metronome. Just a metronome, accurate to second cents.",
-            "link": "/projects/mtts/metronome"
-          },
-          {
-            "title": "(broken) Daw",
-            "description": "Digital Audio Workstation (early WIP) in react w/ tonejs",
-            "link": "/projects/mtts/daw"
           }
         ],
         "research": {

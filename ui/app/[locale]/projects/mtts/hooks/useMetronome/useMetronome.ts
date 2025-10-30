@@ -16,7 +16,6 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('new callabck');
     callbackRef.current = beatCallback;
   }, [beatCallback]);
 
