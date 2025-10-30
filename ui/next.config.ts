@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-const path = require('path');
+import withMDX from '@next/mdx';
+import type { NextConfig } from "next";
+import path from 'path';
 
-const withMDX = require('@next/mdx')();
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   // Configure `pageExtensions`` to include MDX files
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   webpack(config) {
@@ -23,4 +21,4 @@ const nextConfig = {
   output: "standalone",
 };
 
-module.exports = withMDX(nextConfig);
+module.exports = withMDX()(nextConfig);

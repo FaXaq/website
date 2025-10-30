@@ -1,5 +1,3 @@
-'use client';
-
 import { Button, Menu, Portal } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
@@ -12,11 +10,15 @@ interface LocaleContextType {
 export const LocaleContext = React.createContext<LocaleContextType>(undefined);
 
 function LocaleSelector () {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locales = i18n.languages;
 
   const { locale, setLocale } = React.useContext(LocaleContext);
   const remainingLocales = locales.filter((l) => l !== locale);
+
+  if (!locale) {
+    return;
+  }
 
   return (
     <Menu.Root>

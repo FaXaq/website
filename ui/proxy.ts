@@ -22,13 +22,15 @@ function getLocale(request: NextRequest) {
 }
 
 export const proxy: NextProxy = (request) => {
+  const PUBLIC_FILE = /\.(.*)$/;
+
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale) return;
+  if (pathnameHasLocale || PUBLIC_FILE.test(request.nextUrl.pathname)) return;
 
   // Redirect if there is no locale
   const locale = getLocale(request);
