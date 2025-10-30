@@ -11,13 +11,19 @@ function getLocale(request: NextRequest) {
   const locales = ['en'];
   const defaultLocale = 'en';
 
-  return match(languages, locales, defaultLocale);
+  try {
+    const localeMatch = match(languages, locales, defaultLocale);
+    if (localeMatch) return localeMatch;
+  } catch (e) {
+    console.warn("Couldn't match locale", languages, "going to default", defaultLocale);
+  }
+
+  return defaultLocale;
 }
 
 export const middleware: NextMiddleware = (request) => {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
-  console.log(request.headers.get('accept-language'));
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
