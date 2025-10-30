@@ -20,6 +20,18 @@ export async function POST(
     },
   });
 
+  const isLocalhost =
+    request.nextUrl.hostname === 'localhost' ||
+    request.nextUrl.hostname === '127.0.0.1' ||
+    request.nextUrl.hostname === '[::1]';
+
+  if (!isLocalhost) {
+    return NextResponse.json(
+      { error: 'Forbidden: Requests only allowed from localhost' },
+      { status: 403 }
+    );
+  }
+
   try {
     const formData = await request.formData();
     const files = await getFilesFromRequest(formData);

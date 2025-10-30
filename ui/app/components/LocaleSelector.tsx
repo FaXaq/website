@@ -1,6 +1,6 @@
 import { Button, Menu, Portal } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface LocaleContextType {
   locale: string;
@@ -15,8 +15,14 @@ function LocaleSelector () {
 
   const { locale, setLocale } = React.useContext(LocaleContext);
   const remainingLocales = locales.filter((l) => l !== locale);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  if (!locale) {
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // necessary to avoid mismatch between front & server upon local default selection
+  if (!isMounted) {
     return;
   }
 
