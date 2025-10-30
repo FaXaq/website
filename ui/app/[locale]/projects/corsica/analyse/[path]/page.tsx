@@ -58,6 +58,11 @@ export default function AnalyseFile() {
   ), []);
 
   return <Box w="full">
+    {
+      isLoading && (
+        <Skeleton w="full" h={100} />
+      )
+    }
     { analysis?.map && (
       <Box w="full">
         <Box>
