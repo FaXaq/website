@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { t } from "i18next";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useCustomFileContext } from "../context/CustomFileContext";
 import ElevationChart from "./components/ElevationChart";
@@ -23,9 +23,11 @@ const ANALYSE_URL = '/projects/corsica/api/analyse';
 export default function AnalyseFile() {
   const { path } = useParams();
   const { analysis, setAnalysis } = useCustomFileContext();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const address = analysis?.map?.reverseGeocodingSearchResult?.address;
 
   const fetchAndAnalyseExample = async (path: string) => {
+    setIsLoading(true);
     const analyseResponse = await fetch(`${FILES_URL}/${encodeURIComponent(path)}`);
     const fileData = await analyseResponse.blob();
 
@@ -38,6 +40,7 @@ export default function AnalyseFile() {
     });
 
     setAnalysis(await response.json());
+    setIsLoading(false);
   };
 
   useEffect(() => {
