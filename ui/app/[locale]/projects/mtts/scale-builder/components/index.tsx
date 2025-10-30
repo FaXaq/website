@@ -90,8 +90,8 @@ function BuildScale() {
          try {
            Interval.apply(rootNote, interval);
            intervals[intervalNumber].push(Interval.fromName(interval));
-         } catch (err) {
-           console.error("Error applying interval", err);
+         } catch (_e) {
+            // fails silently
          }
        });
      return intervals;
@@ -307,5 +307,7 @@ function BuildScale() {
 }
 
 export default function SuspendedBuildScale() {
-  return <Suspense><BuildScale /></Suspense>;
+  return <Suspense>
+    <BuildScale />
+  </Suspense>;
 }
