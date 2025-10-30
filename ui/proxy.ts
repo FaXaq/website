@@ -30,7 +30,7 @@ export const proxy: NextProxy = (request) => {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale || PUBLIC_FILE.test(request.nextUrl.pathname)) return;
+  if (pathnameHasLocale || PUBLIC_FILE.test(request.nextUrl.pathname)) return NextResponse.next();
 
   // Redirect if there is no locale
   const locale = getLocale(request);
