@@ -65,7 +65,7 @@ jobs:
             RESOLVED_REF=$(git tag -l "v*.*.*" --sort=-version:refname | grep -v '-' | head -n 1)
             echo "ref=$RESOLVED_REF" >> $GITHUB_OUTPUT
           else
-            echo "ref=${{ inputs.app_version }}" >> $GITHUB_OUTPUT
+            echo "ref=v${{ inputs.app_version }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Create Deployment
