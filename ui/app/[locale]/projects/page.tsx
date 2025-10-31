@@ -35,6 +35,14 @@ const Projects = () => {
           </HStack>
         </Link>
       </List.Item>
+      <List.Item>
+        <Link href="/projects/cooler" description={t('projects.cooler.description')}>
+          <HStack>
+            {t('projects.cooler.title')}
+            <LuArrowRight />
+          </HStack>
+        </Link>
+      </List.Item>
     </List.Root>
   </Container>;
 };

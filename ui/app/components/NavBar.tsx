@@ -5,6 +5,7 @@ import React from "react";
 import { LuHouse } from "react-icons/lu";
 
 import { Link } from "@/components/Link";
+import { isClient } from "@/lib/config";
 
 import { LocaleSelector } from "./LocaleSelector";
 import { ColorModeButton } from "./ui/color-mode";
@@ -26,10 +27,11 @@ export const NavBar = () => {
 
   locations.forEach((l, i) => {
     breadcrumbs.push({
-      label: l,
-      path: `/${locations.slice(0, i + 1).join("/")}`
+      label: decodeURI(l),
+      path: encodeURI(`/${locations.slice(0, i + 1).join("/")}`)
     });
   });
+
 
   return (
     <HStack p={2} style={{
@@ -50,7 +52,7 @@ export const NavBar = () => {
             {breadcrumbs.map((crumb, i) => (
               <React.Fragment key={crumb.label}>
                 <Breadcrumb.Item>
-                  <Breadcrumb.Link href={crumb.path}>
+                  <Breadcrumb.Link href={isClient ? encodeURI(crumb.path) : crumb.path}>
                     {_.capitalize(crumb.label).replaceAll("-", " ")}
                   </Breadcrumb.Link>
                 </Breadcrumb.Item>

@@ -461,6 +461,10 @@
     "corsica": {
       "title": "Corsica",
       "description": "Tool to merge and analyse GPX (XML path coordinates storage system)"
+    },
+    "cooler": {
+      "title": "Cooler",
+      "description": "Tool to present color matching based on Wada Sanzo | A Dictionary of Color Combinations and data from https://sanzo-wada.dmbk.io/"
     }
   },
   "mtts": {

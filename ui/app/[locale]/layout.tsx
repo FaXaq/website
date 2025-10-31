@@ -2,7 +2,7 @@
 
 import '../../i18n';
 
-import { Box } from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'next-i18next';
 import PlausibleProvider from 'next-plausible';
@@ -45,19 +45,23 @@ function AppLayout ({ children }: AppLayoutProps) {
         <PlausibleProvider domain="norra.fr" />
       </head>
       <body>
-        <LocaleContext.Provider
-          value={{
-            locale,
-            setLocale
-          }}
-        >
-          <Provider>
-            <Box bg="bg.subtle" h="100vh" width="100vw" overflow="auto">
-              <NavBar />
-              { children }
-            </Box>
-          </Provider>
-        </LocaleContext.Provider>
+          <LocaleContext.Provider
+            value={{
+              locale,
+              setLocale
+            }}
+          >
+            <Provider>
+              <VStack bg="bg.subtle" h="100vh" width="100vw" overflow="auto" gap={0}>
+                <Box w="full">
+                  <NavBar />
+                </Box>
+                <Box flexGrow={1} w="full" overflow="auto">
+                  { children }
+                </Box>
+              </VStack>
+            </Provider>
+          </LocaleContext.Provider>
       </body>
     </html>
   );
