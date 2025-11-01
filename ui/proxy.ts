@@ -22,14 +22,15 @@ function getLocale(request: NextRequest) {
 }
 
 export const proxy: NextProxy = (request) => {
-  console.log("going through proxy", request.nextUrl.pathname);
+  const PUBLIC_FILE = /.*\.(jpg|jpeg|png|gif|svg|ico|webp|woff|woff2|ttf|otf|eot)$/i;
+  const isPublicFile = PUBLIC_FILE.test(request.nextUrl.pathname);
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale) return;
+  if (pathnameHasLocale || isPublicFile) return NextResponse.next();
 
   // Redirect if there is no locale
   const locale = getLocale(request);
@@ -42,6 +43,6 @@ export const proxy: NextProxy = (request) => {
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    '/((?!_next).*)'
+    '/((?!_next).*)',
   ],
 };
