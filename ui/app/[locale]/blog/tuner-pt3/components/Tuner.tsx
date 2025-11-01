@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import TunerContainer from './TunerContainer';
@@ -15,7 +16,9 @@ export default function Tuner() {
     }
   }
 
-  return audioStream !== undefined
+  return <Box p={6} rounded="md" border="1px solid">{
+    audioStream !== undefined
     ? <TunerContainer audioStream={audioStream} />
-    : <button onClick={async () => requestMicAccess()}>Request mic access</button>;
+    : <Button onClick={async () => requestMicAccess()}>Request mic access</Button>
+  }</Box>;
 }

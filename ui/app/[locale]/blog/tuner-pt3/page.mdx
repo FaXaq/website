@@ -2,6 +2,7 @@ import BlogPostLayout from '../components/BlogPostLayout'
 import WorkingWasm from './components/WorkingWasm'
 import { Box, Table } from '@chakra-ui/react'
 import { CodeBlock } from '../components/CodeBlock'
+import Tuner from './components/Tuner';
 
 export const meta = {
   title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
@@ -496,6 +497,8 @@ We now redo the calculations by modifying the analyser initial FFT_SIZE with our
 </Box>
 
 We can see that there is a clear improvement ! We can safely use 4096 FFT_SIZE without our user noticing it. Is there any need for that ? I don't think so... but it was a worth it first project to play around WASM.
+
+<Tuner />
 
 The full source code of this article is available here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3)
 

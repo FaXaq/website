@@ -1,7 +1,8 @@
 'use client';
 
-import type { LinkProps } from '@chakra-ui/react';
-import { Blockquote,Code, Heading, Link as ChakraLink, List, Separator, Table, Text } from '@chakra-ui/react';
+import type { ImageProps, LinkProps } from '@chakra-ui/react';
+import { Blockquote,Code, Heading, Image as ChakraImage,Link as ChakraLink, List, Separator, Table, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 import NextLink from 'next/link';
 import { LuExternalLink } from 'react-icons/lu';
 
@@ -73,6 +74,10 @@ export const MDXTableColumnHeader = ({ children }: { children: React.ReactNode }
 
 export const MDXTableCell = ({ children }: { children: React.ReactNode }) => (
   <Table.Cell>{children}</Table.Cell>
+);
+
+export const MDXImg = (props: ImageProps) => (
+  <ChakraImage as={Image} {...props} />
 );
 
 interface MDXLinkProps extends LinkProps {
