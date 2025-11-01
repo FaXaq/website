@@ -22,17 +22,14 @@ function getLocale(request: NextRequest) {
 }
 
 export const proxy: NextProxy = (request) => {
-  const PUBLIC_FILE = /\.(.*)$/;
-  const API_PATH = /.*\/api\/.*$/;
-  const isFile = PUBLIC_FILE.test(request.nextUrl.pathname);
-  const isAPI = API_PATH.test(request.nextUrl.pathname);
+  console.log("going through proxy", request.nextUrl.pathname);
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale || (isFile && !isAPI)) return;
+  if (pathnameHasLocale) return;
 
   // Redirect if there is no locale
   const locale = getLocale(request);
