@@ -115,7 +115,7 @@ function release:manual() {
 }
 
 function release:candidate() {
-  "${SCRIPT_DIR}/release-manual.sh" "$@"
+  "${SCRIPT_DIR}/release-candidate.sh" "$@"
 }
 
 function deploy:log:decrypt() {
