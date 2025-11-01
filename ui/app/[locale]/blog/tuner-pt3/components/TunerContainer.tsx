@@ -89,7 +89,7 @@ const TunerContainer = ({ audioStream }: TunerContainerProps) => {
         const buffer = new Float32Array(analyser.fftSize);
         analyser.getFloatTimeDomainData(buffer);
         setGuessedFrequency(auto_correlate(buffer, analyser.context.sampleRate));
-      }, 500) as unknown as number;
+      }, 200) as unknown as number;
       setGuessingInterval(interval);
     }
   }
