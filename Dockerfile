@@ -63,16 +63,13 @@ RUN adduser --system --uid 1001 nextjs
 
 # cf. https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/standalone /app
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/static /app/.next
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/static /app/.next/static
 COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/public /app/public
+COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/public /app
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/next.config.ts /app/next.config.ts
 COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/package.json /app/package.json
-
-# Automatically leverage output traces to reduce image size 
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-# COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/static /app/.next/static
 
 USER nextjs
 
