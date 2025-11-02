@@ -4,9 +4,9 @@ import '../../i18n';
 
 import { Box, VStack } from '@chakra-ui/react';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslation } from 'next-i18next';
 import PlausibleProvider from 'next-plausible';
 import React, { Suspense, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { LocaleContext } from '@/components/LocaleSelector';
 import { NavBar } from '@/components/NavBar';
@@ -27,7 +27,6 @@ function AppLayout ({ children }: AppLayoutProps) {
       i18n.changeLanguage(urlLocale as string);
     }
   }, [i18n, urlLocale]);
-
 
   const [locale, setLocale] = useState<string>(urlLocale as string);
 

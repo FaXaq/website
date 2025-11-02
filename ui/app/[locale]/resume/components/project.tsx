@@ -2,8 +2,8 @@
 
 import { Heading, Link as ChakraLink, Text,VStack } from '@chakra-ui/react';
 import NextLink from "next/link";
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuExternalLink } from 'react-icons/lu';
 
 import type { TProject } from '../types';

@@ -2,8 +2,8 @@
 
 
 import type { Interval,Note } from 'mtts';
-import { useTranslation } from 'next-i18next';
 import React, { useMemo,useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getRandomEntity } from '@/utils/misc';
 

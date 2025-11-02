@@ -1,10 +1,10 @@
 'use client';
 
 import { Box, Button, Field, FileUpload, Float, Heading, HStack, Icon, Input, Span, Text, VStack } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import React, { useRef, useState } from 'react';
 import type { SubmitHandler} from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { LuUpload, LuX } from 'react-icons/lu';
 
 interface FormState {

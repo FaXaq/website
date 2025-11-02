@@ -1,8 +1,8 @@
 'use client';
 
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuMapPin } from 'react-icons/lu';
 
 function Header () {

@@ -1,8 +1,8 @@
 'use client';
 
 import { Container, Heading, List, Text } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { LuArrowRight, LuExternalLink } from 'react-icons/lu';
 
 import { Link } from '@/components/Link';

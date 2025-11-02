@@ -1,7 +1,7 @@
 'use client';
 
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { LEVELS } from '../const';
 import type { Level } from '../page';

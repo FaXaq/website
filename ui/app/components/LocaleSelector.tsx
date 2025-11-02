@@ -1,6 +1,6 @@
 import { Button, Menu, Portal } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface LocaleContextType {
   locale: string;

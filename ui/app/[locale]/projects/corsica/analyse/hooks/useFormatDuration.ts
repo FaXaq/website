@@ -1,5 +1,5 @@
 import type { Duration } from 'date-fns';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'react-i18next';
 
 export function useFormatDuration() {
   const { t } = useTranslation();
