@@ -64,10 +64,10 @@ function Metronome() {
       <Heading as="h1">
         <Trans>Metronome</Trans>
       </Heading>
-      <Card.Root fontFamily="mono">
+      <Card.Root fontFamily="mono" w="fit-content">
         <Card.Body>
           <VStack gap={4}>
-            <HStack gap={2}>
+            <HStack gap={2} flexWrap="wrap">
               <HStack gap={0}>
                 <Box w={100} textAlign="center" borderWidth="1px" borderColor="border.muted" borderRadius="md" p={2} bg="bg.emphasized">
                   <Heading as="h2" fontSize="xl">Tempo</Heading>
@@ -81,28 +81,28 @@ function Metronome() {
                 </VStack>
               </HStack>
               <Separator orientation="vertical" variant="solid" mr={2} ml={1} h="28" />
-              <VStack gap={2}>
-                <Heading as="h2" fontSize="xl"><Trans>Beats</Trans></Heading>
+              <VStack gap={2} alignSelf="start">
+                <Heading as="h2" fontSize="xl">
+                  <Trans>Beats</Trans>
+                </Heading>
                 <HStack w="full">
                   <Button onClick={() => setBeatNumber(beatNumber > 0 ? beatNumber - 1 : 0)} size="xs" variant="outline" bg={{ base: "bg.subtle", _hover: "bg.emphasized" }}>-</Button>
                   <Text fontSize="2xl">{beatNumber}</Text>
                   <Button onClick={() => setBeatNumber(beatNumber + 1)} size="xs" variant="outline" bg={{ base: "bg.subtle", _hover: "bg.emphasized" }}>+</Button>
                 </HStack>
               </VStack>
-              <Separator orientation="vertical" variant="solid" h="28" />
-              <Box h="full">
-                <Slider.Root value={[dbToPercent(db)]} size="sm" onValueChange={(d) => {
-                  setDb(percentToDb(d.value[0]));
-                }} onDoubleClick={() => setDb(0)} orientation="vertical" h="full">
-                  <Slider.Control>
-                    <Slider.Track>
-                      <Slider.Range />
-                    </Slider.Track>
-                    <Slider.Thumbs />
-                  </Slider.Control>
-                </Slider.Root>
-              </Box>
             </HStack>
+            <Separator w="full" />
+            <Slider.Root value={[dbToPercent(db)]} size="sm" onValueChange={(d) => {
+              setDb(percentToDb(d.value[0]));
+            }} onDoubleClick={() => setDb(0)} orientation="horizontal" w="full">
+              <Slider.Control>
+                <Slider.Track>
+                  <Slider.Range />
+                </Slider.Track>
+                <Slider.Thumbs />
+              </Slider.Control>
+            </Slider.Root>
             <Separator w="full" />
             <HStack flexWrap="wrap">
             {

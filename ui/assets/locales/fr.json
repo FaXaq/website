@@ -499,6 +499,11 @@
             "title": "Constructeur de gamme",
             "description": "Construit une game à partir d'une note via mtts",
             "link": "/projects/mtts/scale-builder"
+          },
+          {
+            "title": "Metronome",
+            "description": "Un metronome très simple basé sur ToneJS et les webworkers",
+            "link": "/projects/mtts/metronome"
           }
         ],
         "research": {

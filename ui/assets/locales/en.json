@@ -479,6 +479,11 @@
             "title": "Scale builder",
             "description": "Build a scale from a root note",
             "link": "/projects/mtts/scale-builder"
+          },
+          {
+            "title": "Metronome",
+            "description": "A simple metronome based on ToneJS and webworkers",
+            "link": "/projects/mtts/metronome"
           }
         ],
         "research": {
