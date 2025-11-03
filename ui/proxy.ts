@@ -32,6 +32,14 @@ export const proxy: NextProxy = (request) => {
 
   if (pathnameHasLocale || isPublicFile) return NextResponse.next();
 
+  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value || 'en';
+
+  if (cookieLocale && locales.includes(cookieLocale)) {
+    return NextResponse.redirect(
+      new URL(`/${cookieLocale}${request.nextUrl.pathname}${request.nextUrl.search}`, request.url)
+    );
+  }
+
   // Redirect if there is no locale
   const locale = getLocale(request);
   request.nextUrl.pathname = `/${locale}${pathname}`;

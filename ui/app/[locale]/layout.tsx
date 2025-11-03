@@ -22,13 +22,16 @@ function AppLayout ({ children }: AppLayoutProps) {
   const { locale: urlLocale } = useParams();
   const router = useRouter();
 
+  const [locale, setLocale] = useState<string>(urlLocale as string);
+
   useEffect(() => {
     if (locale && i18n.language !== locale) {
       i18n.changeLanguage(urlLocale as string);
+      document.cookie = `NEXT_LOCALE=${locale}; max-age=31536000; path=/`;
+
     }
   }, [i18n, urlLocale]);
 
-  const [locale, setLocale] = useState<string>(urlLocale as string);
 
   useEffect(() => {
     if (urlLocale && locale !== urlLocale) {
@@ -36,7 +39,7 @@ function AppLayout ({ children }: AppLayoutProps) {
       const newUrl = oldUrl.replace(`/${urlLocale}`, `/${locale}`);
       router.push(newUrl);
     }
-  }, [locale]);
+  }, [locale, urlLocale]);
 
   return (
     <html lang={i18n.language} suppressHydrationWarning>
