@@ -1,0 +1,1 @@
+pipenv run fastapi app/main.py

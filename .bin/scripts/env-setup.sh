@@ -20,3 +20,11 @@ ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
   -a "src=\"${INFRA_DIR}/.env_ui\" dest=\"${ROOT_DIR}/ui/.env\"" \
   --extra-vars "@${VAULT_FILE}" \
   --vault-password-file=<($VAULT_PASSWORD_SCRIPT)
+
+ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
+  --limit "${ENV_NAME}" \
+  -c local \
+  -m template \
+  -a "src=\"${INFRA_DIR}/.env_server\" dest=\"${ROOT_DIR}/server/.env\"" \
+  --extra-vars "@${VAULT_FILE}" \
+  --vault-password-file=<($VAULT_PASSWORD_SCRIPT)

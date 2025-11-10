@@ -2725,6 +2725,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.90.6":
+  version: 5.90.6
+  resolution: "@tanstack/query-core@npm:5.90.6"
+  checksum: 10c0/2523cd4d9bc4d9fc1a828b15923c44046004fb1c4322f8c211ff4c153914bc776a356a476f499127cfee3fc89b101ac64f93b352aa761bd349c3a8e0de33d792
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.90.6":
+  version: 5.90.6
+  resolution: "@tanstack/react-query@npm:5.90.6"
+  dependencies:
+    "@tanstack/query-core": "npm:5.90.6"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/0cde819c41d3f02dccc443786c3aeb6e0a6135365ef127dd8e5bb25d65837b0b12b011c6700c14df1f866a1d65d57a6f4a00abf2ddac31543d68b4963ca80d1a
+  languageName: node
+  linkType: hard
+
 "@turf/distance@npm:^6.5.0":
   version: 6.5.0
   resolution: "@turf/distance@npm:6.5.0"
@@ -10062,6 +10080,7 @@ __metadata:
     "@mdx-js/loader": "npm:^3.1.1"
     "@mdx-js/react": "npm:^3.1.1"
     "@next/mdx": "npm:^16.0.1"
+    "@tanstack/react-query": "npm:^5.90.6"
     "@turf/distance": "npm:^6.5.0"
     "@turf/helpers": "npm:^6.5.0"
     "@types/dom-mediacapture-record": "npm:^1.0.4"

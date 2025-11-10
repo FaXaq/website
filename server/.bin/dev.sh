@@ -1,0 +1,1 @@
+pipenv run fastapi dev app/main.py --port 4000

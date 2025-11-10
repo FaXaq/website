@@ -7,12 +7,14 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "./ui"
+    "./ui",
+    "./server"
   ],
   "scripts": {
     "setup": "corepack enable && corepack prepare",
     "lint": "yarn workspace ui lint",
     "typecheck": "yarn workspace ui typecheck",
+    "dev:server": "cd server && .bin/server.sh",
     "dev:ui": "yarn workspace ui dev",
     "ui:install": "yarn workspace ui install",
     "release": "semantic-release",

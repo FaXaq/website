@@ -5,24 +5,30 @@ const appConfigSchema = z.object({
   port: z.number().min(1).max(65535).default(3000),
 });
 
+const publicConfigSchema = appConfigSchema.extend({
+  apiUrl: z.url().min(1, 'NEXT_PUBLIC_API_URL is required'),
+  appUrl: z.url().min(1, 'NEXT_PUBLIC_APP_URL is required'),
+  serverUrl: z.url().min(1, 'NEXT_PUBLIC_SERVER_URL is required'),
+});
+
+const serverConfigSchema = appConfigSchema.extend({
+  s3: z.object({
+    secretKey: z.string().min(1, 'S3_SECRET_KEY is required'),
+    accessKey: z.string().min(1, 'S3_ACCESS_KEY is required'),
+    endpoint: z.url().min(1, 'S3_ENDPOINT is required'),
+    bucketName: z.string().min(1, 'S3_BUCKET_NAME is required'),
+    region: z.string().min(1, 'S3_REGION is required'),
+  }),
+  serverUrl: z.url().min(1, 'SERVER_URL is required')
+});
+
 // lib/config.ts
 const configSchema = z.object({
   // Public variables (accessible in browser)
-  public: appConfigSchema.extend({
-    apiUrl: z.url().default('http://localhost:3000/api'),
-    appUrl: z.url().default('http://localhost:3000'),
-  }),
+  public: publicConfigSchema,
 
   // Private variables (server-side only)
-  server: appConfigSchema.extend({
-    s3: z.object({
-      secretKey: z.string().min(1, 'S3_SECRET_KEY is required'),
-      accessKey: z.string().min(1, 'S3_ACCESS_KEY is required'),
-      endpoint: z.url().min(1, 'S3_ENDPOINT is required'),
-      bucketName: z.string().min(1, 'S3_BUCKET_NAME is required'),
-      region: z.string().min(1, 'S3_REGION is required'),
-    })
-  }),
+  server: serverConfigSchema
 
   // App settings
 });
@@ -33,13 +39,14 @@ type Config = z.infer<typeof configSchema>;
 export const isServer = typeof window === 'undefined';
 export const isClient = !isServer;
 
-const getConfig = (): Config => {
+export const getConfig = (): Config => {
   try {
     const config = configSchema.parse({
     // Public variables - prefixed with NEXT_PUBLIC_
       public: {
         apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
         appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+        serverUrl: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000',
         nodeEnv: process.env.NODE_ENV || 'development',
         port: parseInt(process.env.PORT || '3000', 10),
       },
@@ -53,6 +60,7 @@ const getConfig = (): Config => {
           bucketName: process.env.S3_BUCKET_NAME || '',
           region: process.env.S3_REGION || '',
         },
+        serverUrl: process.env.SERVER_URL || 'http://localhost:4000',
         // App settings
         nodeEnv: process.env.NODE_ENV || 'development',
         port: parseInt(process.env.PORT || '3000', 10),
@@ -66,17 +74,17 @@ const getConfig = (): Config => {
 };
 
 export const getServerConfig = (): Config['server'] => {
-  if (!isServer) {
-    throw new Error("Server config can only be accessed on the server side.");
-  }
   return getConfig().server;
 };
 
 export const getClientConfig = (): Config['public'] => {
-  if (!isClient) {
-    throw new Error("Client config can only be accessed on the client side.");
-  }
-  return getConfig().public;
+  return publicConfigSchema.parse({
+    apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
+    appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    serverUrl: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000',
+    nodeEnv: process.env.NODE_ENV || 'development',
+    port: parseInt(process.env.PORT || '3000', 10),
+  });
 };
 
 export const isServerDev = () => isServer && getConfig().server.nodeEnv === 'development';
