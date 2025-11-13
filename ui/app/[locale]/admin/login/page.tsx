@@ -18,7 +18,7 @@ import { toaster } from '@/components/ui/toaster';
 import { getClientConfig } from '@/lib/config';
 
 interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -33,12 +33,14 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
+      const params = new URLSearchParams();
+      Object.keys(credentials).forEach(k => params.append(k, credentials[k]));
       const response = await fetch(`${getClientConfig().serverUrl}/auth/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify(credentials),
+        body: params.toString()
       });
 
       if (!response.ok) {
@@ -81,7 +83,7 @@ export default function LoginPage() {
               <Input
                 type="email"
                 placeholder="Enter your email"
-                {...register('email', {
+                {...register('username', {
                   required: 'Email is required',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -89,7 +91,7 @@ export default function LoginPage() {
                   },
                 })}
               />
-              {errors.email && <Field.ErrorText>{errors.email.message}</Field.ErrorText>}
+              {errors.username && <Field.ErrorText>{errors.username.message}</Field.ErrorText>}
             </Field.Root>
             <Field.Root required>
               <Field.Label>Password</Field.Label>

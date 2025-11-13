@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, field_validator, EmailStr
 from typing import Annotated
 
-class CreateUser(BaseModel):
+class CreateUserRequest(BaseModel):
     username: Annotated[str, Field(min_length=4, max_length=25)]
     email: Annotated[EmailStr, Field(),]
     password: Annotated[str, Field(min_length=8)]
@@ -27,6 +27,7 @@ class CreateUser(BaseModel):
 class CreateUserResponse(BaseModel):
     username: str
     email: EmailStr
+    id: str
     
     class Config:
         from_attributes = True  #

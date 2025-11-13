@@ -1,9 +1,12 @@
+"use client";
+
 import { Breadcrumb, HStack, IconButton } from "@chakra-ui/react";
 import _ from "lodash";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { LuHouse } from "react-icons/lu";
 
+import { useAuthContext } from "@/[locale]/contexts/AuthContext";
 import { Link } from "@/components/Link";
 import { isClient } from "@/lib/config";
 
@@ -32,6 +35,7 @@ export const NavBar = () => {
     });
   });
 
+  const { isLoggedIn, user } = useAuthContext();
 
   return (
     <HStack p={2} style={{
@@ -65,6 +69,9 @@ export const NavBar = () => {
       )}
       </HStack>
       <HStack gap={2}>
+        { isLoggedIn && (
+          <Link href="/admin/me">{user!.email}</Link>
+        )}
         <LocaleSelector />
         <ColorModeButton />
       </HStack>

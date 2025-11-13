@@ -1,83 +1,39 @@
-'use client';
+import { cookies, headers } from 'next/headers';
+import React, { Suspense } from 'react';
 
-import '../../i18n';
-
-import { Box, VStack } from '@chakra-ui/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useParams, useRouter } from 'next/navigation';
-import PlausibleProvider from 'next-plausible';
-import React, { Suspense, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import { LocaleContext } from '@/components/LocaleSelector';
-import { NavBar } from '@/components/NavBar';
-import { Provider } from '@/components/ui/provider';
-
-import { AuthProvider } from './contexts/AuthContext';
+import type { Response } from '../../api.client';
+import { ApiClient } from '../../api.client';
+import { AppLayout } from './layout.client';
 
 interface AppLayoutProps {
   children: React.ReactNode
 }
 
+type User = Response<"get", "/users/me">;
 
-function AppLayout ({ children }: AppLayoutProps) {
-  const { i18n } = useTranslation();
-  const { locale: urlLocale } = useParams();
-  const router = useRouter();
+async function fetchUser(): Promise<User | undefined> {
+  const headersList = Object.fromEntries((await headers()).entries());
+  const cookieStore = await cookies();
+  const token = cookieStore.get('Bearer')?.value;
 
-  const [locale, setLocale] = useState<string>(urlLocale as string);
+  if (!token) return undefined;
 
-  useEffect(() => {
-    if (locale && i18n.language !== locale) {
-      i18n.changeLanguage(urlLocale as string);
-      document.cookie = `NEXT_LOCALE=${locale}; max-age=31536000; path=/`;
-
+  const { data } = await ApiClient.GET("/users/me", { headers: {
+      ...headersList,
+      Authorization: `Bearer ${token}`
     }
-  }, [i18n, urlLocale]);
+  });
+  return data;
+}
 
+async function ServerLayout ({ children }: AppLayoutProps) {
+  const user = await fetchUser();
 
-  useEffect(() => {
-    if (urlLocale && locale !== urlLocale) {
-      const oldUrl = location.pathname;
-      const newUrl = oldUrl.replace(`/${urlLocale}`, `/${locale}`);
-      router.push(newUrl);
-    }
-  }, [locale, urlLocale]);
-
-  const queryClient = new QueryClient();
-
-  return (
-    <html lang={i18n.language} suppressHydrationWarning>
-      <head>
-        <PlausibleProvider domain="norra.fr" />
-      </head>
-      <body>
-        <AuthProvider>
-          <QueryClientProvider client={queryClient}>
-            <LocaleContext.Provider
-              value={{
-                locale,
-                setLocale
-              }}
-            >
-              <Provider>
-                <VStack bg="bg.subtle" h="100vh" width="100vw" overflow="auto" gap={0}>
-                  <Box w="full">
-                    <NavBar />
-                  </Box>
-                  <Box flexGrow={1} w="full" overflow="auto">
-                    { children }
-                  </Box>
-                </VStack>
-              </Provider>
-            </LocaleContext.Provider>
-          </QueryClientProvider>
-        </AuthProvider>
-      </body>
-    </html>
-  );
+  return <AppLayout user={user}>
+    {children}
+  </AppLayout>;
 }
 
 export default function SuspendedAppLayout(props: AppLayoutProps) {
-  return <Suspense><AppLayout {...props} /></Suspense>;
+  return <Suspense><ServerLayout {...props} /></Suspense>;
 }

@@ -5,9 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import users, auth
-from starlette.middleware.authentication import AuthenticationMiddleware
-from app.middlewares.auth import JWTAuthBackend, on_auth_error
+from app.api import users, auth
 
 app = FastAPI()
 
@@ -21,12 +19,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 origins = [
     "*",
 ]
-
-app.add_middleware(
-    AuthenticationMiddleware, 
-    backend=JWTAuthBackend(),
-    on_error=on_auth_error
-)
 
 app.add_middleware(
     CORSMiddleware,

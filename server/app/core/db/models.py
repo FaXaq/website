@@ -3,6 +3,23 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import String, DateTime, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from uuid import uuid4
+from enum import Enum, EnumMeta
+class MetaEnum(EnumMeta):
+    def __contains__(cls, item):
+        try:
+            cls(item)
+        except ValueError:
+            return False
+        return True
+class BaseEnum(Enum, metaclass=MetaEnum):
+    pass
+class USER_SCOPE(str, BaseEnum):
+    admin = 'admin'
+    anonymous = 'anonymous'
+
+class TOKEN_TYPE(str, BaseEnum):
+    ACCESS = "access"
+    REFRESH = "refresh"
 
 class Base(DeclarativeBase):
     pass
@@ -21,6 +38,17 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"User(id={self.id}, username={self.username}, email={self.email})"
+    
+class BlacklistedToken(Base):
+    __tablename__ = "blacklisted_token"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, server_default=uuid4().hex)
+    token: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    type: Mapped[TOKEN_TYPE] = mapped_column(String, nullable=False)
+
+
+    def __repr__(self) -> str:
+        return f"User(id={self.id}, username={self.token}, email={self.type})"
     
 class Song(Base):
     __tablename__ = "song"
