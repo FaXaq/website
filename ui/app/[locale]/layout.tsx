@@ -1,6 +1,8 @@
 import { cookies, headers } from 'next/headers';
 import React, { Suspense } from 'react';
 
+import { ACCESS_TOKEN_COOKIE_KEY } from '@/const';
+
 import type { Response } from '../../api.client';
 import { ApiClient } from '../../api.client';
 import { AppLayout } from './layout.client';
@@ -14,7 +16,7 @@ type User = Response<"get", "/users/me">;
 async function fetchUser(): Promise<User | undefined> {
   const headersList = Object.fromEntries((await headers()).entries());
   const cookieStore = await cookies();
-  const token = cookieStore.get('Bearer')?.value;
+  const token = cookieStore.get(ACCESS_TOKEN_COOKIE_KEY)?.value;
 
   if (!token) return undefined;
 

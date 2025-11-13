@@ -29,6 +29,7 @@ router = APIRouter(
 @router.post("/login", response_model=LoginUserResponse)
 async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
     response = []
+    print(form_data)
     stmt = select(User).where(User.email == form_data.username)
     db_user = await db.scalar(stmt)
     
@@ -49,6 +50,7 @@ async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Async
         refresh_token=refresh_token,
         scopes=scopes
     )
+    print(response)
     return response
 
 @router.post("/logout")

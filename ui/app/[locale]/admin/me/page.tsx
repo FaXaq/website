@@ -16,8 +16,6 @@ const Me = () => {
     }
   }, []);
 
-  console.log(user);
-
   return <>
   <Text>
     { user?.email }

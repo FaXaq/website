@@ -15,7 +15,8 @@ import { useForm } from 'react-hook-form';
 
 import { useAuthContext } from '@/[locale]/contexts/AuthContext';
 import { toaster } from '@/components/ui/toaster';
-import { getClientConfig } from '@/lib/config';
+
+import { ApiClient } from '../../../../api.client';
 
 interface LoginCredentials {
   username: string;
@@ -32,22 +33,24 @@ export default function LoginPage() {
   const { login } = useAuthContext();
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: LoginCredentials) => {
-      const params = new URLSearchParams();
-      Object.keys(credentials).forEach(k => params.append(k, credentials[k]));
-      const response = await fetch(`${getClientConfig().serverUrl}/auth/login`, {
+    mutationFn: async ({ username, password }: LoginCredentials) => {
+      const response = await ApiClient.POST('/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: params.toString()
+        body: {
+          username,
+          password,
+          scope: '*'
+        }
       });
 
-      if (!response.ok) {
+      if (response.error) {
         throw new Error('Login failed');
       }
 
-      return response.json();
+      return response.data;
     },
     onSuccess: (data) => {
       toaster.create({

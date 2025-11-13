@@ -1,7 +1,7 @@
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from config import get_env_variable
-import jwt
+from jose import jwt, JWTError
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -41,7 +41,7 @@ def decode_token(token: str) -> JWTToken:
             }
         )
         return validated_token
-    except jwt.ExpiredSignatureError:
+    except JWTError:
         raise HTTPException(status_code=440, detail="Token expired")
     except ValidationError:
         raise HTTPException(401, detail="Token malformed")
@@ -74,7 +74,9 @@ async def get_current_user(security_scopes: SecurityScopes, token: str = Depends
         authenticate_value = "Bearer"
     headers={ "WWW-Authenticate": authenticate_value }
 
+    print(token)
     user = decode_token(token)
+    print(user)
     
     find_user_by_id = select(User).where(User.id == user.id)
     db_user = await db.scalar(find_user_by_id)

@@ -39,6 +39,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mtts/split": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Split Song */
+        post: operations["split_song_mtts_split_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/login": {
         parameters: {
             query?: never;
@@ -56,7 +73,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/refresh": {
+    "/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -65,8 +82,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Refresh Token */
-        post: operations["refresh_token_auth_refresh_post"];
+        /** Logout User */
+        post: operations["logout_user_auth_logout_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -118,8 +135,17 @@ export interface components {
              */
             client_secret?: string | null;
         };
-        /** CreateUser */
-        CreateUser: {
+        /** Body_split_song_mtts_split_post */
+        Body_split_song_mtts_split_post: {
+            /**
+             * File
+             * Format: binary
+             * @description A file read as UploadFile
+             */
+            file: string;
+        };
+        /** CreateUserRequest */
+        CreateUserRequest: {
             /** Username */
             username: string;
             /**
@@ -159,13 +185,6 @@ export interface components {
             /** Id */
             id: string;
         };
-        /** LoginUser */
-        LoginUser: {
-            /** Email */
-            email: string;
-            /** Password */
-            password: string;
-        };
         /** LoginUserResponse */
         LoginUserResponse: {
             /**
@@ -173,8 +192,10 @@ export interface components {
              * Format: email
              */
             email: string;
-            /** Token */
-            token: string;
+            /** Access Token */
+            access_token: string;
+            /** Refresh Token */
+            refresh_token: string;
             /** Scopes */
             scopes: string[];
         };
@@ -190,13 +211,13 @@ export interface components {
             /** Id */
             id: string;
             /** Scopes */
-            scopes: components["schemas"]["Scope"][];
+            scopes: components["schemas"]["USER_SCOPE"][];
         };
         /**
-         * Scope
+         * USER_SCOPE
          * @enum {string}
          */
-        Scope: "admin" | "anonymous";
+        USER_SCOPE: "admin" | "anonymous";
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -244,7 +265,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateUser"];
+                "application/json": components["schemas"]["CreateUserRequest"];
             };
         };
         responses: {
@@ -288,6 +309,39 @@ export interface operations {
             };
         };
     };
+    split_song_mtts_split_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_split_song_mtts_split_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     login_user_auth_login_post: {
         parameters: {
             query?: never;
@@ -321,18 +375,16 @@ export interface operations {
             };
         };
     };
-    refresh_token_auth_refresh_post: {
+    logout_user_auth_logout_post: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginUser"];
+            cookie?: {
+                refresh_token?: string | null;
             };
         };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -340,7 +392,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LoginUserResponse"];
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

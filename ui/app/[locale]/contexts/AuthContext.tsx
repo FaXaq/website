@@ -6,6 +6,10 @@ import type { ReactNode} from 'react';
 import { createContext, useContext, useState } from 'react';
 import z from 'zod';
 
+import { ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY, USER_LOCALSTORAGE_KEY } from '@/const';
+
+import type { Response } from '../../../api.client';
+
 export const StoredUserSchema = z.object({
   email: z.email(),
   scopes: z.array(z.string())
@@ -15,7 +19,7 @@ export const UserSchema = StoredUserSchema.extend({
   token: z.string()
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type User = Response<"post", "/auth/login">
 export type StoredUser = z.infer<typeof StoredUserSchema>;
 
 interface AuthContextType {
@@ -27,31 +31,32 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-export const USER_LOCALSTORAGE_KEY = 'u';
-export const BEARER_COOKIE_KEY = 'Bearer';
 
 export function AuthProvider({ auth, children }: { auth?: StoredUser, children: ReactNode }) {
   const [user, setUser] = useState<StoredUser | null>(auth ?? null);
   const router = useRouter();
 
   const login = (userData: User) => {
-    const { token, ...nonSensibleUserdata } = userData;
+    console.log(userData);
+    const { access_token, refresh_token, ...nonSensibleUserdata } = userData;
     setUser(nonSensibleUserdata);
     localStorage.setItem(USER_LOCALSTORAGE_KEY, JSON.stringify(nonSensibleUserdata));
-    Cookies.set(BEARER_COOKIE_KEY, token);
+    Cookies.set(ACCESS_TOKEN_COOKIE_KEY, access_token);
+    Cookies.set(REFRESH_TOKEN_COOKIE_KEY, refresh_token);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem(USER_LOCALSTORAGE_KEY);
-    Cookies.remove(BEARER_COOKIE_KEY);
+    Cookies.remove(ACCESS_TOKEN_COOKIE_KEY);
+    Cookies.remove(REFRESH_TOKEN_COOKIE_KEY);
     router.push("/");
   };
 
   const getBearer: () => string = () => {
-    const bearer = Cookies.get(BEARER_COOKIE_KEY);
+    const bearer = Cookies.get(ACCESS_TOKEN_COOKIE_KEY);
     if (!bearer) {
-      throw new Error('No Bearer in cookies');
+      throw new Error(`No ${ACCESS_TOKEN_COOKIE_KEY} in cookies`);
     }
     return bearer;
   };

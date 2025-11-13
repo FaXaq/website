@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import users, auth
+from app.api import users, auth, mtts
 
 app = FastAPI()
 
@@ -29,6 +29,7 @@ app.add_middleware(
 )
 
 app.include_router(users.router)
+app.include_router(mtts.router)
 app.include_router(auth.router)
 
 @app.get('/')
