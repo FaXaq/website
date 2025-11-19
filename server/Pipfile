@@ -17,6 +17,9 @@ pyjwt = "*"
 asyncpg = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 greenlet = "*"
+bs-roformer = "*"
+torch = "*"
+huggingface-hub = "*"
 
 [dev-packages]
 

@@ -35,7 +35,14 @@ export default function LoginPage() {
       const formData = new FormData();
       formData.append('file', file[0]);
       const response = await ApiClient.POST('/mtts/split', {
-        body: formData
+        body: {
+          file: file as unknown as string
+        },
+        bodySerializer: (body) => {
+          const formData = new FormData();
+          formData.set('file', body.file);
+          return formData;
+        }
       });
 
       if (response.error) {
