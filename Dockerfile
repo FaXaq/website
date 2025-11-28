@@ -2,23 +2,19 @@
 # https://github.com/vercel/next.js/issues/69150
 FROM node:24-alpine AS builder_root
 WORKDIR /app
-RUN corepack enable
+RUN corepack enable pnpm
 
-COPY package.json package.json
-
-#### UI
-COPY ui/.yarnrc.yml ui/.yarnrc.yml
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY ui/package.json ui/package.json
-COPY ui/yarn.lock ui/yarn.lock
 
-RUN corepack prepare
+RUN corepack use pnpm@10.22.0
 
-RUN --mount=type=cache,target=/app/.yarn/cache corepack yarn workspace ui install --immutable
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 
 FROM builder_root AS builder_ui
 WORKDIR /app
 COPY ./ui ./ui
-COPY ./ui/node_modules ./ui/node_modules
+COPY --from=builder_root /app/ui/node_modules /app/ui/node_modules
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -34,7 +30,7 @@ ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
 ARG PUBLIC_ENV
 ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
 
-RUN corepack yarn workspace ui build:ci
+RUN pnpm --filter ui build:ci
 
 # Production image, copy all the files and run next
 FROM node:24-slim AS ui

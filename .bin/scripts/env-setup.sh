@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Updating local ui/.env"
 
 case $ENV_NAME in
   production|local)
@@ -13,10 +12,20 @@ case $ENV_NAME in
     ;;
 esac
 
+echo "Updating local ui/.env"
+
 ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
   --limit "${ENV_NAME}" \
   -c local \
   -m template \
-  -a "src=\"${INFRA_DIR}/.env_ui\" dest=\"${ROOT_DIR}/ui/.env\"" \
+  -a "src=\"${INFRA_DIR}/.env_ui\" dest=\"${UI_DIR}/.env\"" \
+  --extra-vars "@${VAULT_FILE}" \
+  --vault-password-file=<($VAULT_PASSWORD_SCRIPT)
+
+ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
+  --limit "${ENV_NAME}" \
+  -c local \
+  -m template \
+  -a "src=\"${INFRA_DIR}/.env_server\" dest=\"${SERVER_DIR}/.env\"" \
   --extra-vars "@${VAULT_FILE}" \
   --vault-password-file=<($VAULT_PASSWORD_SCRIPT)

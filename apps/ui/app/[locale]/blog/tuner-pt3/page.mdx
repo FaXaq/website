@@ -1,0 +1,507 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+import WorkingWasm from './components/WorkingWasm'
+import { Box, Table } from '@chakra-ui/react'
+import { CodeBlock } from '../components/CodeBlock'
+import Tuner from './components/Tuner';
+
+export const meta = {
+  title: 'How to build a (guitar) tuner in Javascript ? - Part 3',
+  description: 'With no prior Digital Signal Processing knowledge',
+  creationDate: '11/16/2023',
+  tags: ['music theory', 'programming', 'javascript', 'browser', 'english', 'dsp', 'tuner', 'next', 'rust', 'wasm'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+[Part 1](/blog/tuner-pt1)
+
+[Part 2](/blog/tuner-pt2)
+
+We made it ! We have a tuner that works. But some operations may be costly. We'll measure those operations and see if delegating those to a Web Assembly binary can help us.
+
+As we used an FFT of 2048 we had 2048 samples to define our signal. But we may use more to gain accuracy.
+
+First, let's measure the calculation time or our function with different FFT_SIZE. FFT_SIZE comes in pow of 2, and the first size that may be relevant to us is 1024. This is where the tuner starts to work, up until the max FFT_SIZE supported : 32768.
+
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell>FFT_SIZE</Table.Cell>
+        <Table.Cell>Calculation time</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>1024</Table.Cell>
+        <Table.Cell>5ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>2048</Table.Cell>
+        <Table.Cell>22ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>4096</Table.Cell>
+        <Table.Cell>65ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>8192</Table.Cell>
+        <Table.Cell>163ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>16384</Table.Cell>
+        <Table.Cell>489ms</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>32768</Table.Cell>
+        <Table.Cell>1951ms</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
+
+## Creating a wasm package
+
+Let's extract our function and create a wasm package with it. We'll follow the instructions of [https://rustwasm.github.io/docs/book](https://rustwasm.github.io/docs/book) to install the required dependencies.
+
+Create a folder at the root of your project called `wasm`. Inside, run `wasm-pack new <my-package-name>`, it will create a rust lib. In my case, I have chosen to name it `auto-correlate`. `wasm-pack` will create use a boilerplate project to install all that is needed for us.
+
+You should have something that looks like that : 
+
+export const file1 = {
+code:`app/
+└── wasm/
+    └── auto-correlate/
+        ├── src/
+        │   ├── lib.rs
+        │   └── utils.rs
+        ├── tests/
+        ├── Cargo.toml
+        ├── LICENSE_APACHE
+        ├── LICENSE_MIT
+        ├── README.md
+        ├── .gitignore
+        ├── .github/
+        └── .travis.yml
+`,
+language: "text"
+}
+
+<CodeBlock file={file1} showLineNumbers={false} enableCopy={false} />
+
+`utils.rs` contains an utility to map Rust errors into our browser console. Let's modify what's inside `lib.rs` with one simple function to check if it works.
+
+export const file2 = {
+code:`
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file2} />
+
+Line per line here is what it does. First, we import `wasm_bindgen` to create bindings between javascript and rust.
+
+`#[wasm_bindgen]` used before a public function will create an export accessible from Javascript.
+
+The function itself is simple, it does take a string as a parameter and adds it into a the `{}` placeholder. If we pass it `Marin` for instance, it will return `Hello, Marin !`.
+
+Now, to build our rust create to a WebAssembly package we use `wasm-pack build --target web`. It creates a `pkg` folder containing several files.
+
+export const file3 = {
+code:`
+pkg/
+├── .gitignore
+├── auto_correlate_bg.js
+├── auto_correlate_bg.wasm
+├── auto_correlate_bg.wasm.d.ts
+├── auto_correlate.d.ts
+├── auto_correlate.js
+├── package.json
+└── README.md
+`,
+language: "text",
+}
+
+<CodeBlock file={file3} showLineNumbers={false} enableCopy={false}  />
+
+You already know what are `.gitignore`, `package.json` and `README.md` for. But let's have a look at the others.
+The files `*.d.ts` are the types of the javascript and wasm having the same name.
+
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >Filename</Table.Cell>
+        <Table.Cell >Description</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >*.d.ts</Table.Cell>
+        <Table.Cell >Those are the typescript types of the generated files.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate.js</Table.Cell>
+        <Table.Cell >This file creates a wrapper around the WebAssembly file. It allows, when imported to load the WASM file and access its exports seemlessly. To use it, import it like you would any other package, then call its default export, then you can access all named exports when you want.</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >auto_correlate_bg.wasm</Table.Cell>
+        <Table.Cell >This is the WebAssembly file. This is the binary that executes natively within the browser.</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
+
+To use our WASM file, we can add it to a small react component :
+
+export const file5 = {
+code:`
+'use client'
+
+import init, { greet } from '../../../wasm/auto-correlate/pkg/auto_correlate'
+import React, { useEffect, useState } from 'react'
+
+export default function WorkingWasm() {
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      await init()
+      setGreeting(greet('Marin'))
+    })()
+  }, [])
+
+  return <p>{greeting}</p>
+}
+`,
+language: "tsx",
+title: "components/WorkingWasm.tsx"
+}
+
+<CodeBlock file={file5}  />
+
+
+And here it is working in a component : 
+<Box rounded="sm" p={4} mt={2} border="1px solid">
+  <WorkingWasm />
+</Box>
+
+## Porting the autoCorrelate function to Rust
+
+Well it took me some time, but thanks to a few blog posts, a bit of AI and other pointer knowledge acquired in college, here is the port:
+
+export const file6 = {
+code:`
+use wasm_bindgen::prelude::*;
+use js_sys::*;
+extern crate console_error_panic_hook;
+
+#[path = "utils.rs"] mod utils;
+
+// Extract functions from javascript
+#[wasm_bindgen]
+extern "C" {
+    // console.log is polymorphic so we have to declare one for each type we need
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_usize(s: usize);
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_f64(s: f64);
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_f32(s: f32);
+}
+
+fn root_mean_square(vec: &Vec<f32>) -> f32 {
+  let total_sum: f32 = vec.iter().sum();
+  // casting is mandatory since rust only allows
+  // operations between variables of the same type
+  let vec_len: f32 = vec.len() as f32;
+  (total_sum / vec_len).sqrt()
+}
+
+fn apply_buffer_threshold(vec: &Vec<f32>) -> Vec<f32> {
+  let mut r1: usize = 0;
+  let mut r2: usize = vec.len() - 1;
+  let threshold: f32 = 0.2;
+
+  for i in 0..vec.len()/2 {
+    if vec[i].abs() < threshold {
+      r1 = i;
+      break;
+    }
+  }
+
+  for i in 1..vec.len()/2 {
+    let current_index:usize = vec.len() - i;
+    if vec[current_index].abs() < threshold {
+      r2 = current_index;
+      break;
+    }
+  }
+
+  // We need to create a new vector with the capacity required
+  // before copying the slice into it
+  let mut new_vec: Vec<f32> = Vec::with_capacity(r2 - r1);
+  new_vec.extend_from_slice(&vec[r1..r2]);
+  new_vec
+}
+
+#[wasm_bindgen]
+pub fn auto_correlate(buffer: &Float32Array, sample_rate: i32) -> f32 {
+  // This is to have rust errors showing up in console.
+  utils::set_panic_hook();
+  // Convert buffer to Vector
+  let vec: Vec<f32> = buffer.to_vec();
+  let rms: f32 = root_mean_square(&vec);
+
+  if rms < 0.01 {
+    -1 as f32
+  } else {
+    let new_buffer: Vec<f32> = apply_buffer_threshold(&vec);
+    // create a correlation_array with the same size as the new_buffer
+    let mut correlation_array: Vec<f32> = vec![0.0;new_buffer.len()];
+    
+    for i in 0..correlation_array.len() {
+      // Here is a tweak to speed up rust. Do not access vector every iteration
+      // create a variable and assign it at the vector index at the end
+      let mut sum: f32 = 0.0;
+      let item_correlation_len = correlation_array.len() - i;
+      for j in 0..item_correlation_len {
+        sum += new_buffer[j] * new_buffer[j+i];
+      }
+      correlation_array[i] = sum;
+    }
+
+    let mut d: usize = 0;
+
+    for i in 0..correlation_array.len()-1 {
+      if correlation_array[i] > correlation_array[i+1] {
+        d += 1;
+      } else {
+        break;
+      }
+    }
+
+    log_usize(d);
+
+    let mut max_val: f32 = -1.0;
+    let mut max_pos: usize = usize::MIN;
+
+    for i in d..new_buffer.len() {
+      if correlation_array[i] > max_val {
+        max_val = correlation_array[i];
+        max_pos = i;
+      }
+    }
+  
+    let y1: f32 = correlation_array[max_pos - 1];
+    let y2: f32 = correlation_array[max_pos];
+    let y3: f32 = correlation_array[max_pos + 1];
+
+    let a: f32 = (y1 + y3 - 2.0 * y2) / 2.0;
+    let b: f32 = (y3 - y1) / 2.0;
+    
+    let corrected_abscissa: f32 = max_pos as f32 - (b / (2.0 * a));
+
+    sample_rate as f32 / corrected_abscissa
+  }
+}
+
+#[wasm_bindgen]
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+`,
+language: "rust",
+title: "app/wasm/auto-correlate/src/lib.rs"
+}
+
+<CodeBlock file={file6}  />
+
+## Building it and running it with Next.js
+
+Inside the folder of our wasm project, run `wasm-pack build --target web` and that's it ! For it to be included in our deployments, we may have to modify the content of the `.gitignore` files. One at the root of our WASM project to keep the `pkg` directory. And one at the root of the `pkg` directory to ignore only the `README.md` file. The downside of this method is that binaries will be stored directly in the github repository. We could run a build on the deployment server but this is something I'd rather keep simple.
+
+Finally, we import the WASM file as we did before previously with our test function and safely replace the `autoCorrelate` function with its WASM clone `auto_correlate`. Obviously, do not forget to wait on init during component first render, in order to have access to the WASM : 
+
+export const file7 = {
+  code:`
+import { Note } from "@repo/mtts"
+import init, { auto_correlate } from '../../../wasm/auto-correlate/pkg';
+
+const AVERAGE_FLUCTUATION = 0.3
+
+const notes = [
+  Note.fromSPN('E2'),
+  Note.fromSPN('A2'),
+  Note.fromSPN('D3'),
+  Note.fromSPN('G3'),
+  Note.fromSPN('B3'),
+  Note.fromSPN('E4'),
+]
+
+function findClosestNote(searchedFrequency: number, notesInRange: Note[]): Note {
+  if (notesInRange.length <= 3) {
+    let noteFound = notesInRange[0]
+    let closest = Math.abs(searchedFrequency - noteFound.frequency)
+    for (let i = 1; i < notesInRange.length; i++) {
+      const frequencyDifference = Math.abs(searchedFrequency - notesInRange[i].frequency)
+      if (closest > frequencyDifference) {
+        noteFound = notesInRange[i]
+        closest = frequencyDifference
+      }
+    }
+    return noteFound
+  }
+
+  const secondHalf = notesInRange.slice(notesInRange.length / 2, notesInRange.length)
+
+  if (searchedFrequency < secondHalf[0].frequency) {
+    return findClosestNote(searchedFrequency, notesInRange.slice(0, (notesInRange.length / 2) + 1))
+  }
+
+  return  findClosestNote(searchedFrequency, notesInRange.slice((notesInRange.length / 2) - 1, notesInRange.length))
+}
+
+const TunerContainer = ({ audioStream }: TunerContainerProps) => {
+  const [analyser] = useAnalyser(audioStream, 2048)
+  const [guessedFrequency, setGuessedFrequency] = useState(-1)
+  const [guessedNote, setGuessedNote] = useState<Note>()
+  const [isLoadingWebAssembly, setIsLoadingWebAssembly] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (guessedFrequency > 0) {
+      setGuessedNote(findClosestNote(guessedFrequency, notes))
+    } else {
+      setGuessedNote(undefined)
+    }
+
+    return undefined
+  }, [setGuessedNote, guessedFrequency])
+
+  useEffect(() => {
+    (async () => {
+      setIsLoadingWebAssembly(true)
+      try {
+        await init()
+        setIsLoadingWebAssembly(false)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+  }, [])
+
+  function stop() {
+    clearInterval(guessingInterval)
+  }
+
+  function start() {
+    if (analyser) {
+      const interval = setInterval(() => {
+        const buffer = new Float32Array(analyser.fftSize)
+        analyser.getFloatTimeDomainData(buffer)
+        if (!isLoadingWebAssembly) {
+          setGuessedFrequency(autoCorrelate(buffer, analyser.context.sampleRate))
+          setGuessedFrequency(auto_correlate(buffer, analyser.context.sampleRate))
+        }
+      }, 500) as unknown as number
+      setGuessingInterval(interval)
+    }
+  }
+
+  const inTune = Math.abs(guessedFrequency - guessedNote?.frequency) < AVERAGE_FLUCTUATION
+  const sharp = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) > 0
+  const flat = Math.abs(guessedFrequency - guessedNote?.frequency) > AVERAGE_FLUCTUATION && (guessedFrequency - guessedNote?.frequency) < 0
+
+  <>
+    { inTune && <p>it's a flat...</p> }
+    <p>{guessedNote?.SPN}</p>
+    { inTune && <p>in tune !</p> }
+    { sharp && <p>...but it's sharp</p> }
+    { isLoadingWebAssembly && <p>(loading...)</p> }
+    { !isLoadingWebAssembly && (
+      <>
+        <button onClick={() => start()}>start</button>
+        <button onClick={() => stop()}>stop</button>
+      </>
+    )}
+  </>
+}
+`,
+language: "tsx",
+title: "components/TunerContainer.tsx"
+}
+
+<CodeBlock file={file7} addedLineNumbers={[1,53,54,55,56,57,58,59,60,61,62,63,64,76,92,93,94,97,98]} removedLineNumbers={[75]} />
+
+
+We now redo the calculations by modifying the analyser initial FFT_SIZE with our hook and __boom__ here are the results :
+
+<Box py={6}>
+  <Table.Root variant="outline">
+    <Table.Header>
+      <Table.Row>
+        <Table.Cell >FFT_SIZE</Table.Cell>
+        <Table.Cell >Calculation time (JS)</Table.Cell>
+        <Table.Cell >Calculation time (WASM)</Table.Cell>
+        <Table.Cell >Speed increase</Table.Cell>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell >1024</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >2ms</Table.Cell>
+        <Table.Cell >+250%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >2048</Table.Cell>
+        <Table.Cell >22ms</Table.Cell>
+        <Table.Cell >5ms</Table.Cell>
+        <Table.Cell >+440%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >4096</Table.Cell>
+        <Table.Cell >65ms</Table.Cell>
+        <Table.Cell >20ms</Table.Cell>
+        <Table.Cell >+325%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >8192</Table.Cell>
+        <Table.Cell >163ms</Table.Cell>
+        <Table.Cell >61ms</Table.Cell>
+        <Table.Cell >+267%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >16384</Table.Cell>
+        <Table.Cell >489ms</Table.Cell>
+        <Table.Cell >166ms</Table.Cell>
+        <Table.Cell >+294%</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell >32768</Table.Cell>
+        <Table.Cell >1951ms</Table.Cell>
+        <Table.Cell >532ms</Table.Cell>
+        <Table.Cell >+366%</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</Box>
+
+We can see that there is a clear improvement ! We can safely use 4096 FFT_SIZE without our user noticing it. Is there any need for that ? I don't think so... but it was a worth it first project to play around WASM.
+
+<Tuner />
+
+The full source code of this article is available here : [https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3](https://github.com/FaXaq/website/tree/master/app/blog/tuner-pt3)
+
+The full source code of the WASM bit is available here : [https://github.com/FaXaq/website/tree/master/wasm/auto-correlate](https://github.com/FaXaq/website/tree/master/wasm/auto-correlate)
+
+</BlogPostLayout>
