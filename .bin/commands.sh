@@ -39,7 +39,7 @@ function env:setup:production() {
 }
 
 function vault:edit() {
-    editor=${EDITOR:-'code -w'}
+    editor=${EDITOR:-'cursor -w'}
     export VAULT_PASSWORD_SCRIPT="${SCRIPT_DIR}/vault-password-show.sh"
     EDITOR=$editor "${SCRIPT_DIR}/vault-edit.sh" "$@"
 }

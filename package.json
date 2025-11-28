@@ -6,21 +6,20 @@
   "author": "Marin <marin.procureur@gmail.com>",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "./ui"
-  ],
   "scripts": {
-    "setup": "corepack enable && corepack prepare",
-    "lint": "yarn workspace ui lint",
-    "typecheck": "yarn workspace ui typecheck",
-    "dev:ui": "yarn workspace ui dev",
-    "ui:install": "yarn workspace ui install",
+    "setup": "corepack enable pnpm && corepack use pnpm@10.22.0",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types",
+    "dev": "turbo dev",
+    "build": "turbo build",
     "release": "semantic-release",
     "release:manual": ".bin/product release:manual",
-    "release:candidate": ".bin/product release:candidate"
+    "release:candidate": ".bin/product release:candidate",
+    "vault:edit": ".bin/product vault:edit"
   },
-  "packageManager": "yarn@4.10.3+sha512.c38cafb5c7bb273f3926d04e55e1d8c9dfa7d9c3ea1f36a4868fa028b9e5f72298f0b7f401ad5eb921749eb012eb1c3bb74bf7503df3ee43fd600d14a018266f",
+  "packageManager": "pnpm@10.22.0",
   "devDependencies": {
-    "semantic-release": "^25.0.1"
+    "semantic-release": "^25.0.1",
+    "turbo": "^2.6.1"
   }
 }

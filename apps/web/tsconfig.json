@@ -1,0 +1,32 @@
+{
+  "extends": "@repo/typescript-config/web.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "target": "ESNext",
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "vite/client",
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.mdx",
+    "./types.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../server/src/**/*",
+    "**/node_modules",
+  ]
+}

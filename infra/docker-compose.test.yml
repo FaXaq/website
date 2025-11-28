@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  server:
+    build:
+      context: .
+      target: server
+      dockerfile: Dockerfile
+    working_dir: /app/apps/server
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./apps/server/.env
+    volumes:
+      - ./apps/server:/app/apps/server
+      - ./packages:/app/packages
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
+    command: ["pnpm", "start"]
+    networks:
+      - website-network
+
+  web:
+    build:
+      context: .
+      target: web
+      dockerfile: Dockerfile
+    working_dir: /app/apps/web
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/web/.env
+    volumes:
+      - ./apps/web:/app/apps/web
+      - ./packages:/app/packages
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./pnpm-workspace.yaml:/app/pnpm-workspace.yaml
+    command: ["pnpm", "start"]
+    networks:
+      - website-network
+
+networks:
+  website-network:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+        - subnet: fd00:dead:beef::/80

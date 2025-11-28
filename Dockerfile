@@ -1,80 +1,68 @@
-# Temporary solution freeze NodeJs version https://github.com/vercel/next.js/discussions/69326
-# https://github.com/vercel/next.js/issues/69150
-FROM node:24-alpine AS builder_root
+FROM node:22-alpine AS base
+
+# Enable Corepack for pnpm
+RUN corepack enable && corepack prepare pnpm@10.22.0 --activate
+
 WORKDIR /app
-RUN corepack enable
 
-COPY package.json package.json
+# Build stage
+FROM base AS builder
 
-#### UI
-COPY ui/.yarnrc.yml ui/.yarnrc.yml
-COPY ui/package.json ui/package.json
-COPY ui/yarn.lock ui/yarn.lock
-
-RUN corepack prepare
-
-RUN --mount=type=cache,target=/app/.yarn/cache corepack yarn workspace ui install --immutable
-
-FROM builder_root AS builder_ui
-WORKDIR /app
-COPY ./ui ./ui
-COPY ./ui/node_modules ./ui/node_modules
-
-ENV NEXT_TELEMETRY_DISABLED=1
+# Copy source code
+COPY apps ./apps
+COPY packages ./packages
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 
 ARG PUBLIC_REPO_NAME
-ENV NEXT_PUBLIC_PRODUCT_REPO=$PUBLIC_REPO_NAME
+ENV VITE_PRODUCT_REPO=$PUBLIC_REPO_NAME
 
 ARG PUBLIC_PRODUCT_NAME
-ENV NEXT_PUBLIC_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
+ENV VITE_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
 
 ARG PUBLIC_VERSION
-ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
+ENV VITE_VERSION=$PUBLIC_VERSION
 
 ARG PUBLIC_ENV
-ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
+ENV VITE_ENV=$PUBLIC_ENV
 
-RUN corepack yarn workspace ui build:ci
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+RUN pnpm turbo build
 
-# Production image, copy all the files and run next
-FROM node:24-slim AS ui
+# Build packages that need building (if they have build scripts)
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ca-certificates curl && update-ca-certificates && apt-get clean
+FROM node:22-alpine AS server
 
-ENV NODE_ENV=PRODUCTION
-# Uncomment the following line in case you want to disable telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED=1
+RUN corepack enable && corepack prepare pnpm@10.22.0 --activate
 
-ARG PUBLIC_REPO_NAME
-ENV NEXT_PUBLIC_PRODUCT_REPO=$PUBLIC_REPO_NAME
+WORKDIR /app
 
-ARG PUBLIC_PRODUCT_NAME
-ENV NEXT_PUBLIC_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
+# Copy built application
+COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY --from=builder /app/apps/server/package.json ./apps/server/package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/server/node_modules ./apps/server/node_modules
 
-ARG PUBLIC_VERSION
-ENV NEXT_PUBLIC_VERSION=$PUBLIC_VERSION
+WORKDIR /app/apps/server
 
-ARG PUBLIC_ENV
-ENV NEXT_PUBLIC_ENV=$PUBLIC_ENV
+EXPOSE 4000
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+CMD ["pnpm", "start"]
 
-# cf. https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/standalone /app
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/.next/static /app/.next/static
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/public /app/public
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/public /app
+# Runtime stage
+FROM node:22-alpine AS web
 
-# You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/next.config.ts /app/next.config.ts
-COPY --from=builder_ui --chown=nextjs:nodejs /app/ui/package.json /app/package.json
+RUN corepack enable && corepack prepare pnpm@10.22.0 --activate
 
-USER nextjs
+WORKDIR /app
+
+# Copy built application
+COPY --from=builder /app/apps/web/.output ./apps/web/.output
+COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
+
+WORKDIR /app/apps/web
 
 EXPOSE 3000
 
-ENV PORT=3000
-
-CMD ["node", "/app/server.js"]
+CMD ["pnpm", "start"]
