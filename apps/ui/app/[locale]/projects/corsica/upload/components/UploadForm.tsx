@@ -58,14 +58,13 @@ export default function UploadForm() {
     for (const url of urls.urls) {
       const file = data.files.find(file => file.name === url.filename);
       if (file) {
-        const response = await fetch(url.uploadUrl, {
+        await fetch(url.uploadUrl, {
           method: 'PUT',
           body: file,
           headers: {
             contentType: 'application/octet-stream',
           }
         });
-        console.log(response);
       }
     }
   };

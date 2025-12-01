@@ -7,11 +7,13 @@ import type { SubmitHandler} from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { LuUpload, LuX } from 'react-icons/lu';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useTRPC } from '@/utils/trpc/client';
+import type { RouterInput, RouterOutput } from '@/utils/trpc/types';
 
 interface FormState {
-    files: Array<File>,
+    files: FileList,
     newName: string
 }
 
@@ -25,14 +27,9 @@ function downloadFile(name: string, blob: Blob) {
   URL.revokeObjectURL(href);
 }
 
-const INITIAL_FORM_STATE: FormState = {
-  files: [],
-  newName: ''
-};
-
 export default function Merge() {
   const { t } = useTranslation();
-  const clearFilesRef = useRef(undefined);
+  const clearFilesRef = useRef<VoidFunction | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const trpc = useTRPC();
   const {
@@ -41,44 +38,55 @@ export default function Merge() {
     formState: { errors },
     setValue
   } = useForm<FormState>();
-  const formRef = useRef<HTMLFormElement>(undefined);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-  const mergeGPXMutation = useMutation(trpc.corsica.mergeGpx.mutationOptions({}));
+  const mergeGPXMutation = useMutation<
+    RouterOutput['corsica']['mergeGpx'],
+    Error,
+    RouterInput['corsica']['mergeGpx']
+  >(trpc.corsica.mergeGpx.mutationOptions({}));
+  const generateS3SignedUrlsMutation = useMutation(trpc.corsica.generateS3SignedUrls.mutationOptions({}));
+  const deleteFilesMutation = useMutation(trpc.corsica.deleteFiles.mutationOptions({}));
 
-  const mergeGPX = async (data: FormState, analyse = false) => {
+  const mergeGPX = async (data: FormState) => {
     if (!formRef.current) return;
     setIsLoading(true);
-    const apiUrl = formRef.current.action;
-    const method = formRef.current.method;
-    console.log(data);
 
-    const body = new FormData();
-    for (const file of data.files) {
-      if (file !== undefined) {
-        body.append('files', file);
-      }
+    const files = Array.from(data.files).map(file => ({
+      id: `${uuidv4()}.gpx`,
+      name: file.name,
+      type: file.type,
+      file,
+    }));
+
+    const urls = await generateS3SignedUrlsMutation.mutateAsync({
+      files: files.map(file => ({ name: file.id, type: file.type })),
+      subPath: 'merge'
+    });
+
+    console.log("starting upload", urls);
+    for (const url of urls.urls) {
+      await fetch(url.uploadUrl, {
+        method: 'PUT',
+        body: files.find(file => file.id === url.filename)?.file ?? null,
+      });
     }
-    console.log(new FormData(formRef.current));
-    mergeGPXMutation.mutateAsync(body);
+    console.log("upload finished");
 
-    // Frustrating but we have to not set manualy the Content-Type of the request
-    // Because the boundary of form-data has to be set by the web browser itself
-    // const response = await fetch(apiUrl, {
-    //   method,
-    //   body
-    // });
+    console.log("starting merge");
+    const { url } = await mergeGPXMutation.mutateAsync({
+      newName: data.newName, files: files.map(file => ({ id: file.id }))
+    });
+    console.log("merge finished", url);
 
-    // const sanitizedFileName = data.newName
-    //   .replace(/[^a-zA-Z0-9 ]/g, '')
-    //   .replace(/\s+/g, ' ')
-    //   .replace(/\s/g, '_')
-    //   .toLocaleLowerCase();
+    const res = await fetch(url);
+    const blob = await res.blob();
+    downloadFile(`${data.newName}.gpx`, blob);
 
-    // downloadFile(`${sanitizedFileName}.gpx`, await response.blob());
-    // formRef.current.reset();
-    // setValue("files", []);
-    // clearFilesRef.current();
-    // setIsLoading(false);
+    await deleteFilesMutation.mutateAsync({
+      files: [...files.map(file => ({ name: file.id })), { name: `${data.newName}.gpx` }],
+      subPath: 'merge'
+    });
   };
 
   const onSubmit: SubmitHandler<FormState> = async (data) => mergeGPX(data);

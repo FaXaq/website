@@ -1,14 +1,14 @@
 import { loggedInProcedure } from "../../procedures";
 import { t } from "../../trpc";
-import { GenerateS3SignedUrlsInput, GenerateS3SignedUrlsOutput, MergeGpxInput } from "@repo/schemas/api/procedures/corsica";
+import { DeleteFilesInput, DeleteFilesOutput, GenerateS3SignedUrlsInput, GenerateS3SignedUrlsOutput } from "@repo/schemas/api/procedures/corsica";
 import { TRPCError } from "@trpc/server";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { config } from "../../config";
 import { logger } from "../../logger";
-import { S3_PATH_PREFIX } from "./helpers/consts";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import z from "zod";
-import { Multipart } from "@fastify/multipart";
+import { generateS3Key } from "./utils/generateS3Key";
+import { mergeGpxProcedure } from "./procedures/mergeGpx";
+import { analyseGPXProcedure } from "./procedures/analyseGpx";
 
 export const corsicaRouter = t.router({
   generateS3SignedUrls: loggedInProcedure
@@ -26,9 +26,10 @@ export const corsicaRouter = t.router({
         });
 
         const urlPromises = input.files.map(async (file) => {
+          const key = generateS3Key(file.name, input.subPath);
           const command = new PutObjectCommand({
             Bucket: config.S3_BUCKET_NAME,
-            Key: `${S3_PATH_PREFIX}${file.name}`,
+            Key: key,
             ContentType: file.type,
           });
           // @ts-expect-error version mismatch between @aws-sdk/client-s3 and @aws-sdk/s3-request-presigner
@@ -43,39 +44,35 @@ export const corsicaRouter = t.router({
     }
   }),
 
-  mergeGpx: loggedInProcedure
-    .use(async ({ ctx, next, input }) => {
-      if (!ctx.req.isMultipart()) {
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Request must be multipart' });
+  deleteFiles: loggedInProcedure
+    .input(DeleteFilesInput)
+    .output(DeleteFilesOutput)
+    .mutation(async ({ input }) => {
+      try {
+        const s3Client = new S3Client({
+          region: config.S3_REGION,
+          endpoint: config.S3_ENDPOINT,
+          credentials: {
+            accessKeyId: config.S3_ACCESS_KEY,
+            secretAccessKey: config.S3_SECRET_KEY,
+          },
+        });
+
+        await Promise.all(input.files.map(async (file) => {
+          const key = generateS3Key(file.name, input.subPath);
+          const command = new DeleteObjectCommand({
+            Bucket: config.S3_BUCKET_NAME,
+            Key: key,
+          });
+          await s3Client.send(command);
+        }))
+      } catch (error) {
+        logger.error(error, 'Error deleting files');
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to delete files' });
       }
 
-      console.log(input);
-      const formData = new FormData();
-
-      for await (const part of ctx.req.parts()) {
-        console.log(part.fields)
-        if (part.type === 'file') {
-          const buff = await part.toBuffer()
-          const file = new File([buff], part.filename, { type: part.type });
-          formData.append(part.fieldname, file);
-        } else {
-          const field = part.fieldname;
-          const value = part.value;
-          formData.append(field, value);
-        }
-      }
-
-
-      return next({
-        input: {
-          formData: formData
-        }
-      })
-    })
-    .mutation(async ({ ctx, input }) => {
-      console.log(input);
-      
-      // TODO: process your 'parts' as needed
-      return { };
-    })
+      return { message: 'Files deleted successfully' };
+    }),
+  mergeGpx: mergeGpxProcedure,
+  analyseGPX: analyseGPXProcedure,
 })

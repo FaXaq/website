@@ -1,6 +1,4 @@
-import { Context } from "../context";
-import { publicProcedure, t } from "../trpc"
-
+import { publicProcedure } from "../trpc"
 
 import { TRPCError } from "@trpc/server";
 

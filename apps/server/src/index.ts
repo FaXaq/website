@@ -11,9 +11,6 @@ import { config } from './config';
 import fastifyCors from "@fastify/cors";
 import { setupBetterAuth } from './auth/better-auth';
 import { AppRouter } from './router/client';
-import fastifyMultipart from '@fastify/multipart';
-
-
 
 const buildServer = () => {
   const server = Fastify({
@@ -32,18 +29,13 @@ const buildServer = () => {
     maxAge: 86400
   });
 
-  server.register(fastifyMultipart, {
-    limits: {
-      fileSize: 1024 * 1024 * 50, // 50MB
-    }
-  })
-  
   server.register(fastifyTRPCPlugin, {
     prefix: '/trpc',
     trpcOptions: {
       router: appRouter,
       createContext,
       onError({ path, error }) {
+        console.error(error.cause);
         // report to error monitoring
         console.error(`Error in tRPC handler on path '${path}':`, error);
       }
