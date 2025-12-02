@@ -1,1 +1,0 @@
-export * as corsica from "./corsica"

@@ -1,11 +1,11 @@
 import { Box } from '@chakra-ui/react';
+import type { Analysis, ChartData } from '@repo/schemas/api/procedures/corsica';
 import React, { useMemo } from 'react';
 import { } from 'react-leaflet';
 import { Area, AreaChart, CartesianGrid, Customized, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { theme } from '@/components/ui/theme';
 
-import type { Analysis, ChartData } from '../../types';
 import ActiveVerticalChartLine from './ActiveVerticalChartLine';
 
 interface ElevationChartProps {
@@ -17,7 +17,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
     if (analysis) {
       return analysis.points.map((variation, index) => ({
         value: Math.round(variation.ele),
-        label: analysis.distance.distanceVariations[index],
+        label: analysis.distance.distanceVariations[index] ?? 0,
         index
       }));
     }
@@ -25,7 +25,7 @@ export default function ElevationChart({ analysis }: ElevationChartProps) {
     return [];
   }, [analysis]);
 
-  const tickFormatter = (value) => Math.round(parseFloat(value) / 1000).toString();
+  const tickFormatter = (value: string) => Math.round(parseFloat(value) / 1000).toString();
 
   return (
     <Box w="100%" h="100%">

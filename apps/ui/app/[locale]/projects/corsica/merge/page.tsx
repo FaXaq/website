@@ -2,7 +2,7 @@
 
 import { Box, Button, Field, FileUpload, Float, Heading, HStack, Icon, Input, Span, Text, VStack } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import type { SubmitHandler} from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,6 @@ import { LuUpload, LuX } from 'react-icons/lu';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useTRPC } from '@/utils/trpc/client';
-import type { RouterInput, RouterOutput } from '@/utils/trpc/types';
 
 interface FormState {
     files: FileList,
@@ -30,27 +29,20 @@ function downloadFile(name: string, blob: Blob) {
 export default function Merge() {
   const { t } = useTranslation();
   const clearFilesRef = useRef<VoidFunction | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const trpc = useTRPC();
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setValue
+    formState: { errors, isSubmitting },
   } = useForm<FormState>();
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  const mergeGPXMutation = useMutation<
-    RouterOutput['corsica']['mergeGpx'],
-    Error,
-    RouterInput['corsica']['mergeGpx']
-  >(trpc.corsica.mergeGpx.mutationOptions({}));
+  const mergeGPXMutation = useMutation(trpc.corsica.mergeGpx.mutationOptions({}));
   const generateS3SignedUrlsMutation = useMutation(trpc.corsica.generateS3SignedUrls.mutationOptions({}));
   const deleteFilesMutation = useMutation(trpc.corsica.deleteFiles.mutationOptions({}));
 
   const mergeGPX = async (data: FormState) => {
     if (!formRef.current) return;
-    setIsLoading(true);
 
     const files = Array.from(data.files).map(file => ({
       id: `${uuidv4()}.gpx`,
@@ -61,23 +53,20 @@ export default function Merge() {
 
     const urls = await generateS3SignedUrlsMutation.mutateAsync({
       files: files.map(file => ({ name: file.id, type: file.type })),
-      subPath: 'merge'
+      scope: 'merge'
     });
 
-    console.log("starting upload", urls);
+
     for (const url of urls.urls) {
       await fetch(url.uploadUrl, {
         method: 'PUT',
         body: files.find(file => file.id === url.filename)?.file ?? null,
       });
     }
-    console.log("upload finished");
 
-    console.log("starting merge");
     const { url } = await mergeGPXMutation.mutateAsync({
       newName: data.newName, files: files.map(file => ({ id: file.id }))
     });
-    console.log("merge finished", url);
 
     const res = await fetch(url);
     const blob = await res.blob();
@@ -85,7 +74,7 @@ export default function Merge() {
 
     await deleteFilesMutation.mutateAsync({
       files: [...files.map(file => ({ name: file.id })), { name: `${data.newName}.gpx` }],
-      subPath: 'merge'
+      scope: 'merge'
     });
   };
 
@@ -142,7 +131,7 @@ export default function Merge() {
         </FileUpload.Root>
       </VStack>
       <HStack gap={2}>
-        <Button type="submit">{t('corsica.pages.merge.submitLabel')}</Button>
+        <Button type="submit" loading={isSubmitting}>{t('corsica.pages.merge.submitLabel')}</Button>
       </HStack>
     </form>
   );

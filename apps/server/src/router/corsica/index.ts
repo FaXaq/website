@@ -1,14 +1,14 @@
 import { loggedInProcedure } from "../../procedures";
-import { t } from "../../trpc";
-import { DeleteFilesInput, DeleteFilesOutput, GenerateS3SignedUrlsInput, GenerateS3SignedUrlsOutput } from "@repo/schemas/api/procedures/corsica";
+import { publicProcedure, t } from "../../trpc";
+import { DeleteFilesInput, DeleteFilesOutput, GenerateS3SignedUrlsInput, GenerateS3SignedUrlsOutput, GetExamplesOutput } from "@repo/schemas/api/procedures/corsica";
 import { TRPCError } from "@trpc/server";
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { config } from "../../config";
 import { logger } from "../../logger";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { generateS3Key } from "./utils/generateS3Key";
 import { mergeGpxProcedure } from "./procedures/mergeGpx";
 import { analyseGPXProcedure } from "./procedures/analyseGpx";
+import { addS3PathPrefix, ANALYSE_EXAMPLES_PREFIX, generateS3Key, removeExamplesPrefix, removeS3PathPrefix } from "./utils/prefix";
 
 export const corsicaRouter = t.router({
   generateS3SignedUrls: loggedInProcedure
@@ -26,7 +26,7 @@ export const corsicaRouter = t.router({
         });
 
         const urlPromises = input.files.map(async (file) => {
-          const key = generateS3Key(file.name, input.subPath);
+          const key = generateS3Key(file.name, input.scope);
           const command = new PutObjectCommand({
             Bucket: config.S3_BUCKET_NAME,
             Key: key,
@@ -59,7 +59,7 @@ export const corsicaRouter = t.router({
         });
 
         await Promise.all(input.files.map(async (file) => {
-          const key = generateS3Key(file.name, input.subPath);
+          const key = generateS3Key(file.name, input.scope);
           const command = new DeleteObjectCommand({
             Bucket: config.S3_BUCKET_NAME,
             Key: key,
@@ -75,4 +75,29 @@ export const corsicaRouter = t.router({
     }),
   mergeGpx: mergeGpxProcedure,
   analyseGPX: analyseGPXProcedure,
+
+  getExamples: publicProcedure
+  .output(GetExamplesOutput)
+  .query(async () => {
+    const s3Client = new S3Client({
+      region: config.S3_REGION,
+      endpoint: config.S3_ENDPOINT,
+      credentials: {
+        accessKeyId: config.S3_ACCESS_KEY,
+        secretAccessKey: config.S3_SECRET_KEY,
+      },
+    });
+
+    const command = new ListObjectsV2Command({
+      Bucket: config.S3_BUCKET_NAME,
+      Prefix: addS3PathPrefix(ANALYSE_EXAMPLES_PREFIX),
+    });
+
+    const response = await s3Client.send(command);
+
+    return response.Contents?.map((item) => ({
+      key: removeS3PathPrefix(removeExamplesPrefix(item.Key || '')),
+      size: item.Size || 0,
+    })) || [];
+  }),
 })

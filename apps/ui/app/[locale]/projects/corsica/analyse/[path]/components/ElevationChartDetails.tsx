@@ -1,10 +1,10 @@
 import { Card, Text } from '@chakra-ui/react';
+import type { Analysis } from '@repo/schemas/api/procedures/corsica';
 import { intervalToDuration } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormatDuration } from '../../hooks/useFormatDuration';
-import type { Analysis } from '../../types';
 import { useActiveChartPoint } from '../context/ActiveChartPoint';
 
 interface ElevationChartDetailsProps {
@@ -19,16 +19,16 @@ export default function ElevationChartDetails({ analysis }: ElevationChartDetail
   return <Card.Root bg="gray.subtle" shadow="sm">
     <Card.Body>
       <Text>
-        {t('corsica.pages.analyse.kilometers', { value: activePoint.index > -1 ? Math.round(analysis.distance.distanceVariations[activePoint.index] / 100) / 10 : '-' })}
+        {t('corsica.pages.analyse.kilometers', { value: activePoint.index > -1 ? Math.round(analysis.distance.distanceVariations[activePoint.index] ?? 0 / 100) / 10 : '-' })}
       </Text>
       <Text>
-        {(activePoint.index > -1 && analysis.time) ? formatDuration(intervalToDuration({ start: 0, end: analysis.time.movingTimeVariations[activePoint.index] })) : '-:-:-'}
+        {(activePoint.index > -1 && analysis.time) ? formatDuration(intervalToDuration({ start: 0, end: analysis.time.movingTimeVariations[activePoint.index] ?? 0 })) : '-:-:-'}
       </Text>
       <Text>
-        {t('corsica.pages.analyse.meters', { value: activePoint.index > -1 ? analysis.points[activePoint.index].ele : '-' })}
+        {t('corsica.pages.analyse.meters', { value: activePoint.index > -1 ? analysis.points[activePoint.index]?.ele ?? 0 : '-' })}
       </Text>
       <Text>
-        {activePoint.index > -1 ? `${Math.round(analysis.elevation.elevationVariations[activePoint.index].gradient * 10000) / 10}%` : '- %'}
+        {activePoint.index > -1 ? `${Math.round(analysis.elevation.elevationVariations[activePoint.index]?.gradient ?? 0 * 10000) / 10}%` : '- %'}
       </Text>
     </Card.Body>
   </Card.Root>;

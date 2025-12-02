@@ -1,7 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 
-import type { GPXJson } from '@repo/schemas/types/corsica';
 import { XML_ATTRIBUTE_PREFIX } from './consts';
+import { GPXJson } from '@repo/schemas/api/procedures/corsica';
 
 export async function parseGPX(file: Blob): Promise<GPXJson> {
   const text = await file.text();

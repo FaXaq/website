@@ -35,9 +35,7 @@ export default function UploadForm() {
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
-    watch,
     formState: { isSubmitting }
   } = useForm<UploadFormInputs>({
     defaultValues: {
@@ -53,7 +51,8 @@ export default function UploadForm() {
 
   const onSubmit = async (data: UploadFormInputs) => {
     const urls = await generateS3SignedUrlsMutation.mutateAsync({
-      files: data.files.map(file => ({ name: file.name, type: file.type }))
+      files: data.files.map(file => ({ name: file.name, type: file.type })),
+      scope: 'analyse/example'
     });
     for (const url of urls.urls) {
       const file = data.files.find(file => file.name === url.filename);

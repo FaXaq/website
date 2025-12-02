@@ -1,93 +1,82 @@
 import { Box, Button, FileUpload, Float, Heading, HStack, Icon, List, SkeletonText, Span, Text, VStack } from '@chakra-ui/react';
-import _ from 'lodash';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Controller,useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { LuUpload, LuX } from 'react-icons/lu';
+import { v4 as uuidv4 } from 'uuid';
 
-import { getBlobFileName } from '../../api/helpers/blob';
+import { useTRPC } from '@/utils/trpc/client';
+
 import { useCustomFileContext } from '../context/CustomFileContext';
 
-interface Files {
-  key: string,
-  urlEncoded: string,
-  size: number,
-  lastModified: string,
-}
-
-const FILES_URL = '/projects/corsica/api/files';
-const ANALYSE_URL = '/projects/corsica/api/analyse';
-
 interface AnalyseFormValues {
-  files: File[];
+  file: File[];
 }
 
 export default function AnalyseForm() {
   const clearFilesRef = useRef<(() => void) | null>(null);
-  const [isSanitizing, setIsSanitizing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingUrl, setLoadingUrl] = useState('');
-  const [preLoadedFiles, setPreLoadedFiles] = useState<Files[] | void>();
   const { t } = useTranslation();
   const router = useRouter();
   const { setAnalysis } = useCustomFileContext();
+  const trpc = useTRPC();
 
   const {
+    register,
     handleSubmit,
     control,
-    setValue,
-    getValues,
     formState: { isSubmitting }
   } = useForm<AnalyseFormValues>({
     defaultValues: {
-      files: [],
+      file: undefined,
     },
   });
 
-  useEffect(() => {
-    (async () => {
-      const files = await (await fetch(FILES_URL)).json() as unknown as Files[];
-      setPreLoadedFiles(files);
-    })();
-  }, []);
+  const {
+    data: preloadedFiles,
+    isLoading: isLoadingPreloadedFiles
+  } = useQuery(trpc.corsica.getExamples.queryOptions());
 
-  // Since FileUpload doesn't natively hookup to react-hook-form,
-  // we have to intercept the file input and sync it into rhf
-  const handleFilesFromEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsSanitizing(true);
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const sanitized: File[] = [];
-      for (let i = 0; i < files.length; i++) {
-        const item = files.item(i);
-        if (item) sanitized.push(item);
-      }
-      setValue("files", sanitized, { shouldValidate: true });
-    } else {
-      setValue("files", [], { shouldValidate: true });
-    }
-    setIsSanitizing(false);
-  };
+  const analyseGpxMutation = useMutation(trpc.corsica.analyseGPX.mutationOptions({}));
+  const generateS3SignedUrlsMutation = useMutation(trpc.corsica.generateS3SignedUrls.mutationOptions({}));
+  const deleteFilesMutation = useMutation(trpc.corsica.deleteFiles.mutationOptions({}));
 
-  const onSubmit = async (values: AnalyseFormValues) => {
+  const onSubmit = async (data: AnalyseFormValues) => {
     setIsLoading(true);
-    const body = new FormData();
-    for (let i = 0; i < values.files.length; i++) {
-      // defensively check for type
-      const file = values.files[i];
-      if (file) {
-        body.append(`file-${i}`, file);
-      }
-    }
-    const response = await fetch(ANALYSE_URL, {
-      method: 'POST',
-      body
+
+    const formFile = data.file[0];
+
+    if (!formFile) return;
+
+    const file = {
+      name: `${uuidv4()}.gpx`,
+      type: formFile.type,
+      file: formFile,
+    };
+
+    const urls = await generateS3SignedUrlsMutation.mutateAsync({
+      files: [file],
+      scope: 'analyse/custom'
     });
 
-    setAnalysis(await response.json());
-    setIsLoading(false);
-    router.push('/projects/corsica/analyse/custom');
+    for (const url of urls.urls) {
+      await fetch(url.uploadUrl, {
+        method: 'PUT',
+        body: file.file,
+      });
+    }
+    const analysis = await analyseGpxMutation.mutateAsync({
+      id: file.name,
+      example: false
+    });
+    setAnalysis(analysis);
+    await deleteFilesMutation.mutateAsync({
+      files: [file],
+      scope: 'analyse/custom'
+    });
+    router.push(`/projects/corsica/analyse/custom`);
   };
 
   const selectPreLoadedFile = async (fileUrl: string) => {
@@ -96,12 +85,12 @@ export default function AnalyseForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} method='POST' action={ANALYSE_URL}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Heading as="h3">{t('corsica.pages.analyse.title')}</Heading>
       <Text>{t('corsica.pages.analyse.description')}</Text>
       <VStack gap={2} alignItems="start" py={4}>
         <Controller
-          name="files"
+          name="file"
           control={control}
           rules={{ required: true }}
           render={({ field: { value, onChange } }) => (
@@ -111,12 +100,10 @@ export default function AnalyseForm() {
                 <Span fontSize="sm" color="fg.error">*</Span>
               </FileUpload.Label>
               <FileUpload.HiddenInput
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleFilesFromEvent(event);
-                  onChange(event.target.files ? Array.from(event.target.files) : []);
-                }}
+                {...register("file", { required: t('corsica.pages.merge.fileInputRequired') })}
                 accept=".gpx"
                 required
+                multiple={false}
               />
               <FileUpload.Dropzone width="100%" cursor="pointer" height="100px">
                 <Icon size="md" color="fg.muted">
@@ -156,14 +143,14 @@ export default function AnalyseForm() {
           )}
         />
         <Button
-          loading={(isLoading || isSanitizing || isSubmitting) && _.isEmpty(loadingUrl)}
+          loading={(isLoadingPreloadedFiles)}
           type="submit"
         >
           {t('corsica.pages.analyse.submitLabel')}
         </Button>
       </VStack>
       <Text>{t('corsica.pages.analyse.selectAFile')}</Text>
-      { !preLoadedFiles ? (
+      { !preloadedFiles ? (
         <>
           <SkeletonText noOfLines={1} />
           <SkeletonText noOfLines={1} />
@@ -171,11 +158,11 @@ export default function AnalyseForm() {
         </>
       ) : (
         <List.Root variant="plain" gap={2} py={4}>
-          { preLoadedFiles.map(file => (
+          { preloadedFiles.map(file => (
             <List.Item
               key={file.key}
             >
-              <Button variant="outline" onClick={async () => selectPreLoadedFile(getBlobFileName(file.key))} loading={file.key === loadingUrl}>{getBlobFileName(file.key)}</Button>
+              <Button variant="outline" onClick={async () => selectPreLoadedFile(file.key)}>{file.key}</Button>
             </List.Item>
           ))}
         </List.Root>

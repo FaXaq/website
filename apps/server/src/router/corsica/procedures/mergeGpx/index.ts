@@ -2,13 +2,13 @@ import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3
 import { MergeGpxInput, MergeGpxOutput } from "@repo/schemas/api/procedures/corsica";
 import { config } from "../../../../config";
 import { loggedInProcedure } from "../../../../procedures";
-import { generateS3Key } from "../../utils/generateS3Key";
 import { TRPCError } from "@trpc/server";
 import { parseGPX } from "./utils/parseActivity";
 import { XMLBuilder } from "fast-xml-parser";
 import { XML_ATTRIBUTE_PREFIX } from "./utils/consts";
 import { logger } from "../../../../logger";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { generateS3Key } from "../../utils/prefix";
 
 export const mergeGpxProcedure = loggedInProcedure
     .input(MergeGpxInput)

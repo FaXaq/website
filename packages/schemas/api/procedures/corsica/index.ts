@@ -2,12 +2,14 @@ import z from "zod"
 import { AnalysisZodType } from "./analyse"
 export * from "./analyse"
 
+export const CorsicaScope = z.enum(['analyse/example', 'analyse/custom', 'merge'])
+
 export const GenerateS3SignedUrlsInput = z.object({
   files: z.array(z.object({
     name: z.string(),
     type: z.string(),
   })),
-  subPath: z.string().optional()
+  scope: CorsicaScope
 })
 
 export const GenerateS3SignedUrlsOutput = z.object({
@@ -34,7 +36,7 @@ export const DeleteFilesInput = z.object({
   files: z.array(z.object({
     name: z.string(),
   })),
-  subPath: z.string().optional()
+  scope: CorsicaScope
 })
 
 export const DeleteFilesOutput = z.object({
@@ -43,9 +45,15 @@ export const DeleteFilesOutput = z.object({
 
 export const AnalyseGPXInput = z.object({
   id: z.string(),
+  example: z.boolean()
 })
 
 export const AnalyseGPXOutput = AnalysisZodType;
 
 // Type-only schema for server-side (we parse manually, but this provides the type)
 export type MergeGpxInputType = z.infer<typeof MergeGpxInput>;
+
+export const GetExamplesOutput = z.array(z.object({
+  key: z.string(),
+  size: z.number()
+}))

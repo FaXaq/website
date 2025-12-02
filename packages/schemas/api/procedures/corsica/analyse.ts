@@ -30,14 +30,14 @@ export type Coordinates = z.infer<typeof CoordinatesZodType>;
 
 export const ReverseGeocodingJSONAddressZodType = z.object({
     road: z.string(),
-    village: z.string(),
-    state_district: z.string(),
+    village: z.string().optional(),
+    state_district: z.string().optional(),
     state: z.string(),
     'ISO3166-2-lvl4': z.string().optional(),
     'ISO3166-2-lvl6': z.string().optional(),
     postcode: z.string(),
-    municipality: z.string(),
-    county: z.string(),
+    municipality: z.string().optional(),
+    county: z.string().optional(),
     region: z.string(),
     country: z.string(),
     country_code: z.string()
@@ -46,9 +46,9 @@ export type ReverseGeocodingJSONAddress = z.infer<typeof ReverseGeocodingJSONAdd
 
 export const ReverseGeocodingJSONZodType = z.object({
     place_id: z.number(),
-    license: z.string(),
+    license: z.string().optional(),
     osm_type: z.string(),
-    osl_id: z.number(),
+    osl_id: z.number().optional(),
     lat: z.string(),
     lon: z.string(),
     category: z.string(),

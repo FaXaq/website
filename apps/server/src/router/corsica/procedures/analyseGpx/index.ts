@@ -1,8 +1,8 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { AnalyseGPXInput, AnalyseGPXOutput, GPXTrkPart, SpeedAnalysis, TimeAnalysis } from "@repo/schemas/api/procedures/corsica";
+import { AnalyseGPXInput, AnalyseGPXOutput, GPXTrkPart } from "@repo/schemas/api/procedures/corsica";
 import { TRPCError } from "@trpc/server";
-import { config } from "src/config";
-import { t } from "src/trpc";
+import { config } from "../../../..//config";
+import { t } from "../../../..//trpc";
 import { parseGPX } from "../mergeGpx/utils/parseActivity";
 import getElevationVariations from "./utils/getElevationVariations";
 import getDistanceVariations from "./utils/getDistanceVariations";
@@ -10,6 +10,7 @@ import getTimeAnalysis from "./utils/getTimeAnalysis";
 import getSpeedAnalysis from "./utils/getSpeedAnalysis";
 import getMapAnalysis from "./utils/getMapAnalysis";
 import { trackHasTime } from "./utils/trackHasTime";
+import { addExamplesPrefix, generateS3Key } from "../../utils/prefix";
 
 export const analyseGPXProcedure = t.procedure
   .input(AnalyseGPXInput)
@@ -27,7 +28,7 @@ export const analyseGPXProcedure = t.procedure
 
       const command = new GetObjectCommand({
         Bucket: config.S3_BUCKET_NAME,
-        Key: input.id,
+        Key: input.example ? generateS3Key(input.id, 'analyse/example') : generateS3Key(input.id, 'analyse/custom'),
       });
 
       const response = await s3Client.send(command);

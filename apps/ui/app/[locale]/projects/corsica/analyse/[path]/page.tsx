@@ -1,11 +1,14 @@
 "use client";
 
 import { Box, Button,Grid, GridItem, Heading, Skeleton, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { t } from "i18next";
 import dynamic from "next/dynamic";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+
+import { useTRPC } from "@/utils/trpc/client";
 
 import { useCustomFileContext } from "../context/CustomFileContext";
 import ElevationChart from "./components/ElevationChart";
@@ -16,30 +19,22 @@ import SpeedChartHover from './components/SpeedChartDetails';
 import TextAnalysisReport from "./components/TextAnalysisReport";
 import { ActiveChartPointProvider } from "./context/ActiveChartPoint";
 
-
-const FILES_URL = '/projects/corsica/api/files';
-const ANALYSE_URL = '/projects/corsica/api/analyse';
-
 export default function AnalyseFile() {
   const { path } = useParams();
   const { analysis, setAnalysis } = useCustomFileContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const trpc = useTRPC();
+  const router = useRouter();
+  const analyseGpxMutation = useMutation(trpc.corsica.analyseGPX.mutationOptions({}));
   const address = analysis?.map?.reverseGeocodingSearchResult?.address;
 
   const fetchAndAnalyseExample = async (path: string) => {
     setIsLoading(true);
-    const analyseResponse = await fetch(`${FILES_URL}/${encodeURIComponent(path)}`);
-    const fileData = await analyseResponse.blob();
-
-    const body = new FormData();
-    body.append(`file-[0]`, fileData, path);
-
-    const response = await fetch(ANALYSE_URL, {
-      method: 'POST',
-      body
+    const analysis = await analyseGpxMutation.mutateAsync({
+      id: decodeURIComponent(path),
+      example: true
     });
-
-    setAnalysis(await response.json());
+    setAnalysis(analysis);
     setIsLoading(false);
   };
 
@@ -104,7 +99,7 @@ export default function AnalyseFile() {
           </Grid>
           <Button
             type="button"
-            onClick={() => setAnalysis(undefined)}
+            onClick={() => router.push('/projects/corsica/analyse')}
             loading={false}
           >
             {t('corsica.pages.analyse.retry')}

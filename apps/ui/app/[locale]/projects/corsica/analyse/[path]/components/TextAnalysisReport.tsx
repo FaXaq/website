@@ -1,10 +1,10 @@
 import { Card, Grid, GridItem, Text } from '@chakra-ui/react';
+import type { Analysis } from '@repo/schemas/api/procedures/corsica';
 import { intervalToDuration } from 'date-fns';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormatDuration } from '../../hooks/useFormatDuration';
-import type { Analysis } from '../../types';
 
 interface TextAnalysisReportProps {
     analysis: Analysis
@@ -15,13 +15,14 @@ export default function TextAnalysisReport({ analysis }: TextAnalysisReportProps
   const formatDuration = useFormatDuration();
 
   const elapsedTime = useMemo(() => {
+    const lastPoint = analysis.points[analysis.points.length - 1];
     if (analysis) {
-      if (!analysis.points[0].time) {
+      if (!analysis.points[0]?.time || !lastPoint?.time) {
         return undefined;
       }
       return intervalToDuration({
         start: new Date(analysis.points[0].time),
-        end: new Date(analysis.points[analysis.points.length - 1].time)
+        end: new Date(lastPoint.time)
       });
     }
   }, [analysis]);
