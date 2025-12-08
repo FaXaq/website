@@ -1,0 +1,553 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+import Correlation from './components/Correlation'
+import Tuner from './components/Tuner'
+import { List } from "@chakra-ui/react"
+import { CodeBlock } from "../components/CodeBlock"
+
+export const meta = {
+  title: 'How to build a (guitar) tuner in Javascript ? - Part 1',
+  description: 'With no prior Digital Signal Processing knowledge',
+  creationDate: '04/27/2020',
+  tags: ['music theory', 'programming', 'javascript', 'browser', 'english', 'dsp', 'tuner'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+
+## What is a tuner ?
+
+A tuner is a device that helps tuning string based instruments. It takes a sound in input and output a note name if it's close enough and indicates if it is sharp, flat, or in tune.
+
+## Get audio data from the microphone
+
+First, we need some audio stream from the microphpone to analyze. Request access to it, and store the audio stream in a variable.
+
+export const file1 = {
+code: `
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+audioStreamRequest
+  .then((audioStream) => {
+    /* ... Following source code will be there except for function & constants declarations ... */
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+language: "typescript",
+title: "index.ts"
+}
+
+<CodeBlock file={file1} />
+
+## Inserting our audio in a context
+
+Second we'll need to inject this audio stream in a context we can analyse. We can use the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). It provides a [context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) and many more, that we can use to manipulate and analyse sound with browser javascript.
+
+export const file2 = {
+code:`
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+language: "typescript",
+title: "index.ts"
+}
+
+<CodeBlock file={file2} addedLineNumbers={[4]} />
+
+
+We'll also define the audio stream from the mic as a "source node" of our audio chain.
+
+export const file3 = {
+code:`
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+language: "typescript",
+title: "index.ts"
+}
+
+<CodeBlock file={file3} addedLineNumbers={[5,6]} />
+
+## Analyse the sound
+
+### How do I want to do it ?
+
+I have a very crude idea in mind.
+
+Take as reference notes we want to analyse. If we take a guitar, those are : E2, A2, D3, G3, E4. Select the one with the highest magnitude or the loudest (hopefully the one currently playing) and see if we can tell it's in tune.
+
+_Spoiler: This is probably not how to do it_
+
+### Let's do it
+
+#### Extracting the data
+
+Now that we have an [Audio Context](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) we can play with, we can analyse the audio stream from the mic. The [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) provides an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) especially for this purpose.
+
+> The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an [Audio Node](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
+
+It seems that an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) can output frequencies with their magnitudes ? Let's dig into it.
+
+In the documentation there are two methods that we may have a use for :
+- [getFloatFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getFloatFrequencyData)
+> Copies the current frequency data into a Float32Array array passed into it.
+- [getByteFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData)
+> Copies the current frequency data into a Uint8Array (unsigned byte array) passed into it.
+
+We'll extract data from our mic input and see what it looks like.
+
+Create an [Analyser Node](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode) and connect it to our source node. Since we do not plan to do anything else with our audio stream, we can ommit to connect the Analyser Node output.
+
+export const file4 = {
+  code: `
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file4} addedLineNumbers={[7,8,9]} />
+
+Our [audio nodes](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) chain looks like this :
+
+export const file5 = {
+  code: `
+---------------         ----------------
+| Source Node | ------> | AnalyserNode |
+---------------         ----------------
+`,
+  language: "text",
+}
+
+<CodeBlock file={file5} showLineNumbers={false} enableCopy={false} />
+
+We'll use the `getByteFrequencyData` and try requesting data from the Analyser Node each 300ms.
+
+export const file6 = {
+  code: `
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file6} addedLineNumbers={[2,3,4,5,6,7,8,19]} />
+
+
+Each 300ms it yields an `Uint8Array` of 1024 numbers. Those numbers are bytes, so are ranging between 0 and 255.
+What do we do with that ?
+![Uint8Array from the console](/articles/images/tuner-pt1/uint-array.png)
+
+#### Understanding the data
+
+I found out that what `getByteFrequencyData` does under the hood is a Fast Fourier Transform (FFT).
+
+> A FFT is a formula used to switch between time domain to frequency domain.
+
+Let's skip forward a few days trying to understand what FFT is. I found 2 videos on YouTube that sums it pretty well. Watch the [first](https://www.youtube.com/watch?v=mkGsMWi_j4Q) one, then the [second](https://www.youtube.com/watch?v=htCj9exbGo0) one.
+
+Since we are now in the frequency domain, we have 1024 `frequencyBins`. But what are those `frequencyBins` ? And why 1024 ?
+
+We've 1024 frequency bins because the size of the FFT by default is 2048 and we cannot calculate magnitudes above the Nyquist limit (go check out video two if you didn't). It means that the FFT will take our audio stream and output 1024 numbers each representing the magnitude related to a frequency bin. A frequency bin is an interval between two frequencies and its range is calculated as follow : `sampleRate / fftSize`.
+
+See [here](https://stackoverflow.com/questions/4364823/how-do-i-obtain-the-frequencies-of-each-value-in-an-fft) for a stackoverflow explaination.
+
+If I check the `sampleRate` from my current audio context I get `48000`. Let's use it to calculate our frequency bin range.
+
+With my values I end up with a `frequencyBinRange` of `23.4375`Hz. That's a huge range. Let's try to reduce it a bit. Can we increase the `fftSize` ? Yes ! As long that it's a power of 2 and within the range of `2⁵` and `2¹⁵`. Let's set it to the maximum, see where we can end up. So, let's set the `fftSize` to `32768` before calculating that range.
+
+export const file7 = {
+  code: `
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = ctx.sampleRate / analyserNode.fftSize
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+    analyserNode.fftSize = 32768
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file7} addedLineNumbers={[7,20]} />
+
+I end up with a much smaller range of `1.46484375`Hz. It sounds nice enough, let's add it to our code.
+
+#### Guessing the current note
+
+Here is an array containing guitar string frequencies that will be our reference. Let's add it at the start of the file :
+
+export const file8 = {
+  code: `
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = ctx.sampleRate / analyserNode.fftSize
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+    analyserNode.fftSize = 32768
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file8} addedLineNumbers={[0,1,2,3,4,5,6,7]} />
+
+Now, if I want the magnitude of each guitar string frequency in my signal, I have to check on the magnitude of the corresponding frequency bin. First we'll try with the `E2` string. Let's declare a function that takes a frequency in parameter, the frequency bin range, the FFT results and returns the magnitude.
+
+To get the frequency bin that corresponds to our custom frequency, it's simply the closest lower integer of this frequency divided by the frequency bin range. Let's create a function and call it from within our `collectAnalyserData` function.
+
+export const file9 = {
+  code: `
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function getFrequencyMagnitudeFromFFT(frequency, frequencyBinRange, FFTValues) {
+  const frequencyBinIndex = Math.floor(frequency / frequencyBinRange)
+  return FFTValues[frequencyBinIndex]
+}
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file9} addedLineNumbers={[11,12,13,14,22,23]} />
+
+Well, it's working ! Let's now map our guitar strings to `getFrequencyMagnitudeFromFFT` and see the result, and reduce it to detect which string has the highest magnitude and hopefully the one currently playing.
+
+export const file10 = {
+  code: `
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function getFrequencyMagnitudeFromFFT(frequency, frequencyBinRange, FFTValues) {
+  const frequencyBinIndex = Math.floor(frequency / frequencyBinRange)
+  return FFTValues[frequencyBinIndex]
+}
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
+  const guitarStringWithMagnitudes = GUITAR_STRING_FREQUENCIES.map(gsf => {
+    return {
+      ...gsf,
+      magnitude: getFrequencyMagnitudeFromFFT(gsf.frequency, frequencyBinRange, dataArray)
+    }
+  })
+
+  const guessedString = guitarStringWithMagnitudes.reduce((p, c) => p.magnitude < c.magnitude ? c : p)
+  console.log(guessedString)
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file10} addedLineNumbers={[24,25,26,27,28,29,30,31,32]} removedLineNumbers={[23]} />
+
+I have my guitar right next to me, and when I play an A string for instance it prints in the console :
+![guessed A string](/articles/images/tuner-pt1/guessed-string.png)
+
+__SUCCESS !__
+
+#### Is the string in tune ?
+
+Here we may have a situation. Since the frequency bin range is ~1.46Hz, we can never assure that our string is in tune within this range. Unless... We try to analyse its surroundings frequency bins ?
+
+If a string is in tune, it means that its frequency bin's magnitude is higher than its surroundings one, right ?
+
+export const file11 = {
+  code: `
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function getFrequencyMagnitudeFromFFT(frequency, frequencyBinRange, FFTValues) {
+  const frequencyBinIndex = Math.floor(frequency / frequencyBinRange)
+  return FFTValues[frequencyBinIndex]
+}
+
+function isStringInTune(guitarString, frequencyBinRange, FFTValues) {
+  const prevMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency - frequencyBinRange, frequencyBinRange, FFTValues)
+  const nextMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency + frequencyBinRange, frequencyBinRange, FFTValues)
+
+  return prevMagnitude - guitarString.magnitude < 0 && nextMagnitude - guitarString.magnitude < 0
+}
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
+  const guitarStringWithMagnitudes = GUITAR_STRING_FREQUENCIES.map(gsf => {
+    return {
+      ...gsf,
+      magnitude: getFrequencyMagnitudeFromFFT(gsf.frequency, frequencyBinRange, dataArray)
+    }
+  })
+
+  const guessedString = guitarStringWithMagnitudes.reduce((p, c) => p.magnitude < c.magnitude ? c : p)
+  console.log(guessedString)
+  console.log(isStringInTune(guessedString, frequencyBinRange, dataArray))
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+`,
+  language: "typescript",
+  title: "index.ts"
+}
+
+<CodeBlock file={file11} addedLineNumbers={[16,17,18,19,20,21,40]} />
+
+But that leaves a range of ~1.46Hz for it to be out of tune.
+
+I have an idea : Try to see if the distance between our guitar string frequency and the starting frequency of its frequency bin has any relation with its surroundings magnitude.
+
+Let me try to explain my reasoning. In each data extraction we have 7 data :
+- Guitar string frequency
+- Guitar string frequency bin
+- Guitar string frequency bin magnitude
+- Previous frequency bin
+- Previous frequency bin magnitude
+- Next frequency bin
+- Next frequency bin magnitude
+
+_Note: Each time I talk about a frequency bin's frequency, I'm refering to its starting frequency._
+
+For the E2 string, its frequency is `82.4068892282175`. It means that its distance from its frequency bin is `82.4068892282175 - Math.floor(82.4068892282175 / frequencyBinRange) * frequencyBinRange` which is equal to `0.3115523141549943`. This is lesser than half of our frequency range. So it is closer to the previous frequency bin than the next frequency bin.
+
+Let's see, when the E string is in tune, if the previous frequency bin magnitude is higher than the next frequency bin magnitude.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={132} prevFqBinMag={124} nextFqBinMag={112} title={'E2 string in tune'} />
+
+__SUCCESS__ !
+
+Now, after tuning it slightly sharp.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={147} prevFqBinMag={107} nextFqBinMag={156} title={'Sharp E2 string'} />
+
+And tuning it slightly down.
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={59} prevFqBinMag={103} nextFqBinMag={32} title={'Flat E2 string'} />
+
+__SUCCESS__ !
+
+Ok so what I had as an intuition worked as expected. See data for the G3 string. Its distance from its frequency bin is `0.8530646705621336`. Which means it's closer to the next frequency bin than the last. So, when in tune, the next frequency bin's magnitude should be higher than the previous one.
+
+<Correlation gsFq={195.99771799087463} fqBin={195.1446533203125} prevFqBin={193.798828125} nextFqBin={196.490478515625} fqBinMag={202} prevFqBinMag={166} nextFqBinMag={211} title={'B3 string in tune'} />
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={126} prevFqBinMag={120} nextFqBinMag={133} title={'Sharp B3 string'} />
+
+<Correlation gsFq={82.4068892282175} fqBin={82.0953369140625} prevFqBin={80.74951171875} nextFqBin={83.441162109375} fqBinMag={207} prevFqBinMag={211} nextFqBinMag={191} title={'Flat B3 string'} />
+
+
+After seeing those graphs I don't know how to procede and find the correlation. I tried looking at the lines equations' coefficients but ... nothing. If anyone has an idea, don't hesitate to fork the [github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner) and make a PR.
+
+You can try it here : 
+<Tuner />
+
+## Conclusion
+
+Although it's a bit of a failure and probably not the right way to do it, I learned a lot starting from the mic input and doing it all by hand with the [Web Audio Api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and the FFT. After reading a few articles, I found out that I need to look into something called [Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation). It will be for part two.
+
+Thanks for reading.
+
+## Links
+
+- [Github repo](https://github.com/FaXaq/labs/tree/tuner-pt1/javascript-tuner)
+- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+
+</BlogPostLayout>

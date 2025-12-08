@@ -1,11 +1,11 @@
 import type { DB } from './db' // this is the Database interface we defined earlier
 import { Pool } from 'pg'
 import { Kysely, PostgresDialect } from 'kysely'
-import { env } from '../../config'
+import { config } from '../../config'
 
 const dialect = new PostgresDialect({
   pool: new Pool({
-    connectionString: env.DATABASE_URL
+    connectionString: config.DATABASE_URL
   })
 })
 

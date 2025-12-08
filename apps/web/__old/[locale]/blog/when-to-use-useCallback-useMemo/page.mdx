@@ -1,0 +1,27 @@
+import BlogPostLayout from '../components/BlogPostLayout'
+
+export const meta = {
+  title: "When to use useCallback and useMemo ?",
+  description: "What's memoization and how to use it?",
+  creationDate: '01/30/2024',
+  tags: ['react', 'javascript', 'programming', 'english', 'memoization'],
+  published: true
+}
+
+<BlogPostLayout meta={meta}>
+`useCallback` and `useMemo` are two faces of the same coin. They use a concept called `memoization`. To understand it, we need to get back to the basics.
+
+React is a reactive framework. It creates a virtual DOM (which is a lightweight mirror of the original DOM in object notation) and updates it everytime a component property or state changes. This virtual DOM is then compared to the actual DOM. The difference is then passed to a react renderer, which updates the DOM. React does a lot of optimizations done under the hood through its diff algorithm, but other that that it is rather simple. If a proprty or a state changed, it updates the component and its childrens.
+
+What is key to understand here is that : 
+- React updates the virtual DOM everytime a component property or state changes. 
+- React will only re-render what changes.
+
+What memoization does, is that it helps limiting the rendering to only when properties change too.
+
+Before react hooks, we had a function called `React.memo`. You could wrap your class component and it would check if previous properties are equal to incoming properties. If it did, React would return the cached result from the previous render. If it didn't, React would re-render the component.
+
+Now the same logic applies to `useCallback` (functions) and `useMemo` (variables). Some functions might depend on states or properties and need some caching before being passed to a heavy child component. Some variables might require a complex calculus from states and properties too, which can be interesting to cache.
+
+It is important to understand when to use those memoization functions and do not fall into the root of all evil : premature optimization. Memoization have a cost, and most of the time it is not needed, as any other optimization. What I like to do is do without them, and if I have a component that is heavy and is rendered too many times, I try to fix it first, then I can start thinking about memoizing it. Most of the time, fixing the component solves my issue. And most of the time, there is no performance issue.
+</BlogPostLayout>

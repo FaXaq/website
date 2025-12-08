@@ -1,0 +1,11 @@
+node_modules
+.next
+.now
+.vercel
+.env.development.local
+.env*.local
+*.env
+.DS_Store
+.eslintcache
+
+.content-collection
