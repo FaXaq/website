@@ -18,16 +18,12 @@ export const rehypeExtractCodeMeta: unified.Plugin<[], any> = () => {
         ) {
           const codeElement = firstChild;
 
-          console.log(codeElement);
-
           // Get meta from data-meta if it exists (from remark)
           const meta = codeElement.properties?.["data-meta"] as string || "";
           const language = codeElement.properties?.["data-language"] as string || "";
 
           // Apply data attributes to the pre element
           node.properties = node.properties || {};
-
-          console.log(language, meta);
 
           if (language) {
             node.properties["data-language"] = language;

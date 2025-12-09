@@ -7,11 +7,9 @@ var rehypeExtractCodeMeta = () => {
         const firstChild = node.children[0];
         if (firstChild?.type === "element" && firstChild?.tagName === "code") {
           const codeElement = firstChild;
-          console.log(codeElement);
           const meta = codeElement.properties?.["data-meta"] || "";
           const language = codeElement.properties?.["data-language"] || "";
           node.properties = node.properties || {};
-          console.log(language, meta);
           if (language) {
             node.properties["data-language"] = language;
           }

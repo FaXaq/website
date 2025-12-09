@@ -18,8 +18,6 @@ export const remarkExtractCodeMeta: unified.Plugin<[], Root> = () => {
       if (lang) {
         node.data.hProperties["data-language"] = lang;
       }
-
-      console.log(meta)
     });
   };
 };

@@ -13,7 +13,6 @@ var remarkExtractCodeMeta = () => {
       if (lang) {
         node.data.hProperties["data-language"] = lang;
       }
-      console.log(meta);
     });
   };
 };
