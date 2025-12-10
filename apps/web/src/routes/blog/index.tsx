@@ -53,7 +53,7 @@ function BlogIndex() {
       {/* <section>
         {tags.length > 0 && (
           <VStack pb={4} gap={4} alignItems="start">
-            <Text>{m['blog.tagsSearch']()}</Text>
+            <Text>{m['blog_tagsSearch']()}</Text>
             <Tags tags={tags} />
           </VStack>
         )}

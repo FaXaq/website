@@ -33,7 +33,7 @@ export class Score {
   // key signature
   private _ks!: Scale;
 
-  constructor (params: ScoreParams = {}) {
+  constructor(params: ScoreParams = {}) {
     this.timeSignature = params.timeSignature ?? new TimeSignature({})
     this.staff = params.staff ?? SCORE_STAFF.TREBLE
     this.bars = (params.measures ?? params.bars) ?? []
@@ -43,19 +43,19 @@ export class Score {
   }
 
   // getters & setters
-  get timeSignature (): TimeSignature {
+  get timeSignature(): TimeSignature {
     return this._ts
   }
 
-  set timeSignature (ts: TimeSignature) {
+  set timeSignature(ts: TimeSignature) {
     this._ts = ts
   }
 
-  get staff (): SCORE_STAFF {
+  get staff(): SCORE_STAFF {
     return this._staff
   }
 
-  set staff (staff: SCORE_STAFF) {
+  set staff(staff: SCORE_STAFF) {
     if (Object.keys(SCORE_STAFF).indexOf(staff) > -1) {
       this._staff = staff
     } else {
@@ -63,47 +63,47 @@ export class Score {
     }
   }
 
-  get bars (): Bar[] {
+  get bars(): Bar[] {
     return this._bars
   }
 
-  set bars (bars: Bar[]) {
+  set bars(bars: Bar[]) {
     this._bars = bars
   }
 
-  get measures (): Bar[] {
+  get measures(): Bar[] {
     return this._bars
   }
 
-  set measures (measures: Bar[]) {
+  set measures(measures: Bar[]) {
     this._bars = measures
   }
 
-  get keySignature (): Scale {
+  get keySignature(): Scale {
     return this._ks
   }
 
-  set keySignature (scale: Scale) {
+  set keySignature(scale: Scale) {
     this._ks = scale
   }
 
-  get defaultNoteValue (): NOTE_VALUE {
+  get defaultNoteValue(): NOTE_VALUE {
     return this.timeSignature.beatsType
   }
 
-  get lastBar (): Bar {
-    if (this.bars.length === 0) {
+  get lastBar(): Bar {
+    if (this.bars.length === 0 || this.bars[this.bars.length - 1] === undefined) {
       throw new Error('Score has no bar.')
     }
 
-    return this.bars[this.bars.length - 1]
+    return this.bars[this.bars.length - 1]!
   }
 
   /**
    * Add bar to the current score.
    * @param - No field is mandatory
    */
-  addBar ({
+  addBar({
     typeStart = BAR_TYPE_START.STANDARD,
     typeEnd = BAR_TYPE_END.STANDARD,
     content = []
@@ -119,7 +119,7 @@ export class Score {
     return this.lastBar
   }
 
-  addContent (content: BAR_CONTENT): void {
+  addContent(content: BAR_CONTENT): void {
     try {
       this.lastBar.addContent(content, true)
     } catch (err) {
@@ -136,7 +136,7 @@ export class Score {
     }
   }
 
-  modifyContent (bar: number, contentIndex: number, newContent: BAR_CONTENT): void {
+  modifyContent(bar: number, contentIndex: number, newContent: BAR_CONTENT): void {
     try {
       if (this.bars[bar] !== undefined) {
         this.bars[bar].modifyContent(contentIndex, newContent)

@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 import { NavBar } from "@/components/NavBar";
 import { ColorModeProvider } from "@/components/ui/color-mode";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { getLocale } from "@/paraglide/runtime";
 import { trcpClient, TRPCProvider } from "@/utils/trpc/client";
 
 export const Route = createRootRoute({
@@ -60,7 +61,7 @@ function RootLayout() {
   const [trpcClient] = useState(() => trcpClient);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={getLocale()} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

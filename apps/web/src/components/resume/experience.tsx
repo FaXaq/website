@@ -27,14 +27,14 @@ export const Experience = ({ experience }: { experience: TExperience }) => {
         </Timeline.Description>
         { experience.productGoal && (
           <Text textStyle="sm">
-            <Span fontWeight="medium">{m["resume.content.experiences.theProduct"]()}</Span> {experience.productGoal}
+            <Span fontWeight="medium">{m['resume_content_experiences_theProduct']()}</Span> {experience.productGoal}
           </Text>
         )}
         <Text textStyle="sm">
           {
             // if there is no product goal, treat my role as a general description
           }
-          {experience.productGoal && (<Span fontWeight="medium">{m["resume.content.experiences.myRole"]()}</Span> )}{experience.myRole}
+          {experience.productGoal && (<Span fontWeight="medium">{m['resume_content_experiences_myRole']()}</Span> )}{experience.myRole}
         </Text>
       </Timeline.Content>
     </Timeline.Item>

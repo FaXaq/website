@@ -1085,8 +1085,21 @@ var Chord = class _Chord extends ValuedBarContent {
 // src/class/Scale.ts
 var SCALES = {
   MAJOR: {
-    name: "major",
-    mode: "ionian",
+    name: "MAJOR",
+    mode: "IONIAN",
+    intervals: [
+      new Interval("P1"),
+      new Interval("M2"),
+      new Interval("M3"),
+      new Interval("P4"),
+      new Interval("P5"),
+      new Interval("M6"),
+      new Interval("M7")
+    ]
+  },
+  IONIAN: {
+    name: "MAJOR",
+    mode: "IONIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1098,7 +1111,7 @@ var SCALES = {
     ]
   },
   ACOUSTIC: {
-    name: "acoustic",
+    name: "ACOUSTIC",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1110,8 +1123,21 @@ var SCALES = {
     ]
   },
   NATURAL_MINOR: {
-    name: "natural_minor",
-    mode: "aeolian",
+    name: "NATURAL_MINOR",
+    mode: "AEOLIAN",
+    intervals: [
+      new Interval("P1"),
+      new Interval("M2"),
+      new Interval("m3"),
+      new Interval("P4"),
+      new Interval("P5"),
+      new Interval("m6"),
+      new Interval("m7")
+    ]
+  },
+  AEOLIAN: {
+    name: "NATURAL_MINOR",
+    mode: "AEOLIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1123,7 +1149,7 @@ var SCALES = {
     ]
   },
   ALGERIAN: {
-    name: "algerian",
+    name: "ALGERIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1142,8 +1168,21 @@ var SCALES = {
     ]
   },
   ALTERED: {
-    name: "altered",
-    mode: "super_locrian",
+    name: "ALTERED",
+    mode: "SUPER_LOCRIAN",
+    intervals: [
+      new Interval("P1"),
+      new Interval("m2"),
+      new Interval("m3"),
+      new Interval("d4"),
+      new Interval("d5"),
+      new Interval("m6"),
+      new Interval("m7")
+    ]
+  },
+  SUPER_LOCRIAN: {
+    name: "ALTERED",
+    mode: "SUPER_LOCRIAN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1155,7 +1194,7 @@ var SCALES = {
     ]
   },
   AUGMENTED: {
-    name: "augmented",
+    name: "AUGMENTED",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1166,7 +1205,7 @@ var SCALES = {
     ]
   },
   BEBOP_DOMINANT: {
-    name: "bebop_dominant",
+    name: "BEBOP_DOMINANT",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1179,7 +1218,7 @@ var SCALES = {
     ]
   },
   BLUES: {
-    name: "blues",
+    name: "BLUES",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1191,7 +1230,7 @@ var SCALES = {
     ]
   },
   ASCENDING_CHROMATIC: {
-    name: "ascending_chromatic",
+    name: "ASCENDING_CHROMATIC",
     intervals: [
       new Interval("P1"),
       new Interval("A1"),
@@ -1208,7 +1247,7 @@ var SCALES = {
     ]
   },
   DESCENDING_CHROMATIC: {
-    name: "decending_chromatic",
+    name: "DESCENDING_CHROMATIC",
     intervals: [
       new Interval("M7"),
       new Interval("m7"),
@@ -1225,7 +1264,7 @@ var SCALES = {
     ]
   },
   DORIAN: {
-    mode: "dorian",
+    mode: "DORIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1237,8 +1276,21 @@ var SCALES = {
     ]
   },
   DOUBLE_HARMONIC: {
-    name: "double_harmonic",
-    mode: "flamenco",
+    name: "DOUBLE_HARMONIC",
+    mode: "FLAMENCO",
+    intervals: [
+      new Interval("P1"),
+      new Interval("m2"),
+      new Interval("M3"),
+      new Interval("P4"),
+      new Interval("P5"),
+      new Interval("m6"),
+      new Interval("M7")
+    ]
+  },
+  FLAMENCO: {
+    name: "DOUBLE_HARMONIC",
+    mode: "FLAMENCO",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1250,7 +1302,7 @@ var SCALES = {
     ]
   },
   ENIGMATIC: {
-    name: "enigmatic",
+    name: "ENIGMATIC",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1262,7 +1314,7 @@ var SCALES = {
     ]
   },
   GYPSY: {
-    name: "gipsy",
+    name: "GYPSY",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1274,7 +1326,7 @@ var SCALES = {
     ]
   },
   HALF_DIMINISHED: {
-    name: "half_diminished",
+    name: "HALF_DIMINISHED",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1286,7 +1338,7 @@ var SCALES = {
     ]
   },
   HARMONIC_MAJOR: {
-    name: "harmonic_major",
+    name: "HARMONIC_MAJOR",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1298,7 +1350,7 @@ var SCALES = {
     ]
   },
   HARMONIC_MINOR: {
-    name: "harmonic_minor",
+    name: "HARMONIC_MINOR",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1310,7 +1362,7 @@ var SCALES = {
     ]
   },
   HIRAJOSHI: {
-    name: "hirajoshi",
+    name: "HIRAJOSHI",
     intervals: [
       new Interval("P1"),
       new Interval("M3"),
@@ -1320,7 +1372,7 @@ var SCALES = {
     ]
   },
   HUNGRARIAN_GYPSY: {
-    name: "hungrarian_gypsy",
+    name: "HUNGRARIAN_GYPSY",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1332,7 +1384,7 @@ var SCALES = {
     ]
   },
   HUNGRARIAN_MINOR: {
-    name: "hungrarian_minor",
+    name: "HUNGRARIAN_MINOR",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1344,7 +1396,7 @@ var SCALES = {
     ]
   },
   IN: {
-    name: "in",
+    name: "IN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1354,7 +1406,7 @@ var SCALES = {
     ]
   },
   INSEN: {
-    name: "insen",
+    name: "INSEN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1364,8 +1416,7 @@ var SCALES = {
     ]
   },
   ISTRIAN: {
-    name: "istrian",
-    mode: "istrian",
+    mode: "ISTRIAN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1376,7 +1427,7 @@ var SCALES = {
     ]
   },
   IWATO: {
-    name: "iwato",
+    name: "IWATO",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1386,7 +1437,7 @@ var SCALES = {
     ]
   },
   LOCRIAN: {
-    mode: "locrian",
+    mode: "LOCRIAN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1398,8 +1449,7 @@ var SCALES = {
     ]
   },
   LYDIAN_AUGMENTED: {
-    name: "lydian_augmented",
-    mode: "lydian_augmented",
+    mode: "LYDIAN_AUGMENTED",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1411,7 +1461,7 @@ var SCALES = {
     ]
   },
   LYDIAN: {
-    mode: "lydian",
+    mode: "LYDIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1423,7 +1473,7 @@ var SCALES = {
     ]
   },
   MAJOR_BEBOP: {
-    name: "major_bebop",
+    name: "MAJOR_BEBOP",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1436,8 +1486,7 @@ var SCALES = {
     ]
   },
   MAJOR_LOCRIAN: {
-    name: "major_locrian",
-    mode: "major_locrian",
+    mode: "MAJOR_LOCRIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1449,7 +1498,7 @@ var SCALES = {
     ]
   },
   MAJOR_PENTATONIC: {
-    name: "major_pentatonic",
+    name: "MAJOR_PENTATONIC",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1459,7 +1508,7 @@ var SCALES = {
     ]
   },
   MELODIC_MINOR_ASCENDING: {
-    name: "melodic_minor_ascending",
+    name: "MELODIC_MINOR_ASCENDING",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1471,7 +1520,7 @@ var SCALES = {
     ]
   },
   MELODIC_MINOR_DESCENDING: {
-    name: "melodic_minor_descending",
+    name: "MELODIC_MINOR_DESCENDING",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1483,7 +1532,7 @@ var SCALES = {
     ]
   },
   MINOR_PENTATONIC: {
-    name: "minor_pentatonic",
+    name: "MINOR_PENTATONIC",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1493,7 +1542,7 @@ var SCALES = {
     ]
   },
   MIXOLYDIAN: {
-    mode: "mixolydian",
+    mode: "MIXOLYDIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1505,7 +1554,7 @@ var SCALES = {
     ]
   },
   NEOPOLITAN_MAJOR: {
-    name: "neopolitan_major",
+    name: "NEOPOLITAN_MAJOR",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1517,7 +1566,7 @@ var SCALES = {
     ]
   },
   NEOPOLITAN_MINOR: {
-    name: "neopolitan_minor",
+    name: "NEOPOLITAN_MINOR",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1529,7 +1578,7 @@ var SCALES = {
     ]
   },
   PERSIAN: {
-    name: "persian",
+    name: "PERSIAN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1541,8 +1590,7 @@ var SCALES = {
     ]
   },
   PHRYGIAN_DOMINANT: {
-    name: "phrygian_dominant",
-    mode: "phrygian_dominant",
+    mode: "PHRYGIAN_DOMINANT",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1554,7 +1602,7 @@ var SCALES = {
     ]
   },
   PHRYGIAN: {
-    mode: "phrygian",
+    mode: "PHRYGIAN",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1566,7 +1614,7 @@ var SCALES = {
     ]
   },
   PROMETHEUS: {
-    name: "prometheus",
+    name: "PROMETHEUS",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1577,7 +1625,7 @@ var SCALES = {
     ]
   },
   HARMONICS: {
-    name: "harmonics",
+    name: "HARMONICS",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1588,7 +1636,7 @@ var SCALES = {
     ]
   },
   TRITONE: {
-    name: "tritones",
+    name: "TRITONE",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1599,7 +1647,7 @@ var SCALES = {
     ]
   },
   TWO_SEMITONE_TRITONE: {
-    name: "two_semiton_tritone",
+    name: "TWO_SEMITONE_TRITONE",
     intervals: [
       new Interval("P1"),
       new Interval("m2"),
@@ -1609,8 +1657,8 @@ var SCALES = {
       new Interval("m6")
     ]
   },
-  UKRANIAN_DORIAN: {
-    name: "ukrarian_dorian",
+  UKRAINIAN_DORIAN: {
+    mode: "UKRAINIAN_DORIAN",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1622,7 +1670,7 @@ var SCALES = {
     ]
   },
   WHOLE_TONE: {
-    name: "whole_tone",
+    name: "WHOLE_TONE",
     intervals: [
       new Interval("P1"),
       new Interval("M2"),
@@ -1633,7 +1681,7 @@ var SCALES = {
     ]
   },
   YO: {
-    name: "yo",
+    name: "YO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1642,9 +1690,9 @@ var SCALES = {
       new Interval("m7")
     ]
   },
-  MAJOR_7_ARPEGGIO: {
+  MAJOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: "major_seven_arpeggio",
+    name: "MAJOR_SEVEN_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("M3"),
@@ -1654,7 +1702,7 @@ var SCALES = {
   },
   DOMINANT_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: "dominant_seven_arpeggio",
+    name: "DOMINANT_SEVEN_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("M3"),
@@ -1664,7 +1712,7 @@ var SCALES = {
   },
   MINOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: "minor_seven_arpeggio",
+    name: "MINOR_SEVEN_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1674,7 +1722,7 @@ var SCALES = {
   },
   MINOR_SEVEN_FLAT_FIVE_ARPEGGIO: {
     arpeggio: true,
-    name: "minor_seven_flat_five_arpeggio",
+    name: "MINOR_SEVEN_FLAT_FIVE_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1684,7 +1732,7 @@ var SCALES = {
   },
   DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO: {
     arpeggio: true,
-    name: "dominant_seven_sus_four_arpeggio",
+    name: "DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("P4"),
@@ -1692,9 +1740,9 @@ var SCALES = {
       new Interval("m7")
     ]
   },
-  DIMINISHED_SEVENT_ARPEGGIO: {
+  DIMINISHED_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: "diminished_seven_arpeggio",
+    name: "DIMINISHED_SEVEN_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1704,7 +1752,7 @@ var SCALES = {
   },
   MINOR_MAJOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: "minor_major_seven_arpeggio",
+    name: "MINOR_MAJOR_SEVEN_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1714,7 +1762,7 @@ var SCALES = {
   },
   MAJOR_SIX_ARPEGGIO: {
     arpeggio: true,
-    name: "major_six_arpeggio",
+    name: "MAJOR_SIX_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("M3"),
@@ -1724,7 +1772,7 @@ var SCALES = {
   },
   MINOR_MAJOR_SIX_ARPEGGIO: {
     arpeggio: true,
-    name: "minor_major_six_arpeggio",
+    name: "MINOR_MAJOR_SIX_ARPEGGIO",
     intervals: [
       new Interval("P1"),
       new Interval("m3"),
@@ -1740,7 +1788,7 @@ var Scale = class _Scale {
   constructor(params = {}) {
     const key = params.key ?? new Note2({ name: "C" });
     const intervals = params.intervals ?? [];
-    const name = params.name ?? "major";
+    const name = params.name ?? "MAJOR";
     const mode = params.mode ?? "";
     this.key = key;
     if (params.intervals !== void 0 && Array.isArray(intervals) && intervals.length > 0) {
@@ -1762,19 +1810,18 @@ var Scale = class _Scale {
   }
   get name() {
     const definitions = _Scale.getDefintionsFromIntervals(this.intervals);
-    return definitions.length > 0 ? definitions[0].name ?? "" : "";
+    return definitions.length > 0 ? definitions[0]?.name ?? "" : "";
   }
   set name(name) {
-    const definitionName = Object.keys(SCALES).find((s) => SCALES[s].name === name);
-    if (definitionName !== void 0) {
-      this.intervals = SCALES[definitionName].intervals;
+    if (name !== void 0) {
+      this.intervals = SCALES[name].intervals;
     } else {
       throw new Error(`Couldn't find a scale definition with that name : ${name}.`);
     }
   }
   get mode() {
     const definitions = _Scale.getDefintionsFromIntervals(this.intervals);
-    return definitions.length > 0 ? definitions[0].mode ?? "" : "";
+    return definitions.length > 0 ? definitions[0]?.mode ?? "" : "";
   }
   set mode(mode) {
     const definitionName = Object.keys(SCALES).find((s) => SCALES[s].mode === mode);
@@ -1800,22 +1847,24 @@ var Scale = class _Scale {
   get scaleChords() {
     const chords = [];
     if (this.intervals.length === 7) {
-      for (let i = 0; i < this.notes.length; i++) {
-        chords.push(
-          new Chord({
-            root: this.notes[i],
-            notes: [
-              this.notes[i],
-              this.notes[(i + 2) % this.notes.length],
-              // 3rd
-              this.notes[(i + 4) % this.notes.length],
-              // 5th
-              this.notes[(i + 6) % this.notes.length]
-              // 7th
-            ]
-          })
-        );
-      }
+      this.notes.forEach((n, i) => {
+        const third = this.notes[(i + 2) % this.notes.length];
+        const fifth = this.notes[(i + 4) % this.notes.length];
+        const seventh = this.notes[(i + 6) % this.notes.length];
+        if (third && fifth && seventh) {
+          chords.push(
+            new Chord({
+              root: n,
+              notes: [
+                n,
+                third,
+                fifth,
+                seventh
+              ]
+            })
+          );
+        }
+      });
     } else {
       console.warn("Cannot compute scale chords yet.");
     }
@@ -1825,7 +1874,7 @@ var Scale = class _Scale {
     return Object.keys(SCALES).filter((s) => {
       const scale = SCALES[s];
       if (scale.intervals.length === intervals.length) {
-        return scale.intervals.every((v, i) => v.name === intervals[i].name);
+        return scale.intervals.every((v, i) => v.name === intervals[i]?.name);
       } else {
         return false;
       }
@@ -1930,9 +1979,9 @@ var Bar = class _Bar {
       throw new Error(`Tying to set the content of a bar with something else than an array : ${JSON.stringify(content)}`);
     }
     this._content = [];
-    for (let i = 0; i < content.length; i++) {
-      this.addContent(content[i], false);
-    }
+    content.forEach((c) => {
+      this.addContent(c, false);
+    });
     if (this.autoFill) {
       this.fillEmptySpace();
     }
@@ -1964,9 +2013,9 @@ var Bar = class _Bar {
   // get the current value of bar
   get value() {
     let barValue = 0;
-    for (let i = 0; i < this.content.length; i++) {
-      barValue += this.content[i].dottedValue;
-    }
+    this.content.forEach((c) => {
+      barValue += c.dottedValue;
+    });
     return barValue;
   }
   // get expected bar value
@@ -2023,9 +2072,9 @@ var Bar = class _Bar {
       rests.unshift(Rest.findLargest(bar.emptySpace - restsValue));
       restsValue = rests.map((r) => r.value).reduce((p, r) => p + r, 0);
     }
-    for (let i = 0; i < rests.length; i++) {
-      bar.addContent(rests[i], false);
-    }
+    rests.forEach((r) => {
+      bar.addContent(r, false);
+    });
     return bar;
   }
   static isFull(bar) {
@@ -2104,7 +2153,7 @@ var Score = class {
     return this.timeSignature.beatsType;
   }
   get lastBar() {
-    if (this.bars.length === 0) {
+    if (this.bars.length === 0 || this.bars[this.bars.length - 1] === void 0) {
       throw new Error("Score has no bar.");
     }
     return this.bars[this.bars.length - 1];

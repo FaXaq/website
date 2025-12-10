@@ -37,7 +37,7 @@ export class Bar {
   private _typeEnd!: BAR_TYPE_END;
   private _autoFill: boolean = true;
 
-  constructor (params: IBarParams = {}) {
+  constructor(params: IBarParams = {}) {
     // setup autofill parameter before content assignation to prevent first autofill
     if (params.autoFill !== undefined) this.autoFill = params.autoFill
 
@@ -51,11 +51,11 @@ export class Bar {
   }
 
   // getters & setters
-  get timeSignature (): TimeSignature {
+  get timeSignature(): TimeSignature {
     return this._ts
   }
 
-  set timeSignature (timeSignature: TimeSignature) {
+  set timeSignature(timeSignature: TimeSignature) {
     if (!(timeSignature instanceof TimeSignature)) {
       throw new Error(`Trying to set a bar Time signature with something other than a Time Signature : ${JSON.stringify(timeSignature)}`)
     } else {
@@ -63,11 +63,11 @@ export class Bar {
     }
   }
 
-  get content (): BAR_CONTENT[] {
+  get content(): BAR_CONTENT[] {
     return this._content
   }
 
-  set content (content: BAR_CONTENT[]) {
+  set content(content: BAR_CONTENT[]) {
     if (!Array.isArray(content)) {
       throw new Error(`Tying to set the content of a bar with something else than an array : ${JSON.stringify(content)}`)
     }
@@ -75,67 +75,67 @@ export class Bar {
     // reset content
     this._content = []
 
-    for (let i = 0; i < content.length; i++) {
-      this.addContent(content[i], false)
-    }
+    content.forEach((c) => {
+      this.addContent(c, false)
+    })
 
     if (this.autoFill) {
       this.fillEmptySpace()
     }
   }
 
-  get staff (): SCORE_STAFF {
+  get staff(): SCORE_STAFF {
     return this._staff
   }
 
-  set staff (staff: SCORE_STAFF) {
+  set staff(staff: SCORE_STAFF) {
     this._staff = staff
   }
 
-  get typeStart (): BAR_TYPE_START {
+  get typeStart(): BAR_TYPE_START {
     return this._typeStart
   }
 
-  set typeStart (typeStart: BAR_TYPE_START) {
+  set typeStart(typeStart: BAR_TYPE_START) {
     this._typeStart = typeStart
   }
 
-  get typeEnd (): BAR_TYPE_END {
+  get typeEnd(): BAR_TYPE_END {
     return this._typeEnd
   }
 
-  set typeEnd (typeEnd: BAR_TYPE_END) {
+  set typeEnd(typeEnd: BAR_TYPE_END) {
     this._typeEnd = typeEnd
   }
 
-  get autoFill (): boolean {
+  get autoFill(): boolean {
     return this._autoFill
   }
 
-  set autoFill (autoFill: boolean) {
+  set autoFill(autoFill: boolean) {
     this._autoFill = autoFill
   }
 
   // get the current value of bar
-  get value (): number {
+  get value(): number {
     let barValue = 0
-    for (let i = 0; i < this.content.length; i++) {
-      barValue += this.content[i].dottedValue
-    }
+    this.content.forEach((c) => {
+      barValue += c.dottedValue
+    })
     return barValue
   }
 
   // get expected bar value
-  get expectedValue (): number {
+  get expectedValue(): number {
     return this.timeSignature.beatsType / this.timeSignature.beats
   }
 
   // get remaining empty space in bar
-  get emptySpace (): number {
+  get emptySpace(): number {
     return this.expectedValue - this.value
   }
 
-  addContent (content: BAR_CONTENT, fillEmptySpace: boolean = false): Bar {
+  addContent(content: BAR_CONTENT, fillEmptySpace: boolean = false): Bar {
     if (this.isFull()) {
       throw new Error('Trying to add content to a bar that is already full. Try modifyContent instead.')
     }
@@ -159,7 +159,7 @@ export class Bar {
   }
 
   // return old content
-  modifyContent (contentIndex: number, newContent: BAR_CONTENT): BAR_CONTENT | null {
+  modifyContent(contentIndex: number, newContent: BAR_CONTENT): BAR_CONTENT | null {
     if (this.content[contentIndex] !== undefined) {
       // modify it
       this.content[contentIndex] = newContent
@@ -176,16 +176,16 @@ export class Bar {
     }
   }
 
-  fillEmptySpace (): Bar {
+  fillEmptySpace(): Bar {
     return Bar.fillEmptySpace(this)
   }
 
-  isFull (): boolean {
+  isFull(): boolean {
     return Bar.isFull(this)
   }
 
   // fill empty space with rests
-  static fillEmptySpace (bar: Bar): Bar {
+  static fillEmptySpace(bar: Bar): Bar {
     if (bar.isFull()) return bar
     // when the bar is not full, fill it with the greater rests starting from the end
     const rests: Rest[] = []
@@ -198,21 +198,21 @@ export class Bar {
       restsValue = rests.map(r => r.value).reduce((p, r) => p + r, 0)
     }
 
-    for (let i = 0; i < rests.length; i++) {
+    rests.forEach((r) => {
       // add each rest without triggering autoFill
-      bar.addContent(rests[i], false)
-    }
+      bar.addContent(r, false)
+    })
 
     return bar
   }
 
-  static isFull (bar: Bar): boolean {
+  static isFull(bar: Bar): boolean {
     return bar.value === bar.expectedValue
   }
 
-  static isBarContent (content: any): boolean {
+  static isBarContent(content: any): boolean {
     return content instanceof Note ||
-    content instanceof Rest ||
-    content instanceof Chord
+      content instanceof Rest ||
+      content instanceof Chord
   }
 }

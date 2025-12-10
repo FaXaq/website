@@ -10,9 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResumeRouteImport } from './routes/resume'
-import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as BlogWildcardRouteImport } from './routes/blog/wildcard'
 import { Route as BlogWhenToUseUseCallbackUseMemoRouteImport } from './routes/blog/when-to-use-useCallback-useMemo'
 import { Route as BlogTunerPt3RouteImport } from './routes/blog/tuner-pt3'
@@ -25,15 +26,17 @@ import { Route as BlogGpxFilesRouteImport } from './routes/blog/gpx-files'
 import { Route as BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRouteImport } from './routes/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
 import { Route as BlogDigitalPresenceOfGovernementsRouteImport } from './routes/blog/digital-presence-of-governements'
 import { Route as BlogDigitalAdsRouteImport } from './routes/blog/digital-ads'
+import { Route as AdminMeRouteImport } from './routes/admin/me'
+import { Route as ProjectsMttsRouteRouteImport } from './routes/projects/mtts/route'
+import { Route as ProjectsMttsIndexRouteImport } from './routes/projects/mtts/index'
+import { Route as ProjectsCorsicaIndexRouteImport } from './routes/projects/corsica/index'
+import { Route as ProjectsCoolerIndexRouteImport } from './routes/projects/cooler/index'
+import { Route as ProjectsMttsScaleBuilderRouteImport } from './routes/projects/mtts/scale-builder'
+import { Route as ProjectsMttsMetronomeRouteImport } from './routes/projects/mtts/metronome'
 
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsRoute = ProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -41,9 +44,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogWildcardRoute = BlogWildcardRouteImport.update({
@@ -110,11 +123,48 @@ const BlogDigitalAdsRoute = BlogDigitalAdsRouteImport.update({
   path: '/blog/digital-ads',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminMeRoute = AdminMeRouteImport.update({
+  id: '/admin/me',
+  path: '/admin/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsMttsRouteRoute = ProjectsMttsRouteRouteImport.update({
+  id: '/projects/mtts',
+  path: '/projects/mtts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsMttsIndexRoute = ProjectsMttsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProjectsMttsRouteRoute,
+} as any)
+const ProjectsCorsicaIndexRoute = ProjectsCorsicaIndexRouteImport.update({
+  id: '/projects/corsica/',
+  path: '/projects/corsica/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsCoolerIndexRoute = ProjectsCoolerIndexRouteImport.update({
+  id: '/projects/cooler/',
+  path: '/projects/cooler/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsMttsScaleBuilderRoute =
+  ProjectsMttsScaleBuilderRouteImport.update({
+    id: '/scale-builder',
+    path: '/scale-builder',
+    getParentRoute: () => ProjectsMttsRouteRoute,
+  } as any)
+const ProjectsMttsMetronomeRoute = ProjectsMttsMetronomeRouteImport.update({
+  id: '/metronome',
+  path: '/metronome',
+  getParentRoute: () => ProjectsMttsRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/projects/mtts': typeof ProjectsMttsRouteRouteWithChildren
+  '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
   '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe': typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
@@ -127,12 +177,19 @@ export interface FileRoutesByFullPath {
   '/blog/tuner-pt3': typeof BlogTunerPt3Route
   '/blog/when-to-use-useCallback-useMemo': typeof BlogWhenToUseUseCallbackUseMemoRoute
   '/blog/wildcard': typeof BlogWildcardRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
+  '/projects/cooler': typeof ProjectsCoolerIndexRoute
+  '/projects/corsica': typeof ProjectsCorsicaIndexRoute
+  '/projects/mtts/': typeof ProjectsMttsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
   '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe': typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
@@ -145,13 +202,21 @@ export interface FileRoutesByTo {
   '/blog/tuner-pt3': typeof BlogTunerPt3Route
   '/blog/when-to-use-useCallback-useMemo': typeof BlogWhenToUseUseCallbackUseMemoRoute
   '/blog/wildcard': typeof BlogWildcardRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
+  '/projects/cooler': typeof ProjectsCoolerIndexRoute
+  '/projects/corsica': typeof ProjectsCorsicaIndexRoute
+  '/projects/mtts': typeof ProjectsMttsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/projects': typeof ProjectsRoute
   '/resume': typeof ResumeRoute
+  '/projects/mtts': typeof ProjectsMttsRouteRouteWithChildren
+  '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
   '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe': typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
@@ -164,14 +229,22 @@ export interface FileRoutesById {
   '/blog/tuner-pt3': typeof BlogTunerPt3Route
   '/blog/when-to-use-useCallback-useMemo': typeof BlogWhenToUseUseCallbackUseMemoRoute
   '/blog/wildcard': typeof BlogWildcardRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
+  '/projects/cooler/': typeof ProjectsCoolerIndexRoute
+  '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
+  '/projects/mtts/': typeof ProjectsMttsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/projects'
     | '/resume'
+    | '/projects/mtts'
+    | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
     | '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
@@ -184,12 +257,19 @@ export interface FileRouteTypes {
     | '/blog/tuner-pt3'
     | '/blog/when-to-use-useCallback-useMemo'
     | '/blog/wildcard'
+    | '/admin'
     | '/blog'
+    | '/projects'
+    | '/projects/mtts/metronome'
+    | '/projects/mtts/scale-builder'
+    | '/projects/cooler'
+    | '/projects/corsica'
+    | '/projects/mtts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/projects'
     | '/resume'
+    | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
     | '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
@@ -202,12 +282,20 @@ export interface FileRouteTypes {
     | '/blog/tuner-pt3'
     | '/blog/when-to-use-useCallback-useMemo'
     | '/blog/wildcard'
+    | '/admin'
     | '/blog'
+    | '/projects'
+    | '/projects/mtts/metronome'
+    | '/projects/mtts/scale-builder'
+    | '/projects/cooler'
+    | '/projects/corsica'
+    | '/projects/mtts'
   id:
     | '__root__'
     | '/'
-    | '/projects'
     | '/resume'
+    | '/projects/mtts'
+    | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
     | '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
@@ -220,13 +308,21 @@ export interface FileRouteTypes {
     | '/blog/tuner-pt3'
     | '/blog/when-to-use-useCallback-useMemo'
     | '/blog/wildcard'
+    | '/admin/'
     | '/blog/'
+    | '/projects/'
+    | '/projects/mtts/metronome'
+    | '/projects/mtts/scale-builder'
+    | '/projects/cooler/'
+    | '/projects/corsica/'
+    | '/projects/mtts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProjectsRoute: typeof ProjectsRoute
   ResumeRoute: typeof ResumeRoute
+  ProjectsMttsRouteRoute: typeof ProjectsMttsRouteRouteWithChildren
+  AdminMeRoute: typeof AdminMeRoute
   BlogDigitalAdsRoute: typeof BlogDigitalAdsRoute
   BlogDigitalPresenceOfGovernementsRoute: typeof BlogDigitalPresenceOfGovernementsRoute
   BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute: typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
@@ -239,7 +335,11 @@ export interface RootRouteChildren {
   BlogTunerPt3Route: typeof BlogTunerPt3Route
   BlogWhenToUseUseCallbackUseMemoRoute: typeof BlogWhenToUseUseCallbackUseMemoRoute
   BlogWildcardRoute: typeof BlogWildcardRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ProjectsCoolerIndexRoute: typeof ProjectsCoolerIndexRoute
+  ProjectsCorsicaIndexRoute: typeof ProjectsCorsicaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -251,13 +351,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResumeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/projects': {
-      id: '/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -265,11 +358,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/wildcard': {
@@ -356,13 +463,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogDigitalAdsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/me': {
+      id: '/admin/me'
+      path: '/admin/me'
+      fullPath: '/admin/me'
+      preLoaderRoute: typeof AdminMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/mtts': {
+      id: '/projects/mtts'
+      path: '/projects/mtts'
+      fullPath: '/projects/mtts'
+      preLoaderRoute: typeof ProjectsMttsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/mtts/': {
+      id: '/projects/mtts/'
+      path: '/'
+      fullPath: '/projects/mtts/'
+      preLoaderRoute: typeof ProjectsMttsIndexRouteImport
+      parentRoute: typeof ProjectsMttsRouteRoute
+    }
+    '/projects/corsica/': {
+      id: '/projects/corsica/'
+      path: '/projects/corsica'
+      fullPath: '/projects/corsica'
+      preLoaderRoute: typeof ProjectsCorsicaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/cooler/': {
+      id: '/projects/cooler/'
+      path: '/projects/cooler'
+      fullPath: '/projects/cooler'
+      preLoaderRoute: typeof ProjectsCoolerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/mtts/scale-builder': {
+      id: '/projects/mtts/scale-builder'
+      path: '/scale-builder'
+      fullPath: '/projects/mtts/scale-builder'
+      preLoaderRoute: typeof ProjectsMttsScaleBuilderRouteImport
+      parentRoute: typeof ProjectsMttsRouteRoute
+    }
+    '/projects/mtts/metronome': {
+      id: '/projects/mtts/metronome'
+      path: '/metronome'
+      fullPath: '/projects/mtts/metronome'
+      preLoaderRoute: typeof ProjectsMttsMetronomeRouteImport
+      parentRoute: typeof ProjectsMttsRouteRoute
+    }
   }
 }
 
+interface ProjectsMttsRouteRouteChildren {
+  ProjectsMttsMetronomeRoute: typeof ProjectsMttsMetronomeRoute
+  ProjectsMttsScaleBuilderRoute: typeof ProjectsMttsScaleBuilderRoute
+  ProjectsMttsIndexRoute: typeof ProjectsMttsIndexRoute
+}
+
+const ProjectsMttsRouteRouteChildren: ProjectsMttsRouteRouteChildren = {
+  ProjectsMttsMetronomeRoute: ProjectsMttsMetronomeRoute,
+  ProjectsMttsScaleBuilderRoute: ProjectsMttsScaleBuilderRoute,
+  ProjectsMttsIndexRoute: ProjectsMttsIndexRoute,
+}
+
+const ProjectsMttsRouteRouteWithChildren =
+  ProjectsMttsRouteRoute._addFileChildren(ProjectsMttsRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProjectsRoute: ProjectsRoute,
   ResumeRoute: ResumeRoute,
+  ProjectsMttsRouteRoute: ProjectsMttsRouteRouteWithChildren,
+  AdminMeRoute: AdminMeRoute,
   BlogDigitalAdsRoute: BlogDigitalAdsRoute,
   BlogDigitalPresenceOfGovernementsRoute:
     BlogDigitalPresenceOfGovernementsRoute,
@@ -378,7 +550,11 @@ const rootRouteChildren: RootRouteChildren = {
   BlogTunerPt3Route: BlogTunerPt3Route,
   BlogWhenToUseUseCallbackUseMemoRoute: BlogWhenToUseUseCallbackUseMemoRoute,
   BlogWildcardRoute: BlogWildcardRoute,
+  AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
+  ProjectsCoolerIndexRoute: ProjectsCoolerIndexRoute,
+  ProjectsCorsicaIndexRoute: ProjectsCorsicaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

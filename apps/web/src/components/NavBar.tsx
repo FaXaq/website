@@ -18,10 +18,7 @@ interface Crumb {
 export const NavBar = () => {
   const routerState = useRouterState();
   const location = routerState.location.pathname;
-  // slice(2) to remove home & locale from url
   const locations = location.split("/").filter(l => !_.isEmpty(l));
-
-  console.log('locations', location);
 
   const breadcrumbs: Crumb[] = [{
     label: "",

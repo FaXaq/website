@@ -147,6 +147,9 @@ importers:
       '@tanstack/react-start':
         specifier: ^1.139.12
         version: 1.139.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vite@7.2.4(@types/node@13.13.52)(sass@1.94.1)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.2))(webpack@5.103.0)
+      '@tanstack/zod-adapter':
+        specifier: ^1.140.1
+        version: 1.140.1(@tanstack/react-router@1.139.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(zod@4.1.12)
       '@trpc/client':
         specifier: ^11.7.1
         version: 11.7.1(@trpc/server@11.7.1(typescript@5.9.3))(typescript@5.9.3)
@@ -2421,6 +2424,13 @@ packages:
   '@tanstack/virtual-file-routes@1.139.0':
     resolution: {integrity: sha512-9PImF1d1tovTUIpjFVa0W7Fwj/MHif7BaaczgJJfbv3sDt1Gh+oW9W9uCw9M3ndEJynnp5ZD/TTs0RGubH5ssg==}
     engines: {node: '>=12'}
+
+  '@tanstack/zod-adapter@1.140.1':
+    resolution: {integrity: sha512-GPwefmoB/RrVnGKTIzGnp4Kv6FQNgXwZQxbk+A7g5ddGCAuug+3xj4n/l1qsCokE1nVBc8CTWmrDRQrsAXVqHQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@tanstack/react-router': '>=1.43.2'
+      zod: ^3.23.8
 
   '@trpc/client@11.7.1':
     resolution: {integrity: sha512-uOnAjElKI892/U6aQMcBHYs3x7mme3Cvv1F87ytBL56rBvs7+DyK7r43zgaXKf13+GtPEI6ex5xjVUfyDW8XcQ==}
@@ -9724,6 +9734,11 @@ snapshots:
 
   '@tanstack/virtual-file-routes@1.139.0': {}
 
+  '@tanstack/zod-adapter@1.140.1(@tanstack/react-router@1.139.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(zod@4.1.12)':
+    dependencies:
+      '@tanstack/react-router': 1.139.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      zod: 4.1.12
+
   '@trpc/client@11.7.1(@trpc/server@11.7.1(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@trpc/server': 11.7.1(typescript@5.9.3)
@@ -12768,7 +12783,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 13.13.52
+      '@types/node': 22.19.1
       merge-stream: 2.0.0
       supports-color: 8.1.1
 

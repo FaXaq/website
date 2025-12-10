@@ -2,17 +2,34 @@ import { Note } from './Note'
 import { Interval } from './Interval'
 import { Chord } from './Chord'
 
+type IScaleName = "MAJOR" | "ACOUSTIC" | "NATURAL_MINOR" | "ALGERIAN" | "ALTERED" | "AUGMENTED" | "BEBOP_DOMINANT" | "BLUES" | "ASCENDING_CHROMATIC" | "DESCENDING_CHROMATIC" | "DOUBLE_HARMONIC" | "ENIGMATIC" | "GYPSY" | "HALF_DIMINISHED" | "HARMONIC_MAJOR" | "HARMONIC_MINOR" | "HIRAJOSHI" | "HUNGRARIAN_GYPSY" | "HUNGRARIAN_MINOR" | "IN" | "INSEN" | "IWATO" | "MAJOR_BEBOP" | "MAJOR_PENTATONIC" | "MELODIC_MINOR_ASCENDING" | "MELODIC_MINOR_DESCENDING" | "MINOR_PENTATONIC" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PERSIAN" | "PROMETHEUS" | "HARMONICS" | "TRITONE" | "TWO_SEMITONE_TRITONE" | "UKRAINIAN_DORIAN" | "WHOLE_TONE" | "YO" | "MAJOR_SEVEN_ARPEGGIO" | "DOMINANT_SEVEN_ARPEGGIO" | "MINOR_SEVEN_ARPEGGIO" | "MINOR_SEVEN_FLAT_FIVE_ARPEGGIO" | "DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO" | "MINOR_MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SIX_ARPEGGIO" | "MINOR_MAJOR_SIX_ARPEGGIO" | "DIMINISHED_SEVEN_ARPEGGIO"
+
+type IScaleMode = "IONIAN" | "AEOLIAN" | "DORIAN" | "LOCRIAN" | "LYDIAN" | "MIXOLYDIAN" | "SUPER_LOCRIAN" | "LYDIAN_AUGMENTED" | "MAJOR_LOCRIAN" | "MELODIC_MINOR_DESCENDING" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PHRYGIAN_DOMINANT" | "PHRYGIAN" | "PROMETHEUS" | "HARMONICS" | "ISTRIAN" | "FLAMENCO" | "UKRAINIAN_DORIAN"
+
 interface IScaleDefinition {
-  name?: string
-  mode?: string
+  name?: IScaleName
+  mode?: IScaleMode
   arpeggio?: boolean
   intervals: Interval[]
 }
 
-export const SCALES = {
+export const SCALES: Record<IScaleName | IScaleMode, IScaleDefinition> = {
   MAJOR: {
-    name: 'major',
-    mode: 'ionian',
+    name: "MAJOR",
+    mode: "IONIAN",
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('M6'),
+      new Interval('M7')
+    ]
+  },
+  IONIAN: {
+    name: "MAJOR",
+    mode: "IONIAN",
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -24,7 +41,7 @@ export const SCALES = {
     ]
   },
   ACOUSTIC: {
-    name: 'acoustic',
+    name: 'ACOUSTIC',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -36,8 +53,21 @@ export const SCALES = {
     ]
   },
   NATURAL_MINOR: {
-    name: 'natural_minor',
-    mode: 'aeolian',
+    name: 'NATURAL_MINOR',
+    mode: 'AEOLIAN',
+    intervals: [
+      new Interval('P1'),
+      new Interval('M2'),
+      new Interval('m3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  AEOLIAN: {
+    name: 'NATURAL_MINOR',
+    mode: 'AEOLIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -49,7 +79,7 @@ export const SCALES = {
     ]
   },
   ALGERIAN: {
-    name: 'algerian',
+    name: 'ALGERIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -68,8 +98,21 @@ export const SCALES = {
     ]
   },
   ALTERED: {
-    name: 'altered',
-    mode: 'super_locrian',
+    name: 'ALTERED',
+    mode: 'SUPER_LOCRIAN',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('m3'),
+      new Interval('d4'),
+      new Interval('d5'),
+      new Interval('m6'),
+      new Interval('m7')
+    ]
+  },
+  SUPER_LOCRIAN: {
+    name: 'ALTERED',
+    mode: 'SUPER_LOCRIAN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -81,7 +124,7 @@ export const SCALES = {
     ]
   },
   AUGMENTED: {
-    name: 'augmented',
+    name: 'AUGMENTED',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -92,7 +135,7 @@ export const SCALES = {
     ]
   },
   BEBOP_DOMINANT: {
-    name: 'bebop_dominant',
+    name: 'BEBOP_DOMINANT',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -105,7 +148,7 @@ export const SCALES = {
     ]
   },
   BLUES: {
-    name: 'blues',
+    name: 'BLUES',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -117,7 +160,7 @@ export const SCALES = {
     ]
   },
   ASCENDING_CHROMATIC: {
-    name: 'ascending_chromatic',
+    name: 'ASCENDING_CHROMATIC',
     intervals: [
       new Interval('P1'),
       new Interval('A1'),
@@ -134,7 +177,7 @@ export const SCALES = {
     ]
   },
   DESCENDING_CHROMATIC: {
-    name: 'decending_chromatic',
+    name: 'DESCENDING_CHROMATIC',
     intervals: [
       new Interval('M7'),
       new Interval('m7'),
@@ -151,7 +194,7 @@ export const SCALES = {
     ]
   },
   DORIAN: {
-    mode: 'dorian',
+    mode: 'DORIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -163,8 +206,21 @@ export const SCALES = {
     ]
   },
   DOUBLE_HARMONIC: {
-    name: 'double_harmonic',
-    mode: 'flamenco',
+    name: 'DOUBLE_HARMONIC',
+    mode: 'FLAMENCO',
+    intervals: [
+      new Interval('P1'),
+      new Interval('m2'),
+      new Interval('M3'),
+      new Interval('P4'),
+      new Interval('P5'),
+      new Interval('m6'),
+      new Interval('M7')
+    ]
+  },
+  FLAMENCO: {
+    name: 'DOUBLE_HARMONIC',
+    mode: 'FLAMENCO',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -176,7 +232,7 @@ export const SCALES = {
     ]
   },
   ENIGMATIC: {
-    name: 'enigmatic',
+    name: 'ENIGMATIC',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -188,7 +244,7 @@ export const SCALES = {
     ]
   },
   GYPSY: {
-    name: 'gipsy',
+    name: 'GYPSY',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -200,7 +256,7 @@ export const SCALES = {
     ]
   },
   HALF_DIMINISHED: {
-    name: 'half_diminished',
+    name: 'HALF_DIMINISHED',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -212,7 +268,7 @@ export const SCALES = {
     ]
   },
   HARMONIC_MAJOR: {
-    name: 'harmonic_major',
+    name: 'HARMONIC_MAJOR',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -224,7 +280,7 @@ export const SCALES = {
     ]
   },
   HARMONIC_MINOR: {
-    name: 'harmonic_minor',
+    name: 'HARMONIC_MINOR',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -236,7 +292,7 @@ export const SCALES = {
     ]
   },
   HIRAJOSHI: {
-    name: 'hirajoshi',
+    name: 'HIRAJOSHI',
     intervals: [
       new Interval('P1'),
       new Interval('M3'),
@@ -246,7 +302,7 @@ export const SCALES = {
     ]
   },
   HUNGRARIAN_GYPSY: {
-    name: 'hungrarian_gypsy',
+    name: 'HUNGRARIAN_GYPSY',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -258,7 +314,7 @@ export const SCALES = {
     ]
   },
   HUNGRARIAN_MINOR: {
-    name: 'hungrarian_minor',
+    name: 'HUNGRARIAN_MINOR',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -270,7 +326,7 @@ export const SCALES = {
     ]
   },
   IN: {
-    name: 'in',
+    name: 'IN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -280,7 +336,7 @@ export const SCALES = {
     ]
   },
   INSEN: {
-    name: 'insen',
+    name: 'INSEN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -290,8 +346,7 @@ export const SCALES = {
     ]
   },
   ISTRIAN: {
-    name: 'istrian',
-    mode: 'istrian',
+    mode: 'ISTRIAN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -302,7 +357,7 @@ export const SCALES = {
     ]
   },
   IWATO: {
-    name: 'iwato',
+    name: 'IWATO',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -312,7 +367,7 @@ export const SCALES = {
     ]
   },
   LOCRIAN: {
-    mode: 'locrian',
+    mode: 'LOCRIAN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -324,8 +379,7 @@ export const SCALES = {
     ]
   },
   LYDIAN_AUGMENTED: {
-    name: 'lydian_augmented',
-    mode: 'lydian_augmented',
+    mode: 'LYDIAN_AUGMENTED',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -337,7 +391,7 @@ export const SCALES = {
     ]
   },
   LYDIAN: {
-    mode: 'lydian',
+    mode: 'LYDIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -349,7 +403,7 @@ export const SCALES = {
     ]
   },
   MAJOR_BEBOP: {
-    name: 'major_bebop',
+    name: 'MAJOR_BEBOP',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -362,8 +416,7 @@ export const SCALES = {
     ]
   },
   MAJOR_LOCRIAN: {
-    name: 'major_locrian',
-    mode: 'major_locrian',
+    mode: 'MAJOR_LOCRIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -375,7 +428,7 @@ export const SCALES = {
     ]
   },
   MAJOR_PENTATONIC: {
-    name: 'major_pentatonic',
+    name: 'MAJOR_PENTATONIC',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -385,7 +438,7 @@ export const SCALES = {
     ]
   },
   MELODIC_MINOR_ASCENDING: {
-    name: 'melodic_minor_ascending',
+    name: 'MELODIC_MINOR_ASCENDING',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -397,7 +450,7 @@ export const SCALES = {
     ]
   },
   MELODIC_MINOR_DESCENDING: {
-    name: 'melodic_minor_descending',
+    name: 'MELODIC_MINOR_DESCENDING',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -409,7 +462,7 @@ export const SCALES = {
     ]
   },
   MINOR_PENTATONIC: {
-    name: 'minor_pentatonic',
+    name: 'MINOR_PENTATONIC',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -419,7 +472,7 @@ export const SCALES = {
     ]
   },
   MIXOLYDIAN: {
-    mode: 'mixolydian',
+    mode: 'MIXOLYDIAN',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -431,7 +484,7 @@ export const SCALES = {
     ]
   },
   NEOPOLITAN_MAJOR: {
-    name: 'neopolitan_major',
+    name: 'NEOPOLITAN_MAJOR',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -443,7 +496,7 @@ export const SCALES = {
     ]
   },
   NEOPOLITAN_MINOR: {
-    name: 'neopolitan_minor',
+    name: 'NEOPOLITAN_MINOR',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -455,7 +508,7 @@ export const SCALES = {
     ]
   },
   PERSIAN: {
-    name: 'persian',
+    name: 'PERSIAN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -467,8 +520,7 @@ export const SCALES = {
     ]
   },
   PHRYGIAN_DOMINANT: {
-    name: 'phrygian_dominant',
-    mode: 'phrygian_dominant',
+    mode: 'PHRYGIAN_DOMINANT',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -480,7 +532,7 @@ export const SCALES = {
     ]
   },
   PHRYGIAN: {
-    mode: 'phrygian',
+    mode: 'PHRYGIAN',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -492,7 +544,7 @@ export const SCALES = {
     ]
   },
   PROMETHEUS: {
-    name: 'prometheus',
+    name: 'PROMETHEUS',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -503,7 +555,7 @@ export const SCALES = {
     ]
   },
   HARMONICS: {
-    name: 'harmonics',
+    name: 'HARMONICS',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -514,7 +566,7 @@ export const SCALES = {
     ]
   },
   TRITONE: {
-    name: 'tritones',
+    name: 'TRITONE',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -525,7 +577,7 @@ export const SCALES = {
     ]
   },
   TWO_SEMITONE_TRITONE: {
-    name: 'two_semiton_tritone',
+    name: 'TWO_SEMITONE_TRITONE',
     intervals: [
       new Interval('P1'),
       new Interval('m2'),
@@ -535,8 +587,8 @@ export const SCALES = {
       new Interval('m6')
     ]
   },
-  UKRANIAN_DORIAN: {
-    name: 'ukrarian_dorian',
+  UKRAINIAN_DORIAN: {
+    mode: "UKRAINIAN_DORIAN",
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -548,7 +600,7 @@ export const SCALES = {
     ]
   },
   WHOLE_TONE: {
-    name: 'whole_tone',
+    name: 'WHOLE_TONE',
     intervals: [
       new Interval('P1'),
       new Interval('M2'),
@@ -559,7 +611,7 @@ export const SCALES = {
     ]
   },
   YO: {
-    name: 'yo',
+    name: 'YO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -568,9 +620,9 @@ export const SCALES = {
       new Interval('m7')
     ]
   },
-  MAJOR_7_ARPEGGIO: {
+  MAJOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: 'major_seven_arpeggio',
+    name: 'MAJOR_SEVEN_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('M3'),
@@ -580,7 +632,7 @@ export const SCALES = {
   },
   DOMINANT_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: 'dominant_seven_arpeggio',
+    name: 'DOMINANT_SEVEN_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('M3'),
@@ -590,7 +642,7 @@ export const SCALES = {
   },
   MINOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: 'minor_seven_arpeggio',
+    name: 'MINOR_SEVEN_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -600,7 +652,7 @@ export const SCALES = {
   },
   MINOR_SEVEN_FLAT_FIVE_ARPEGGIO: {
     arpeggio: true,
-    name: 'minor_seven_flat_five_arpeggio',
+    name: 'MINOR_SEVEN_FLAT_FIVE_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -610,7 +662,7 @@ export const SCALES = {
   },
   DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO: {
     arpeggio: true,
-    name: 'dominant_seven_sus_four_arpeggio',
+    name: 'DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('P4'),
@@ -618,9 +670,9 @@ export const SCALES = {
       new Interval('m7')
     ]
   },
-  DIMINISHED_SEVENT_ARPEGGIO: {
+  DIMINISHED_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: 'diminished_seven_arpeggio',
+    name: 'DIMINISHED_SEVEN_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -630,7 +682,7 @@ export const SCALES = {
   },
   MINOR_MAJOR_SEVEN_ARPEGGIO: {
     arpeggio: true,
-    name: 'minor_major_seven_arpeggio',
+    name: 'MINOR_MAJOR_SEVEN_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -640,7 +692,7 @@ export const SCALES = {
   },
   MAJOR_SIX_ARPEGGIO: {
     arpeggio: true,
-    name: 'major_six_arpeggio',
+    name: 'MAJOR_SIX_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('M3'),
@@ -650,7 +702,7 @@ export const SCALES = {
   },
   MINOR_MAJOR_SIX_ARPEGGIO: {
     arpeggio: true,
-    name: 'minor_major_six_arpeggio',
+    name: 'MINOR_MAJOR_SIX_ARPEGGIO',
     intervals: [
       new Interval('P1'),
       new Interval('m3'),
@@ -661,10 +713,10 @@ export const SCALES = {
 }
 
 interface IScaleParams {
-  name?: string
+  name?: IScaleName
   key?: Note
   intervals?: Interval[]
-  mode?: string
+  mode?: IScaleMode
 }
 
 export class Scale {
@@ -672,10 +724,10 @@ export class Scale {
   private _notes: Note[] = [];
   private _intervals: Interval[] = [];
 
-  constructor (params: IScaleParams = {}) {
+  constructor(params: IScaleParams = {}) {
     const key = params.key ?? new Note({ name: 'C' })
     const intervals = params.intervals ?? []
-    const name = params.name ?? 'major'
+    const name = params.name ?? 'MAJOR'
     const mode = params.mode ?? ''
 
     this.key = key
@@ -689,11 +741,11 @@ export class Scale {
     }
   }
 
-  get intervals (): Interval[] {
+  get intervals(): Interval[] {
     return this._intervals
   }
 
-  set intervals (intervals: Interval[]) {
+  set intervals(intervals: Interval[]) {
     if (!Array.isArray(intervals) || !intervals.every(i => i instanceof Interval)) {
       throw new Error(`Cannot assign ${JSON.stringify(intervals)} as scale intervals.`)
     }
@@ -701,71 +753,75 @@ export class Scale {
     this._intervals = intervals.sort((ia, ib) => ia.semitones - ib.semitones)
   }
 
-  get name (): string {
+  get name(): string {
     const definitions = Scale.getDefintionsFromIntervals(this.intervals)
 
-    return definitions.length > 0 ? definitions[0].name ?? '' : ''
+    return definitions.length > 0 ? definitions[0]?.name ?? '' : ''
   }
 
-  set name (name: string) {
-    const definitionName = Object.keys(SCALES).find(s => SCALES[s].name === name)
-
-    if (definitionName !== undefined) {
-      this.intervals = SCALES[definitionName].intervals
+  set name(name: IScaleName) {
+    if (name !== undefined) {
+      this.intervals = SCALES[name].intervals
     } else {
       throw new Error(`Couldn't find a scale definition with that name : ${name}.`)
     }
   }
 
-  get mode (): string {
+  get mode(): string {
     const definitions = Scale.getDefintionsFromIntervals(this.intervals)
 
-    return definitions.length > 0 ? definitions[0].mode ?? '' : ''
+    return definitions.length > 0 ? definitions[0]?.mode ?? '' : ''
   }
 
-  set mode (mode: string) {
-    const definitionName = Object.keys(SCALES).find(s => SCALES[s].mode === mode)
+  set mode(mode: string) {
+    const definitionName = Object.keys(SCALES).find(s => SCALES[s as IScaleName].mode === mode)
 
     if (definitionName !== undefined) {
-      this.intervals = SCALES[definitionName].intervals
+      this.intervals = SCALES[definitionName as IScaleName].intervals
     } else {
       throw new Error(`Couldn't find a scale definition with that mode : ${mode}.`)
     }
   }
 
-  get key (): Note {
+  get key(): Note {
     return this._key
   }
 
-  set key (note: Note) {
+  set key(note: Note) {
     this._key = note
   }
 
-  set notes (notes: Note[]) {
+  set notes(notes: Note[]) {
     this._notes = notes
   }
 
-  get notes (): Note[] {
+  get notes(): Note[] {
     return this._intervals.map(interval => Interval.apply(this._key, interval.name))
   }
 
   // Return all 7th chords from the scale if it is diatonic
-  get scaleChords (): Chord[] {
+  get scaleChords(): Chord[] {
     const chords: Chord[] = []
     if (this.intervals.length === 7) {
-      for (let i = 0; i < this.notes.length; i++) {
-        chords.push(
-          new Chord({
-            root: this.notes[i],
-            notes: [
-              this.notes[i],
-              this.notes[(i + 2) % this.notes.length], // 3rd
-              this.notes[(i + 4) % this.notes.length], // 5th
-              this.notes[(i + 6) % this.notes.length] // 7th
-            ]
-          })
-        )
-      }
+      this.notes.forEach((n, i) => {
+        const third = this.notes[(i + 2) % this.notes.length]
+        const fifth = this.notes[(i + 4) % this.notes.length]
+        const seventh = this.notes[(i + 6) % this.notes.length]
+
+        if (third && fifth && seventh) {
+          chords.push(
+            new Chord({
+              root: n,
+              notes: [
+                n,
+                third,
+                fifth,
+                seventh
+              ]
+            })
+          )
+        }
+      })
     } else {
       console.warn('Cannot compute scale chords yet.')
     }
@@ -773,14 +829,14 @@ export class Scale {
     return chords
   }
 
-  static getDefintionsFromIntervals (intervals: Interval[]): IScaleDefinition[] {
-    return Object.keys(SCALES).filter(s => {
-      const scale = SCALES[s]
+  static getDefintionsFromIntervals(intervals: Interval[]): IScaleDefinition[] {
+    return Object.keys(SCALES).filter((s) => {
+      const scale = SCALES[s as IScaleName]
       if (scale.intervals.length === intervals.length) {
-        return scale.intervals.every((v, i) => v.name === intervals[i].name)
+        return scale.intervals.every((v, i) => v.name === intervals[i]?.name)
       } else {
         return false
       }
-    }).map(n => SCALES[n])
+    }).map(n => SCALES[n as IScaleName])
   }
 }

@@ -14,33 +14,33 @@ function Home() {
   return (
     <Container p={4}>
       <Heading as="h1" size="2xl" mb={4}>
-        {m['home.title']()}
+        {m['home_title']()}
       </Heading>
       <Text>
-        {m['home.description']()}
+        {m['home_description']()}
       </Text>
       <List.Root gap={2} py={4} variant="plain">
         <List.Item>
           <Link to="/resume">
-            {m['home.resume']()}
+            {m['home_resume']()}
             <LuArrowRight />
           </Link>
         </List.Item>
         <List.Item>
           <Link to="/projects">
-            {m['home.projects']()}
+            {m['home_projects']()}
             <LuArrowRight />
           </Link>
         </List.Item>
         <List.Item>
           <Link to="/blog">
-            {m['home.blog']()}
+            {m['home_blog']()}
             <LuArrowRight />
           </Link>
         </List.Item>
         <List.Item>
           <ExternalLink target="_blank" href="https://github.com/faxaq">
-            {m['home.github']()}
+            {m['home_github']()}
             <LuExternalLink />
           </ExternalLink>
         </List.Item>

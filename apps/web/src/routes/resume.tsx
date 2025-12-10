@@ -12,67 +12,67 @@ import { m } from '@/paraglide/messages';
 
 const buildExperiences = () => {
   return {
-    title: m['resume.content.experiences.title'](),
+    title: m['resume_content_experiences_title'](),
     current: {
-      title: m['resume.content.experiences.current.title'](),
-      period: m['resume.content.experiences.current.period'](),
+      title: m['resume_content_experiences_current_title'](),
+      period: m['resume_content_experiences_current_period'](),
       links: [
-        m['resume.content.experiences.current.links.0'](),
-        m['resume.content.experiences.current.links.1']()
+        m['resume_content_experiences_current_links_0'](),
+        m['resume_content_experiences_current_links_1']()
       ],
       tasks: [],
-      productGoal: m['resume.content.experiences.current.productGoal'](),
-      myRole: m['resume.content.experiences.current.myRole'](),
+      productGoal: m['resume_content_experiences_current_productGoal'](),
+      myRole: m['resume_content_experiences_current_myRole'](),
     },
     past: [
       {
-        title: m['resume.content.experiences.past.1.title'](),
-        period: m['resume.content.experiences.past.1.period'](),
+        title: m['resume_content_experiences_past_1_title'](),
+        period: m['resume_content_experiences_past_1_period'](),
         links: [
-          m['resume.content.experiences.past.1.links.0'](),
+          m['resume_content_experiences_past_1_links_0'](),
         ],
         tasks: [],
-        productGoal: m['resume.content.experiences.past.1.productGoal'](),
-        myRole: m['resume.content.experiences.past.1.myRole'](),
+        productGoal: m['resume_content_experiences_past_1_productGoal'](),
+        myRole: m['resume_content_experiences_past_1_myRole'](),
       },
       {
 
-        title: m['resume.content.experiences.past.2.title'](),
-        period: m['resume.content.experiences.past.2.period'](),
+        title: m['resume_content_experiences_past_2_title'](),
+        period: m['resume_content_experiences_past_2_period'](),
         links: [
-          m['resume.content.experiences.past.2.links.0'](),
+          m['resume_content_experiences_past_2_links_0'](),
         ],
         tasks: [],
-        productGoal: m['resume.content.experiences.past.2.productGoal'](),
-        myRole: m['resume.content.experiences.past.2.myRole'](),
+        productGoal: m['resume_content_experiences_past_2_productGoal'](),
+        myRole: m['resume_content_experiences_past_2_myRole'](),
       },
       {
-        title: m['resume.content.experiences.past.3.title'](),
-        period: m['resume.content.experiences.past.3.period'](),
+        title: m['resume_content_experiences_past_3_title'](),
+        period: m['resume_content_experiences_past_3_period'](),
         links: [
-          m['resume.content.experiences.past.3.links.0'](),
+          m['resume_content_experiences_past_3_links_0'](),
         ],
         tasks: [],
-        myRole: m['resume.content.experiences.past.3.myRole'](),
+        myRole: m['resume_content_experiences_past_3_myRole'](),
       },
       {
-        title: m['resume.content.experiences.past.4.title'](),
-        period: m['resume.content.experiences.past.4.period'](),
+        title: m['resume_content_experiences_past_4_title'](),
+        period: m['resume_content_experiences_past_4_period'](),
         links: [
-          m['resume.content.experiences.past.4.links.0'](),
-          m['resume.content.experiences.past.4.links.1']()
+          m['resume_content_experiences_past_4_links_0'](),
+          m['resume_content_experiences_past_4_links_1']()
         ],
         tasks: [],
-        myRole: m['resume.content.experiences.past.4.myRole'](),
+        myRole: m['resume_content_experiences_past_4_myRole'](),
       },
       {
-        title: m['resume.content.experiences.past.5.title'](),
-        period: m['resume.content.experiences.past.5.period'](),
+        title: m['resume_content_experiences_past_5_title'](),
+        period: m['resume_content_experiences_past_5_period'](),
         links: [
-          m['resume.content.experiences.past.5.links.0'](),
+          m['resume_content_experiences_past_5_links_0'](),
         ],
         tasks: [],
-        myRole: m['resume.content.experiences.past.5.myRole'](),
+        myRole: m['resume_content_experiences_past_5_myRole'](),
       }
     ]
   } satisfies {
@@ -84,31 +84,31 @@ const buildExperiences = () => {
 
 const buildProjects = () => {
   return {
-    title: m['resume.content.projects.title'](),
+    title: m['resume_content_projects_title'](),
     current: [
       {
-        title: m['resume.content.projects.current.0.title'](),
-        period: m['resume.content.projects.current.0.period'](),
+        title: m['resume_content_projects_current_0_title'](),
+        period: m['resume_content_projects_current_0_period'](),
         links: [
-          m['resume.content.projects.current.0.links.0'](),
+          m['resume_content_projects_current_0_links_0'](),
         ],
         tasks: [
           {
-            type: TaskTypeZodType.parse(m["resume.content.projects.current.0.tasks.0.type"]()),
-            text: m["resume.content.projects.current.0.tasks.0.text"]()
+            type: TaskTypeZodType.parse(m["resume_content_projects_current_0_tasks_0_type"]()),
+            text: m["resume_content_projects_current_0_tasks_0_text"]()
           },
         ],
       },
       {
-        title: m['resume.content.projects.current.1.title'](),
-        period: m['resume.content.projects.current.1.period'](),
+        title: m['resume_content_projects_current_1_title'](),
+        period: m['resume_content_projects_current_1_period'](),
         links: [
-          m['resume.content.projects.current.1.links.0'](),
+          m['resume_content_projects_current_1_links_0'](),
         ],
         tasks: [
           {
-            type: TaskTypeZodType.parse(m["resume.content.projects.current.1.tasks.0.type"]()),
-            text: m["resume.content.projects.current.1.tasks.0.text"]()
+            type: TaskTypeZodType.parse(m["resume_content_projects_current_1_tasks_0_type"]()),
+            text: m["resume_content_projects_current_1_tasks_0_text"]()
           },
         ],
       },
