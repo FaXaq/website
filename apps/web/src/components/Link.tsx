@@ -41,7 +41,9 @@ const ChakraLinkComponent = React.forwardRef<
     _hover={{ color: "gray.400" }}
     transition="color 0.15s"
     style={{
-      textDecoration: "none"
+      textDecoration: "none",
+      display: "block",
+      height: "100%"
     }}
     {...props}
   >

@@ -33,6 +33,8 @@ import { Route as ProjectsCorsicaIndexRouteImport } from './routes/projects/cors
 import { Route as ProjectsCoolerIndexRouteImport } from './routes/projects/cooler/index'
 import { Route as ProjectsMttsScaleBuilderRouteImport } from './routes/projects/mtts/scale-builder'
 import { Route as ProjectsMttsMetronomeRouteImport } from './routes/projects/mtts/metronome'
+import { Route as ProjectsCoolerColorSlugIndexRouteImport } from './routes/projects/cooler/$colorSlug/index'
+import { Route as ProjectsCoolerColorSlugCombinationRouteImport } from './routes/projects/cooler/$colorSlug/$combination'
 
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
@@ -159,6 +161,18 @@ const ProjectsMttsMetronomeRoute = ProjectsMttsMetronomeRouteImport.update({
   path: '/metronome',
   getParentRoute: () => ProjectsMttsRouteRoute,
 } as any)
+const ProjectsCoolerColorSlugIndexRoute =
+  ProjectsCoolerColorSlugIndexRouteImport.update({
+    id: '/projects/cooler/$colorSlug/',
+    path: '/projects/cooler/$colorSlug/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProjectsCoolerColorSlugCombinationRoute =
+  ProjectsCoolerColorSlugCombinationRouteImport.update({
+    id: '/projects/cooler/$colorSlug/$combination',
+    path: '/projects/cooler/$colorSlug/$combination',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -185,6 +199,8 @@ export interface FileRoutesByFullPath {
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
   '/projects/corsica': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts/': typeof ProjectsMttsIndexRoute
+  '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/cooler/$colorSlug': typeof ProjectsCoolerColorSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -210,6 +226,8 @@ export interface FileRoutesByTo {
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
   '/projects/corsica': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts': typeof ProjectsMttsIndexRoute
+  '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/cooler/$colorSlug': typeof ProjectsCoolerColorSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -237,6 +255,8 @@ export interface FileRoutesById {
   '/projects/cooler/': typeof ProjectsCoolerIndexRoute
   '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts/': typeof ProjectsMttsIndexRoute
+  '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/cooler/$colorSlug/': typeof ProjectsCoolerColorSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -265,6 +285,8 @@ export interface FileRouteTypes {
     | '/projects/cooler'
     | '/projects/corsica'
     | '/projects/mtts/'
+    | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/cooler/$colorSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -290,6 +312,8 @@ export interface FileRouteTypes {
     | '/projects/cooler'
     | '/projects/corsica'
     | '/projects/mtts'
+    | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/cooler/$colorSlug'
   id:
     | '__root__'
     | '/'
@@ -316,6 +340,8 @@ export interface FileRouteTypes {
     | '/projects/cooler/'
     | '/projects/corsica/'
     | '/projects/mtts/'
+    | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/cooler/$colorSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -340,6 +366,8 @@ export interface RootRouteChildren {
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ProjectsCoolerIndexRoute: typeof ProjectsCoolerIndexRoute
   ProjectsCorsicaIndexRoute: typeof ProjectsCorsicaIndexRoute
+  ProjectsCoolerColorSlugCombinationRoute: typeof ProjectsCoolerColorSlugCombinationRoute
+  ProjectsCoolerColorSlugIndexRoute: typeof ProjectsCoolerColorSlugIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -512,6 +540,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsMttsMetronomeRouteImport
       parentRoute: typeof ProjectsMttsRouteRoute
     }
+    '/projects/cooler/$colorSlug/': {
+      id: '/projects/cooler/$colorSlug/'
+      path: '/projects/cooler/$colorSlug'
+      fullPath: '/projects/cooler/$colorSlug'
+      preLoaderRoute: typeof ProjectsCoolerColorSlugIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/cooler/$colorSlug/$combination': {
+      id: '/projects/cooler/$colorSlug/$combination'
+      path: '/projects/cooler/$colorSlug/$combination'
+      fullPath: '/projects/cooler/$colorSlug/$combination'
+      preLoaderRoute: typeof ProjectsCoolerColorSlugCombinationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -555,6 +597,9 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsIndexRoute: ProjectsIndexRoute,
   ProjectsCoolerIndexRoute: ProjectsCoolerIndexRoute,
   ProjectsCorsicaIndexRoute: ProjectsCorsicaIndexRoute,
+  ProjectsCoolerColorSlugCombinationRoute:
+    ProjectsCoolerColorSlugCombinationRoute,
+  ProjectsCoolerColorSlugIndexRoute: ProjectsCoolerColorSlugIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
