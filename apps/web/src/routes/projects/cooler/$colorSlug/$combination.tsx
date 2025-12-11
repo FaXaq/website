@@ -31,7 +31,7 @@ function RouteComponent() {
   return <Box w="full" h="full">
     <Grid w="full" h="full" templateColumns="repeat(2, 1fr)">
       <GridItem rowSpan={complementaryColors.length} bg={mainColor.hex} color={getDerivedColor(mainColor.rgb_array)}>
-        <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: mainColor.slug }}>
+        <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: mainColor.slug }} style={{ display: "block", width: "100%", height: "100%", color: "inherit" }}>
           <Box p={3}>
             <Heading as="h2">{mainColor.name}</Heading>
             <Text>{mainColor.hex}</Text>
@@ -42,7 +42,7 @@ function RouteComponent() {
       </GridItem>
         {complementaryColors.map(cc => (
           <GridItem key={cc.slug} bg={cc.hex} color={getDerivedColor(cc.rgb_array)}>
-            <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: cc.slug }}>
+            <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: cc.slug }} style={{ display: "block", width: "100%", height: "100%", color: "inherit" }}>
               <Box p={3}>
                 <Heading as="h2">{cc.name}</Heading>
                 <Text>{cc.hex}</Text>

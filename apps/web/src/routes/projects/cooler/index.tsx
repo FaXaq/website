@@ -24,7 +24,7 @@ function RouteComponent() {
     {
       colors.colors.map(color => (
         <GridItem key={color.slug} bg={color.hex} color={getDerivedColor(color.rgb_array)} minH={50}>
-          <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: color.slug }}>
+          <Link to="/projects/cooler/$colorSlug" params={{ colorSlug: color.slug }} style={{ display: "block", width: "100%", color: "inherit" }}>
             <HStack w="full">
               <VStack p={4} alignItems="start" w="full">
                 <Text>{color.name}</Text>

@@ -34,7 +34,11 @@ function RouteComponent() {
         {
           color?.combinations?.map((c) => (
             <GridItem h={100} key={`${c.number}`} p={2}>
-              <Link to="/projects/cooler/$colorSlug/$combination" params={{ colorSlug: color.color.slug, combination: c.number.toString() }}>
+              <Link
+                to="/projects/cooler/$colorSlug/$combination"
+                params={{ colorSlug: color.color.slug, combination: c.number.toString() }}
+                style={{ display: "block", height: "100%" }}
+              >
                 <Grid templateColumns={`repeat(${c.colors.length}, 1fr)`} h="full" w="full">
                   {
                     c.colors.map(cc => (
