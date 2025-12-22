@@ -28,7 +28,7 @@ function RouteComponent() {
         </Link>
       </List.Item>
       <List.Item>
-        <Link to="/projects/mtts" description={m['projects_corsica_description']()}>
+        <Link to="/projects/corsica" description={m['projects_corsica_description']()}>
           <HStack>
             {m['projects_corsica_title']()}
             <LuArrowRight />

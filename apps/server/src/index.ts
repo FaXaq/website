@@ -18,7 +18,7 @@ const buildServer = () => {
   });
   // Configure CORS policies
   server.register(fastifyCors, {
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:1234",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
@@ -43,7 +43,6 @@ const buildServer = () => {
   });
 
   setupBetterAuth(server)
-
 
   return server;
 };

@@ -46,6 +46,11 @@ export const userRouter = t.router({
           cause: typedErr.cause
         })
       }
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "An unexpected error occurred",
+        cause: err
+      })
     }
   }),
 
@@ -66,7 +71,7 @@ export const userRouter = t.router({
       headers: opts.ctx.req.headers
     })
   }),
-  
+
   me: t.procedure.query(async (opts) => {
     const res = await auth.api.getSession({
       headers: opts.ctx.req.headers,

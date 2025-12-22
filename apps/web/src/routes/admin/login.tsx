@@ -17,7 +17,7 @@ import type { RouterInput } from '@/utils/trpc/types';
 
 type CreateUserFormData = RouterInput["user"]["singInEmail"];
 
-export const Route = createFileRoute('/admin/me')({
+export const Route = createFileRoute('/admin/login')({
   component: RouteComponent,
 });
 

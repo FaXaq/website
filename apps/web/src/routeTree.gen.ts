@@ -27,13 +27,19 @@ import { Route as BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRouteImport } 
 import { Route as BlogDigitalPresenceOfGovernementsRouteImport } from './routes/blog/digital-presence-of-governements'
 import { Route as BlogDigitalAdsRouteImport } from './routes/blog/digital-ads'
 import { Route as AdminMeRouteImport } from './routes/admin/me'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as ProjectsMttsRouteRouteImport } from './routes/projects/mtts/route'
+import { Route as ProjectsCorsicaRouteRouteImport } from './routes/projects/corsica/route'
 import { Route as ProjectsMttsIndexRouteImport } from './routes/projects/mtts/index'
 import { Route as ProjectsCorsicaIndexRouteImport } from './routes/projects/corsica/index'
 import { Route as ProjectsCoolerIndexRouteImport } from './routes/projects/cooler/index'
 import { Route as ProjectsMttsScaleBuilderRouteImport } from './routes/projects/mtts/scale-builder'
 import { Route as ProjectsMttsMetronomeRouteImport } from './routes/projects/mtts/metronome'
+import { Route as ProjectsCorsicaMergeRouteImport } from './routes/projects/corsica/merge'
+import { Route as ProjectsCorsicaAnalyseRouteRouteImport } from './routes/projects/corsica/analyse/route'
+import { Route as ProjectsCorsicaAnalyseIndexRouteImport } from './routes/projects/corsica/analyse/index'
 import { Route as ProjectsCoolerColorSlugIndexRouteImport } from './routes/projects/cooler/$colorSlug/index'
+import { Route as ProjectsCorsicaAnalyseFileRouteImport } from './routes/projects/corsica/analyse/$file'
 import { Route as ProjectsCoolerColorSlugCombinationRouteImport } from './routes/projects/cooler/$colorSlug/$combination'
 
 const ResumeRoute = ResumeRouteImport.update({
@@ -130,9 +136,19 @@ const AdminMeRoute = AdminMeRouteImport.update({
   path: '/admin/me',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsMttsRouteRoute = ProjectsMttsRouteRouteImport.update({
   id: '/projects/mtts',
   path: '/projects/mtts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsCorsicaRouteRoute = ProjectsCorsicaRouteRouteImport.update({
+  id: '/projects/corsica',
+  path: '/projects/corsica',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsMttsIndexRoute = ProjectsMttsIndexRouteImport.update({
@@ -141,9 +157,9 @@ const ProjectsMttsIndexRoute = ProjectsMttsIndexRouteImport.update({
   getParentRoute: () => ProjectsMttsRouteRoute,
 } as any)
 const ProjectsCorsicaIndexRoute = ProjectsCorsicaIndexRouteImport.update({
-  id: '/projects/corsica/',
-  path: '/projects/corsica/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProjectsCorsicaRouteRoute,
 } as any)
 const ProjectsCoolerIndexRoute = ProjectsCoolerIndexRouteImport.update({
   id: '/projects/cooler/',
@@ -161,11 +177,34 @@ const ProjectsMttsMetronomeRoute = ProjectsMttsMetronomeRouteImport.update({
   path: '/metronome',
   getParentRoute: () => ProjectsMttsRouteRoute,
 } as any)
+const ProjectsCorsicaMergeRoute = ProjectsCorsicaMergeRouteImport.update({
+  id: '/merge',
+  path: '/merge',
+  getParentRoute: () => ProjectsCorsicaRouteRoute,
+} as any)
+const ProjectsCorsicaAnalyseRouteRoute =
+  ProjectsCorsicaAnalyseRouteRouteImport.update({
+    id: '/analyse',
+    path: '/analyse',
+    getParentRoute: () => ProjectsCorsicaRouteRoute,
+  } as any)
+const ProjectsCorsicaAnalyseIndexRoute =
+  ProjectsCorsicaAnalyseIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ProjectsCorsicaAnalyseRouteRoute,
+  } as any)
 const ProjectsCoolerColorSlugIndexRoute =
   ProjectsCoolerColorSlugIndexRouteImport.update({
     id: '/projects/cooler/$colorSlug/',
     path: '/projects/cooler/$colorSlug/',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ProjectsCorsicaAnalyseFileRoute =
+  ProjectsCorsicaAnalyseFileRouteImport.update({
+    id: '/$file',
+    path: '/$file',
+    getParentRoute: () => ProjectsCorsicaAnalyseRouteRoute,
   } as any)
 const ProjectsCoolerColorSlugCombinationRoute =
   ProjectsCoolerColorSlugCombinationRouteImport.update({
@@ -177,7 +216,9 @@ const ProjectsCoolerColorSlugCombinationRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/projects/corsica': typeof ProjectsCorsicaRouteRouteWithChildren
   '/projects/mtts': typeof ProjectsMttsRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
@@ -194,17 +235,22 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
+  '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
-  '/projects/corsica': typeof ProjectsCorsicaIndexRoute
+  '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts/': typeof ProjectsMttsIndexRoute
   '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/corsica/analyse/$file': typeof ProjectsCorsicaAnalyseFileRoute
   '/projects/cooler/$colorSlug': typeof ProjectsCoolerColorSlugIndexRoute
+  '/projects/corsica/analyse/': typeof ProjectsCorsicaAnalyseIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/admin/login': typeof AdminLoginRoute
   '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
@@ -221,19 +267,24 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
   '/projects/corsica': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts': typeof ProjectsMttsIndexRoute
   '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/corsica/analyse/$file': typeof ProjectsCorsicaAnalyseFileRoute
   '/projects/cooler/$colorSlug': typeof ProjectsCoolerColorSlugIndexRoute
+  '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/resume': typeof ResumeRoute
+  '/projects/corsica': typeof ProjectsCorsicaRouteRouteWithChildren
   '/projects/mtts': typeof ProjectsMttsRouteRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/admin/me': typeof AdminMeRoute
   '/blog/digital-ads': typeof BlogDigitalAdsRoute
   '/blog/digital-presence-of-governements': typeof BlogDigitalPresenceOfGovernementsRoute
@@ -250,20 +301,26 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
+  '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler/': typeof ProjectsCoolerIndexRoute
   '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
   '/projects/mtts/': typeof ProjectsMttsIndexRoute
   '/projects/cooler/$colorSlug/$combination': typeof ProjectsCoolerColorSlugCombinationRoute
+  '/projects/corsica/analyse/$file': typeof ProjectsCorsicaAnalyseFileRoute
   '/projects/cooler/$colorSlug/': typeof ProjectsCoolerColorSlugIndexRoute
+  '/projects/corsica/analyse/': typeof ProjectsCorsicaAnalyseIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/resume'
+    | '/projects/corsica'
     | '/projects/mtts'
+    | '/admin/login'
     | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
@@ -280,17 +337,22 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/projects'
+    | '/projects/corsica/analyse'
+    | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler'
-    | '/projects/corsica'
+    | '/projects/corsica/'
     | '/projects/mtts/'
     | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/corsica/analyse/$file'
     | '/projects/cooler/$colorSlug'
+    | '/projects/corsica/analyse/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/resume'
+    | '/admin/login'
     | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
@@ -307,18 +369,23 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/projects'
+    | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler'
     | '/projects/corsica'
     | '/projects/mtts'
     | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/corsica/analyse/$file'
     | '/projects/cooler/$colorSlug'
+    | '/projects/corsica/analyse'
   id:
     | '__root__'
     | '/'
     | '/resume'
+    | '/projects/corsica'
     | '/projects/mtts'
+    | '/admin/login'
     | '/admin/me'
     | '/blog/digital-ads'
     | '/blog/digital-presence-of-governements'
@@ -335,19 +402,25 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/projects/'
+    | '/projects/corsica/analyse'
+    | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler/'
     | '/projects/corsica/'
     | '/projects/mtts/'
     | '/projects/cooler/$colorSlug/$combination'
+    | '/projects/corsica/analyse/$file'
     | '/projects/cooler/$colorSlug/'
+    | '/projects/corsica/analyse/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ResumeRoute: typeof ResumeRoute
+  ProjectsCorsicaRouteRoute: typeof ProjectsCorsicaRouteRouteWithChildren
   ProjectsMttsRouteRoute: typeof ProjectsMttsRouteRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
   AdminMeRoute: typeof AdminMeRoute
   BlogDigitalAdsRoute: typeof BlogDigitalAdsRoute
   BlogDigitalPresenceOfGovernementsRoute: typeof BlogDigitalPresenceOfGovernementsRoute
@@ -365,7 +438,6 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ProjectsCoolerIndexRoute: typeof ProjectsCoolerIndexRoute
-  ProjectsCorsicaIndexRoute: typeof ProjectsCorsicaIndexRoute
   ProjectsCoolerColorSlugCombinationRoute: typeof ProjectsCoolerColorSlugCombinationRoute
   ProjectsCoolerColorSlugIndexRoute: typeof ProjectsCoolerColorSlugIndexRoute
 }
@@ -498,11 +570,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/mtts': {
       id: '/projects/mtts'
       path: '/projects/mtts'
       fullPath: '/projects/mtts'
       preLoaderRoute: typeof ProjectsMttsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/corsica': {
+      id: '/projects/corsica'
+      path: '/projects/corsica'
+      fullPath: '/projects/corsica'
+      preLoaderRoute: typeof ProjectsCorsicaRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/mtts/': {
@@ -514,10 +600,10 @@ declare module '@tanstack/react-router' {
     }
     '/projects/corsica/': {
       id: '/projects/corsica/'
-      path: '/projects/corsica'
-      fullPath: '/projects/corsica'
+      path: '/'
+      fullPath: '/projects/corsica/'
       preLoaderRoute: typeof ProjectsCorsicaIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ProjectsCorsicaRouteRoute
     }
     '/projects/cooler/': {
       id: '/projects/cooler/'
@@ -540,12 +626,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsMttsMetronomeRouteImport
       parentRoute: typeof ProjectsMttsRouteRoute
     }
+    '/projects/corsica/merge': {
+      id: '/projects/corsica/merge'
+      path: '/merge'
+      fullPath: '/projects/corsica/merge'
+      preLoaderRoute: typeof ProjectsCorsicaMergeRouteImport
+      parentRoute: typeof ProjectsCorsicaRouteRoute
+    }
+    '/projects/corsica/analyse': {
+      id: '/projects/corsica/analyse'
+      path: '/analyse'
+      fullPath: '/projects/corsica/analyse'
+      preLoaderRoute: typeof ProjectsCorsicaAnalyseRouteRouteImport
+      parentRoute: typeof ProjectsCorsicaRouteRoute
+    }
+    '/projects/corsica/analyse/': {
+      id: '/projects/corsica/analyse/'
+      path: '/'
+      fullPath: '/projects/corsica/analyse/'
+      preLoaderRoute: typeof ProjectsCorsicaAnalyseIndexRouteImport
+      parentRoute: typeof ProjectsCorsicaAnalyseRouteRoute
+    }
     '/projects/cooler/$colorSlug/': {
       id: '/projects/cooler/$colorSlug/'
       path: '/projects/cooler/$colorSlug'
       fullPath: '/projects/cooler/$colorSlug'
       preLoaderRoute: typeof ProjectsCoolerColorSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/projects/corsica/analyse/$file': {
+      id: '/projects/corsica/analyse/$file'
+      path: '/$file'
+      fullPath: '/projects/corsica/analyse/$file'
+      preLoaderRoute: typeof ProjectsCorsicaAnalyseFileRouteImport
+      parentRoute: typeof ProjectsCorsicaAnalyseRouteRoute
     }
     '/projects/cooler/$colorSlug/$combination': {
       id: '/projects/cooler/$colorSlug/$combination'
@@ -556,6 +670,38 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ProjectsCorsicaAnalyseRouteRouteChildren {
+  ProjectsCorsicaAnalyseFileRoute: typeof ProjectsCorsicaAnalyseFileRoute
+  ProjectsCorsicaAnalyseIndexRoute: typeof ProjectsCorsicaAnalyseIndexRoute
+}
+
+const ProjectsCorsicaAnalyseRouteRouteChildren: ProjectsCorsicaAnalyseRouteRouteChildren =
+  {
+    ProjectsCorsicaAnalyseFileRoute: ProjectsCorsicaAnalyseFileRoute,
+    ProjectsCorsicaAnalyseIndexRoute: ProjectsCorsicaAnalyseIndexRoute,
+  }
+
+const ProjectsCorsicaAnalyseRouteRouteWithChildren =
+  ProjectsCorsicaAnalyseRouteRoute._addFileChildren(
+    ProjectsCorsicaAnalyseRouteRouteChildren,
+  )
+
+interface ProjectsCorsicaRouteRouteChildren {
+  ProjectsCorsicaAnalyseRouteRoute: typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
+  ProjectsCorsicaMergeRoute: typeof ProjectsCorsicaMergeRoute
+  ProjectsCorsicaIndexRoute: typeof ProjectsCorsicaIndexRoute
+}
+
+const ProjectsCorsicaRouteRouteChildren: ProjectsCorsicaRouteRouteChildren = {
+  ProjectsCorsicaAnalyseRouteRoute:
+    ProjectsCorsicaAnalyseRouteRouteWithChildren,
+  ProjectsCorsicaMergeRoute: ProjectsCorsicaMergeRoute,
+  ProjectsCorsicaIndexRoute: ProjectsCorsicaIndexRoute,
+}
+
+const ProjectsCorsicaRouteRouteWithChildren =
+  ProjectsCorsicaRouteRoute._addFileChildren(ProjectsCorsicaRouteRouteChildren)
 
 interface ProjectsMttsRouteRouteChildren {
   ProjectsMttsMetronomeRoute: typeof ProjectsMttsMetronomeRoute
@@ -575,7 +721,9 @@ const ProjectsMttsRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ResumeRoute: ResumeRoute,
+  ProjectsCorsicaRouteRoute: ProjectsCorsicaRouteRouteWithChildren,
   ProjectsMttsRouteRoute: ProjectsMttsRouteRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
   AdminMeRoute: AdminMeRoute,
   BlogDigitalAdsRoute: BlogDigitalAdsRoute,
   BlogDigitalPresenceOfGovernementsRoute:
@@ -596,7 +744,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ProjectsCoolerIndexRoute: ProjectsCoolerIndexRoute,
-  ProjectsCorsicaIndexRoute: ProjectsCorsicaIndexRoute,
   ProjectsCoolerColorSlugCombinationRoute:
     ProjectsCoolerColorSlugCombinationRoute,
   ProjectsCoolerColorSlugIndexRoute: ProjectsCoolerColorSlugIndexRoute,

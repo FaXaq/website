@@ -22,7 +22,7 @@ export const trcpClient = createTRPCClient<AppRouter>({
           const response = await fetch(url, {
             ...options,
             // mandatory to handle cookies from the server
-            credentials: 'include'
+            credentials: 'include',
           });
           return response;
         },

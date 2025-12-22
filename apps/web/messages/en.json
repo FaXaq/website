@@ -312,5 +312,7 @@
   "Beats": "Beats",
   "Tap": "Tap",
   "Tempo": "Tempo",
-  "delay {delay}ms": "delay {delay}ms"
+  "delay {delay}ms": "delay {delay}ms",
+  "corsica_pages_analyse_durations_years": "{years}",
+  "corsica_pages_analyse_durations_months": "{months}"
 }

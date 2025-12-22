@@ -36,13 +36,13 @@ export const corsicaRouter = t.router({
           const url = await getSignedUrl(s3Client, command);
           return { filename: file.name, uploadUrl: url };
         });
-        
+
         return { urls: await Promise.all(urlPromises) };
-    } catch (error) {
-      logger.error(error, 'Error uploading files');
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to upload files' });
-    }
-  }),
+      } catch (error) {
+        logger.error(error, 'Error uploading files');
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to upload files' });
+      }
+    }),
 
   deleteFiles: loggedInProcedure
     .input(DeleteFilesInput)
@@ -77,27 +77,27 @@ export const corsicaRouter = t.router({
   analyseGPX: analyseGPXProcedure,
 
   getExamples: publicProcedure
-  .output(GetExamplesOutput)
-  .query(async () => {
-    const s3Client = new S3Client({
-      region: config.S3_REGION,
-      endpoint: config.S3_ENDPOINT,
-      credentials: {
-        accessKeyId: config.S3_ACCESS_KEY,
-        secretAccessKey: config.S3_SECRET_KEY,
-      },
-    });
+    .output(GetExamplesOutput)
+    .query(async () => {
+      const s3Client = new S3Client({
+        region: config.S3_REGION,
+        endpoint: config.S3_ENDPOINT,
+        credentials: {
+          accessKeyId: config.S3_ACCESS_KEY,
+          secretAccessKey: config.S3_SECRET_KEY,
+        },
+      });
 
-    const command = new ListObjectsV2Command({
-      Bucket: config.S3_BUCKET_NAME,
-      Prefix: addS3PathPrefix(ANALYSE_EXAMPLES_PREFIX),
-    });
+      const command = new ListObjectsV2Command({
+        Bucket: config.S3_BUCKET_NAME,
+        Prefix: addS3PathPrefix(ANALYSE_EXAMPLES_PREFIX),
+      });
 
-    const response = await s3Client.send(command);
+      const response = await s3Client.send(command);
 
-    return response.Contents?.map((item) => ({
-      key: removeS3PathPrefix(removeExamplesPrefix(item.Key || '')),
-      size: item.Size || 0,
-    })) || [];
-  }),
+      return response.Contents?.map((item) => ({
+        key: removeS3PathPrefix(removeExamplesPrefix(item.Key || '')),
+        size: item.Size || 0,
+      })) || [];
+    }),
 })
