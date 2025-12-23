@@ -26,6 +26,16 @@ const buildExperiences = () => {
     },
     past: [
       {
+        title: m['resume_content_experiences_past_0_title'](),
+        period: m['resume_content_experiences_past_0_period'](),
+        links: [
+          m['resume_content_experiences_past_0_links_0'](),
+        ],
+        tasks: [],
+        productGoal: m['resume_content_experiences_past_0_productGoal'](),
+        myRole: m['resume_content_experiences_past_0_myRole'](),
+      },
+      {
         title: m['resume_content_experiences_past_1_title'](),
         period: m['resume_content_experiences_past_1_period'](),
         links: [
