@@ -16,7 +16,8 @@ const config = defineConfig(
     {
       "ignores": [
         "./eslint.config.js",
-        "src/paraglide/**"
+        "src/paraglide/**",
+        "apps/web/src/content/tuner-pt3/wasm/auto-correlate/pkg/**"
       ]
     }
   ],
