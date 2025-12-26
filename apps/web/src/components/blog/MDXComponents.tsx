@@ -1,6 +1,7 @@
 import type { ImageProps, LinkProps } from '@chakra-ui/react';
 import { Blockquote,Box, Code, CodeBlock as ChakraCodeBlock, createShikiAdapter, Heading,IconButton,Image as ChakraImage,Link as ChakraLink, List, Separator, Table, Text } from '@chakra-ui/react';
 import { Image } from '@unpic/react';
+import React from 'react';
 import { LuExternalLink } from 'react-icons/lu';
 import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki';
 import { createHighlighter } from 'shiki';

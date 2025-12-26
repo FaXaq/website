@@ -21,6 +21,10 @@ export default defineConfig((options) => {
 
   return {
     entry,
-    format: ["esm"],
+    target: 'node22',
+    tsconfig: './tsconfig.json',
+    format: ["esm", "cjs"],
+    dts: true,
+    noExternal: ['@repo/schemas'],
   };
 });

@@ -1,7 +1,7 @@
 import { createTRPCClient, httpBatchLink, httpLink, isNonJsonSerializable, splitLink } from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 
-import { config } from "@/lib/config";
+import { apiUrl } from "@/lib/config";
 
 import { getRequestHeaders } from "../requestHeaders";
 import type { AppRouter } from "./types";
@@ -17,7 +17,7 @@ export const trcpClient = createTRPCClient<AppRouter>({
     splitLink({
       condition: (op) => isNonJsonSerializable(op.input),
       true: httpLink({
-        url: config.trpcUrl,
+        url: apiUrl,
         async fetch(url, options) {
           const response = await fetch(url, {
             ...options,
@@ -28,7 +28,7 @@ export const trcpClient = createTRPCClient<AppRouter>({
         },
       }),
       false: httpBatchLink({
-        url: config.trpcUrl,
+        url: apiUrl,
         async fetch(url, options) {
           const headers = getRequestHeaders();
           const response = await fetch(url, {

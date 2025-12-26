@@ -1,5 +1,4 @@
-import type { DistanceAnalysis, GPXTrkPart } from '@/[locale]/projects/corsica/analyse/types';
-
+import { GPXTrkPart, type DistanceAnalysis } from '@repo/schemas/api/procedures/corsica';
 import { getDistanceBetweenPoints } from './betweenPoints';
 
 export default function getDistanceVariations(trkpts: Array<GPXTrkPart>): DistanceAnalysis {
@@ -10,16 +9,16 @@ export default function getDistanceVariations(trkpts: Array<GPXTrkPart>): Distan
     };
   }
 
-  let previousPoint = trkpts[0];
+  let previousPoint = trkpts[0]!;
   let totalDistance = 0;
   const distanceVariations = [0];
   for (let i = 1; i < trkpts.length; i++) {
     // In this loop we're dealing with kilometers
-    const currentPoint = trkpts[i];
+    const currentPoint = trkpts[i]!;
     const eleDifference = Math.abs(previousPoint.ele - currentPoint.ele);
     const distanceBetweenPoints = getDistanceBetweenPoints(previousPoint, currentPoint);
     const distanceBetweenPointsWithEle = Math.sqrt((eleDifference * eleDifference) + (distanceBetweenPoints * distanceBetweenPoints));
-    distanceVariations.push(distanceVariations[distanceVariations.length - 1] + distanceBetweenPointsWithEle);
+    distanceVariations.push(distanceVariations[distanceVariations.length - 1]! + distanceBetweenPointsWithEle);
     totalDistance += distanceBetweenPointsWithEle;
     previousPoint = currentPoint;
   }

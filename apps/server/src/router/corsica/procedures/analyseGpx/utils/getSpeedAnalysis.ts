@@ -1,9 +1,9 @@
-import type { GPXTrkPart, SpeedAnalysis } from '@/[locale]/projects/corsica/analyse/types';
+import type { GPXTrkPart, SpeedAnalysis } from '@repo/schemas/api/procedures/corsica';
 
 import { getSpeedBetweenPoints } from './betweenPoints';
 
 export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalysis {
-  if (trkpts.length < 2) {
+  if (!trkpts[0] || !trkpts[1]) {
     return {
       maxSpeed: 0,
       minSpeed: 0,
@@ -19,8 +19,9 @@ export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalys
   let previousPoint = trkpts[0];
   const speedVariations = [0];
 
-  for (let i = 1; i < trkpts.length; i++) {
-    const currentPoint = trkpts[i];
+  trkpts.forEach((currentPoint, i) => {
+    if (i === 0) return;
+
     const currentSpeedBetweenPoints = getSpeedBetweenPoints(previousPoint, currentPoint, 'kilometers', 'hours');
 
     if (currentSpeedBetweenPoints < minSpeed || minSpeed === 0) {
@@ -33,7 +34,7 @@ export default function getSpeedAnalysis(trkpts: Array<GPXTrkPart>): SpeedAnalys
 
     speedVariations.push(currentSpeedBetweenPoints);
     previousPoint = currentPoint;
-  }
+  })
 
   return {
     minSpeed,

@@ -23,14 +23,39 @@ x-default: &default
     - website
 
 services:
-  ui:
+  web:
     <<: *default
-    image: ghcr.io/faxaq/{{product_name}}_ui:{{app_version}}-{{env_name}}
+    image: ghcr.io/faxaq/{{product_name}}_web:{{app_version}}-{{env_name}}
     deploy:
       <<: *deploy-default
       resources:
         limits:
           memory: 256m
       replicas: 2
-    env_file: .env_ui
+    env_file: .env_web
     stop_grace_period: 60s
+    networks:
+      - website-network
+
+  server:
+    <<: *default
+    image: ghcr.io/faxaq/{{product_name}}_server:{{app_version}}-{{env_name}}
+    deploy:
+      <<: *deploy-default
+      resources:
+        limits:
+          memory: 256m
+      replicas: 2
+    env_file: .env_server
+    stop_grace_period: 60s
+    networks:
+      - website-network
+
+networks:
+  website-network:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+        - subnet: fd00:dead:beef::/80

@@ -14,11 +14,11 @@ export const ChartDataZodType = z.array(z.object({
 export type ChartData = z.infer<typeof ChartDataZodType>;
 
 export const TimeAnalysisZodType = z.object({
-    meta: z.string(),
-    start: z.string(),
-    end: z.string(),
+    meta: z.string().optional(),
+    start: z.string().optional(),
+    end: z.string().optional(),
     movingTimeVariations: z.array(z.number()),
-    totalMovingTime: z.number()
+    totalMovingTime: z.number().optional()
 });
 export type TimeAnalysis = z.infer<typeof TimeAnalysisZodType>;
 
@@ -60,7 +60,9 @@ export const ReverseGeocodingJSONZodType = z.object({
     display_name: z.string(),
     address: ReverseGeocodingJSONAddressZodType,
     boundingbox: z.array(z.string()).min(4).max(4),
-});
+}).optional();
+
+export type ReverseGeocodingJSON = z.infer<typeof ReverseGeocodingJSONZodType>;
 
 export const MapAnalysisZodType = z.object({
     center: CoordinatesZodType,

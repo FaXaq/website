@@ -1,4 +1,4 @@
-import type { ReverseGeocodingJSON } from "@/[locale]/projects/corsica/analyse/types";
+import type { ReverseGeocodingJSON } from "@repo/schemas/api/procedures/corsica";
 
 export default async function reverseGeocodingSearch({ lat, lon }: { lat: number, lon: number }): Promise<ReverseGeocodingJSON> {
   try {

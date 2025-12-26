@@ -8,13 +8,14 @@
   "private": true,
   "scripts": {
     "setup": "corepack enable pnpm && corepack use pnpm@10.22.0",
-    "lint": "pnpm --filter ui lint",
-    "typecheck": "pnpm --filter ui typecheck",
-    "dev:ui": "pnpm --filter ui dev",
-    "ui:install": "pnpm --filter ui install",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck",
+    "dev:web": "pnpm --filter web dev",
+    "dev:server": "pnpm --filter server dev",
     "release": "semantic-release",
     "release:manual": ".bin/product release:manual",
-    "release:candidate": ".bin/product release:candidate"
+    "release:candidate": ".bin/product release:candidate",
+    "vault:edit": ".bin/product vault:edit"
   },
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {

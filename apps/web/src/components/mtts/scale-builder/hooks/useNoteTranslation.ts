@@ -1,11 +1,8 @@
 import type { Note } from "@repo/mtts";
-import { useTranslation } from "react-i18next";
 
 import { m } from "@/paraglide/messages";
 
 export function useNoteTranslation() {
-  const { t } = useTranslation();
-
   return {
     translateNote(note: Note, showNatural: boolean = false) {
       let noteName = note.name;

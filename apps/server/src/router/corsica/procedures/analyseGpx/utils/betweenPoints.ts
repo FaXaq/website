@@ -1,7 +1,6 @@
+import { type GPXTrkPart } from '@repo/schemas/api/procedures/corsica';
 import turfDistance from '@turf/distance';
 import { differenceInMilliseconds } from 'date-fns';
-
-import type { GPXTrkPart } from '../../../analyse/types';
 
 export type DistanceUnit = 'kilometers' | 'meters'
 
@@ -18,16 +17,16 @@ export function getDistanceBetweenPoints(pointA: GPXTrkPart, pointB: GPXTrkPart,
 export type TimeUnit = 'milliseconds' | 'hours' | 'seconds'
 
 export function getDurationBetweenPoints(pointA: GPXTrkPart, pointB: GPXTrkPart, units: TimeUnit = 'milliseconds') {
-  const millisecondsDifference = Math.abs(differenceInMilliseconds(new Date(pointB.time), new Date(pointA.time)));
+  const millisecondsDifference = Math.abs(differenceInMilliseconds(new Date(pointB.time ?? ''), new Date(pointA.time ?? '')));
 
   switch (units) {
-  case 'hours':
-    return millisecondsDifference / (1000 * 60 * 60);
-  case 'seconds':
-    return millisecondsDifference / (1000);
-  case 'milliseconds':
-  default:
-    return millisecondsDifference;
+    case 'hours':
+      return millisecondsDifference / (1000 * 60 * 60);
+    case 'seconds':
+      return millisecondsDifference / (1000);
+    case 'milliseconds':
+    default:
+      return millisecondsDifference;
   }
 }
 

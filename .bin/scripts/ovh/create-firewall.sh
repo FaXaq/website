@@ -10,7 +10,7 @@ function main() {
   if [ -z $env_ip ]; then exit 1; fi
 
   cd "${SCRIPT_DIR}/ovh/ovh-nodejs-client"
-  yarn --silent install
+  pnpm --silent install
 
   VAULT=$(${SCRIPT_DIR}/view-vault.sh)
 
@@ -24,7 +24,7 @@ function main() {
     export OVH_API_APP_TOKEN=$(yq '.vault.OVH_API_APP_TOKEN' <<< "${VAULT}")
   fi;
 
-  yarn --silent cli createFirewall ${env_ip} "$PRODUCT_NAME" "${ENV_NAME}" --key "${OVH_API_APP_TOKEN}"
+  pnpm --silent cli createFirewall ${env_ip} "$PRODUCT_NAME" "${ENV_NAME}" --key "${OVH_API_APP_TOKEN}"
   cd - >/dev/null
 }
 

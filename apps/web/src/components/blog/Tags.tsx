@@ -1,14 +1,11 @@
-'use client';
-
 import { Badge, List } from '@chakra-ui/react';
-import React from 'react';
 import { LuCircleX } from 'react-icons/lu';
 
 interface TagsProps {
   tags: string[],
   removable?: boolean,
-  onDelete?: (tag: string) => void,
-  onClick?: (tag: string) => void
+  onDelete: (tag: string) => void,
+  onClick: (tag: string) => void
 }
 
 const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
@@ -16,7 +13,7 @@ const Tags = ({ tags, removable = false, onDelete, onClick }: TagsProps) => {
     return;
   }
 
-  function handleOnClick(tag) {
+  function handleOnClick(tag: string) {
     if (!onClick) {
       console.warn('no onClick handle for', tags);
       return;

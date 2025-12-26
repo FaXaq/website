@@ -1,43 +1,15 @@
-import { Box, Container, Heading, HStack, List, Separator, Text, VStack } from "@chakra-ui/react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { format } from "date-fns";
+import { Container, Heading, HStack, List, Separator, VStack } from "@chakra-ui/react";
+import { createFileRoute } from "@tanstack/react-router";
 import { LuExternalLink } from "react-icons/lu";
-import type z from "zod";
 
-import Tags from "@/components/blog/Tags";
-import { ExternalLink, Link } from "@/components/Link";
-import type { ArticleMetaZodSchema} from "@/content";
-import { listAllPosts } from "@/content";
-
-const ArticleListItem = ({ meta }: { meta: z.infer<typeof ArticleMetaZodSchema> }) => {
-  const router = useRouter();
-  const routes = router.routesByPath;
-  const articleRoute = `/blog/${meta.slug}`;
-
-  if (!(articleRoute in routes)) {
-    return null;
-  }
-
-  return (
-    <List.Item key={`article-${meta.slug}`}>
-      <VStack alignItems="start">
-        <Link to={articleRoute}>
-          <Box>
-            <Heading as="h3">{meta.title}</Heading>
-            <Text>{meta.description ? meta.description : '' } - <em>{format(new Date(meta.date), 'do MMMM yyyy')}</em></Text>
-          </Box>
-        </Link>
-        <Tags tags={meta.tags || []} />
-      </VStack>
-    </List.Item>
-  );
-};
-
+import { ArticleListItem } from "@/components/blog/ArticleListItem";
+import { ExternalLink } from "@/components/Link";
+import { listAllPostMetas } from "@/content";
 
 export const Route = createFileRoute('/blog/')({
   component: BlogIndex,
   loader: async () => {
-    const p = await listAllPosts();
+    const p = listAllPostMetas();
 
     return { posts: p.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()) };
   }

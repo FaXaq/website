@@ -9,3 +9,6 @@ node_modules
 .eslintcache
 
 .content-collection
+dist
+.output
+.nitro
