@@ -81,7 +81,7 @@ jobs:
         uses: crazy-max/ghaction-github-runtime@v2
 
       - name: Populate .env files
-        run: .bin/scripts/env-setup.sh ${{ inputs.release_type }}
+        run: .bin/product env:setup ${{ inputs.release_type }}
 
       - name: Retrieve previous version
         id: get-prev-version
