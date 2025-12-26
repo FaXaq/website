@@ -19,7 +19,8 @@
             "args": {
                 "PUBLIC_VERSION": "${VERSION}",
                 "PUBLIC_PRODUCT_NAME": "${PRODUCT_NAME}",
-                "PUBLIC_REPO_NAME": "${REPO_NAME}"
+                "PUBLIC_REPO_NAME": "${REPO_NAME}",
+                "PUBLIC_ENV": "${ENV}"
             },
             "platforms": [
                 "linux/amd64"
@@ -46,9 +47,6 @@
             },
             "Dockerfile": "Dockerfile",
             "name": "web-${ENV}",
-            "args": {
-                "PUBLIC_ENV": "${ENV}"
-            },
             "tags": [
                 "ghcr.io/faxaq/${PRODUCT_NAME}_web:${VERSION}-${ENV}",
                 "ghcr.io/faxaq/${PRODUCT_NAME}_web:${CHANNEL}-${ENV}"
@@ -69,9 +67,6 @@
             },
             "Dockerfile": "Dockerfile",
             "name": "server-${ENV}",
-            "args": {
-                "PUBLIC_ENV": "${ENV}"
-            },
             "tags": [
                 "ghcr.io/faxaq/${PRODUCT_NAME}_server:${VERSION}-${ENV}",
                 "ghcr.io/faxaq/${PRODUCT_NAME}_server:${CHANNEL}-${ENV}"

@@ -13,6 +13,18 @@ COPY apps ./apps
 COPY packages ./packages
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 
+ARG PUBLIC_REPO_NAME
+ENV VITE_PRODUCT_REPO=$PUBLIC_REPO_NAME
+
+ARG PUBLIC_PRODUCT_NAME
+ENV VITE_PRODUCT_NAME=$PUBLIC_PRODUCT_NAME
+
+ARG PUBLIC_VERSION
+ENV VITE_VERSION=$PUBLIC_VERSION
+
+ARG PUBLIC_ENV
+ENV VITE_ENV=$PUBLIC_ENV
+
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 RUN pnpm turbo build

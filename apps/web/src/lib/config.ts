@@ -8,9 +8,12 @@ const configSchema = z.object({
 
 
 export const config = configSchema.parse({
-  nodeEnv: import.meta.env.MODE || 'development',
+  mode: import.meta.env.MODE || 'development',
   port: parseInt(process.env.PORT || '3000', 10),
-  host: import.meta.env.VITE_APP_HOST ?? process?.env.VITE_APP_HOST ?? 'localhost',
+  productRepo: import.meta.env.VITE_PRODUCT_REPO,
+  productName: import.meta.env.VITE_PRODUCT_NAME,
+  version: import.meta.env.VITE_VERSION,
+  env: import.meta.env.VITE_ENV || 'development',
 });
 
 const buildApiUrl = (config: z.infer<typeof configSchema>) => {
