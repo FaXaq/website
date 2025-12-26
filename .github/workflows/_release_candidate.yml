@@ -84,6 +84,9 @@ jobs:
         id: get-prev-version
         run: echo "PREVIOUS_VERSION=$(git describe --tags --abbrev=0 | cut -c2-)" >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Populate .env files
+        run: .bin/scripts/env-setup.sh ${{ inputs.release_type }}
+
       - name: bump and release
         run: pnpm release:candidate ${{ inputs.release_type }}
 

@@ -15,7 +15,8 @@ const config = defineConfig(
   [
     {
       "ignores": [
-        "./eslint.config.js" 
+        "./eslint.config.js",
+        "src/paraglide/**"
       ]
     }
   ],

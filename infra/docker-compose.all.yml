@@ -6,7 +6,7 @@ x-default: &default
 services:
   web:
     <<: *default
-    image: ghcr.io/faxaq/website_web:1.0.0-rc.1-production
+    image: ghcr.io/faxaq/{{product_name}}_web:{{app_version}}-{{env_name}}
     deploy:
       resources:
         limits:
@@ -16,7 +16,7 @@ services:
 
   server:
     <<: *default
-    image: ghcr.io/faxaq/website_server:1.0.0-rc.1-production
+    image: ghcr.io/faxaq/{{product_name}}_server:{{app_version}}-{{env_name}}
     deploy:
       resources:
         limits:

@@ -7,12 +7,22 @@ case $ENV_NAME in
     ;;
   *)
     echo "Invalid argument: $ENV_NAME"
-    echo "Usage: Provide 'production' or 'local' as the first argument."
+    echo "Usage: Provide 'production' or 'development' as the first argument."
     exit 1
     ;;
 esac
 
 echo "Updating local web/.env"
+
+# Sanitize ENV_NAME to be 'local' or 'production'
+if [[ "$ENV_NAME" == "development" ]]; then
+  ENV_NAME="local"
+elif [[ "$ENV_NAME" != "local" && "$ENV_NAME" != "production" ]]; then
+  echo "Invalid argument: $ENV_NAME"
+  echo "Usage: Provide 'production' or 'development' as the first argument."
+  exit 1
+fi
+
 
 ANSIBLE_CONFIG="${ANSIBLE_DIR}/ansible.cfg" ansible all \
   --limit "${ENV_NAME}" \

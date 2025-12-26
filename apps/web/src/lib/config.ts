@@ -6,7 +6,6 @@ const configSchema = z.object({
   host: z.string(),
 });
 
-console.log(import.meta.env);
 
 export const config = configSchema.parse({
   nodeEnv: import.meta.env.MODE || 'development',

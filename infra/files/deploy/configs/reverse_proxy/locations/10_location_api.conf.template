@@ -1,5 +1,13 @@
 location /api {
     set $upstream http://server:4000;
+    
+    proxy_pass_request_headers on;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+
     include includes/error_page_json.conf;
+    # Remove the /api prefix before passing to upstream
+    rewrite ^/api(/.*)$ $1 break;
+    
     include includes/proxy.conf;
 }

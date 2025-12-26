@@ -18,13 +18,6 @@ for file in docker-compose.*.yml; do
   fi
 done
 
-# Debug output
-if [[ ${#compose_files[@]} -eq 0 ]]; then
-  echo "Warning: No compose files found in /opt/app" >&2
-else
-  echo "Using compose files: ${compose_files[*]}"
-fi
-
 # Ensure we have a command to run
 if [[ $# -eq 0 ]]; then
   echo "Error: No command provided to docker compose" >&2

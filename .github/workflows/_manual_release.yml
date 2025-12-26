@@ -80,6 +80,9 @@ jobs:
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v2
 
+      - name: Populate .env files
+        run: .bin/scripts/env-setup.sh ${{ inputs.release_type }}
+
       - name: Retrieve previous version
         id: get-prev-version
         run: echo "PREVIOUS_VERSION=$(git describe --tags --abbrev=0 | cut -c2-)" >> "$GITHUB_STEP_SUMMARY"
