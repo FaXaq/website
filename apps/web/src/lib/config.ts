@@ -12,10 +12,10 @@ export const config = configSchema.parse({
 
 const buildApiUrl = (config: z.infer<typeof configSchema>) => {
   if (config.mode === 'production') {
-    return `https://norra.fr/trpc`;
+    return `https://norra.fr/api/trpc`;
   }
 
-  return `https://localhost:4000/api/trpc`;
+  return `https://localhost:4000/trpc`;
 };
 
 export const apiUrl = buildApiUrl(config);

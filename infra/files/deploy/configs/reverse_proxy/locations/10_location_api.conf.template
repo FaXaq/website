@@ -6,8 +6,6 @@ location /api {
     proxy_set_header X-Real-IP $remote_addr;
 
     include includes/error_page_json.conf;
-    # Remove the /api prefix before passing to upstream
-    rewrite ^/api(/.*)$ $1 break;
     
     include includes/proxy.conf;
 }
