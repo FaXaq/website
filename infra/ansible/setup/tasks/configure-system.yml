@@ -15,7 +15,7 @@
     docker_daemon_options:
       dns: ["172.17.0.1"]
       ipv6: true
-      fixed-cidr-v6: "fd00:dead:beef::/48"
+      fixed-cidr-v6: "fd00::/80"
 
 - include_role:
     name: geerlingguy.docker
@@ -24,7 +24,7 @@
       log-driver: local
       dns: ["172.17.0.1"]
       ipv6: true
-      fixed-cidr-v6: "fd00:dead:beef::/48"
+      fixed-cidr-v6: "fd00::/80"
 
 - name: Docker login
   shell: "echo $PASS | docker login ghcr.io -u '{{ vault.infra.DOCKER.user }}' --password-stdin"

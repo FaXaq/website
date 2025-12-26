@@ -6,11 +6,12 @@ const configSchema = z.object({
   host: z.string(),
 });
 
+console.log(import.meta.env);
 
 export const config = configSchema.parse({
   nodeEnv: import.meta.env.MODE || 'development',
   port: parseInt(process.env.PORT || '3000', 10),
-  host: import.meta.env.VITE_APP_HOST,
+  host: import.meta.env.VITE_APP_HOST ?? process?.env.VITE_APP_HOST ?? 'localhost',
 });
 
 const buildApiUrl = (config: z.infer<typeof configSchema>) => {

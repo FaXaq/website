@@ -6,10 +6,8 @@ readonly PROJECT_DIR="/opt/app"
 
 function reload_containers() {
     echo "Rechargement des conteneurs ..."
-    for serviceId in $(docker service ls -q)
-    do
-      docker service update $serviceId
-    done
+    cd /opt/app
+    /opt/app/tools/docker-compose.sh up -d --force-recreate --remove-orphans
 }
 
 echo "****************************"
