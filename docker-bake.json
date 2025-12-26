@@ -19,8 +19,7 @@
             "args": {
                 "PUBLIC_VERSION": "${VERSION}",
                 "PUBLIC_PRODUCT_NAME": "${PRODUCT_NAME}",
-                "PUBLIC_REPO_NAME": "${REPO_NAME}",
-                "PUBLIC_ENV": "${ENV}"
+                "PUBLIC_REPO_NAME": "${REPO_NAME}"
             },
             "platforms": [
                 "linux/amd64"
@@ -45,6 +44,9 @@
                     "production"
                 ]
             },
+            "args": {
+                "PUBLIC_ENV": "${ENV}"
+            },
             "Dockerfile": "Dockerfile",
             "name": "web-${ENV}",
             "tags": [
@@ -64,6 +66,9 @@
                 "ENV": [
                     "production"
                 ]
+            },
+            "args": {
+                "PUBLIC_ENV": "${ENV}"
             },
             "Dockerfile": "Dockerfile",
             "name": "server-${ENV}",
