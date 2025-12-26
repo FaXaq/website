@@ -3,7 +3,10 @@ import z from "zod";
 const configSchema = z.object({
   nodeEnv: z.enum(['development', 'production', 'test']).default('development'),
   port: z.number().min(1).max(65535).default(3000),
-  host: z.string(),
+  productRepo: z.string(),
+  productName: z.string(),
+  version: z.string(),
+  env: z.enum(['development', 'production', 'test']).default('development'),
 });
 
 
