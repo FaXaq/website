@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import { theme } from '@/components/ui/theme';

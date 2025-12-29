@@ -1,5 +1,3 @@
-"use client";
-
 import type { Reducer} from 'react';
 import React, { createContext, useContext, useReducer } from 'react';
 

@@ -1,9 +1,7 @@
-'use client';
-
 import { Badge, Box, Text } from '@chakra-ui/react';
 import type { Scale } from '@repo/mtts';
 import { Note } from '@repo/mtts';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { NOTE_DISPLAY, useScaleBuilderSettings } from './context/settings';
 import { getNoteColor } from './helpers/getNoteColor';

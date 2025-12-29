@@ -1,5 +1,3 @@
-'use client';
-
 import { Box } from "@chakra-ui/react";
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 

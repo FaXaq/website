@@ -1,7 +1,4 @@
-'use client';
-
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { LuMapPin } from 'react-icons/lu';
 
 import { m } from '@/paraglide/messages';

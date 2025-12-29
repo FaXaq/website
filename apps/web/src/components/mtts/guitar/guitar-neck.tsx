@@ -1,5 +1,3 @@
-'use client';
-
 import { Grid } from '@chakra-ui/react';
 import { Note, Pitch } from '@repo/mtts';
 import React from 'react';

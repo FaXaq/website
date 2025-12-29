@@ -1,7 +1,4 @@
-'use client';
-
 import { Box } from '@chakra-ui/react';
-import React from 'react';
 import { Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 const correlation = [

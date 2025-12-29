@@ -1,6 +1,3 @@
-
-"use client";
-
 import type { MapContainerProps } from "react-leaflet";
 import { MapContainer } from "react-leaflet";
 

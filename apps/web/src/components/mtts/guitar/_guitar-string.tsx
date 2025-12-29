@@ -1,8 +1,5 @@
-'use client';
-
 import { Grid } from '@chakra-ui/react';
 import { Note } from '@repo/mtts';
-import React from 'react';
 
 import type { FGetFret, FHighlight,GuitarFretProps } from './_guitar-fret';
 import GuitarFret from './_guitar-fret';

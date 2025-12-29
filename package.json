@@ -15,10 +15,12 @@
     "release": "semantic-release",
     "release:manual": ".bin/product release:manual",
     "release:candidate": ".bin/product release:candidate",
-    "vault:edit": ".bin/product vault:edit"
+    "vault:edit": ".bin/product vault:edit",
+    "prepare": "husky"
   },
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {
+    "husky": "^9.1.7",
     "semantic-release": "^25.0.1",
     "turbo": "^2.6.1"
   }

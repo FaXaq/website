@@ -1,7 +1,4 @@
-'use client';
-
 import { Box } from '@chakra-ui/react';
-import React from 'react';
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 export default function ClearSineWave() {

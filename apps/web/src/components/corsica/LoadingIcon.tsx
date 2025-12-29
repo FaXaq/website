@@ -1,7 +1,3 @@
-'use client';
-
-import React from 'react';
-
 export default function LoadingIcon() {
   return (
     <div role="status" >

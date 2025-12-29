@@ -1,7 +1,5 @@
-'use client';
-
 import { Box } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 export default function MatchingSinWaves() {

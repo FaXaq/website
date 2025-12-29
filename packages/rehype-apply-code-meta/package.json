@@ -2,8 +2,7 @@
   "name": "@repo/rehype-apply-code-meta",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "test": "vitest",

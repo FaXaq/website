@@ -1,7 +1,4 @@
-'use client';
-
 import { system } from '@chakra-ui/react/preset';
-import React from 'react';
 
 function MTTSLogo({ color = system.token("colors.fg") }: { color?: string }) {
   return (

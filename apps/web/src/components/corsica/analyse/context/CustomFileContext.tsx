@@ -1,5 +1,3 @@
-"use client";
-
 import type { Analysis } from '@repo/schemas/api/procedures/corsica';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { createContext, useContext } from 'react';

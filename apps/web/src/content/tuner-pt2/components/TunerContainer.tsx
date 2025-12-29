@@ -1,5 +1,3 @@
-"use client";
-
 import { Note } from '@repo/mtts';
 import React, { useEffect, useState } from 'react';
 
