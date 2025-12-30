@@ -19,4 +19,5 @@ const buildApiUrl = (config: z.infer<typeof configSchema>) => {
 };
 
 export const apiUrl = buildApiUrl(config);
+export const authUrl = buildApiUrl(config) + '/api/auth';
 export const trpcUrl = buildApiUrl(config) + '/trpc';
