@@ -9,7 +9,6 @@ export const setupBetterAuth = (fastify: FastifyInstance) => {
     async handler(request, reply) {
       try {
         // Construct request URL
-        console.log(request.headers.host);
         const url = new URL(request.url, `http://${request.headers.host}`);
 
         // Convert Fastify headers to standard Headers object
