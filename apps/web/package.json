@@ -68,7 +68,10 @@
     "dev": "vite dev",
     "build": "vite build",
     "start": "node .output/server/index.mjs",
+    "translations:generate": "paraglide-js compile",
+    "prelint": "pnpm translations:generate",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx -c ./eslint.config.js .",
+    "precheck-types": "pnpm translations:generate",
     "typecheck": "tsc --noEmit",
     "check-types": "tsc --noEmit"
   },
@@ -79,6 +82,7 @@
     "@inlang/paraglide-js": "2.5.0",
     "@mdx-js/react": "^3.1.1",
     "@mdx-js/rollup": "^3.1.1",
+    "@repo/eslint-config": "workspace:*",
     "@repo/rehype-apply-code-meta": "workspace:*",
     "@repo/remark-extract-code-meta": "workspace:*",
     "@shikijs/transformers": "^3.19.0",
@@ -113,8 +117,7 @@
     "remark-rehype": "^11.1.2",
     "sass": "^1.62.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.0",
-    "@repo/eslint-config": "workspace:*"
+    "typescript-eslint": "^8.46.0"
   },
   "overrides": {
     "@types/react": "19.1.10"
