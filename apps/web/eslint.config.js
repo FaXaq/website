@@ -22,7 +22,8 @@ const config = defineConfig(
         "src/content/tuner-pt3/wasm/auto-correlate/pkg/**",
         ".output/**",
         ".turbo/**",
-        ".nitro/**"
+        ".nitro/**",
+        "vite.config.ts"
       ]
     }
   ]
