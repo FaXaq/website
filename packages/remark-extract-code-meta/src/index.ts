@@ -1,6 +1,6 @@
 import { visit } from "unist-util-visit";
 import type * as unified from "unified";
-import { Root } from "remark-parse/lib";
+import type { Root } from "remark-parse/lib/index.js";
 
 export const remarkExtractCodeMeta: unified.Plugin<[], Root> = () => {
   return (tree) => {
