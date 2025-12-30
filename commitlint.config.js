@@ -1,5 +1,11 @@
 export default {
   extends: ['@commitlint/config-conventional'],
+  ignores: [
+    (commit) => {
+      const firstLine = commit.split('\n')[0];
+      return firstLine.startsWith('chore(release):') || commit.includes('[skip ci]');
+    },
+  ],
   rules: {
     'type-enum': [
       2,
