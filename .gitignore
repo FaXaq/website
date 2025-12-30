@@ -1,5 +1,6 @@
 .pnp.cjs
 .pnp.loader.mjs
+.pnpm-store
 .yarn
 
 infra/vault/.vault-password.gpg
@@ -8,3 +9,4 @@ node_modules
 .bin/id_rsa_deploy.key
 
 .DS_Store
+.turbo

@@ -9,7 +9,8 @@
     "group": {
         "production": {
             "targets": [
-                "ui-production"
+                "web-production",
+                "server-production"
             ]
         }
     },
@@ -20,7 +21,6 @@
                 "PUBLIC_PRODUCT_NAME": "${PRODUCT_NAME}",
                 "PUBLIC_REPO_NAME": "${REPO_NAME}"
             },
-            "dockerfile": "Dockerfile",
             "platforms": [
                 "linux/amd64"
             ],
@@ -35,7 +35,7 @@
                 "type=gha,mode=max,scope=${DEPS_ID}"
             ]
         },
-        "ui": {
+        "web": {
             "inherits": [
                 "common"
             ],
@@ -44,18 +44,42 @@
                     "production"
                 ]
             },
-            "name": "ui-${ENV}",
             "args": {
                 "PUBLIC_ENV": "${ENV}"
             },
+            "Dockerfile": "Dockerfile",
+            "name": "web-${ENV}",
             "tags": [
-                "ghcr.io/faxaq/${PRODUCT_NAME}_ui:${VERSION}-${ENV}",
-                "ghcr.io/faxaq/${PRODUCT_NAME}_ui:${CHANNEL}-${ENV}"
+                "ghcr.io/faxaq/${PRODUCT_NAME}_web:${VERSION}-${ENV}",
+                "ghcr.io/faxaq/${PRODUCT_NAME}_web:${CHANNEL}-${ENV}"
             ],
             "labels": {
-                "org.opencontainers.image.description": "Ui"
+                "org.opencontainers.image.description": "web"
             },
-            "target": "ui"
+            "target": "web"
+        },
+        "server": {
+            "inherits": [
+                "common"
+            ],
+            "matrix": {
+                "ENV": [
+                    "production"
+                ]
+            },
+            "args": {
+                "PUBLIC_ENV": "${ENV}"
+            },
+            "Dockerfile": "Dockerfile",
+            "name": "server-${ENV}",
+            "tags": [
+                "ghcr.io/faxaq/${PRODUCT_NAME}_server:${VERSION}-${ENV}",
+                "ghcr.io/faxaq/${PRODUCT_NAME}_server:${CHANNEL}-${ENV}"
+            ],
+            "labels": {
+                "org.opencontainers.image.description": "server"
+            },
+            "target": "server"
         }
     }
 }

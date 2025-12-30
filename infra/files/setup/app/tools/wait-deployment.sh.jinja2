@@ -2,4 +2,35 @@
 set -euo pipefail
 #Needs to be run as sudo
 
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock sudobmitch/docker-stack-wait:v0.2.3 {{product_name}}
+cd /opt/app
+
+# Wait for all services to be running
+max_attempts=60
+attempt=0
+
+while [ $attempt -lt $max_attempts ]; do
+  # Get all service names and check their status
+  services=$(/opt/app/tools/docker-compose.sh ps --services)
+  all_running=true
+  
+  for service in $services; do
+    status=$(/opt/app/tools/docker-compose.sh ps -q "$service" | xargs -r docker inspect --format '{% raw %}{{.State.Status}}{% endraw %}' 2>/dev/null || echo "notfound")
+    if [ "$status" != "running" ]; then
+      all_running=false
+      break
+    fi
+  done
+  
+  if [ "$all_running" = true ]; then
+    echo "All services are running"
+    exit 0
+  fi
+  
+  attempt=$((attempt + 1))
+  echo "Waiting for services to be ready... (attempt $attempt/$max_attempts)"
+  sleep 5
+done
+
+echo "Timeout waiting for services to be ready"
+/opt/app/tools/docker-compose.sh ps
+exit 1

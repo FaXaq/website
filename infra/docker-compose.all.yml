@@ -1,36 +1,25 @@
-version: "3.8"
-
-# The following variables define reusable configurations for deployment, providing consistent and predefined
-# behaviors for updating, rolling back, and restarting services.
-
-x-deploy-default: &deploy-default
-  update_config:
-    failure_action: rollback
-    parallelism: 1
-    delay: 10s
-  rollback_config:
-    parallelism: 1
-    delay: 10s
-  restart_policy:
-    condition: on-failure
-    window: 360s
-    delay: 30s
-    # Max 24hours
-    max_attempts: 240
-
 x-default: &default
+  restart: on-failure:50
   networks:
     - website
 
 services:
-  ui:
+  web:
     <<: *default
-    image: ghcr.io/faxaq/{{product_name}}_ui:{{app_version}}-{{env_name}}
+    image: ghcr.io/faxaq/{{product_name}}_web:{{app_version}}-{{env_name}}
     deploy:
-      <<: *deploy-default
       resources:
         limits:
           memory: 256m
-      replicas: 2
-    env_file: .env_ui
+    env_file: .env_web
+    stop_grace_period: 60s
+
+  server:
+    <<: *default
+    image: ghcr.io/faxaq/{{product_name}}_server:{{app_version}}-{{env_name}}
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    env_file: .env_server
     stop_grace_period: 60s

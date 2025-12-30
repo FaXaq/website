@@ -1,0 +1,58 @@
+name: Automatic Release
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v2
+
+      - name: Retrieve previous version
+        id: get-prev-version
+        run: echo "PREVIOUS_VERSION=$(git describe --tags --abbrev=0 | cut -c2-)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup corepack
+        run: corepack enable pnpm && corepack use pnpm@10.22.0
+
+      - name: Install dependencies
+        working-directory: ./
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Run semantic-release
+        id: semantic-release
+        working-directory: ./
+        run: corepack pnpm release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Retrieve new version
+        id: get-version
+        run: echo "NEW_VERSION=$(git describe --tags --abbrev=0 | cut -c2-)" >> "$GITHUB_STEP_SUMMARY"

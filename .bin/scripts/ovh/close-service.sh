@@ -10,7 +10,7 @@ function main() {
   if [ -z $env_ip ]; then exit 1; fi
 
   cd "${MODULE_DIR}"
-  yarn --silent install
+  pnpm --silent install
 
 
   VAULT=$(${SCRIPT_DIR}/view-vault.sh)
@@ -22,7 +22,7 @@ function main() {
     export OVH_API_APP_SECRET=$(yq '.vault.OVH_API_APP_SECRET' <<< "${VAULT}")
   fi;
 
-  yarn --silent cli closeService "${env_ip}" "$PRODUCT_NAME" "$@"
+  pnpm --silent cli closeService "${env_ip}" "$PRODUCT_NAME" "$@"
   cd - >/dev/null
 }
 

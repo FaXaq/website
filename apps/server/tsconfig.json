@@ -1,0 +1,40 @@
+{
+    "extends": "@repo/typescript-config/base.json",
+    "compilerOptions": {
+        "lib": [
+            "ESNext"
+        ],
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "Bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "target": "ESNext",
+        "module": "ESNext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "noEmit": false,
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "strict": true,
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "./node_modules/@types",
+            "../web/node_modules/@types"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "moduleDetection": "force",
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "dist",
+        "node_modules",
+    ]
+}

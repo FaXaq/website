@@ -1,0 +1,89 @@
+export const meta = {
+  title: "Digital advertising and content creation",
+  description: "The content creator platforms situation.",
+  date: "2021-04-26",
+  tags: ['english', 'internet', 'advertising'],
+  slug: 'digital-ads',
+};
+
+After 5 years I disabled my ad blocker and I was shocked by how much advertising there is on the web, most importantly on content creators' platforms. I watch videos, listen to podcasts, look at stream replays and on every single of those platforms, advertising took a huge place. More than I remember.
+
+Last November, nobody missed [YouTube ToS updates](https://support.google.com/youtube/thread/83733719?hl=en&msgid=83733719), with this quote in particular :
+
+> For channels not yet in the YouTube Partner Program:We added this new section to let you know that, starting today we’ll begin slowly rolling out ads on a limited number of videos from channels not in YPP (Youtube Partner Program).
+
+It seems that while for several years YouTube (and other CC platforms) has been keen to accept new content creators for free, without showing ads on every video, it rolls out a new advertising strategy. This strategy rings like : "Monetise your videos, or we will do it anyway.". In my opinion, it takes place after two major changes :
+
+- The birth and stabilization of services like [Patreon](https://www.patreon.com/) and [Tipeee](https://en.tipeee.com/).
+- The product advertising inside a video.
+
+Those new services coupled with in content advertising take care of creators' need for a stable revenue stream by enabling its community financial engagement. By enabling those other incomes source, need of ads revenue from the platforms dwindles more and more and forces content platforms to react.
+
+YouTube has been in the game for a long time. But what about others ? And what's different from TV at this point ? I fear that while we've gain the content customization we tend to an advertising normalization to support platforms and then, content creators.
+
+Why is advertising taking so much place, and our attention with that matter ? Isn't there a more profitable model for Content Creators, Content Platforms and Content Consumers ?
+
+There is a way, and it is for the consumer to pay. But pay every plaftorm ? It is not ideal, can be expansive and in my opinion tend to a content normalization and most importantly, centralisation. Centralisation because Content Creators needs audience, and audience is provided by the platform, and the plaftorm is here forcing ads on ouservelves.
+
+
+```typescript title="index.ts" addedLineNumbers=[16,17,18,19,20,21,40]
+const GUITAR_STRING_FREQUENCIES = [
+  { name: 'E2', frequency: 82.4068892282175 },
+  { name: 'A2', frequency: 110 },
+  { name: 'D3', frequency: 146.8323839587038 },
+  { name: 'G3', frequency: 195.99771799087463 },
+  { name: 'B3', frequency: 246.94165062806206 },
+  { name: 'E4', frequency: 329.6275569128699 }
+]
+
+const audioStreamRequest = navigator.mediaDevices.getUserMedia({ audio: true })
+
+function getFrequencyMagnitudeFromFFT(frequency, frequencyBinRange, FFTValues) {
+  const frequencyBinIndex = Math.floor(frequency / frequencyBinRange)
+  return FFTValues[frequencyBinIndex]
+}
+
+function isStringInTune(guitarString, frequencyBinRange, FFTValues) {
+  const prevMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency - frequencyBinRange, frequencyBinRange, FFTValues)
+  const nextMagnitude = getFrequencyMagnitudeFromFFT(guitarString.frequency + frequencyBinRange, frequencyBinRange, FFTValues)
+
+  return prevMagnitude - guitarString.magnitude < 0 && nextMagnitude - guitarString.magnitude < 0
+}
+
+function collectAnalyserData(analyser) {
+  // Uint8Array should be the same length as the frequencyBinCount
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(dataArray)
+
+  const frequencyBinRange = analyser.context.sampleRate / analyser.fftSize
+
+  const E2Magnitude = getFrequencyMagnitudeFromFFT(GUITAR_STRING_FREQUENCIES[0].frequency, frequencyBinRange, dataArray)
+  const guitarStringWithMagnitudes = GUITAR_STRING_FREQUENCIES.map(gsf => {
+    return {
+      ...gsf,
+      magnitude: getFrequencyMagnitudeFromFFT(gsf.frequency, frequencyBinRange, dataArray)
+    }
+  })
+
+  const guessedString = guitarStringWithMagnitudes.reduce((p, c) => p.magnitude <Layout c.magnitude ? c : p)
+  console.log(guessedString)
+  console.log(isStringInTune(guessedString, frequencyBinRange, dataArray))
+
+  setTimeout(() => collectAnalyserData(analyser), 300)
+}
+
+audioStreamRequest
+  .then((audioStream) => {
+    const ctx = new AudioContext()
+  
+    const sourceNode = ctx.createMediaStreamSource(audioStream)
+
+    const analyserNode = ctx.createAnalyser()
+    sourceNode.connect(analyserNode)
+
+    collectAnalyserData(analyserNode)
+  })
+  .catch(err => {
+    console.error("Error when requesting mic audio stream", err)
+  })
+```

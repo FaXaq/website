@@ -5,4 +5,5 @@ set -euo pipefail
 readonly SERVICE=${1:?"Merci de préciser le service"}
 shift
 
-docker service logs {{product_name}}_${SERVICE} "$@"
+cd /opt/app
+/opt/app/tools/docker-compose.sh logs -f ${SERVICE} "$@"

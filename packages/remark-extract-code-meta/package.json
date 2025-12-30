@@ -1,0 +1,33 @@
+{
+  "name": "@repo/remark-extract-code-meta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup src/index.ts --watch --format esm --dts --clean",
+    "build": "tsup src/index.ts --format esm --dts --clean"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.22.0",
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.19.1",
+    "mdast": "^3.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "tsup": "^8.5.1",
+    "unified": "^11.0.5",
+    "vite": "^7.2.4",
+    "vitest": "^4.0.13"
+  }
+}

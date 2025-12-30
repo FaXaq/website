@@ -8,4 +8,5 @@ echo "[$(date +'%Y-%m-%d_%H%M%S')] Running ${BASH_SOURCE[0]} $*"
 echo "****************************"
 
 echo "Arrêt des conteneurs ${CONTAINER_FILTER}..."
-docker service scale {{product_name}}_${CONTAINER_FILTER}=0
+cd /opt/app
+/opt/app/tools/docker-compose.sh stop ${CONTAINER_FILTER} || true

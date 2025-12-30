@@ -28,7 +28,7 @@ docker buildx create --name "faxaq-${PRODUCT_NAME}" --driver docker-container --
 set -e
 
 if [[ ! -z "${CI:-}" ]]; then
-  export DEPS_ID=($(md5sum $ROOT_DIR/yarn.lock))
+  export DEPS_ID=($(md5sum $ROOT_DIR/pnpm-lock.yaml))
 else
   export DEPS_ID=""
 fi

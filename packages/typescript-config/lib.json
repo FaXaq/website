@@ -1,0 +1,12 @@
+{
+    "extends": "./base.json",
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "ESNext",
+        "noEmit": true,
+        "target": "ESNext"
+    },
+    "include": [
+        "src"
+    ]
+}
