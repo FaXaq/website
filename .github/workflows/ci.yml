@@ -29,8 +29,8 @@ jobs:
 
       - name: Run lint
         working-directory: ./
-        run: turbo lint
+        run: pnpm turbo lint
 
       - name: Run check-types
         working-directory: ./
-        run: turbo check-types
+        run: pnpm turbo check-types
