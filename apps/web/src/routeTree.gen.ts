@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as ProjectsRouteRouteImport } from './routes/projects/route'
+import { Route as BlogRouteRouteImport } from './routes/blog/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
@@ -54,6 +55,11 @@ const ProjectsRouteRoute = ProjectsRouteRouteImport.update({
   path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRouteRoute = BlogRouteRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -70,9 +76,9 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   getParentRoute: () => ProjectsRouteRoute,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -80,68 +86,68 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const BlogWildcardRoute = BlogWildcardRouteImport.update({
-  id: '/blog/wildcard',
-  path: '/blog/wildcard',
-  getParentRoute: () => rootRouteImport,
+  id: '/wildcard',
+  path: '/wildcard',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogWhenToUseUseCallbackUseMemoRoute =
   BlogWhenToUseUseCallbackUseMemoRouteImport.update({
-    id: '/blog/when-to-use-useCallback-useMemo',
-    path: '/blog/when-to-use-useCallback-useMemo',
-    getParentRoute: () => rootRouteImport,
+    id: '/when-to-use-useCallback-useMemo',
+    path: '/when-to-use-useCallback-useMemo',
+    getParentRoute: () => BlogRouteRoute,
   } as any)
 const BlogTunerPt3Route = BlogTunerPt3RouteImport.update({
-  id: '/blog/tuner-pt3',
-  path: '/blog/tuner-pt3',
-  getParentRoute: () => rootRouteImport,
+  id: '/tuner-pt3',
+  path: '/tuner-pt3',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogTunerPt2Route = BlogTunerPt2RouteImport.update({
-  id: '/blog/tuner-pt2',
-  path: '/blog/tuner-pt2',
-  getParentRoute: () => rootRouteImport,
+  id: '/tuner-pt2',
+  path: '/tuner-pt2',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogTunerPt1Route = BlogTunerPt1RouteImport.update({
-  id: '/blog/tuner-pt1',
-  path: '/blog/tuner-pt1',
-  getParentRoute: () => rootRouteImport,
+  id: '/tuner-pt1',
+  path: '/tuner-pt1',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogSoundsliceRoute = BlogSoundsliceRouteImport.update({
-  id: '/blog/soundslice',
-  path: '/blog/soundslice',
-  getParentRoute: () => rootRouteImport,
+  id: '/soundslice',
+  path: '/soundslice',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogSeekubeRewindRoute = BlogSeekubeRewindRouteImport.update({
-  id: '/blog/seekube-rewind',
-  path: '/blog/seekube-rewind',
-  getParentRoute: () => rootRouteImport,
+  id: '/seekube-rewind',
+  path: '/seekube-rewind',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogLangageGuerreMondeProfessionnelRoute =
   BlogLangageGuerreMondeProfessionnelRouteImport.update({
-    id: '/blog/langage-guerre-monde-professionnel',
-    path: '/blog/langage-guerre-monde-professionnel',
-    getParentRoute: () => rootRouteImport,
+    id: '/langage-guerre-monde-professionnel',
+    path: '/langage-guerre-monde-professionnel',
+    getParentRoute: () => BlogRouteRoute,
   } as any)
 const BlogGpxFilesRoute = BlogGpxFilesRouteImport.update({
-  id: '/blog/gpx-files',
-  path: '/blog/gpx-files',
-  getParentRoute: () => rootRouteImport,
+  id: '/gpx-files',
+  path: '/gpx-files',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute =
   BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRouteImport.update({
-    id: '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe',
-    path: '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe',
-    getParentRoute: () => rootRouteImport,
+    id: '/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe',
+    path: '/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe',
+    getParentRoute: () => BlogRouteRoute,
   } as any)
 const BlogDigitalPresenceOfGovernementsRoute =
   BlogDigitalPresenceOfGovernementsRouteImport.update({
-    id: '/blog/digital-presence-of-governements',
-    path: '/blog/digital-presence-of-governements',
-    getParentRoute: () => rootRouteImport,
+    id: '/digital-presence-of-governements',
+    path: '/digital-presence-of-governements',
+    getParentRoute: () => BlogRouteRoute,
   } as any)
 const BlogDigitalAdsRoute = BlogDigitalAdsRouteImport.update({
-  id: '/blog/digital-ads',
-  path: '/blog/digital-ads',
-  getParentRoute: () => rootRouteImport,
+  id: '/digital-ads',
+  path: '/digital-ads',
+  getParentRoute: () => BlogRouteRoute,
 } as any)
 const AdminMeRoute = AdminMeRouteImport.update({
   id: '/me',
@@ -228,6 +234,7 @@ const ProjectsCoolerColorSlugCombinationRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/blog': typeof BlogRouteRouteWithChildren
   '/projects': typeof ProjectsRouteRouteWithChildren
   '/resume': typeof ResumeRoute
   '/projects/corsica': typeof ProjectsCorsicaRouteRouteWithChildren
@@ -247,7 +254,7 @@ export interface FileRoutesByFullPath {
   '/blog/when-to-use-useCallback-useMemo': typeof BlogWhenToUseUseCallbackUseMemoRoute
   '/blog/wildcard': typeof BlogWildcardRoute
   '/admin/': typeof AdminIndexRoute
-  '/blog': typeof BlogIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
   '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
@@ -296,6 +303,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/blog': typeof BlogRouteRouteWithChildren
   '/projects': typeof ProjectsRouteRouteWithChildren
   '/resume': typeof ResumeRoute
   '/projects/corsica': typeof ProjectsCorsicaRouteRouteWithChildren
@@ -334,6 +342,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/blog'
     | '/projects'
     | '/resume'
     | '/projects/corsica'
@@ -353,7 +362,7 @@ export interface FileRouteTypes {
     | '/blog/when-to-use-useCallback-useMemo'
     | '/blog/wildcard'
     | '/admin/'
-    | '/blog'
+    | '/blog/'
     | '/projects/'
     | '/projects/corsica/analyse'
     | '/projects/corsica/merge'
@@ -401,6 +410,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/blog'
     | '/projects'
     | '/resume'
     | '/projects/corsica'
@@ -438,21 +448,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  BlogRouteRoute: typeof BlogRouteRouteWithChildren
   ProjectsRouteRoute: typeof ProjectsRouteRouteWithChildren
   ResumeRoute: typeof ResumeRoute
-  BlogDigitalAdsRoute: typeof BlogDigitalAdsRoute
-  BlogDigitalPresenceOfGovernementsRoute: typeof BlogDigitalPresenceOfGovernementsRoute
-  BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute: typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
-  BlogGpxFilesRoute: typeof BlogGpxFilesRoute
-  BlogLangageGuerreMondeProfessionnelRoute: typeof BlogLangageGuerreMondeProfessionnelRoute
-  BlogSeekubeRewindRoute: typeof BlogSeekubeRewindRoute
-  BlogSoundsliceRoute: typeof BlogSoundsliceRoute
-  BlogTunerPt1Route: typeof BlogTunerPt1Route
-  BlogTunerPt2Route: typeof BlogTunerPt2Route
-  BlogTunerPt3Route: typeof BlogTunerPt3Route
-  BlogWhenToUseUseCallbackUseMemoRoute: typeof BlogWhenToUseUseCallbackUseMemoRoute
-  BlogWildcardRoute: typeof BlogWildcardRoute
-  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -469,6 +467,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof ProjectsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -494,10 +499,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/': {
       id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog'
+      path: '/'
+      fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -508,87 +513,87 @@ declare module '@tanstack/react-router' {
     }
     '/blog/wildcard': {
       id: '/blog/wildcard'
-      path: '/blog/wildcard'
+      path: '/wildcard'
       fullPath: '/blog/wildcard'
       preLoaderRoute: typeof BlogWildcardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/when-to-use-useCallback-useMemo': {
       id: '/blog/when-to-use-useCallback-useMemo'
-      path: '/blog/when-to-use-useCallback-useMemo'
+      path: '/when-to-use-useCallback-useMemo'
       fullPath: '/blog/when-to-use-useCallback-useMemo'
       preLoaderRoute: typeof BlogWhenToUseUseCallbackUseMemoRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/tuner-pt3': {
       id: '/blog/tuner-pt3'
-      path: '/blog/tuner-pt3'
+      path: '/tuner-pt3'
       fullPath: '/blog/tuner-pt3'
       preLoaderRoute: typeof BlogTunerPt3RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/tuner-pt2': {
       id: '/blog/tuner-pt2'
-      path: '/blog/tuner-pt2'
+      path: '/tuner-pt2'
       fullPath: '/blog/tuner-pt2'
       preLoaderRoute: typeof BlogTunerPt2RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/tuner-pt1': {
       id: '/blog/tuner-pt1'
-      path: '/blog/tuner-pt1'
+      path: '/tuner-pt1'
       fullPath: '/blog/tuner-pt1'
       preLoaderRoute: typeof BlogTunerPt1RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/soundslice': {
       id: '/blog/soundslice'
-      path: '/blog/soundslice'
+      path: '/soundslice'
       fullPath: '/blog/soundslice'
       preLoaderRoute: typeof BlogSoundsliceRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/seekube-rewind': {
       id: '/blog/seekube-rewind'
-      path: '/blog/seekube-rewind'
+      path: '/seekube-rewind'
       fullPath: '/blog/seekube-rewind'
       preLoaderRoute: typeof BlogSeekubeRewindRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/langage-guerre-monde-professionnel': {
       id: '/blog/langage-guerre-monde-professionnel'
-      path: '/blog/langage-guerre-monde-professionnel'
+      path: '/langage-guerre-monde-professionnel'
       fullPath: '/blog/langage-guerre-monde-professionnel'
       preLoaderRoute: typeof BlogLangageGuerreMondeProfessionnelRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/gpx-files': {
       id: '/blog/gpx-files'
-      path: '/blog/gpx-files'
+      path: '/gpx-files'
       fullPath: '/blog/gpx-files'
       preLoaderRoute: typeof BlogGpxFilesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe': {
       id: '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
-      path: '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
+      path: '/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
       fullPath: '/blog/en-tant-qu-ingenieur-quel-est-mon-role-dans-la-societe'
       preLoaderRoute: typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/digital-presence-of-governements': {
       id: '/blog/digital-presence-of-governements'
-      path: '/blog/digital-presence-of-governements'
+      path: '/digital-presence-of-governements'
       fullPath: '/blog/digital-presence-of-governements'
       preLoaderRoute: typeof BlogDigitalPresenceOfGovernementsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/blog/digital-ads': {
       id: '/blog/digital-ads'
-      path: '/blog/digital-ads'
+      path: '/digital-ads'
       fullPath: '/blog/digital-ads'
       preLoaderRoute: typeof BlogDigitalAdsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BlogRouteRoute
     }
     '/admin/me': {
       id: '/admin/me'
@@ -714,6 +719,45 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface BlogRouteRouteChildren {
+  BlogDigitalAdsRoute: typeof BlogDigitalAdsRoute
+  BlogDigitalPresenceOfGovernementsRoute: typeof BlogDigitalPresenceOfGovernementsRoute
+  BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute: typeof BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute
+  BlogGpxFilesRoute: typeof BlogGpxFilesRoute
+  BlogLangageGuerreMondeProfessionnelRoute: typeof BlogLangageGuerreMondeProfessionnelRoute
+  BlogSeekubeRewindRoute: typeof BlogSeekubeRewindRoute
+  BlogSoundsliceRoute: typeof BlogSoundsliceRoute
+  BlogTunerPt1Route: typeof BlogTunerPt1Route
+  BlogTunerPt2Route: typeof BlogTunerPt2Route
+  BlogTunerPt3Route: typeof BlogTunerPt3Route
+  BlogWhenToUseUseCallbackUseMemoRoute: typeof BlogWhenToUseUseCallbackUseMemoRoute
+  BlogWildcardRoute: typeof BlogWildcardRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteRouteChildren: BlogRouteRouteChildren = {
+  BlogDigitalAdsRoute: BlogDigitalAdsRoute,
+  BlogDigitalPresenceOfGovernementsRoute:
+    BlogDigitalPresenceOfGovernementsRoute,
+  BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute:
+    BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute,
+  BlogGpxFilesRoute: BlogGpxFilesRoute,
+  BlogLangageGuerreMondeProfessionnelRoute:
+    BlogLangageGuerreMondeProfessionnelRoute,
+  BlogSeekubeRewindRoute: BlogSeekubeRewindRoute,
+  BlogSoundsliceRoute: BlogSoundsliceRoute,
+  BlogTunerPt1Route: BlogTunerPt1Route,
+  BlogTunerPt2Route: BlogTunerPt2Route,
+  BlogTunerPt3Route: BlogTunerPt3Route,
+  BlogWhenToUseUseCallbackUseMemoRoute: BlogWhenToUseUseCallbackUseMemoRoute,
+  BlogWildcardRoute: BlogWildcardRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteRouteWithChildren = BlogRouteRoute._addFileChildren(
+  BlogRouteRouteChildren,
+)
+
 interface ProjectsCorsicaAnalyseRouteRouteChildren {
   ProjectsCorsicaAnalyseFileRoute: typeof ProjectsCorsicaAnalyseFileRoute
   ProjectsCorsicaAnalyseIndexRoute: typeof ProjectsCorsicaAnalyseIndexRoute
@@ -787,24 +831,9 @@ const ProjectsRouteRouteWithChildren = ProjectsRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  BlogRouteRoute: BlogRouteRouteWithChildren,
   ProjectsRouteRoute: ProjectsRouteRouteWithChildren,
   ResumeRoute: ResumeRoute,
-  BlogDigitalAdsRoute: BlogDigitalAdsRoute,
-  BlogDigitalPresenceOfGovernementsRoute:
-    BlogDigitalPresenceOfGovernementsRoute,
-  BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute:
-    BlogEnTantQuIngenieurQuelEstMonRoleDansLaSocieteRoute,
-  BlogGpxFilesRoute: BlogGpxFilesRoute,
-  BlogLangageGuerreMondeProfessionnelRoute:
-    BlogLangageGuerreMondeProfessionnelRoute,
-  BlogSeekubeRewindRoute: BlogSeekubeRewindRoute,
-  BlogSoundsliceRoute: BlogSoundsliceRoute,
-  BlogTunerPt1Route: BlogTunerPt1Route,
-  BlogTunerPt2Route: BlogTunerPt2Route,
-  BlogTunerPt3Route: BlogTunerPt3Route,
-  BlogWhenToUseUseCallbackUseMemoRoute: BlogWhenToUseUseCallbackUseMemoRoute,
-  BlogWildcardRoute: BlogWildcardRoute,
-  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
