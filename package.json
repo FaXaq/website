@@ -6,6 +6,7 @@
   "author": "Marin <marin.procureur@gmail.com>",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "scripts": {
     "setup": "corepack enable pnpm && corepack use pnpm@10.22.0",
     "lint": "turbo lint",
@@ -13,13 +14,24 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run",
     "release:manual": ".bin/product release:manual",
     "release:candidate": ".bin/product release:candidate",
     "vault:edit": ".bin/product vault:edit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "commitlint": "commitlint --edit",
+    "test:commitlint": "echo 'feat: test commit message' | commitlint",
+    "test:release": "semantic-release --dry-run --debug"
   },
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^12.0.0",
     "husky": "^9.1.7",
     "semantic-release": "^25.0.1",
     "turbo": "^2.6.1"

@@ -28,9 +28,9 @@ jobs:
         run: corepack pnpm install --frozen-lockfile
 
       - name: Run lint
-        working-directory: ./apps/web
-        run: corepack pnpm lint
+        working-directory: ./
+        run: turbo lint
 
-      - name: Run typecheck
-        working-directory: ./apps/web
-        run: corepack pnpm typecheck
+      - name: Run check-types
+        working-directory: ./
+        run: turbo check-types
