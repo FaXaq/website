@@ -1,5 +1,6 @@
 .pnp.cjs
 .pnp.loader.mjs
+.pnpm-store
 .yarn
 
 infra/vault/.vault-password.gpg
