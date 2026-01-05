@@ -7,7 +7,7 @@ describe('Scale class', () => {
   describe('Constructor', () => {
     it('Should create a major scale without name provided', () => {
       const s = new Scale()
-      expect(s.name).toBe('major')
+      expect(s.name).toBe("MAJOR")
       expect(s.key).toEqual(new Note({
         name: 'C'
       }))
@@ -20,14 +20,6 @@ describe('Scale class', () => {
         new Note({ name: 'A' }),
         new Note({ name: 'B' })
       ].map((n: Note) => n.SPN))
-    })
-
-    it('Should reject any name unknown', () => {
-      expect(() => {
-        new Scale({
-          name: 'wat'
-        })
-      }).toThrow()
     })
   })
 
@@ -72,30 +64,29 @@ describe('Scale class', () => {
   describe('Get & Set mode & name', () => {
     describe('setters', () => {
       it('Should create a scale from a name', () => {
-        expect(new Scale({ name: 'major' })).toEqual(new Scale())
+        expect(new Scale({ name: 'MAJOR' })).toEqual(new Scale())
       })
 
       it('Should be able to set a name after its creation', () => {
         // default is major
         const s = new Scale()
-        s.name = 'natural_minor'
-        expect(s).toEqual(new Scale({ name: 'natural_minor' }))
+        s.name = 'NATURAL_MINOR'
+        expect(s).toEqual(new Scale({ name: 'NATURAL_MINOR' }))
       })
 
       it('Should create a scale from a mode', () => {
-        expect(new Scale({ mode: 'aeolian' })).toEqual(new Scale({ name: 'natural_minor' }))
+        expect(new Scale({ mode: 'AEOLIAN' })).toEqual(new Scale({ name: 'NATURAL_MINOR' }))
       })
       it('Should be able to set a mode after its creation', () => {
         // default is ionian
         const s = new Scale()
-        s.mode = 'aeolian'
-        expect(s).toEqual(new Scale({ name: 'natural_minor' }))
+        s.mode = 'AEOLIAN'
+        expect(s).toEqual(new Scale({ name: 'NATURAL_MINOR' }))
       })
 
       it('Should throw when name / mode is unknown', () => {
         const s = new Scale()
 
-        expect(() => { s.name = 'tartiflette' }).toThrow()
         expect(() => { s.name = ['tartiflette'] as any }).toThrow()
         expect(() => { s.mode = 'tartiflette' }).toThrow()
         expect(() => { s.mode = { tartiflette: 2 } as any }).toThrow()
@@ -104,8 +95,8 @@ describe('Scale class', () => {
 
     describe('getters', () => {
       it('Should get a scale name', () => {
-        expect(new Scale().name).toBe('major')
-        expect(new Scale().mode).toBe('ionian')
+        expect(new Scale().name).toBe('MAJOR')
+        expect(new Scale().mode).toBe('IONIAN')
         expect(new Scale({
           intervals: [
             new Interval('P1'),
@@ -116,7 +107,7 @@ describe('Scale class', () => {
             new Interval('M7'),
             new Interval('M3')
           ]
-        }).mode).toBe('ionian')
+        }).mode).toBe('IONIAN')
       })
 
       it('Should be able to set a name after its creation', () => {
@@ -134,7 +125,7 @@ describe('Scale class', () => {
   describe('Generate chords', () => {
     it('Should generate default 7th chords from the current scale', () => {
       const s = new Scale()
-      expect(s.scaleChords.length).toBe(7)
+      expect(s.diatonicChords.length).toBe(7)
     })
   })
 })

@@ -249,11 +249,11 @@ export function ScaleBuilder() {
                 <Card.Description as="div">
                   <VStack alignItems="start">
                     <Text>This scale contains the following notes: <Em>{scale?.notes.map(note => translateNote(note)).join(", ")}</Em></Text>
-                    {scale?.scaleChords?.length && scale?.scaleChords?.length > 0 && (
+                    {scale?.diatonicChords?.length && scale?.diatonicChords?.length > 0 && (
                       <>
                         <Span>I have extracted the following diatonic chords:</Span>
                         <List.Root variant="plain">
-                          {scale?.scaleChords.map(chord =>
+                          {scale?.diatonicChords.map(chord =>
                             chord.notation && (
                               <List.Item key={`${chord.root.name}${chord.notation}`}>
                                 <Chord chord={chord} scale={scale} />

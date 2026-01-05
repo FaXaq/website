@@ -41,32 +41,32 @@ export const TRIADS: Record<TRIAD_NAME, ITriadDefinition> = {
     name: 'major',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('P5')],
     notation: ''
-  },'min': {
+  }, 'min': {
     key: 'min',
     name: 'minor',
     intervals: [new Interval('P1'), new Interval('m3'), new Interval('P5')],
     notation: '-'
-  },'aug': {
+  }, 'aug': {
     key: 'aug',
     name: 'augmented',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('A5')],
     notation: '+'
-  },'dim': {
+  }, 'dim': {
     key: 'dim',
     name: 'diminished',
     intervals: [new Interval('P1'), new Interval('m3'), new Interval('d5')],
     notation: '°'
-  },'sus2': {
+  }, 'sus2': {
     key: 'sus2',
     name: 'suspended2',
     intervals: [new Interval('P1'), new Interval('M2'), new Interval('P5')],
     notation: 'sus2'
-  },'sus4': {
+  }, 'sus4': {
     key: 'sus4',
     name: 'suspended4',
     intervals: [new Interval('P1'), new Interval('P4'), new Interval('P5')],
     notation: 'sus4'
-  },'power': {
+  }, 'power': {
     key: 'power',
     name: 'power',
     intervals: [new Interval('P1'), new Interval('P5')],
@@ -204,13 +204,13 @@ export const EXTENDED_CHORDS = {
   }
 };
 
-function _recursiveExtendedChordCompute (
+function _recursiveExtendedChordCompute(
   chord: ITriadDefinition | IExtendedChordDefinition,
   addedTones: Interval[] = []
 ): {
-    intervals: Interval[]
-    addedTones: Interval[]
-  } {
+  intervals: Interval[]
+  addedTones: Interval[]
+} {
   if ((chord as ITriadDefinition).intervals !== undefined) {
     return {
       intervals: (chord as ITriadDefinition).intervals,
@@ -264,7 +264,7 @@ export class Chord extends ValuedBarContent {
   private _notes: Note[] = [];
   private readonly _definitions: ITriadDefinition[] = [];
 
-  constructor (
+  constructor(
     params: ChordParams = {
       root: new Note({ name: 'C' }),
       value: DEFAULT_NOTE_VALUE
@@ -282,11 +282,11 @@ export class Chord extends ValuedBarContent {
     }
   }
 
-  get root (): Note {
+  get root(): Note {
     return this._root
   }
 
-  set root (root: Note) {
+  set root(root: Note) {
     if (root instanceof Note) {
       this._root = root
     } else {
@@ -296,11 +296,11 @@ export class Chord extends ValuedBarContent {
     }
   }
 
-  get intervals (): Interval[] {
+  get intervals(): Interval[] {
     return this._intervals
   }
 
-  set intervals (intervals: Interval[]) {
+  set intervals(intervals: Interval[]) {
     const notes: Note[] = []
     intervals.forEach(i => {
       if (!(i instanceof Interval)) {
@@ -316,8 +316,7 @@ export class Chord extends ValuedBarContent {
     this._intervals = intervals
   }
 
-  set notes (notes: Note[]) {
-    const lowestNote = notes.sort((n1, n2) => n1.frequency - n2.frequency)[0]
+  set notes(notes: Note[]) {
     const semitonesAndValues = notes.map(note => ({
       semitones: Note.getNormalizedSemitonesBetween(this._root, note),
       value: Note.getIndexDifferenceBetween(this._root, note)
@@ -330,12 +329,11 @@ export class Chord extends ValuedBarContent {
       return interval
     })
 
-    this._root = lowestNote!
     this._intervals = intervals
     this._notes = notes
   }
 
-  get notes (): Note[] {
+  get notes(): Note[] {
     const notes = this._intervals.map(interval => (
       Interval.apply(this._root, interval.name)
     ))
@@ -343,7 +341,7 @@ export class Chord extends ValuedBarContent {
     return notes
   }
 
-  get notation (): string {
+  get notation(): string {
     const semitonesNotation = this.semitonesNotation
     const fullyMatchingChordDefinitions = Chord.getDefinitionsFromSemitonesNotation(semitonesNotation)
     const partialMatchingChordDefinitions = Chord.getDefinitionsFromPartialSemitonesNotation(semitonesNotation)
@@ -386,7 +384,7 @@ export class Chord extends ValuedBarContent {
    * @param notation
    * @returns
    */
-  static getDefinitionsFromSemitonesNotation (notation: string): Array<{
+  static getDefinitionsFromSemitonesNotation(notation: string): Array<{
     addedTones: Interval[]
     chordDefinition: IChordDefinition
   }> {
@@ -454,7 +452,7 @@ export class Chord extends ValuedBarContent {
    * @param notation
    * @returns
    */
-  static getDefinitionsFromPartialSemitonesNotation (notation: string): Array<{
+  static getDefinitionsFromPartialSemitonesNotation(notation: string): Array<{
     missingTones: Interval[]
     chordDefinition: IChordDefinition
   }> {
@@ -485,7 +483,7 @@ export class Chord extends ValuedBarContent {
       .sort((a, b) => a.missingTones.length - b.missingTones.length)
   }
 
-  static fromNotation (notation: string): Chord {
+  static fromNotation(notation: string): Chord {
     const chars = notation.split('')
     let possibleRoot = new Note()
 
@@ -518,7 +516,7 @@ export class Chord extends ValuedBarContent {
     throw new Error(`Cannot find a chord notation yet for ${notation}`)
   }
 
-  get semitonesNotation (): string {
+  get semitonesNotation(): string {
     const semitones = []
     for (const note of this.notes) {
       const semitoneFromRoot = Note.getSemitonesBetween(this._root, note)
@@ -533,15 +531,15 @@ export class Chord extends ValuedBarContent {
     return semitones.join('')
   }
 
-  computeNotationWithContext (scale: Scale): string {
+  computeNotationWithContext(scale: Scale): string {
     return ''
   }
 
-  _noNotationYet (): void {
+  _noNotationYet(): void {
     console.warn(`No name for this chord yet ${this.root.SPN} ${JSON.stringify(this.intervals.map(i => i.name))}`)
   }
 
-  computeIntervals (): Interval[] {
+  computeIntervals(): Interval[] {
     const intervals: Interval[] = []
 
     this.notes.forEach((n: Note) => {
@@ -560,12 +558,12 @@ export class Chord extends ValuedBarContent {
     return intervals
   }
 
-  addInterval (interval: Interval): Chord {
+  addInterval(interval: Interval): Chord {
     this._intervals.push(interval)
     return this
   }
 
-  possibleAddedTones (triad: ITriadDefinition): Interval[] {
+  possibleAddedTones(triad: ITriadDefinition): Interval[] {
     if (triad.intervals.length === this.intervals.length) {
       return []
     }

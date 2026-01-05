@@ -538,7 +538,7 @@ export const SCALES: Record<IScaleName | IScaleMode, IScaleDefinition> = {
       new Interval('m2'),
       new Interval('m3'),
       new Interval('P4'),
-      new Interval('d5'),
+      new Interval('P5'),
       new Interval('m6'),
       new Interval('m7')
     ]
@@ -800,7 +800,7 @@ export class Scale {
   }
 
   // Return all 7th chords from the scale if it is diatonic
-  get scaleChords(): Chord[] {
+  get diatonicChords(): Chord[] {
     const chords: Chord[] = []
     if (this.intervals.length === 7) {
       this.notes.forEach((n, i) => {
@@ -809,16 +809,18 @@ export class Scale {
         const seventh = this.notes[(i + 6) % this.notes.length]
 
         if (third && fifth && seventh) {
+          const chord = new Chord({
+            root: n,
+            notes: [
+              n,
+              third,
+              fifth,
+              seventh
+            ]
+          })
+          console.log("chord", chord.root.SPN, chord.semitonesNotation);
           chords.push(
-            new Chord({
-              root: n,
-              notes: [
-                n,
-                third,
-                fifth,
-                seventh
-              ]
-            })
+            chord
           )
         }
       })
