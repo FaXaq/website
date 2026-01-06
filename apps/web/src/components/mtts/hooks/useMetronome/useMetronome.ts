@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import type { OutgoingMessage } from "./worker/const";
 import { IncomingMessageType, OutgoingMessageType } from "./worker/const";
+import Worker from "./worker?worker";
 
 type MetronomeCallback = (bipNumber: number) => void
 
 
 export default function useMetronome(beatCallback: MetronomeCallback) {
-  let bipNumber = 0;
-  const workerRef = useRef<Worker>(undefined);
+  const bipNumberRef = useRef<number>(0);
+  const workerRef = useRef<Worker | null>(null);
   const callbackRef = useRef<MetronomeCallback>(undefined);
   const [bpm, setBpm] = useState<number>(60);
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -20,8 +21,8 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
   function onReceiveMessageFromWorker(event: MessageEvent<OutgoingMessage>) {
     switch (event.data.type) {
       case OutgoingMessageType.BIP:
-        callbackRef?.current?.(bipNumber);
-        bipNumber++;
+        callbackRef?.current?.(bipNumberRef.current);
+        bipNumberRef.current++;
         break;
       case OutgoingMessageType.BPM_UPDATE: {
         const bpmUpdatePayload = event.data.payload as unknown as number;
@@ -31,7 +32,7 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
       case OutgoingMessageType.WORKING_UPDATE: {
         const workingUpdatePayload = event.data.payload as unknown as boolean;
         if (!workingUpdatePayload) {
-          bipNumber = 0;
+          bipNumberRef.current = 0;
         }
         setIsActive(workingUpdatePayload);
         break;
@@ -48,11 +49,15 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
   };
 
   useEffect(() => {
-    const workerUrl = new URL('./worker/index.ts', import.meta.url);
-    workerRef.current = new Worker(workerUrl, { type: 'module' });
-    workerRef.current.onmessage = onReceiveMessageFromWorker;
+    // Create the worker inside useEffect so it's properly managed within React's lifecycle
+    const worker = new Worker();
+    workerRef.current = worker;
+    worker.onmessage = onReceiveMessageFromWorker;
+
     return () => {
+      // Cleanup: terminate the worker when component unmounts
       workerRef.current?.terminate();
+      workerRef.current = null;
     };
   }, []);
 

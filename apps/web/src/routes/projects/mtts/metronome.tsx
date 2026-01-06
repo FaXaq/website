@@ -8,7 +8,8 @@ import useMetronome from '@/components/mtts/hooks/useMetronome/useMetronome';
 import { m } from '@/paraglide/messages';
 
 export const Route = createFileRoute('/projects/mtts/metronome')({
-  component: RouteComponent
+  component: RouteComponent,
+  ssr: false
 });
 
 function RouteComponent() {
