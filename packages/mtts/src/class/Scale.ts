@@ -818,7 +818,6 @@ export class Scale {
               seventh
             ]
           })
-          console.log("chord", chord.root.SPN, chord.semitonesNotation);
           chords.push(
             chord
           )
