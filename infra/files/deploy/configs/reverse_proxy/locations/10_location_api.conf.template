@@ -1,4 +1,4 @@
-location /api/ {
+location ^~ /api/ {
     proxy_pass_request_headers on;
     proxy_set_header Host $host;
     proxy_set_header Proxy "";
@@ -20,8 +20,8 @@ location /api/ {
     proxy_read_timeout 36000s;
     proxy_redirect off;
     proxy_pass_header Authorization;
-    
+
     include includes/error_page_json.conf;
-    
+
     proxy_pass http://server:4000/;
 }
