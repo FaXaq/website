@@ -44,8 +44,16 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
     workerRef.current?.postMessage({ type: IncomingMessageType.UPDATE_BPM, payload: newBpm });
   };
 
-  const toggleMetronome = () => {
+  const toggle = () => {
     workerRef.current?.postMessage({ type: IncomingMessageType.IS_WORKING, payload: !isActive });
+  };
+
+  const start = () => {
+    workerRef.current?.postMessage({ type: IncomingMessageType.IS_WORKING, payload: true });
+  };
+
+  const stop = () => {
+    workerRef.current?.postMessage({ type: IncomingMessageType.IS_WORKING, payload: false });
   };
 
   useEffect(() => {
@@ -63,7 +71,9 @@ export default function useMetronome(beatCallback: MetronomeCallback) {
 
   return {
     updateBpm,
-    toggleMetronome,
+    toggle,
+    start,
+    stop,
     bpm,
     isActive,
   };

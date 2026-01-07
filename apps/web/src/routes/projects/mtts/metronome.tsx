@@ -1,6 +1,7 @@
-import { Box, Button,Card, GridItem, Heading, HStack, Separator, Slider, Span, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Card, GridItem, Heading, HStack, Separator, Slider, Span, Text, VStack } from '@chakra-ui/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useCallback, useEffect, useState } from 'react';
+import { useKeyPressEvent } from 'react-use';
 import * as Tone from 'tone';
 
 import { useVolume } from '@/components/mtts/hooks/tonejs';
@@ -30,7 +31,12 @@ function RouteComponent() {
     setMetronomeBeat((metronomeBeat) % beatNumber);
   }, [synth, beatNumber]);
 
-  const { bpm, updateBpm, toggleMetronome, isActive } = useMetronome(onBip);
+  const { bpm, updateBpm, toggle: toggleMetronome, isActive: isMetronomeActive } = useMetronome(onBip);
+
+  useKeyPressEvent(" ", () => {
+    toggleMetronome();
+  });
+
   const delay = (Math.round(60000 * 100 / bpm) / 100).toFixed(2);
 
   function triggerTap() {
@@ -59,7 +65,7 @@ function RouteComponent() {
   };
 
   const dbToPercent = (db: number) => {
-    return (30 * (db + 15))/ 9;
+    return (30 * (db + 15)) / 9;
   };
 
   return (
@@ -108,15 +114,15 @@ function RouteComponent() {
             </Slider.Root>
             <Separator w="full" />
             <HStack flexWrap="wrap">
-            {
-              Array.from({ length: beatNumber }).fill(0).map((_, index) => (
-                <GridItem key={`beat-${index}`} display="inline-block" mx="2" h={50} w={50} bg={metronomeBeat === index ? "red.400" : "bg.muted"}>
-                </GridItem>
-              ))
-            }
+              {
+                Array.from({ length: beatNumber }).fill(0).map((_, index) => (
+                  <GridItem key={`beat-${index}`} display="inline-block" mx="2" h={50} w={50} bg={metronomeBeat === index ? "red.400" : "bg.muted"}>
+                  </GridItem>
+                ))
+              }
             </HStack>
             <Button onClick={() => toggleMetronome()}>
-              { isActive ? m["Stop"]() : m["Start"]() }
+              {isMetronomeActive ? m["Stop"]() : m["Start"]()}
             </Button>
           </VStack>
         </Card.Body>
