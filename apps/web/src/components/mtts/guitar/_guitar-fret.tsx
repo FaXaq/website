@@ -40,7 +40,7 @@ function GuitarFret({ note, stringNumber, fretNumber, highlight, getFret }: Guit
   >
     {layout === "horizontal" && fretNumber !== 0 && <Box h={0.5} w="full" bg="gray.emphasized" position="absolute" top="50%" zIndex={1}></Box>}
     {layout === "vertical" && fretNumber !== 0 && <Box w={0.5} h="full" bg="gray.emphasized" position="absolute" left="50%" zIndex={1}></Box>}
-    <Box position="relative" zIndex={10}>
+    <Box position="relative" zIndex={10} height="full" width="full">
       {getFret({ note, stringNumber, fretNumber, highlighted })}
     </Box>
   </GridItem>;

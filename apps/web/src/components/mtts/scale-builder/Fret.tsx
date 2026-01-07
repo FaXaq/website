@@ -57,7 +57,7 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   }
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" p={0.5} minH="8">
+    <Box display="flex" alignItems="center" justifyContent="center" p={0.5} minH="8" h="full" w="full">
       {noteExistsInScale(scale, note)
         ? (<Box
           onClick={() => toggleFret()}
