@@ -1,4 +1,4 @@
-import { Box, Card, createListCollection, Em, Grid, GridItem, Heading, HStack, List, Portal, RadioGroup, Select, Span, Text, VStack } from '@chakra-ui/react';
+import { Box, Card, Checkbox, createListCollection, Em, Grid, GridItem, Heading, HStack, List, Portal, RadioGroup, Select, Span, Text, VStack } from '@chakra-ui/react';
 import type { Chord as MTTSChord } from '@repo/mtts';
 import { Interval, INTERVAL_NAMES, INTERVALS, Note, Scale, SCALE_NAMES, SCALES } from '@repo/mtts';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -21,6 +21,7 @@ export function ScaleBuilder() {
   const navigate = useNavigate({ from: '/projects/mtts/scale-builder' });
   const rootNote = Note.fromSPN(searchParams.rootNote);
   const [selectedChord, setSelectedChord] = useState<MTTSChord | null>(null);
+  const [layoutVertical, setLayoutVertical] = useState(false);
   const scaleIntervals = searchParams.scaleIntervals.map((interval) => Interval.fromName(interval));
   const { noteDisplay, setNoteDisplay } = useScaleBuilderSettings();
   const { translateNote } = useNoteTranslation();
@@ -241,8 +242,13 @@ export function ScaleBuilder() {
           <GridItem colSpan={4}>
             <Text>Here is the scale on a guitar neck :</Text>
             <Box>
+              <Checkbox.Root checked={layoutVertical} onCheckedChange={(e) => setLayoutVertical(!!e.checked)}>
+                <Checkbox.HiddenInput />
+                <Checkbox.Control />
+                <Checkbox.Label>Layout vertical ?</Checkbox.Label>
+              </Checkbox.Root>
               <GuitarNeck
-                layout='horizontal'
+                layout={layoutVertical ? 'vertical' : 'horizontal'}
                 highlightFret={({ note }) => selectedChord ? noteExistsInChord(selectedChord, note) : true}
                 getFret={(props) =>
                   <Fret

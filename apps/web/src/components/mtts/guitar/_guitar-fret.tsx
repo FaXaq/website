@@ -33,12 +33,13 @@ function GuitarFret({ note, stringNumber, fretNumber, highlight, getFret }: Guit
     textAlign="center"
     borderColor="gray.focusRing"
     borderStyle="solid"
-    borderTopWidth={layout === "vertical" ? 1 : undefined}
+    borderBottomWidth={layout === "vertical" ? 1 : undefined}
     borderRightWidth={layout === "horizontal" ? 1 : undefined}
     zIndex={10}
     position="relative"
   >
-    {fretNumber !== 0 && <Box h={0.5} w="full" bg="gray.emphasized" position="absolute" top="50%" zIndex={1}></Box>}
+    {layout === "horizontal" && fretNumber !== 0 && <Box h={0.5} w="full" bg="gray.emphasized" position="absolute" top="50%" zIndex={1}></Box>}
+    {layout === "vertical" && fretNumber !== 0 && <Box w={0.5} h="full" bg="gray.emphasized" position="absolute" left="50%" zIndex={1}></Box>}
     <Box position="relative" zIndex={10}>
       {getFret({ note, stringNumber, fretNumber, highlighted })}
     </Box>

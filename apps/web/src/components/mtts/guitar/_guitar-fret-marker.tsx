@@ -1,6 +1,7 @@
 import { Box, Grid, Text } from "@chakra-ui/react";
 import { useRef } from "react";
 
+import { useContainerDimensions } from "../hooks/useContainerDimensions";
 import { useGuitarNeck } from "./context";
 
 const shouldShowFret = (fretIndex: number) => {
@@ -14,9 +15,13 @@ const shouldShowFret = (fretIndex: number) => {
     || fretIndexModulo === 12;
 };
 
-export const GuitarFretMarkerRow = () => {
+const FRET_MARKER_PX_WIDTH = 12;
+
+export const GuitarFretMarkerContainer = () => {
   const { layout, fretNumber, containerRef } = useGuitarNeck();
   const fretMarkerRowRef = useRef<HTMLDivElement>(null);
+  const containerDimensions = useContainerDimensions(containerRef);
+  const fretMarkerRowDimensions = useContainerDimensions(fretMarkerRowRef);
 
   const fakeArray = Array.from({ length: fretNumber });
 
@@ -26,38 +31,41 @@ export const GuitarFretMarkerRow = () => {
     ref={fretMarkerRowRef}
   >
     {fakeArray.map((_f, i) => (
-      <Box key={`fret-marker-${i}`} display="flex" flexDirection="column" alignItems="center">
-        {shouldShowFret(i) && <Text>{i}</Text>}
+      <Box key={`fret-marker-${i}`} display="flex" flexDirection={layout === "horizontal" ? "column" : "row"} alignItems="center">
+        {shouldShowFret(i) && <Text w="full" fontSize="xs" textAlign={layout === "vertical" ? "right" : "center"} px={2}>{i}</Text>}
         {shouldShowFret(i) && i === 12 && (
           <>
             <Box
-              h="8px"
-              w="8px"
+              h={`${FRET_MARKER_PX_WIDTH}px`}
+              w={`${FRET_MARKER_PX_WIDTH}px`}
               bg="gray.emphasized"
               borderRadius="full"
               position="absolute"
-              top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) * 3 / 9}px)`}
+              top={layout === "horizontal" ? `calc(${((containerDimensions.height ?? 0) - (fretMarkerRowDimensions.height ?? 0)) / 3}px)` : undefined}
+              right={layout === "vertical" ? `calc(${((containerDimensions.width ?? 0) - (fretMarkerRowDimensions.width ?? 0)) / 3}px - ${FRET_MARKER_PX_WIDTH / 2}px)` : undefined}
               zIndex={1}
             />
             <Box
-              h="8px"
-              w="8px"
+              h={`${FRET_MARKER_PX_WIDTH}px`}
+              w={`${FRET_MARKER_PX_WIDTH}px`}
               bg="gray.emphasized"
               borderRadius="full"
               position="absolute"
-              top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) * 6 / 9}px)`}
+              top={layout === "horizontal" ? `calc(${((containerDimensions.height ?? 0) - (fretMarkerRowDimensions.height ?? 0)) * 2 / 3}px)` : undefined}
+              right={layout === "vertical" ? `calc(${((containerDimensions.width ?? 0) - (fretMarkerRowDimensions.width ?? 0)) * 2 / 3}px - ${FRET_MARKER_PX_WIDTH / 2}px)` : undefined}
               zIndex={1}
             />
           </>
         )}
         {shouldShowFret(i) && i !== 12 && (
           <Box
-            h="8px"
-            w="8px"
+            h={`${FRET_MARKER_PX_WIDTH}px`}
+            w={`${FRET_MARKER_PX_WIDTH}px`}
             bg="gray.emphasized"
             borderRadius="full"
             position="absolute"
-            top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) / 2}px - 4px)`}
+            top={layout === "horizontal" ? `calc(${((containerDimensions.height ?? 0) - (fretMarkerRowDimensions.height ?? 0)) / 2}px - ${FRET_MARKER_PX_WIDTH / 2}px)` : undefined}
+            right={layout === "vertical" ? `calc(${((containerDimensions.width ?? 0) - (fretMarkerRowDimensions.width ?? 0)) / 2}px - ${FRET_MARKER_PX_WIDTH / 2}px)` : undefined}
             zIndex={1}
           />
         )}

@@ -3,7 +3,7 @@ import { Note } from '@repo/mtts';
 import React from 'react';
 
 import type { FGetFret, FHighlight } from './_guitar-fret';
-import { GuitarFretMarkerRow } from './_guitar-fret-marker';
+import { GuitarFretMarkerContainer } from './_guitar-fret-marker';
 import type { GuitarStringProps } from './_guitar-string';
 import GuitarString from './_guitar-string';
 import { FRET_MARKER } from './const';
@@ -40,13 +40,15 @@ function GuitarNeck({
     </Box>
     <Grid
       ref={containerRef}
-      templateColumns={layout === "vertical" ? `repeat(${tuning.strings.length}, minmax(0, 1fr))` : undefined}
-      templateRows={layout === "horizontal" ? `repeat(${tuning.strings.length}, minmax(0, 1fr))` : undefined}
+      templateColumns={layout === "vertical" ? `repeat(${tuning.strings.length + 1}, minmax(0, 1fr))` : undefined}
+      templateRows={layout === "horizontal" ? `repeat(${tuning.strings.length + 1}, minmax(0, 1fr))` : undefined}
       position="relative"
       overflow="auto"
+      maxWidth={layout === "vertical" ? 12 * tuning.strings.length : undefined}
     >
+      {layout === "vertical" && <GuitarFretMarkerContainer />}
       {stringsInOrder.map((string) => <GuitarString key={`string-${string.stringNumber}`} {...string} />)}
-      <GuitarFretMarkerRow />
+      {layout === "horizontal" && <GuitarFretMarkerContainer />}
     </Grid>
   </>;
 }
