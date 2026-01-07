@@ -1,52 +1,47 @@
-import { GridItem } from '@chakra-ui/react';
+import { Box, GridItem } from '@chakra-ui/react';
 import type { Note } from '@repo/mtts';
 import React from 'react';
 
-import { FRET_MARKER } from './const';
 import { useGuitarNeck } from './context';
 
-export type FHighlight = ({ note, stringNumber, fretNumber }: { note: typeof FRET_MARKER | Note, stringNumber?: number, fretNumber?: number }) => boolean
-export type FGetFret = ({ note, stringNumber, fretNumber, highlighted }: { note: typeof FRET_MARKER | Note, highlighted: boolean, stringNumber: number, fretNumber: number }) => React.JSX.Element | null | string
+export type FHighlight = (params: {
+  note: Note,
+  stringNumber?: number,
+  fretNumber?: number
+}) => boolean
+
+export type FGetFret = (params: {
+  note: Note,
+  highlighted: boolean,
+  stringNumber: number,
+  fretNumber: number
+}) => React.JSX.Element | null | string
 
 export interface GuitarFretProps {
   stringNumber: number,
   fretNumber: number,
-  note: Note | typeof FRET_MARKER,
+  note: Note,
   highlight: FHighlight,
   getFret: FGetFret,
 }
 
 function GuitarFret({ note, stringNumber, fretNumber, highlight, getFret }: GuitarFretProps) {
   const highlighted = highlight({ note, stringNumber, fretNumber });
-  const { layout, fretNumber: guitarFretNumber } = useGuitarNeck();
-
-  const horizontalLayout = {
-    borderBottom: fretNumber !== 0 ? "1px solid" : undefined,
-    borderBottomColor: "fg.muted",
-    borderLeft: (fretNumber !== 0 && note !== FRET_MARKER) ? "1px solid" : undefined,
-    borderLeftColor: "fg.muted",
-    borderRight: (note !== FRET_MARKER && fretNumber === guitarFretNumber - 1) ? "1px solid" : undefined,
-    borderRightColor: "fg.muted",
-    borderTop: (layout === "vertical" && fretNumber === 1) ? "1px solid" : undefined,
-    borderTopColor: "fg.muted",
-  };
-
-  const verticalLayout = {
-    borderBottom: note !== FRET_MARKER && fretNumber !== 0 ? "1px solid" : undefined,
-    borderBottomColor: "fg.muted",
-    borderLeft: fretNumber !== 0 ? "1px solid" : undefined,
-    borderLeftColor: "fg.muted",
-    borderTop: note !== FRET_MARKER && layout === "vertical" && fretNumber === 1 ? "1px solid" : undefined,
-    borderTopColor: "fg.muted",
-  };
-
-  const fretBorders = layout === "vertical" ? verticalLayout : horizontalLayout;
+  const { layout } = useGuitarNeck();
 
   return <GridItem
     textAlign="center"
-    {...fretBorders}
+    borderColor="gray.focusRing"
+    borderStyle="solid"
+    borderTopWidth={layout === "vertical" ? 1 : undefined}
+    borderRightWidth={layout === "horizontal" ? 1 : undefined}
+    zIndex={10}
+    position="relative"
   >
-    {getFret({ note, stringNumber, fretNumber, highlighted })}
+    {fretNumber !== 0 && <Box h={0.5} w="full" bg="gray.emphasized" position="absolute" top="50%" zIndex={1}></Box>}
+    <Box position="relative" zIndex={10}>
+      {getFret({ note, stringNumber, fretNumber, highlighted })}
+    </Box>
   </GridItem>;
 }
 

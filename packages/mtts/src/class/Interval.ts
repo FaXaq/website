@@ -1,3 +1,4 @@
+import { getTypedKeys } from '../misc/utils'
 import { Note, NOTES } from './Note'
 
 export type INTERVAL_NAME = "P1" | "d2" | "m2" | "A1" | "M2" | "d3" | "m3" | "A2" | "M3" | "d4" | "P4" | "A3" | "d5" | "A4" | "P5" | "d6" | "m6" | "A5" | "M6" | "d7" | "m7" | "A6" | "M7" | "d8" | "P8" | "A7" | "d9" | "m9" | "A8" | "M9" | "d10" | "m10" | "A9" | "M10" | "d11" | "A10" | "P11" | "d12" | "A11" | "P12" | "d13" | "m13" | "A12" | "M13" | "d14" | "m14" | "A13" | "M14" | "d15" | "P15" | "A14" | "A15"
@@ -63,14 +64,16 @@ export const INTERVALS: Record<INTERVAL_NAME, IInterval> = {
   "P15": { name: "P15", value: 15, semitones: 24 },
   "A14": { name: "A14", value: 14, semitones: 24 },
   "A15": { name: "A15", value: 15, semitones: 25 }
-} 
+}
+
+export const INTERVAL_NAMES = getTypedKeys(INTERVALS)
 
 export class Interval {
   name: INTERVAL_NAME;
   semitones: number;
   value: number;
 
-  constructor (name: INTERVAL_NAME) {
+  constructor(name: INTERVAL_NAME) {
     if (INTERVALS[name] !== undefined) {
       this.name = name
       this.semitones = INTERVALS[name].semitones
@@ -80,19 +83,19 @@ export class Interval {
     }
   }
 
-  apply (note: Note): Note {
+  apply(note: Note): Note {
     return Interval.apply(note, this.name)
   }
 
-  get notation (): string {
+  get notation(): string {
     return Interval.notation(this.name)
   }
 
-  get chordSemitonesNotation (): string {
+  get chordSemitonesNotation(): string {
     return Interval.chordSemitonesNotation(this)
   }
 
-  raiseOctave (): Interval {
+  raiseOctave(): Interval {
     const interval = Interval.raiseOctave(this)
     if (interval !== undefined) {
       return interval
@@ -101,7 +104,7 @@ export class Interval {
     return Interval.fromSemitonesAndValue(this.semitones, this.value) as unknown as Interval
   }
 
-  static raiseOctave (interval: Interval): Interval | undefined {
+  static raiseOctave(interval: Interval): Interval | undefined {
     if (interval.value < 8) {
       return Interval.fromSemitonesAndValue(interval.semitones + 12, interval.value + 7)
     } else {
@@ -109,7 +112,7 @@ export class Interval {
     }
   }
 
-  static fromSemitones (semitones: number): Interval[] {
+  static fromSemitones(semitones: number): Interval[] {
     const intervals: Interval[] = []
 
     for (const key in INTERVALS) {
@@ -122,7 +125,7 @@ export class Interval {
     return intervals
   }
 
-  static fromValue (value: number): Interval[] {
+  static fromValue(value: number): Interval[] {
     const intervals: Interval[] = []
 
     for (const key in INTERVALS) {
@@ -135,7 +138,7 @@ export class Interval {
     return intervals
   }
 
-  static fromSemitonesAndValue (
+  static fromSemitonesAndValue(
     semitones: number,
     value: number
   ): Interval | undefined {
@@ -144,11 +147,11 @@ export class Interval {
     })
   }
 
-  static getSemitones (name: INTERVAL_NAME): number {
+  static getSemitones(name: INTERVAL_NAME): number {
     return INTERVALS[name].semitones
   }
 
-  static apply (note: Note, name: INTERVAL_NAME): Note {
+  static apply(note: Note, name: INTERVAL_NAME): Note {
     const newNote = note.duplicate()
     let intervalValue = Interval.getValue(name)
 
@@ -171,19 +174,19 @@ export class Interval {
     return newNote
   }
 
-  static getValue (name: INTERVAL_NAME): number {
+  static getValue(name: INTERVAL_NAME): number {
     return INTERVALS[name].value
   }
 
-  static fromName (name: INTERVAL_NAME): Interval {
+  static fromName(name: INTERVAL_NAME): Interval {
     return new Interval(name)
   }
 
-  static equals (interval1: Interval, interval2: Interval): boolean {
+  static equals(interval1: Interval, interval2: Interval): boolean {
     return interval1.name === interval2.name
   }
 
-  static notation (name: INTERVAL_NAME): string {
+  static notation(name: INTERVAL_NAME): string {
     if (!INTERVALS[name]) {
       throw new Error(`No interval known with that name : ${name}. Cannot get its notation.`)
     }
@@ -217,7 +220,7 @@ export class Interval {
     }
   }
 
-  static chordSemitonesNotation (interval: Interval): string {
+  static chordSemitonesNotation(interval: Interval): string {
     const semitones = interval.semitones % SEMITONES_WITHIN_OCTAVE
     if (semitones === 10) {
       return 'X'
@@ -242,7 +245,7 @@ export class Interval {
    * @param chordSemitonesNotation
    * @returns
    */
-  static fromChordSemitonesNotation (chordSemitonesNotation: string): Interval[] | undefined {
+  static fromChordSemitonesNotation(chordSemitonesNotation: string): Interval[] | undefined {
     if (chordSemitonesNotation === 'N') {
       return Interval.fromSemitones(11)
     }

@@ -8,7 +8,8 @@ export enum COLOR {
   GREEN = 'color-green',
   BLUE = 'color-blue',
   VIOLET = 'color-violet',
-  RED = 'color-red'
+  RED = 'color-red',
+  TRANSPARENT = 'transparent'
 }
 
 export function getNoteColor(scale: Scale, note: Note): COLOR {
@@ -39,5 +40,5 @@ export function getNoteColor(scale: Scale, note: Note): COLOR {
       return COLOR.RED;
   }
 
-  return COLOR.DEFAULT;
+  return COLOR.TRANSPARENT;
 }

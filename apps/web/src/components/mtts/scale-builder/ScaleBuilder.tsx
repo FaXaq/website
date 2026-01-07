@@ -1,96 +1,53 @@
 import { Box, Card, createListCollection, Em, Grid, GridItem, Heading, HStack, List, Portal, RadioGroup, Select, Span, Text, VStack } from '@chakra-ui/react';
-import type { INTERVAL_NAME} from '@repo/mtts';
-import { ACCIDENTAL, Accidental, ACCIDENTALS, Interval, INTERVALS, Note, NOTES, Scale, SCALES } from '@repo/mtts';
-import { redirect, useSearch } from '@tanstack/react-router';
-import {useEffect, useMemo, useState } from 'react';
+import type { Chord as MTTSChord } from '@repo/mtts';
+import { Interval, INTERVAL_NAMES, INTERVALS, Note, Scale, SCALE_NAMES, SCALES } from '@repo/mtts';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useMemo, useState } from 'react';
 
 import GuitarNeck from '@/components/mtts/guitar/guitar-neck';
-import PianoRoll from '@/components/mtts/keys/PianoRoll';
 
 import Chord from './Chord';
 import ColorButton from './ColorButton';
 import { NOTE_DISPLAY, useScaleBuilderSettings } from './context/settings';
 import Fret from './Fret';
 import { COLOR } from './helpers/getNoteColor';
-import { noteExistsInScale } from './helpers/noteExistsInScale';
+import { isSameChord } from './helpers/isSameChord';
+import { noteExistsInChord } from './helpers/noteExistsInChord';
 import { useNoteTranslation } from './hooks/useNoteTranslation';
-import PianoBlackKey from './PianoBlackKey';
-import PianoKey from './PianoKey';
-
-const availableAccidentals: Accidental[] =
-  ACCIDENTALS
-    .filter(a => !a.includes('DOUBLE'))
-    .map(a => new Accidental({ semitones: ACCIDENTAL[a as keyof typeof ACCIDENTAL] ?? 0 }));
-
-export const availableIntervals: {
-  [key:number]: Interval[]
- } = (() => {
-   const intervals: { [key:number]: Interval[] } = {};
-   Object.keys(INTERVALS)
-     .filter(i => INTERVALS[i as INTERVAL_NAME].semitones < 12 && INTERVALS[i as INTERVAL_NAME].value < 8)
-     .forEach(interval => {
-       const intervalNumber = parseInt(interval.replace(/[a-zA-Z]/, ''));
-       if (!intervals[intervalNumber]) {
-         intervals[intervalNumber] = [];
-       }
-
-       intervals[intervalNumber].push(Interval.fromName(interval as INTERVAL_NAME));
-     });
-   return intervals;
- })();
-
-const INTERVAL_COLORS = Object.values(COLOR);
-
-
-const availableNotes: Note[] = NOTES.map(n => new Note({ name: n }));
-const availableRootNotes: Note[] = [];
-availableNotes
-  .forEach(note => {
-    availableAccidentals
-      .forEach(accidental => {
-        availableRootNotes.push(new Note({
-          name: note.name,
-          accidental: new Accidental({ semitones: accidental.semitones })
-        }));
-      });
-  });
+import { availableRootNotes, INTERVAL_COLORS } from './utils';
 
 export function ScaleBuilder() {
   const searchParams = useSearch({ from: '/projects/mtts/scale-builder' });
-  const [rootNote, setRootNote] = useState<Note>(availableRootNotes[0] ?? new Note({ name: 'C' }));
-  const [scaleIntervals, setScaleIntervals] = useState<Interval[]>(SCALES.MAJOR.intervals);
+  const navigate = useNavigate({ from: '/projects/mtts/scale-builder' });
+  const rootNote = Note.fromSPN(searchParams.rootNote);
+  const [selectedChord, setSelectedChord] = useState<MTTSChord | null>(null);
+  const scaleIntervals = searchParams.scaleIntervals.map((interval) => Interval.fromName(interval));
   const { noteDisplay, setNoteDisplay } = useScaleBuilderSettings();
   const { translateNote } = useNoteTranslation();
 
-  const scale = useMemo(() => {
-    try {
-      return new Scale({ key: rootNote, intervals: scaleIntervals });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [rootNote, scaleIntervals]);
+  const scale = new Scale({ key: rootNote, intervals: scaleIntervals });
 
   const availableIntervals: {
-    [key:number]: Interval[]
-   } = useMemo(() => {
-     const intervals: { [key:number]: Interval[] } = {};
-     Object.keys(INTERVALS)
-       .filter(i => INTERVALS[i as INTERVAL_NAME].semitones < 12 && INTERVALS[i as INTERVAL_NAME].value < 8)
-       .forEach(interval => {
-         const intervalNumber = parseInt(interval.replace(/[a-zA-Z]/, ''));
-         if (!intervals[intervalNumber]) {
-           intervals[intervalNumber] = [];
-         }
+    [key: number]: Interval[]
+  } = useMemo(() => {
+    const intervals: { [key: number]: Interval[] } = {};
+    INTERVAL_NAMES
+      .filter(i => INTERVALS[i].semitones < 12 && INTERVALS[i].value < 8)
+      .forEach(interval => {
+        const intervalNumber = parseInt(interval.replace(/[a-zA-Z]/, ''));
+        if (!intervals[intervalNumber]) {
+          intervals[intervalNumber] = [];
+        }
 
-         try {
-           Interval.apply(rootNote, interval as INTERVAL_NAME);
-           intervals[intervalNumber].push(Interval.fromName(interval as INTERVAL_NAME));
-         } catch (_e) {
-            // fails silently
-         }
-       });
-     return intervals;
-   }, [rootNote]);
+        try {
+          Interval.apply(rootNote, interval);
+          intervals[intervalNumber].push(Interval.fromName(interval));
+        } catch (_e) {
+          // fails silently
+        }
+      });
+    return intervals;
+  }, [rootNote]);
 
   function getIntervalIndexInScale(interval: Interval) {
     return scaleIntervals.findIndex(si => interval.name === si.name);
@@ -99,44 +56,27 @@ export function ScaleBuilder() {
   function toggleScaleInterval(interval: Interval) {
     const intervalIndexInScale = getIntervalIndexInScale(interval);
     if (intervalIndexInScale > -1) {
-      setScaleIntervals(si => si.reduce((previous: Interval[], current: Interval, interval: number) => {
-        if (interval !== intervalIndexInScale) {
-          return [...previous, current];
-        }
-
-        return [...previous];
-      }, []));
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          scaleIntervals: scaleIntervals.filter(si => si.name !== interval.name).map(si => si.name)
+        })
+      });
     } else {
-      setScaleIntervals(si => [...si, interval]);
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          scaleIntervals: [...scaleIntervals.map(si => si.name), interval.name]
+        })
+      });
     }
   }
-
-  useEffect(() => {
-    const searchParamsRootNote = searchParams.rootNote;
-    const searchParamsScaleIntervals = searchParams.scaleIntervals;
-    setRootNote(searchParamsRootNote ? Note.fromSPN(searchParamsRootNote) : availableRootNotes[0] ?? new Note({ name: 'C' }));
-    setScaleIntervals(
-      searchParamsScaleIntervals
-        ? searchParamsScaleIntervals.map(interval => Interval.fromName(interval as INTERVAL_NAME))
-        : SCALES.MAJOR.intervals
-    );
-  }, []);
 
   const scaleTitle = useMemo(() => {
     if (rootNote && scale) {
       return `${translateNote(rootNote)} ${scale?.name || scale.mode ? scale.name : `(${scale.intervals.map(interval => `${interval.name}`)})`} ${scale.mode && `/ ${translateNote(rootNote)} ${scale.mode}`}`;
     }
   }, [scale, rootNote]);
-
-  useEffect(() => {
-    redirect({
-      to: '/projects/mtts/scale-builder',
-      search: {
-        rootNote: rootNote.SPN,
-        scaleIntervals: scaleIntervals.map(interval => interval.name)
-      }
-    });
-  }, [scaleIntervals, rootNote]);
 
   const rootNoteOptions = createListCollection({
     items: availableRootNotes.map((note) => ({
@@ -146,11 +86,19 @@ export function ScaleBuilder() {
   });
 
   const scaleOptions = createListCollection({
-    items: Object.keys(SCALES).map(s => ({
+    items: SCALE_NAMES.map(s => ({
       label: s,
       value: s
     }))
   });
+
+  const selectChord = (chord: MTTSChord) => {
+    if (isSameChord(chord, selectedChord)) {
+      setSelectedChord(null);
+    } else {
+      setSelectedChord(chord);
+    }
+  };
 
   return (
     <Box>
@@ -162,7 +110,9 @@ export function ScaleBuilder() {
               collection={rootNoteOptions}
               size="xs"
               value={[rootNoteOptions.items.find((option) => option.value === rootNote.SPN)?.value ?? Note.fromSPN('C').SPN]}
-              onValueChange={(e) => setRootNote(Note.fromSPN(e.value[0] ?? ''))}
+              onValueChange={async (e) => navigate({
+                search: (prev) => ({ ...prev, rootNote: e.value[0] ?? new Note().SPN })
+              })}
               multiple={false}
             >
               <Select.HiddenSelect />
@@ -193,10 +143,18 @@ export function ScaleBuilder() {
               size="xs"
               width="320px"
               value={[scale?.name?.toUpperCase() ?? '']}
-              onValueChange={(e) => setScaleIntervals(
-                SCALES[e.value[0] as keyof typeof SCALES]?.intervals
-                ?? SCALES.MAJOR.intervals
-              )}
+              onValueChange={(e) => {
+                const val = e.value[0] as keyof typeof SCALES;
+                if (val && SCALES[val]) {
+                  const scale = SCALES[val];
+                  navigate({
+                    search: (prev) => ({
+                      ...prev,
+                      scaleIntervals: scale.intervals.map(i => i.name)
+                    })
+                  });
+                }
+              }}
               multiple={false}
             >
               <Select.HiddenSelect />
@@ -223,7 +181,7 @@ export function ScaleBuilder() {
               </Portal>
             </Select.Root>
             <Text fontSize="sm">Here are the intervals you're working with. You can click to add or remove some if you want to experiment.</Text>
-            <List.Root variant="plain" display="flex" flexDir="row" gap={1}>
+            <List.Root variant="plain" display="flex" flexDir="row" gap={1} py={1}>
               {Object.keys(availableIntervals).map((intervalKey) =>
                 <List.Item key={intervalKey}>
                   <List.Root variant="plain" display="flex" flexDir="column" gap={1}>
@@ -234,7 +192,7 @@ export function ScaleBuilder() {
                           isActive={getIntervalIndexInScale(interval) > -1}
                           onClick={() => toggleScaleInterval(interval)}
                         >
-                          <span>{interval.name}</span>
+                          <Span fontSize="xs">{interval.name}</Span>
                         </ColorButton>
                       </List.Item>))}
                   </List.Root>
@@ -242,7 +200,7 @@ export function ScaleBuilder() {
               )}
             </List.Root>
           </GridItem>
-          <GridItem colSpan={{ base: 4, md: 3}}>
+          <GridItem colSpan={{ base: 4, md: 3 }}>
             <Card.Root shadow="md">
               <Card.Body gap="2">
                 <Card.Title mt="2">{scaleTitle}</Card.Title>
@@ -252,15 +210,13 @@ export function ScaleBuilder() {
                     {scale?.diatonicChords?.length && scale?.diatonicChords?.length > 0 && (
                       <>
                         <Span>I have extracted the following diatonic chords:</Span>
-                        <List.Root variant="plain">
-                          {scale?.diatonicChords.map(chord =>
+                        <HStack flexWrap="wrap">
+                          {scale?.diatonicChords.map(({ chord, degree }) =>
                             chord.notation && (
-                              <List.Item key={`${chord.root.name}${chord.notation}`}>
-                                <Chord chord={chord} scale={scale} />
-                              </List.Item>
+                              <Chord key={`${chord.root.name}${chord.notation}`} chord={chord} degree={degree} scale={scale} onClick={selectChord} highlighted={isSameChord(chord, selectedChord)} />
                             )
                           )}
-                        </List.Root>
+                        </HStack>
                       </>
                     )}
                   </VStack>
@@ -287,7 +243,7 @@ export function ScaleBuilder() {
             <Box>
               <GuitarNeck
                 layout='horizontal'
-                highlightFret={({ note }) => noteExistsInScale(scale ?? new Scale(), note)}
+                highlightFret={({ note }) => selectedChord ? noteExistsInChord(selectedChord, note) : true}
                 getFret={(props) =>
                   <Fret
                     {...props}
@@ -297,12 +253,12 @@ export function ScaleBuilder() {
               />
             </Box>
           </GridItem>
-          <GridItem colSpan={4}>
+          {/*<GridItem colSpan={4}>
             <Text>Here is the scale on a piano :</Text>
             <Box h="32">
               <PianoRoll scale={scale} PianoBlackKeyComponent={PianoBlackKey} PianoKeyComponent={PianoKey} />
             </Box>
-          </GridItem>
+          </GridItem>*/}
         </Grid>
       </VStack>
     </Box>

@@ -1,24 +1,36 @@
-export function cloneArray<T> (array: T[]): T[] {
+export function cloneArray<T>(array: T[]): T[] {
   return Array.from(array)
 }
 
-export function cloneObject<T> (object: T): T {
+export function cloneObject<T>(object: T): T {
   return Object.assign({}, object)
 }
 
-export function cloneInstanceObject<InstanceObject> (instanciableObject: InstanceObject): InstanceObject {
+export function cloneInstanceObject<InstanceObject>(instanciableObject: InstanceObject): InstanceObject {
   // see https://stackoverflow.com/questions/16024940/how-do-i-clone-a-javascript-class-instance/16025595#16025595
   return Object.assign(Object.create(Object.getPrototypeOf(instanciableObject)), instanciableObject)
 }
 
-export function cloneObjectArray<Object> (objectArray: Object[]): Object[] {
+export function cloneObjectArray<Object>(objectArray: Object[]): Object[] {
   return Array.from(objectArray, (object: Object) => {
     return cloneObject(object)
   })
 }
 
-export function cloneInstanceObjectArray<InstanceObject> (instanceObjectArray: InstanceObject[]): InstanceObject[] {
+export function cloneInstanceObjectArray<InstanceObject>(instanceObjectArray: InstanceObject[]): InstanceObject[] {
   return Array.from(instanceObjectArray, (instanceObject: InstanceObject) => {
     return cloneInstanceObject(instanceObject)
   })
+}
+
+export function digitToRomanNumeral(n: number) {
+  if (n > 9 || n < 1) {
+    throw new Error("digitToRomanNumeral: Invalid input")
+  }
+  const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', "VIII", "IX"];
+  return romanNumerals[n - 1]!;
+}
+
+export function getTypedKeys<T extends object>(obj: T): Array<keyof T> {
+  return Object.keys(obj) as Array<keyof T>;
 }

@@ -30,6 +30,11 @@ function RouteComponent() {
       title: m['mtts_pages_index_experiments_1_title'](),
       description: m['mtts_pages_index_experiments_1_description'](),
       link: m['mtts_pages_index_experiments_1_link'](),
+    },
+    {
+      title: m['mtts_pages_index_experiments_2_title'](),
+      description: m['mtts_pages_index_experiments_2_description'](),
+      link: m['mtts_pages_index_experiments_2_link'](),
     }
   ].map(e => {
     if (!(e.link in router.routesByPath)) {

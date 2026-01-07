@@ -37,6 +37,7 @@ import { Route as ProjectsMttsIndexRouteImport } from './routes/projects/mtts/in
 import { Route as ProjectsCorsicaIndexRouteImport } from './routes/projects/corsica/index'
 import { Route as ProjectsCoolerIndexRouteImport } from './routes/projects/cooler/index'
 import { Route as ProjectsMttsScaleBuilderRouteImport } from './routes/projects/mtts/scale-builder'
+import { Route as ProjectsMttsPartyRouteImport } from './routes/projects/mtts/party'
 import { Route as ProjectsMttsMetronomeRouteImport } from './routes/projects/mtts/metronome'
 import { Route as ProjectsCorsicaMergeRouteImport } from './routes/projects/corsica/merge'
 import { Route as ProjectsCorsicaAnalyseRouteRouteImport } from './routes/projects/corsica/analyse/route'
@@ -190,6 +191,11 @@ const ProjectsMttsScaleBuilderRoute =
     path: '/scale-builder',
     getParentRoute: () => ProjectsMttsRouteRoute,
   } as any)
+const ProjectsMttsPartyRoute = ProjectsMttsPartyRouteImport.update({
+  id: '/party',
+  path: '/party',
+  getParentRoute: () => ProjectsMttsRouteRoute,
+} as any)
 const ProjectsMttsMetronomeRoute = ProjectsMttsMetronomeRouteImport.update({
   id: '/metronome',
   path: '/metronome',
@@ -259,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
   '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/party': typeof ProjectsMttsPartyRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
   '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsIndexRoute
   '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/party': typeof ProjectsMttsPartyRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler': typeof ProjectsCoolerIndexRoute
   '/projects/corsica': typeof ProjectsCorsicaIndexRoute
@@ -328,6 +336,7 @@ export interface FileRoutesById {
   '/projects/corsica/analyse': typeof ProjectsCorsicaAnalyseRouteRouteWithChildren
   '/projects/corsica/merge': typeof ProjectsCorsicaMergeRoute
   '/projects/mtts/metronome': typeof ProjectsMttsMetronomeRoute
+  '/projects/mtts/party': typeof ProjectsMttsPartyRoute
   '/projects/mtts/scale-builder': typeof ProjectsMttsScaleBuilderRoute
   '/projects/cooler/': typeof ProjectsCoolerIndexRoute
   '/projects/corsica/': typeof ProjectsCorsicaIndexRoute
@@ -367,6 +376,7 @@ export interface FileRouteTypes {
     | '/projects/corsica/analyse'
     | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
+    | '/projects/mtts/party'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler'
     | '/projects/corsica/'
@@ -398,6 +408,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
+    | '/projects/mtts/party'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler'
     | '/projects/corsica'
@@ -435,6 +446,7 @@ export interface FileRouteTypes {
     | '/projects/corsica/analyse'
     | '/projects/corsica/merge'
     | '/projects/mtts/metronome'
+    | '/projects/mtts/party'
     | '/projects/mtts/scale-builder'
     | '/projects/cooler/'
     | '/projects/corsica/'
@@ -651,6 +663,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsMttsScaleBuilderRouteImport
       parentRoute: typeof ProjectsMttsRouteRoute
     }
+    '/projects/mtts/party': {
+      id: '/projects/mtts/party'
+      path: '/party'
+      fullPath: '/projects/mtts/party'
+      preLoaderRoute: typeof ProjectsMttsPartyRouteImport
+      parentRoute: typeof ProjectsMttsRouteRoute
+    }
     '/projects/mtts/metronome': {
       id: '/projects/mtts/metronome'
       path: '/metronome'
@@ -792,12 +811,14 @@ const ProjectsCorsicaRouteRouteWithChildren =
 
 interface ProjectsMttsRouteRouteChildren {
   ProjectsMttsMetronomeRoute: typeof ProjectsMttsMetronomeRoute
+  ProjectsMttsPartyRoute: typeof ProjectsMttsPartyRoute
   ProjectsMttsScaleBuilderRoute: typeof ProjectsMttsScaleBuilderRoute
   ProjectsMttsIndexRoute: typeof ProjectsMttsIndexRoute
 }
 
 const ProjectsMttsRouteRouteChildren: ProjectsMttsRouteRouteChildren = {
   ProjectsMttsMetronomeRoute: ProjectsMttsMetronomeRoute,
+  ProjectsMttsPartyRoute: ProjectsMttsPartyRoute,
   ProjectsMttsScaleBuilderRoute: ProjectsMttsScaleBuilderRoute,
   ProjectsMttsIndexRoute: ProjectsMttsIndexRoute,
 }

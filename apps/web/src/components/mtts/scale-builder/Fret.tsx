@@ -1,6 +1,6 @@
-import { Badge, Box, Text } from '@chakra-ui/react';
+import { Box, Span, Text } from '@chakra-ui/react';
 import type { Scale } from '@repo/mtts';
-import { Note } from '@repo/mtts';
+import type { Note } from '@repo/mtts';
 import { useState } from 'react';
 
 import { NOTE_DISPLAY, useScaleBuilderSettings } from './context/settings';
@@ -12,7 +12,7 @@ import { useNoteTranslation } from './hooks/useNoteTranslation';
 import { getColorString } from './utils';
 
 interface IFretProps {
-  note: Note | string,
+  note: Note,
   stringNumber: number,
   fretNumber: number,
   highlighted: boolean,
@@ -26,16 +26,6 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
 
   function toggleFret() {
     setActive(!active);
-  }
-
-  if (!(note instanceof Note)) {
-    return <div>
-      <p>
-        {(fretNumber === 12 || fretNumber === 24) && '••'}
-        {(fretNumber === 3 || fretNumber === 5 || fretNumber === 7 || fretNumber === 9) && '•'}
-        {(fretNumber === 15 || fretNumber === 17 || fretNumber === 19 || fretNumber === 21) && '•'}
-      </p>
-    </div>;
   }
 
   function getNoteText(scale: Scale, note: Note): string {
@@ -67,10 +57,25 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
   }
 
   return (
-    <Box onClick={() => toggleFret()} bg={active ? "purple.muted" : "transparent"} w="full" h="full" p={1}>
+    <Box w="full" h="full" display="flex" alignItems="center" justifyContent="center" p={0.5} minH="8">
       {noteExistsInScale(scale, note)
-        ? (<Badge display="inline-block" bg={getColorString({ color: getNoteColor(scale, note) })}>{getNoteText(scale, note)}</Badge>)
-        : (<Text></Text>) }
+        ? (<Box
+          onClick={() => toggleFret()}
+          borderColor={getColorString({ color: getNoteColor(scale, note) })}
+          borderWidth="2px"
+          w={highlighted ? '8' : '3'}
+          h={highlighted ? '8' : '3'}
+          rounded="full"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          cursor="pointer"
+          bg={active ? getColorString({ color: getNoteColor(scale, note) }) : "bg.muted"}
+          transition="all 0.1s ease-in-out"
+        >
+          {highlighted && <Span fontSize="xs">{getNoteText(scale, note)}</Span>}
+        </Box>)
+        : (<Text></Text>)}
     </Box>
   );
 }

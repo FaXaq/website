@@ -41,12 +41,14 @@ export const TRIADS: Record<TRIAD_NAME, ITriadDefinition> = {
     name: 'major',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('P5')],
     notation: ''
-  }, 'min': {
+  },
+  'min': {
     key: 'min',
     name: 'minor',
     intervals: [new Interval('P1'), new Interval('m3'), new Interval('P5')],
     notation: '-'
-  }, 'aug': {
+  },
+  'aug': {
     key: 'aug',
     name: 'augmented',
     intervals: [new Interval('P1'), new Interval('M3'), new Interval('A5')],
@@ -73,7 +75,6 @@ export const TRIADS: Record<TRIAD_NAME, ITriadDefinition> = {
     notation: '5'
   }
 }
-
 
 export const EXTENDED_CHORDS = {
   M7: {
@@ -262,7 +263,6 @@ export class Chord extends ValuedBarContent {
   private _root!: Note;
   private _intervals!: Interval[];
   private _notes: Note[] = [];
-  private readonly _definitions: ITriadDefinition[] = [];
 
   constructor(
     params: ChordParams = {
@@ -366,6 +366,26 @@ export class Chord extends ValuedBarContent {
     this._noNotationYet()
 
     return ''
+  }
+
+  get thirdInterval(): Interval | undefined {
+    return this.intervals.find(i => i.value === 3);
+  }
+
+  get fifthInterval(): Interval | undefined {
+    return this.intervals.find(i => i.value === 5);
+  }
+
+  isMajor(): boolean {
+    return this.thirdInterval?.name === "M3";
+  }
+
+  isMinor(): boolean {
+    return this.thirdInterval?.name === "m3";
+  }
+
+  isDiminished(): boolean {
+    return this.isMinor() && this.fifthInterval?.name === "d5";
   }
 
   /**

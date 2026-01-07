@@ -1,19 +1,20 @@
 import { Note } from './Note'
 import { Interval } from './Interval'
 import { Chord } from './Chord'
+import { digitToRomanNumeral, getTypedKeys } from '../misc/utils'
 
-type IScaleName = "MAJOR" | "ACOUSTIC" | "NATURAL_MINOR" | "ALGERIAN" | "ALTERED" | "AUGMENTED" | "BEBOP_DOMINANT" | "BLUES" | "ASCENDING_CHROMATIC" | "DESCENDING_CHROMATIC" | "DOUBLE_HARMONIC" | "ENIGMATIC" | "GYPSY" | "HALF_DIMINISHED" | "HARMONIC_MAJOR" | "HARMONIC_MINOR" | "HIRAJOSHI" | "HUNGRARIAN_GYPSY" | "HUNGRARIAN_MINOR" | "IN" | "INSEN" | "IWATO" | "MAJOR_BEBOP" | "MAJOR_PENTATONIC" | "MELODIC_MINOR_ASCENDING" | "MELODIC_MINOR_DESCENDING" | "MINOR_PENTATONIC" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PERSIAN" | "PROMETHEUS" | "HARMONICS" | "TRITONE" | "TWO_SEMITONE_TRITONE" | "UKRAINIAN_DORIAN" | "WHOLE_TONE" | "YO" | "MAJOR_SEVEN_ARPEGGIO" | "DOMINANT_SEVEN_ARPEGGIO" | "MINOR_SEVEN_ARPEGGIO" | "MINOR_SEVEN_FLAT_FIVE_ARPEGGIO" | "DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO" | "MINOR_MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SIX_ARPEGGIO" | "MINOR_MAJOR_SIX_ARPEGGIO" | "DIMINISHED_SEVEN_ARPEGGIO"
+export type TScaleName = "MAJOR" | "ACOUSTIC" | "NATURAL_MINOR" | "ALGERIAN" | "ALTERED" | "AUGMENTED" | "BEBOP_DOMINANT" | "BLUES" | "ASCENDING_CHROMATIC" | "DESCENDING_CHROMATIC" | "DOUBLE_HARMONIC" | "ENIGMATIC" | "GYPSY" | "HALF_DIMINISHED" | "HARMONIC_MAJOR" | "HARMONIC_MINOR" | "HIRAJOSHI" | "HUNGRARIAN_GYPSY" | "HUNGRARIAN_MINOR" | "IN" | "INSEN" | "IWATO" | "MAJOR_BEBOP" | "MAJOR_PENTATONIC" | "MELODIC_MINOR_ASCENDING" | "MELODIC_MINOR_DESCENDING" | "MINOR_PENTATONIC" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PERSIAN" | "PROMETHEUS" | "HARMONICS" | "TRITONE" | "TWO_SEMITONE_TRITONE" | "UKRAINIAN_DORIAN" | "WHOLE_TONE" | "YO" | "MAJOR_SEVEN_ARPEGGIO" | "DOMINANT_SEVEN_ARPEGGIO" | "MINOR_SEVEN_ARPEGGIO" | "MINOR_SEVEN_FLAT_FIVE_ARPEGGIO" | "DOMINANT_SEVEN_SUS_FOUR_ARPEGGIO" | "MINOR_MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SEVEN_ARPEGGIO" | "MAJOR_SIX_ARPEGGIO" | "MINOR_MAJOR_SIX_ARPEGGIO" | "DIMINISHED_SEVEN_ARPEGGIO"
 
-type IScaleMode = "IONIAN" | "AEOLIAN" | "DORIAN" | "LOCRIAN" | "LYDIAN" | "MIXOLYDIAN" | "SUPER_LOCRIAN" | "LYDIAN_AUGMENTED" | "MAJOR_LOCRIAN" | "MELODIC_MINOR_DESCENDING" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PHRYGIAN_DOMINANT" | "PHRYGIAN" | "PROMETHEUS" | "HARMONICS" | "ISTRIAN" | "FLAMENCO" | "UKRAINIAN_DORIAN"
+export type TScaleMode = "IONIAN" | "AEOLIAN" | "DORIAN" | "LOCRIAN" | "LYDIAN" | "MIXOLYDIAN" | "SUPER_LOCRIAN" | "LYDIAN_AUGMENTED" | "MAJOR_LOCRIAN" | "MELODIC_MINOR_DESCENDING" | "NEOPOLITAN_MAJOR" | "NEOPOLITAN_MINOR" | "PHRYGIAN_DOMINANT" | "PHRYGIAN" | "PROMETHEUS" | "HARMONICS" | "ISTRIAN" | "FLAMENCO" | "UKRAINIAN_DORIAN"
 
 interface IScaleDefinition {
-  name?: IScaleName
-  mode?: IScaleMode
+  name?: TScaleName
+  mode?: TScaleMode
   arpeggio?: boolean
   intervals: Interval[]
 }
 
-export const SCALES: Record<IScaleName | IScaleMode, IScaleDefinition> = {
+export const SCALES: Record<TScaleName | TScaleMode, IScaleDefinition> = {
   MAJOR: {
     name: "MAJOR",
     mode: "IONIAN",
@@ -712,11 +713,13 @@ export const SCALES: Record<IScaleName | IScaleMode, IScaleDefinition> = {
   }
 }
 
+export const SCALE_NAMES = getTypedKeys(SCALES)
+
 interface IScaleParams {
-  name?: IScaleName
+  name?: TScaleName
   key?: Note
   intervals?: Interval[]
-  mode?: IScaleMode
+  mode?: TScaleMode
 }
 
 export class Scale {
@@ -759,7 +762,7 @@ export class Scale {
     return definitions.length > 0 ? definitions[0]?.name ?? '' : ''
   }
 
-  set name(name: IScaleName) {
+  set name(name: TScaleName) {
     if (name !== undefined) {
       this.intervals = SCALES[name].intervals
     } else {
@@ -774,10 +777,10 @@ export class Scale {
   }
 
   set mode(mode: string) {
-    const definitionName = Object.keys(SCALES).find(s => SCALES[s as IScaleName].mode === mode)
+    const definitionName = Object.keys(SCALES).find(s => SCALES[s as TScaleName].mode === mode)
 
     if (definitionName !== undefined) {
-      this.intervals = SCALES[definitionName as IScaleName].intervals
+      this.intervals = SCALES[definitionName as TScaleName].intervals
     } else {
       throw new Error(`Couldn't find a scale definition with that mode : ${mode}.`)
     }
@@ -800,8 +803,8 @@ export class Scale {
   }
 
   // Return all 7th chords from the scale if it is diatonic
-  get diatonicChords(): Chord[] {
-    const chords: Chord[] = []
+  get diatonicChords(): { degree: string, chord: Chord }[] {
+    const chords: { degree: string, chord: Chord }[] = []
     if (this.intervals.length === 7) {
       this.notes.forEach((n, i) => {
         const third = this.notes[(i + 2) % this.notes.length]
@@ -818,9 +821,10 @@ export class Scale {
               seventh
             ]
           })
-          chords.push(
+          chords.push({
+            degree: chord.isMinor() ? digitToRomanNumeral(i + 1).toLowerCase() : digitToRomanNumeral(i + 1).toUpperCase(),
             chord
-          )
+          })
         }
       })
     } else {
@@ -832,12 +836,12 @@ export class Scale {
 
   static getDefintionsFromIntervals(intervals: Interval[]): IScaleDefinition[] {
     return Object.keys(SCALES).filter((s) => {
-      const scale = SCALES[s as IScaleName]
+      const scale = SCALES[s as TScaleName]
       if (scale.intervals.length === intervals.length) {
         return scale.intervals.every((v, i) => v.name === intervals[i]?.name)
       } else {
         return false
       }
-    }).map(n => SCALES[n as IScaleName])
+    }).map(n => SCALES[n as TScaleName])
   }
 }
