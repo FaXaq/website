@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 
+## 1.1.0 (2026-01-07)
+
+* feat(mtts): rework chords, scales & scale presentation on norra ([6ebe8b6](https://github.com/FaXaq/website/commit/6ebe8b6))
+* chore(mtts): remove console.log ([4313a1a](https://github.com/FaXaq/website/commit/4313a1a))
+* chore(server): remove useless log ([3afb3ed](https://github.com/FaXaq/website/commit/3afb3ed))
+* fix: auth api url for production ([ed30e30](https://github.com/FaXaq/website/commit/ed30e30))
+* fix(blog): add breadcrumb for blog ([b6941de](https://github.com/FaXaq/website/commit/b6941de))
+* fix(mtts): diatonic chord generation ([806adb5](https://github.com/FaXaq/website/commit/806adb5))
+* fix(mtts/metronome): make it work with worker loader from vite ([45ad533](https://github.com/FaXaq/website/commit/45ad533))
+
 ## 1.0.0 (2025-12-30)
 
 * ci: add pre-commit hook ([d30fb98](https://github.com/FaXaq/website/commit/d30fb98))
