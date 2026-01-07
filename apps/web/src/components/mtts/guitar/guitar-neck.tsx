@@ -3,7 +3,7 @@ import { Note } from '@repo/mtts';
 import React from 'react';
 
 import type { FGetFret, FHighlight } from './_guitar-fret';
-import { GuitarFretMarker } from './_guitar-fret-marker';
+import { GuitarFretMarkerRow } from './_guitar-fret-marker';
 import type { GuitarStringProps } from './_guitar-string';
 import GuitarString from './_guitar-string';
 import { FRET_MARKER } from './const';
@@ -46,7 +46,7 @@ function GuitarNeck({
       overflow="auto"
     >
       {stringsInOrder.map((string) => <GuitarString key={`string-${string.stringNumber}`} {...string} />)}
-      <GuitarFretMarker />
+      <GuitarFretMarkerRow />
     </Grid>
   </>;
 }

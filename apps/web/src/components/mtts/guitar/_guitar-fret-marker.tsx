@@ -1,5 +1,5 @@
 import { Box, Grid, Text } from "@chakra-ui/react";
-import type { FC } from "react";
+import { useRef } from "react";
 
 import { useGuitarNeck } from "./context";
 
@@ -14,68 +14,53 @@ const shouldShowFret = (fretIndex: number) => {
     || fretIndexModulo === 12;
 };
 
-const SimpleFretMarker: FC = () => {
-  const { containerRef } = useGuitarNeck();
-  return <Box
-    h="8px"
-    w="8px"
-    bg="gray.emphasized"
-    borderRadius="full"
-    position="absolute"
-    top={`calc(8px - ${(containerRef?.current?.clientHeight ?? 0) / 2}px)`}
-    left="calc(50% - 4px)"
-    zIndex={1}
-  />;
-};
+export const GuitarFretMarkerRow = () => {
+  const { layout, fretNumber, containerRef } = useGuitarNeck();
+  const fretMarkerRowRef = useRef<HTMLDivElement>(null);
 
-const SpecialFretMarker: FC = () => {
-  const { containerRef } = useGuitarNeck();
-  return <>
-    <Box
-      h="8px"
-      w="8px"
-      bg="gray.emphasized"
-      borderRadius="full"
-      position="absolute"
-      top={`calc(8px - ${(containerRef?.current?.clientHeight ?? 0) * 3.25 / 5}px)`}
-      left="calc(50% - 4px)"
-      zIndex={1}
-    />
-    <Box
-      h="8px"
-      w="8px"
-      bg="gray.emphasized"
-      borderRadius="full"
-      position="absolute"
-      top={`calc(8px - ${(containerRef?.current?.clientHeight ?? 0) * 1.75 / 5}px)`}
-      left="calc(50% - 8px)"
-      zIndex={1}
-    />
-  </>;
-};
-
-export const GuitarFretMarker = () => {
-  const { layout, fretNumber } = useGuitarNeck();
-
-  const frets = Array.from({ length: fretNumber }, (_, i) => ({
-    number: i,
-    show: shouldShowFret(i),
-    indicator: <Text textAlign="center">{i}</Text>,
-    dot: (() => {
-      if (!shouldShowFret(i)) return null;
-      if (i === 12) return <SpecialFretMarker />;
-      return <SimpleFretMarker />;
-    })()
-  }));
+  const fakeArray = Array.from({ length: fretNumber });
 
   return <Grid
     templateColumns={layout === "horizontal" ? `repeat(${fretNumber}, minmax(0, 1fr))` : undefined}
     templateRows={layout === "vertical" ? `repeat(${fretNumber}, minmax(0, 1fr))` : undefined}
+    ref={fretMarkerRowRef}
   >
-    {frets.map((fret, i) => (
-      <Box key={i} position="relative">
-        {fret.show && fret.indicator}
-        {fret.dot}
+    {fakeArray.map((_f, i) => (
+      <Box key={`fret-marker-${i}`} display="flex" flexDirection="column" alignItems="center">
+        {shouldShowFret(i) && <Text>{i}</Text>}
+        {shouldShowFret(i) && i === 12 && (
+          <>
+            <Box
+              h="8px"
+              w="8px"
+              bg="gray.emphasized"
+              borderRadius="full"
+              position="absolute"
+              top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) * 3 / 9}px)`}
+              zIndex={1}
+            />
+            <Box
+              h="8px"
+              w="8px"
+              bg="gray.emphasized"
+              borderRadius="full"
+              position="absolute"
+              top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) * 6 / 9}px)`}
+              zIndex={1}
+            />
+          </>
+        )}
+        {shouldShowFret(i) && i !== 12 && (
+          <Box
+            h="8px"
+            w="8px"
+            bg="gray.emphasized"
+            borderRadius="full"
+            position="absolute"
+            top={`calc(${((containerRef?.current?.clientHeight ?? 0) - (fretMarkerRowRef?.current?.clientHeight ?? 0)) / 2}px - 4px)`}
+            zIndex={1}
+          />
+        )}
       </Box>
     ))}
   </Grid>;
