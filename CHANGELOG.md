@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 
+## 1.2.0 (2026-01-07)
+
+* fix(infra): wrong url matching for redirecting api request ([0dc0dee](https://github.com/FaXaq/website/commit/0dc0dee))
+* fix(web/mtts/scale-builder): add guitar vertical layout with fixed width ([3503485](https://github.com/FaXaq/website/commit/3503485))
+* fix(web/mtts/scale-builder): dot vertical & horizontal centering ([61f5381](https://github.com/FaXaq/website/commit/61f5381))
+* fix(web/mtts/scale-builder): fret markers ([3db6595](https://github.com/FaXaq/website/commit/3db6595))
+* feat(web/mtts/metronome): start with space-bar ([ccd2bd8](https://github.com/FaXaq/website/commit/ccd2bd8))
+
 ## 1.1.0 (2026-01-07)
 
 * feat(mtts): rework chords, scales & scale presentation on norra ([6ebe8b6](https://github.com/FaXaq/website/commit/6ebe8b6))
