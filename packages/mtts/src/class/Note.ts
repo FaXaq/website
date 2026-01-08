@@ -20,7 +20,7 @@ export class Note extends ValuedBarContent {
   private _pitch!: Pitch;
   private _accidental?: Accidental;
 
-  constructor (params: NoteParams = { name: 'C' }) {
+  constructor(params: NoteParams = { name: 'C' }) {
     super(params)
     this.name = params.name ?? 'C'
     this.value = params.value ?? DEFAULT_NOTE_VALUE
@@ -32,7 +32,7 @@ export class Note extends ValuedBarContent {
   /**
    * Adds a sharp accidental (if one is already there, adds a second one)
    */
-  public addSharp (): Note {
+  public addSharp(): Note {
     if (!this.hasAccidental()) {
       this.accidental = new Accidental({ semitones: ACCIDENTAL.SHARP })
     } else {
@@ -42,7 +42,7 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public sharpenTo (n: number): Note {
+  public sharpenTo(n: number): Note {
     while (n > 0) {
       this.addSharp()
       n--
@@ -54,7 +54,7 @@ export class Note extends ValuedBarContent {
   /**
    * Adds a flat to the current note (or flatten the accidental)
    */
-  public addFlat (): Note {
+  public addFlat(): Note {
     if (!this.hasAccidental()) {
       this.accidental = new Accidental({ semitones: ACCIDENTAL.FLAT })
     } else {
@@ -64,7 +64,7 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public flattenTo (n: number): Note {
+  public flattenTo(n: number): Note {
     while (n < 0) {
       this.addFlat()
       n++
@@ -73,7 +73,7 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public next (): Note {
+  public next(): Note {
     // if note was B, next one will be a pitch higher
     if (this.name === 'B') this.pitch.inc()
     this.name = NOTES[(this.index + 1) % NOTES.length]!
@@ -81,7 +81,7 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public previous (): Note {
+  public previous(): Note {
     // if note was C, previous one will be a pitch lower
     if (this.name === 'C') this.pitch.dec()
     this.name = NOTES[(this.index - 1 + NOTES.length) % NOTES.length]!
@@ -89,9 +89,9 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public sharpenChromatically (semitones: number = 1): Note {
+  public sharpenChromatically(semitones: number = 1): Note {
     for (let i = 0; i < semitones; i++) {
-      if (!this.hasAccidental()) {
+      if (!this.hasAccidental() || this.accidental.semitones === 0) {
         if (this.isBorE()) {
           this.next()
         } else {
@@ -113,7 +113,7 @@ export class Note extends ValuedBarContent {
     return this
   }
 
-  public flattenChromatically (semitones: number = 1): Note {
+  public flattenChromatically(semitones: number = 1): Note {
     for (let i = 0; i < semitones; i++) {
       if (!this.hasAccidental()) {
         if (this.isCorF()) {
@@ -138,11 +138,11 @@ export class Note extends ValuedBarContent {
   }
 
   // Get semitones between this note and the one passed as parameter
-  public getSemitonesTo (note: Note): number {
+  public getSemitonesTo(note: Note): number {
     return Note.getSemitonesBetween(this, note)
   }
 
-  public duplicate (): Note {
+  public duplicate(): Note {
     return new Note({
       name: this.name,
       pitch: new Pitch({
@@ -154,27 +154,27 @@ export class Note extends ValuedBarContent {
     })
   }
 
-  public removeAccidental (): Note {
+  public removeAccidental(): Note {
     delete this._accidental
     return this
   }
 
   // checks
-  public hasAccidental (): boolean {
+  public hasAccidental(): boolean {
     return this._accidental !== undefined
   }
 
-  public isBorE (): boolean {
+  public isBorE(): boolean {
     return this.name === 'B' || this.name === 'E'
   }
 
-  public isCorF (): boolean {
+  public isCorF(): boolean {
     return this.name === 'C' || this.name === 'F'
   }
 
   // getters & setters
   // name
-  set name (name: string) {
+  set name(name: string) {
     if (Note.validateName(name)) {
       this._name = name
     } else {
@@ -184,50 +184,50 @@ export class Note extends ValuedBarContent {
     }
   }
 
-  get name (): string {
+  get name(): string {
     return this._name
   }
 
   // pitch
-  set pitch (pitch: Pitch) {
+  set pitch(pitch: Pitch) {
     this._pitch = pitch
   }
 
-  get pitch (): Pitch {
+  get pitch(): Pitch {
     return this._pitch
   }
 
   // note index
-  get index (): number {
+  get index(): number {
     return NOTES.indexOf(this.name)
   }
 
   // accidental
-  set accidental (accidental: Accidental) {
+  set accidental(accidental: Accidental) {
     this._accidental = accidental
   }
 
-  get accidental (): Accidental {
+  get accidental(): Accidental {
     return this._accidental ?? new Accidental()
   }
 
   // frequency
   // Base frequency times 2 pow (semitones to A440 / 12)
-  get frequency (): number {
+  get frequency(): number {
     const baseA: Note = new Note({ name: 'A', pitch: new Pitch({ value: 4 }) })
     return BASE_FREQUENCY * Math.pow(2, baseA.getSemitonesTo(this) / 12)
   }
 
-  get SPN (): string {
+  get SPN(): string {
     return Note.toSPN(this)
   }
 
   // static methods
-  static validateName (name: string): boolean {
+  static validateName(name: string): boolean {
     return NOTES.indexOf(name) > -1
   }
 
-  static getSemitonesBetween (note1: Note, note2: Note): number {
+  static getSemitonesBetween(note1: Note, note2: Note): number {
     let semitones = 0
     let noteIndex = note1.index
 
@@ -258,7 +258,7 @@ export class Note extends ValuedBarContent {
    * @param note1 The root from which you want to start counting semitones
    * @param note2 The destination note
    */
-  static getNormalizedSemitonesBetween (note1: Note, note2: Note): number {
+  static getNormalizedSemitonesBetween(note1: Note, note2: Note): number {
     let semitones = Note.getSemitonesBetween(note1, note2)
     if (semitones < 0) {
       semitones += SEMITONES_WITHIN_OCTAVE
@@ -268,14 +268,14 @@ export class Note extends ValuedBarContent {
     return semitones
   }
 
-  static getIndexDifferenceBetween (note1: Note, note2: Note): number {
+  static getIndexDifferenceBetween(note1: Note, note2: Note): number {
     return 1 + ((note2.index - note1.index + NOTES.length) % NOTES.length)
   }
 
   /**
    * To Scientific Pitch Notation
    */
-  static toSPN (n: Note): string {
+  static toSPN(n: Note): string {
     try {
       return `${n.name}${n.hasAccidental() ? n.accidental.SPN : ''}${n.pitch.value}`
     } catch (err) {
@@ -286,7 +286,7 @@ export class Note extends ValuedBarContent {
   /**
    * From Scientific Pitch Notation
    */
-  static fromSPN (s: string): Note {
+  static fromSPN(s: string): Note {
     try {
       return new Note({
         name: s[0],
