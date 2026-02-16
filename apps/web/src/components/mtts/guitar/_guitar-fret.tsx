@@ -12,9 +12,10 @@ export type FHighlight = (params: {
 
 export type FGetFret = (params: {
   note: Note,
-  highlighted: boolean,
+  highlighted?: boolean,
   stringNumber: number,
-  fretNumber: number
+  fretNumber: number,
+  focused?: boolean
 }) => React.JSX.Element | null | string
 
 export interface GuitarFretProps {
@@ -27,7 +28,10 @@ export interface GuitarFretProps {
 
 function GuitarFret({ note, stringNumber, fretNumber, highlight, getFret }: GuitarFretProps) {
   const highlighted = highlight({ note, stringNumber, fretNumber });
-  const { layout } = useGuitarNeck();
+  const { layout, focusedFrets } = useGuitarNeck();
+  const focused = focusedFrets.findIndex(fret =>
+    fret.fretIndex === fretNumber && fret.stringIndex === stringNumber
+  ) !== -1;
 
   return <GridItem
     textAlign="center"
@@ -41,7 +45,7 @@ function GuitarFret({ note, stringNumber, fretNumber, highlight, getFret }: Guit
     {layout === "horizontal" && fretNumber !== 0 && <Box h={0.5} w="full" bg="gray.emphasized" position="absolute" top="50%" zIndex={1}></Box>}
     {layout === "vertical" && fretNumber !== 0 && <Box w={0.5} h="full" bg="gray.emphasized" position="absolute" left="50%" zIndex={1}></Box>}
     <Box position="relative" zIndex={10} height="full" width="full">
-      {getFret({ note, stringNumber, fretNumber, highlighted })}
+      {getFret({ note, stringNumber, fretNumber, highlighted, focused })}
     </Box>
   </GridItem>;
 }

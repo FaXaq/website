@@ -20,8 +20,9 @@ export function ScaleBuilder() {
   const searchParams = useSearch({ from: '/projects/mtts/scale-builder' });
   const navigate = useNavigate({ from: '/projects/mtts/scale-builder' });
   const rootNote = Note.fromSPN(searchParams.rootNote);
-  const [selectedChord, setSelectedChord] = useState<MTTSChord | null>(null);
+  const [selectedChord, setSelectedChord] = useState<MTTSChord>();
   const [layoutVertical, setLayoutVertical] = useState(false);
+  const [highlightChordOnGuitar, setHighlightChordOnGuitar] = useState(false);
   const scaleIntervals = searchParams.scaleIntervals.map((interval) => Interval.fromName(interval));
   const { noteDisplay, setNoteDisplay } = useScaleBuilderSettings();
   const { translateNote } = useNoteTranslation();
@@ -95,7 +96,7 @@ export function ScaleBuilder() {
 
   const selectChord = (chord: MTTSChord) => {
     if (isSameChord(chord, selectedChord)) {
-      setSelectedChord(null);
+      setSelectedChord(undefined);
     } else {
       setSelectedChord(chord);
     }
@@ -218,15 +219,23 @@ export function ScaleBuilder() {
                             )
                           )}
                         </HStack>
-                      </>
-                    )}
+                        {selectedChord && (
+                          <>
+                            <Checkbox.Root onCheckedChange={(e) => setHighlightChordOnGuitar(!!e.checked)} checked={highlightChordOnGuitar}>
+                              <Checkbox.HiddenInput />
+                              <Checkbox.Control />
+                              <Checkbox.Label>Highlight on guitar neck</Checkbox.Label>
+                            </Checkbox.Root>
+                          </>
+                        )}
+                      </>)}
                   </VStack>
                 </Card.Description>
               </Card.Body>
             </Card.Root>
           </GridItem>
           <GridItem colSpan={4}>
-            <p>Select how you want to show the notes on the fretboard</p>
+            <Text>Select how you want to show the notes on the fretboard</Text>
             <RadioGroup.Root defaultValue="1" value={noteDisplay} onValueChange={(e) => setNoteDisplay(e.value as NOTE_DISPLAY)} size="sm">
               <HStack gap="6">
                 {Object.values(NOTE_DISPLAY).map(displaySetting => (
@@ -249,6 +258,7 @@ export function ScaleBuilder() {
               </Checkbox.Root>
               <GuitarNeck
                 layout={layoutVertical ? 'vertical' : 'horizontal'}
+                chord={highlightChordOnGuitar ? selectedChord : undefined}
                 highlightFret={({ note }) => selectedChord ? noteExistsInChord(selectedChord, note) : true}
                 getFret={(props) =>
                   <Fret

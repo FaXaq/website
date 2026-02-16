@@ -23,7 +23,8 @@ const config = defineConfig(
         ".output/**",
         ".turbo/**",
         ".nitro/**",
-        "vite.config.ts"
+        "vite.config.ts",
+        "vitest.config.ts"
       ]
     }
   ]

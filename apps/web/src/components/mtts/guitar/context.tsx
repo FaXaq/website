@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useRef, useState } from 'react';
+import type { Chord } from '@repo/mtts';
+import type { Note } from '@repo/mtts';
+import React, { createContext, useContext, useMemo, useRef, useState } from 'react';
 
+import type { CAGEDType } from './placements/utils';
+import { CAGEDEnum } from './placements/utils';
 import type { ITuning } from './tunings';
 import { TUNINGS } from './tunings';
 
@@ -10,14 +14,23 @@ const DEFAULT_FRET_NUMBER = 24;
 
 interface GuitarNeckContextState {
   layout: GuitarNeckLayout,
-  setGuitarNeckLayout: (layout: GuitarNeckLayout) => void,
+  setGuitarNeckLayout: React.Dispatch<React.SetStateAction<GuitarNeckLayout>>,
   tuning: ITuning,
-  setGuitarTuning: (tuning: ITuning) => void,
+  setGuitarTuning: React.Dispatch<React.SetStateAction<ITuning>>,
   fretNumber: number,
-  setGuitarFretNumber: (fretNumber: number) => void,
+  setGuitarFretNumber: React.Dispatch<React.SetStateAction<number>>,
   containerRef?: React.RefObject<HTMLDivElement | null>,
   isLefty: boolean,
-  setIsLefty: (isLefty: boolean) => void
+  setIsLefty: React.Dispatch<React.SetStateAction<boolean>>,
+  focusedChord: Chord | undefined,
+  setFocusedChord: (chord: Chord | undefined) => void,
+  CAGED: CAGEDType,
+  setCAGED: React.Dispatch<React.SetStateAction<CAGEDType>>,
+  CAGEDRange: { start: number, end: number },
+  setCAGEDRange: React.Dispatch<React.SetStateAction<{ start: number, end: number }>>,
+  neckMatrix: Note[][],
+  focusedFrets: { stringIndex: number, fretIndex: number }[],
+  setFocusedFrets: React.Dispatch<React.SetStateAction<{ stringIndex: number, fretIndex: number }[]>>
 }
 
 const INITIAL_STATE: GuitarNeckContextState = {
@@ -29,7 +42,16 @@ const INITIAL_STATE: GuitarNeckContextState = {
   setGuitarFretNumber: () => { throw new Error('Function not implemented.'); },
   containerRef: undefined,
   isLefty: false,
-  setIsLefty: () => { throw new Error('Function not implemented.'); }
+  setIsLefty: () => { throw new Error('Function not implemented.'); },
+  focusedChord: undefined,
+  setFocusedChord: () => { throw new Error('Function not implemented.'); },
+  CAGED: "C",
+  setCAGED: () => { throw new Error('Function not implemented.'); },
+  CAGEDRange: { start: 0, end: 12 },
+  setCAGEDRange: () => { throw new Error('Function not implemented.'); },
+  neckMatrix: [],
+  focusedFrets: [],
+  setFocusedFrets: () => { throw new Error('Function not implemented.'); }
 };
 
 const GuitarNeckContext = createContext(INITIAL_STATE);
@@ -44,6 +66,21 @@ export function GuitarNeckProvider({ children, value }: ProviderProps) {
   const [fretNumber, setGuitarFretNumber] = useState<number>(DEFAULT_FRET_NUMBER);
   const [isLefty, setIsLefty] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [focusedChord, setFocusedChord] = useState<Chord | undefined>(undefined);
+  const [CAGED, setCAGED] = useState<CAGEDType>(CAGEDEnum.C);
+  const [CAGEDRange, setCAGEDRange] = useState<{ start: number; end: number }>({ start: 0, end: DEFAULT_FRET_NUMBER });
+  const [focusedFrets, setFocusedFrets] = useState<{ stringIndex: number, fretIndex: number }[]>([]);
+
+  const neckMatrix = useMemo(() => {
+    return tuning.strings.map((string) => {
+      const frets = [];
+      for (let i = 0; i < fretNumber; i++) {
+        const note = string.note.duplicate();
+        frets.push(note.sharpenChromatically(i));
+      }
+      return frets;
+    });
+  }, [tuning, fretNumber]);
 
   const initialValue: GuitarNeckContextState = {
     layout: layout,
@@ -55,6 +92,15 @@ export function GuitarNeckProvider({ children, value }: ProviderProps) {
     fretNumber,
     setGuitarFretNumber,
     containerRef,
+    focusedChord,
+    setFocusedChord,
+    CAGED,
+    setCAGED,
+    CAGEDRange,
+    setCAGEDRange,
+    neckMatrix,
+    focusedFrets,
+    setFocusedFrets,
     ...value
   };
 

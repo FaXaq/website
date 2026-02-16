@@ -13,13 +13,12 @@ import { getColorString } from './utils';
 
 interface IFretProps {
   note: Note,
-  stringNumber: number,
-  fretNumber: number,
-  highlighted: boolean,
-  scale: Scale
+  highlighted?: boolean,
+  scale: Scale,
+  focused?: boolean
 }
 
-function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
+function Fret({ note, highlighted, scale, focused }: IFretProps) {
   const [active, setActive] = useState(false);
   const { translateNote } = useNoteTranslation();
   const { noteDisplay } = useScaleBuilderSettings();
@@ -66,11 +65,8 @@ function Fret({ note, highlighted, scale, fretNumber }: IFretProps) {
           w={highlighted ? '8' : '3'}
           h={highlighted ? '8' : '3'}
           rounded="full"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
           cursor="pointer"
-          bg={active ? getColorString({ color: getNoteColor(scale, note) }) : "bg.muted"}
+          bg={active || focused ? getColorString({ color: getNoteColor(scale, note) }) : "bg.muted"}
           transition="all 0.1s ease-in-out"
         >
           {highlighted && <Span fontSize="xs">{getNoteText(scale, note)}</Span>}

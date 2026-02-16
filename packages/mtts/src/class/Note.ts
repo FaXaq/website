@@ -227,7 +227,7 @@ export class Note extends ValuedBarContent {
     return NOTES.indexOf(name) > -1
   }
 
-  static getSemitonesBetween(note1: Note, note2: Note): number {
+  static getSemitonesBetween(note1: Note, note2: Note, ignoreOctave = false): number {
     let semitones = 0
     let noteIndex = note1.index
 
@@ -250,6 +250,8 @@ export class Note extends ValuedBarContent {
       (note2.hasAccidental() ? note2.accidental.semitones : 0) -
       (note1.hasAccidental() ? note1.accidental.semitones : 0)
 
+    if (ignoreOctave) return semitones % 12;
+
     return semitones
   }
 
@@ -262,7 +264,7 @@ export class Note extends ValuedBarContent {
     let semitones = Note.getSemitonesBetween(note1, note2)
     if (semitones < 0) {
       semitones += SEMITONES_WITHIN_OCTAVE
-    } if (semitones > SEMITONES_WITHIN_OCTAVE) {
+    } if (semitones >= SEMITONES_WITHIN_OCTAVE) {
       semitones = semitones % SEMITONES_WITHIN_OCTAVE
     }
     return semitones

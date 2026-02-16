@@ -70,6 +70,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "start": "node .output/server/index.mjs",
+    "test": "vitest",
     "translations:generate": "paraglide-js compile",
     "prelint": "pnpm translations:generate",
     "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx -c ./eslint.config.js .",
@@ -119,7 +120,8 @@
     "remark-rehype": "^11.1.2",
     "sass": "^1.62.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.0"
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^4.0.13"
   },
   "overrides": {
     "@types/react": "19.1.10"
